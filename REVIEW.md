@@ -32,17 +32,16 @@ audit.
 
 ```
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-git clone --branch model-v1 <this repo> shielded-pool-model && cd shielded-pool-model
+git clone --branch model-v1 git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
 lake exe cache get          # setup: about 30 minutes (estimate), .lake about 7.5 GB
 bash scripts/gate.sh        # expect: GATE PASS (<commit>); 37 s measured
 bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 206 s measured
 ```
 
-`<this repo>` is the GitHub URL once the repo exists. Branch `model-v1`
-holds the model until the PR merges. The 37 s gate time is one cold build
-with a copied Mathlib cache. The fixture time is from two runs, 206 s
-each, on Linux with btrfs. Without cheap file copies, set `GATE_WORK` to
-a directory on APFS, btrfs or XFS.
+Branch `model-v1` holds the model until the PR merges. The 37 s gate
+time is one cold build with a copied Mathlib cache. The fixture time is
+from two runs, 206 s each, on Linux with btrfs. Without cheap file
+copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
 and unlisted axioms. It checks the exact type and axioms of the 19

@@ -98,8 +98,8 @@ the model.
    root" is membership in `leaves.take snapshot`. This drops LeanIMT, dynamic
    depth, `MAX_DEPTH = 32`, the `proof_length <= MAX_DEPTH` range check, and
    the rule that the two transfer inputs must not share one length (5.3,
-   322-323). It assumes distinct leaf multisets give distinct roots, which is
-   a collision-resistance assumption not yet stated.
+   322-323). It assumes concrete roots bind ordered leaves. That is an
+   obligation on the implementation, not a premise of any theorem here.
 3. **Amounts are `Nat` with a side condition.** `U128 n` is `n <= 2^128 - 1`,
    not a 128-bit vector. `Nat` never wraps, so the model cannot exhibit the
    overflow-minting bug of 5.3 (325-328). The former `U128 (in1 + in2)`
@@ -129,11 +129,11 @@ the model.
    `msg.sender == funding_address` or the signature form (5.3, 337-341) is
    not modelled: the model has no caller and no signatures. Withdraw's
    `recipient` is likewise data only.
-8. **Payload, events and encryption are out.** No encrypted note, no payload
-   commitment, no payload binding (4.4, 268-269), no events, so log-order
-   replay (4.4) and the recipient's recompute check (4.2 step 3) are absent.
-   Update: this repo models events (`LeanShieldedPool/Pool/Events.lean`)
-   and proves `eventReplayFaithful_proof`; payload and encryption stay out.
+8. **Payload and encryption are out; events are modelled.** No encrypted
+   note, no payload commitment, no payload binding (4.4, 268-269), and no
+   recipient recompute check (4.2 step 3). Events are modelled
+   (`LeanShieldedPool/Pool/Events.lean`); `eventReplayFaithful_proof` shows
+   log replay rebuilds the commitment tree and the nullifier set.
 9. **Reentrancy and ordering are out.** Insertion-before-external-call (4.4,
    277-279) and non-reentrancy (4.4) have no counterpart: `Step` is atomic.
    These rules cannot be violated in the model, so the model gives no
@@ -148,10 +148,9 @@ the model.
     `amount == 0` (5.3, 358). This is weaker than the spec's shape and is a
     review point.
 12. **Privacy guarantees are not stated.** Confidentiality, unlinkability and
-    selective disclosure (6.2) need an observer model, which this draft does
-    not have. Only the nine integrity results of `statements/INVENTORY.md`
-    are written (CLAIMS.md).
-    Update: privacy results are outside this repo; it states none.
+    selective disclosure (6.2) need an observer model, which this repo does
+    not have. It states no privacy result; the nine integrity results of
+    `statements/INVENTORY.md` are the whole claim set (CLAIMS.md).
 13. **`open Classical`.** Used so per-token maps and `liveValue` can branch on
     undecidable propositions. It makes `bump`, `drop` and `liveValue`
     noncomputable. No axiom is declared; `Classical.choice` is already
@@ -161,5 +160,5 @@ the model.
 15. **Tokens are credited at face value.** The spec excludes fee-on-transfer
     and rebasing tokens from the supported set (4.4, 267). The model relies
     on that exclusion: `deposited` and `balance` credit the stated amount.
-    A supported token that violates the exclusion voids the conservation
-    guarantee.
+    A supported token that violates the exclusion is outside what the model
+    describes; the theorem itself stands.
