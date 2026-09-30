@@ -1,1 +1,3 @@
--- Root module for the shielded-pool model.
+import LeanShieldedPool.Pool.State
+import LeanShieldedPool.Pool.Tx
+import LeanShieldedPool.Pool.Events
