@@ -8,3 +8,7 @@ import LeanShieldedPool.Draft.NonVacuity
 import LeanShieldedPool.Proofs.Invariants
 import LeanShieldedPool.Proofs.NoDoubleSpend
 import LeanShieldedPool.Proofs.Conservation
+import LeanShieldedPool.Proofs.TierA
+import LeanShieldedPool.Proofs.TierAConditional
+import LeanShieldedPool.Proofs.TierB
+import LeanShieldedPool.Proofs.EventReplay
