@@ -4,6 +4,7 @@ import LeanShieldedPool.Pool.Events
 import LeanShieldedPool.Statements.L3
 import LeanShieldedPool.Statements.L4
 import LeanShieldedPool.Statements.L4B
+import LeanShieldedPool.Draft.NonVacuity
 import LeanShieldedPool.Proofs.Invariants
 import LeanShieldedPool.Proofs.NoDoubleSpend
 import LeanShieldedPool.Proofs.Conservation
