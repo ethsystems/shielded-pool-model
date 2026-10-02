@@ -33,7 +33,7 @@ subsingleton), so the failure below is due only to the dropped insertion.
 This part must elaborate. -/
 theorem txs_cryptoHyp : CryptoHyp Toy [.deposit d0, .withdraw w0] := by
   constructor
-  · intro n hn m hm _
+  · intro n hn m hm _ _ _
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm

@@ -119,4 +119,44 @@ theorem Run.leaves_nodup {sup : P.Token → Prop}
   | empty => exact List.nodup_nil
   | step hr hs ih => exact hs.leaves_nodup ih
 
+/-- Every note an accepted operation names passes a guard `u128` range check
+(Section 5.3), so it is well-formed. -/
+theorem Step.notes_wf {st st' : St P} {tx : Tx P}
+    (h : Step st tx st') : ∀ n ∈ tx.notes, n.wf := by
+  cases h with
+  | @deposit d hg =>
+      intro n hn
+      simp only [Tx.notes, List.mem_cons, List.not_mem_nil, or_false] at hn
+      subst hn
+      exact hg.2.2.1
+  | @transfer d hg =>
+      obtain ⟨_, _, _, _, _, _, _, _, _, _, _, hu1, hu2, hu3, hu4, _, _, _, _⟩ := hg
+      intro n hn
+      simp only [Tx.notes, List.mem_cons, List.not_mem_nil, or_false] at hn
+      rcases hn with rfl | rfl | rfl | rfl
+      · exact hu1
+      · exact hu2
+      · exact hu3
+      · exact hu4
+  | @withdraw d hg =>
+      intro n hn
+      simp only [Tx.notes, List.mem_cons, List.not_mem_nil, or_false] at hn
+      subst hn
+      exact hg.2.2.2.2.2.1
+
+/-- Every note of an accepted history is well-formed. This is why restricting
+`CryptoHyp.commit_inj` to `wf` notes costs the proofs nothing. -/
+theorem Run.runNotes_wf {sup : P.Token → Prop}
+    {txs : List (Tx P)} {st : St P} (h : Run sup txs st) :
+    ∀ n ∈ runNotes txs, n.wf := by
+  induction h with
+  | empty => intro n hn; exact False.elim (List.not_mem_nil hn)
+  | @step txs st st' tx hr hs ih =>
+      intro n hn
+      simp only [runNotes, List.flatMap_append, List.flatMap_cons,
+        List.flatMap_nil, List.append_nil, List.mem_append] at hn
+      rcases hn with hold | hnew
+      · exact ih n hold
+      · exact hs.notes_wf n hnew
+
 end LeanShieldedPool

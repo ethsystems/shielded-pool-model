@@ -47,7 +47,7 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `DepositData.post` | append the commitment, record the new root, pull tokens | 4.1 steps 5-6 (200-203), 4.4 (263) |
 | `TransferData` | transfer public inputs: two nullifiers, two output commitments, root | 5.3 (347) |
 | `TransferData.nf1`, `.nf2` | "each public nullifier equals `Poseidon2(commitment_in, spending_key)`" | 5.3 (351) |
-| `TransferData.guard` | root in window; both inputs under one key; membership unless ballast; both nullifiers unspent and distinct; token consistency; per-amount range checks; value conservation; no duplicate insertion. The former `U128 (in1 + in2)` conjunct is dropped: `Nat` sums never wrap, and the bound was stricter than spec 5.3 | 4.2 step 5 (233), 4.4 (260-264), 5.3 (348-359) |
+| `TransferData.guard` | root in window; both inputs under one key; membership for the first input and for the second unless it is ballast; both nullifiers unspent and distinct; token consistency; per-amount range checks; value conservation; no duplicate insertion. The former `U128 (in1 + in2)` conjunct is dropped: `Nat` sums never wrap, and the bound was stricter than spec 5.3 | 4.2 step 5 (233), 4.4 (260-264), 5.3 (348-359) |
 | `TransferData.post` | mark both nullifiers spent, append both outputs in public-input order, record the new root | 4.2 step 6 (234) |
 | `WithdrawData` | withdraw public inputs: nullifier, token, amount, recipient, root | 5.3 (362, 365-369) |
 | `WithdrawData.nf` | `nullifier == Poseidon2(commitment, spending_key)` | 5.3 (367) |
@@ -57,7 +57,7 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `Step` | one accepted operation; a failed guard reverts and is not a step | 4.1-4.3, 4.4 |
 | `Reachable` | states reachable from an empty pool | - |
 | `Run` | a full accepted history from an empty pool | - |
-| `runNotes`, `runKeys`, `CryptoHyp` | run-scoped collision-freedom of `Poseidon4` commitments and `Poseidon1` key derivation, stated as named hypotheses, never axioms | 5.1 (290, 304) |
+| `runNotes`, `runKeys`, `CryptoHyp` | run-scoped collision-freedom of `Poseidon4` commitments (for `u128`-bounded notes) and `Poseidon1` key derivation, stated as named hypotheses, never axioms | 5.1 (290, 304), 5.3 (325-328) |
 | `spentCommitments`, `noteSpentAtMostOnce` | "A note spends at most once", at the commitment level the chain sees | 6.2 (441) |
 | `valueConservation` | "No transfer creates or destroys value", conditional on `CryptoHyp` | 6.2 (442), 5.3 (353) |
 | `noDoubleSpend` | "A note spends at most once", conditional on `CryptoHyp` | 6.2 (441), 4.2 step 5 (233) |
@@ -65,7 +65,7 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `doubleSpendExhibitsCollision` | reduction reading: a double spend exhibits a hash collision among the run's own witnesses | 6.2 (441) |
 | `Event`, `Tx.event`, `events` | operation events carrying commitments and nullifiers, transfer outputs in public-input order; no note or key witnesses; encrypted payloads out (simpl. 8) | 4.1 step 6 (201-202), 4.2 step 6 (234), 4.3 step 5 (256), 4.4 (279) |
 | `replayStep`, `replay`, `replayLeaves`, `replayNullifiers` | "events MUST carry enough data for a client to reconstruct the commitment tree and spent set from logs alone" | 4.4 (279) |
-| `noTheft` | spending authorization binds to the note's owner key; one spending-key witness feeds both derivations; key secrecy out of model | 5.3 (319, 348, 365), spec 463 |
+| `spendRequiresOwnerKey` | spending authorization binds to the note's owner key; one spending-key witness feeds both derivations; key secrecy out of model | 5.3 (319, 348, 365), spec 463 |
 | `eventReplayFaithful` | honest bookkeeping: log replay reconstructs the commitment tree and nullifier set; timing vs external calls out (simpl. 9) | 4.4 (279) |
 | `NonVacuity.*` | witnesses that each guard is satisfiable, so the statements are not vacuous | - |
 | `d.note.cm ∉ st.leaves`, `out cm ∉ st.leaves` (guard conjuncts) | duplicate check; spec main adds the commitment-seen set that answers it on-chain | 4.4 (264); 5.2 at 72414f4 (322-323) |
@@ -78,8 +78,8 @@ Scope: in a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision
 4d4dce1), the protocol rules imply that no note spends twice and that
 value is conserved per token, from an empty pool over every accepted
 history, under one hypothesis: among the notes and keys that appear in
-that history, no two distinct notes share a commitment and no two
-distinct spending keys derive the same public key. That hypothesis is
+that history, no two distinct notes with `u128` amounts share a
+commitment and no two distinct spending keys derive the same public key. That hypothesis is
 `CryptoHyp`, scoped to one history. The 16 items below are modelling
 choices. Some are encoded in the guards; none is a separately quantified
 hypothesis of any theorem. No definition has an
@@ -156,10 +156,15 @@ the model.
     withdrawals (4.4, 266) is therefore modelled only by the fact that
     transfer and withdraw guards never read `supported`. Verifier mutability
     and owner powers (6.1) are out.
-11. **Ballast rule applied to both slots.** The spec pads the *second* input
-    (4.2). The model lets either input be ballast, since the real rule is
-    `amount == 0` (5.3, 358). This is weaker than the spec's shape and is a
-    review point.
+11. **Ballast is the second input only.** The model follows 4.2 (208) and
+    the reference circuit: input 0 is always membership-checked, and only
+    input 1 may skip membership when its amount is zero
+    (transfer/src/main.nr:106-131 at pocs-private a04b8b3). 5.3 (356-358)
+    derives ballast from `amount == 0` alone and does not restrict the
+    slot, so the two readings disagree; a spec change is proposed that
+    makes 5.3 match 4.2. First-slot membership does not remove zero-value
+    notes from the tree: transfer outputs may be zero-value and enter it
+    as real leaves.
 12. **Privacy guarantees are not stated.** Confidentiality, unlinkability and
     selective disclosure (6.2) need an observer model, which this repo does
     not have. It states no privacy result; the nine integrity results of

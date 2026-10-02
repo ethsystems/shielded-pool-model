@@ -1,12 +1,12 @@
--- EXPECT: unsolved goals
--- Negative control for `noDoubleSpend_proof`.
+-- Refutation control for `noDoubleSpend_proof`. This file MUST BUILD.
 -- The withdraw post-state with ONLY the nullifier insertion REMOVED
 -- (spentCms is still recorded) accepts a history that withdraws the same
 -- note twice: freshness can never fail because no nullifier is recorded.
--- The accepted history consumes one commitment twice, so
--- `noteSpentAtMostOnce` is FALSE for it, and the history satisfies
--- `CryptoHyp` (proven below), so the failure is due only to the dropped
--- insertion. The proof attempt at the end must not close.
+-- The accepted history consumes one commitment twice, and it satisfies
+-- `CryptoHyp` (proven below), so the final theorem proves the explicit
+-- negation of the frozen Prop on an accepted mutated run. A refutation
+-- control states what fails; it cannot pass because of an unrelated
+-- unsolved goal in its setup, which an EXPECT marker cannot distinguish.
 -- The dual single mutation (spentCms only) is neg_l3_spentcms.lean.
 import LeanShieldedPool.Statements.L3
 import LeanShieldedPool.Draft.NonVacuity
@@ -97,7 +97,7 @@ subsingleton), so the failure below is due only to the dropped insertion.
 This part must elaborate. -/
 theorem txs_cryptoHyp : CryptoHyp Toy txs := by
   constructor
-  · intro n hn m hm hcm
+  · intro n hn m hm _ _ hcm
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm
@@ -107,8 +107,8 @@ theorem txs_cryptoHyp : CryptoHyp Toy txs := by
     exact Subsingleton.elim k k'
 
 /-- The accepted history consumes n0's commitment twice, so the frozen Prop
-is FALSE for it. The control passes only if this proof fails. -/
-example : noteSpentAtMostOnce txs := by
+is FALSE for it. The control passes only if this refutation builds. -/
+theorem double_spend_counterexample : ¬ noteSpentAtMostOnce txs := by
   norm_num [noteSpentAtMostOnce, spentCommitments, Tx.consumes, Note.cm,
     List.flatMap]
 

@@ -12,8 +12,8 @@ alone. `noMinting` and `balanceIsLiveValue` inherit the run-scoped
 
 namespace LeanShieldedPool
 
-/-- **Pool solvency** (Section 4.4: the withdraw guard requires the pool to
-hold the payout). For every token, contract balance plus total withdrawn
+/-- **Pool solvency** (model simplification 16: the withdraw guard models
+the ERC-20 revert; no spec clause states the bound). For every token, contract balance plus total withdrawn
 equals total deposited. No cryptographic hypotheses. -/
 def poolSolvency (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),

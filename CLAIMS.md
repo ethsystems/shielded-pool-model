@@ -18,11 +18,17 @@ are its line numbers.
 ## The hypothesis
 
 `CryptoHyp P txs` (L3.lean) says: among the notes and keys that appear in
-the history `txs`, no two distinct notes share a commitment (Poseidon4),
-and no two distinct spending keys derive the same public key (Poseidon1).
-It covers that one history only. It says nothing about the hashes outside
-it, and it is not a Poseidon security claim. It is a theorem hypothesis,
-not an axiom. No theorem uses the global form `CryptoHypGlobal`.
+the history `txs`, no two distinct notes with `u128` amounts share a
+commitment (Poseidon4), and no two distinct spending keys derive the same
+public key (Poseidon1). The commitment part is restricted to well-formed
+notes (`Note.wf`). Every note of an accepted run passes a guard range
+check (`Run.runNotes_wf`), so on accepted runs the restricted and
+unrestricted forms impose the same condition; the restriction states the
+domain of the hypothesis instead of leaving the reader to replay the
+guard argument. It covers that one history only. It says nothing about
+the hashes outside it, and it is not a Poseidon security claim. It is a
+theorem hypothesis, not an axiom. No theorem uses the global form
+`CryptoHypGlobal`.
 
 ## The nine theorems
 
@@ -35,7 +41,7 @@ not an axiom. No theorem uses the global form `CryptoHypGlobal`.
 | 5 | `noOverWithdrawal_proof` | For every token, total withdrawn never exceeds total deposited. | corollary supporting 6.2 (441-442); no own row | none |
 | 6 | `noMinting_proof` | For every token, live note value never exceeds total deposited. | corollary supporting 6.2 (441-442); no own row | `CryptoHyp` |
 | 7 | `balanceIsLiveValue_proof` | For every token, the contract balance equals the live note value. | 4.4, 6.2 | `CryptoHyp` |
-| 8 | `noTheft_proof` | This is owner-key binding: each operation's witness spending key owns every history note whose commitment the operation consumes. | 5.3 (319, 348, 365), 463 | `CryptoHyp` |
+| 8 | `spendRequiresOwnerKey_proof` | This is owner-key binding: each operation's witness spending key owns every history note whose commitment the operation consumes. | 5.3 (319, 348, 365), 463 | `CryptoHyp` |
 | 9 | `eventReplayFaithful_proof` | Replaying the event log rebuilds the commitment tree and the nullifier set exactly. | 4.4 (279) | none |
 
 In the Hypothesis column, "none" means no cryptographic hypothesis.
@@ -49,9 +55,12 @@ device (simplification 16).
 - Theorems 4 to 9 are supporting results about the same model, in three
   groups. Accounting: theorems 4 to 7. Authorization: theorem 8. Event
   semantics: theorem 9. Value conservation does not imply theorems 8 and 9.
-- `noTheft` states owner-key binding at the model level only. Key secrecy
-  and signature custody (spec line 308; line 463) are out of the model
-  (L4B.lean docstring).
+- `spendRequiresOwnerKey` states owner-key binding at the model level
+  only. Key secrecy and signature custody (spec line 308; line 463) are
+  out of the model (L4B.lean docstring). Two spec theft routes are out of
+  model under simplification 7: a deposit against another address's
+  allowance (342-343) and a relayer redirecting the withdraw recipient
+  (369).
 - Live value counts the unspent notes that the pool minted. A note that a
   nullifier collision locks still counts as live.
 - `doubleSpendExhibitsCollision` (L3.lean) is a definition, not a proved
@@ -84,8 +93,17 @@ bug these theorems cannot see.
 
 - `Draft/NonVacuity.lean` shows on a toy instance that each operation
   guard can fire, so `Run` is not empty.
-- The positive controls apply the nine theorems to that toy instance.
+- The positive controls apply the nine theorems to that toy instance, and
+  `controls/positive_l3.lean` proves `CryptoHyp` for the
+  deposit-transfer-withdraw run, so the conditional theorems apply to a
+  nonempty accepted history.
 - Each negative control weakens one guard, post-state or replay step. The
   proof attempt must then fail with "unsolved goals".
+- A refutation control goes further: it carries the accepted mutated run
+  and proves the explicit negation of the frozen Prop, and the file must
+  build, so an unrelated unsolved goal in its setup cannot be mistaken
+  for success. `controls/refute_l3_double_spend.lean` is the first one.
+  The remaining `neg_*` controls keep the marker check until they are
+  converted.
 
 REVIEW.md part 6 lists what the theorems do not say.

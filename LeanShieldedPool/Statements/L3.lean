@@ -19,12 +19,18 @@ def runKeys {P : PrimSpec} (txs : List (Tx P)) : List P.SpendKey := txs.flatMap 
 
 /--
 Cryptographic hypotheses, scoped to the witnesses of one run (Section 5.1).
-`commit_inj` is Poseidon4 collision-freedom among the run's notes.
+`commit_inj` is Poseidon4 collision-freedom among the run's well-formed
+notes, that is notes whose amount is inside the `u128` range (`Note.wf`,
+Section 5.3). Every note of an accepted run passes a guard range check
+(`Run.runNotes_wf`), so on accepted runs the restricted and unrestricted
+forms impose the same condition; the restriction states the domain of the
+hypothesis instead of leaving it to the reader.
 `derivePub_inj` is Poseidon1 collision-freedom among the run's spending keys.
 Neither says anything about the hash outside the run.
 -/
 structure CryptoHyp (P : PrimSpec) (txs : List (Tx P)) : Prop where
-  commit_inj : ∀ n ∈ runNotes txs, ∀ n' ∈ runNotes txs, n.cm = n'.cm → n = n'
+  commit_inj : ∀ n ∈ runNotes txs, ∀ n' ∈ runNotes txs,
+    n.wf → n'.wf → n.cm = n'.cm → n = n'
   derivePub_inj : ∀ k ∈ runKeys txs, ∀ k' ∈ runKeys txs,
     P.derivePub k = P.derivePub k' → k = k'
 

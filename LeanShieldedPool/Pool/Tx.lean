@@ -34,7 +34,8 @@ derivations, as Section 5.3 requires of the statement. -/
 structure TransferData (P : PrimSpec) where
   key : P.SpendKey
   in1 : Note P
-  /-- The second input may be a ballast (zero-value) note (Section 4.2). -/
+  /-- Only the second input may be a ballast (zero-value) note
+  (Section 4.2). -/
   in2 : Note P
   out1 : Note P
   out2 : Note P
@@ -127,12 +128,12 @@ Transfer guard (Sections 4.2 step 5, 4.4, 5.3).
 * the public root is inside the window (Section 4.4);
 * both inputs name the public key of the single spending-key witness
   (Section 5.3);
-* each input is a member of the tree at that root, unless it is ballast;
-  ballast is decided by `amount = 0`, never by a free selector (Section 5.3);
+* the first input is a member of the tree at that root; the second input
+  is a member unless it is ballast, and ballast is decided by
+  `amount = 0`, never by a free selector (Sections 4.2, 5.3);
 * both nullifiers are unspent and pairwise distinct (Section 4.2 step 5);
 * token consistency over all four notes (Section 5.3 clause 5);
-* every amount is range-checked to `u128`, and the input sum does not wrap
-  (Section 5.3);
+* every amount is range-checked to `u128` (Section 5.3);
 * value conservation, input sum equals output sum (Section 5.3 clause 4);
 * neither output commitment is already in the tree, and the two differ
   (Section 4.4).
@@ -141,7 +142,7 @@ def guard (d : TransferData P) (st : St P) : Prop :=
   st.rootInWindow d.snapshot ∧
   d.in1.ownedBy d.key ∧
   d.in2.ownedBy d.key ∧
-  (d.in1.isBallast ∨ st.inTreeAt d.snapshot d.in1.cm) ∧
+  st.inTreeAt d.snapshot d.in1.cm ∧
   (d.in2.isBallast ∨ st.inTreeAt d.snapshot d.in2.cm) ∧
   st.fresh d.nf1 ∧
   st.fresh d.nf2 ∧
