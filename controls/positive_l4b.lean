@@ -5,5 +5,5 @@ import LeanShieldedPool.Proofs.EventReplay
 
 open LeanShieldedPool
 
-example : noTheft NonVacuity.Toy := noTheft_proof _
+example : spendRequiresOwnerKey NonVacuity.Toy := spendRequiresOwnerKey_proof _
 example : eventReplayFaithful NonVacuity.Toy := eventReplayFaithful_proof _

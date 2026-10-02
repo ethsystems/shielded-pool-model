@@ -121,14 +121,15 @@ theorem Run.spentCms_nodup {sup : P.Token → Prop}
         rw [hkeys]
         exact List.subset_append_right _ _
       have hprefix : CryptoHyp P txs :=
-        ⟨fun n hn n' hn' => hcrypto.commit_inj n (oldNotes hn) n' (oldNotes hn'),
+        ⟨fun n hn n' hn' hw hw' =>
+            hcrypto.commit_inj n (oldNotes hn) n' (oldNotes hn') hw hw',
           fun k hk k' hk' => hcrypto.derivePub_inj k (oldKeys hk) k' (oldKeys hk')⟩
       have hfresh : ∀ c ∈ tx.consumes, c ∉ st.spentCms := by
         intro c hc hold
         obtain ⟨n, hn, k, hk, hcm, ho, _, hf⟩ := hs.consumes_witness hc
         obtain ⟨n', hn', k', hk', hcm', ho', hnf⟩ := hr.spentCms_witness hold
         have heq := hcrypto.commit_inj n (newNotes hn) n' (oldNotes hn')
-          (hcm.trans hcm'.symm)
+          (hs.notes_wf n hn) (hr.runNotes_wf n' hn') (hcm.trans hcm'.symm)
         have hpub : P.derivePub k = P.derivePub k' :=
           ho.trans ((congrArg Note.ownerPubkey heq).trans ho'.symm)
         have hkey := hcrypto.derivePub_inj k (newKeys hk) k' (oldKeys hk') hpub
@@ -140,6 +141,7 @@ theorem Run.spentCms_nodup {sup : P.Token → Prop}
       refine ⟨ih hprefix, hs.consumes_nodup ?_, ?_⟩
       · exact fun n hn n' hn' =>
           hcrypto.commit_inj n (newNotes hn) n' (newNotes hn')
+            (hs.notes_wf n hn) (hs.notes_wf n' hn')
       · intro a ha b hb heq
         exact hfresh b hb (heq ▸ ha)
 

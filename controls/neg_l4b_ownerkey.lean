@@ -1,13 +1,13 @@
 -- EXPECT: unsolved goals
--- Negative control for `noTheft_proof`.
+-- Negative control for `spendRequiresOwnerKey_proof`.
 -- On a PrimSpec with nontrivial ownership (PubKey = Bool), the withdraw
 -- guard with the ownedBy conjunct REMOVED accepts a spend of a note owned
--- by pubkey `true` using witness key `false`. The noTheft conclusion for
+-- by pubkey `true` using witness key `false`. The spendRequiresOwnerKey conclusion for
 -- that operation is then FALSE. The proof attempt below must not close.
 import LeanShieldedPool.Proofs.TierB
 
 namespace LeanShieldedPool
-namespace NegL4BNoTheft
+namespace NegL4BOwnerKey
 
 /-- Toy primitives with real ownership: two pubkeys, derivePub = id. -/
 abbrev K : PrimSpec where
@@ -84,7 +84,7 @@ hypotheses (one note; one run key), so the failure below is due only to
 the dropped ownership guard. This part must elaborate. -/
 theorem theft_cryptoHyp : CryptoHyp K [.deposit dOwned, .withdraw wSteal] := by
   constructor
-  · intro n hn m hm _
+  · intro n hn m hm _ _ _
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm
@@ -95,11 +95,11 @@ theorem theft_cryptoHyp : CryptoHyp K [.deposit dOwned, .withdraw wSteal] := by
       List.not_mem_nil, or_false] at hk hk'
     subst hk; subst hk'; rfl
 
-/-- The noTheft conclusion for the theft operation in the accepted history.
+/-- The spendRequiresOwnerKey conclusion for the theft operation in the accepted history.
 FALSE: the only witness key is `false` and `derivePub false = false ≠ true`.
 The control passes only if this proof fails. -/
 example : ∃ k ∈ (Tx.withdraw wSteal).keys, nOwned.ownedBy k := by
   norm_num [Tx.keys, Note.ownedBy]
 
-end NegL4BNoTheft
+end NegL4BOwnerKey
 end LeanShieldedPool

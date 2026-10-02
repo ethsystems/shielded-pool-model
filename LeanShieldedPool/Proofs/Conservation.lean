@@ -20,7 +20,7 @@ private theorem crypto_prefix {txs : List (Tx P)} {tx : Tx P}
     simp only [runKeys, List.flatMap_append, List.flatMap_cons,
       List.flatMap_nil, List.append_nil]
     exact List.subset_append_left _ _
-  exact ⟨fun n h n' h' => hc.commit_inj n (hn h) n' (hn h'),
+  exact ⟨fun n h n' h' hw hw' => hc.commit_inj n (hn h) n' (hn h') hw hw',
     fun k h k' h' => hc.derivePub_inj k (hk h) k' (hk h')⟩
 
 private theorem Step.leaves_subset {st st' : St P} {tx : Tx P}
@@ -43,10 +43,8 @@ private theorem Step.consumes_covered {st st' : St P} {tx : Tx P}
       obtain ⟨_, _, _, h1, h2, _⟩ := hg
       simp only [Tx.consumes, List.mem_cons, List.not_mem_nil, or_false] at hc
       rcases hc with hc | hc
-      · refine ⟨d.in1, List.mem_cons_self, hc.symm, ?_⟩
-        rcases h1 with hz | hm
-        · exact Or.inl hz
-        · exact Or.inr (hc ▸ List.mem_of_mem_take hm)
+      · exact ⟨d.in1, List.mem_cons_self, hc.symm,
+          Or.inr (hc ▸ List.mem_of_mem_take h1)⟩
       · refine ⟨d.in2, List.mem_cons_of_mem _ List.mem_cons_self, hc.symm, ?_⟩
         rcases h2 with hz | hm
         · exact Or.inl hz
@@ -165,7 +163,8 @@ private theorem fresh_output_value {sup : P.Token → Prop}
     have hn' : n ∈ runNotes (txs ++ [tx]) := by
       rw [runNotes_append]
       exact List.mem_append_right _ hn
-    have hmn := hc.commit_inj m hm n hn' heq
+    have hmn := hc.commit_inj m hm n hn'
+      ((hr.step hs).runNotes_wf m hm) (hs.notes_wf n hn) heq
     subst m
     exact h.resolve_right hf
   by_cases hm : n.cm ∈ st'.spentCms
@@ -175,7 +174,8 @@ private theorem fresh_output_value {sup : P.Token → Prop}
 private theorem input_present {sup : P.Token → Prop}
     {txs : List (Tx P)} {st : St P} {tx : Tx P}
     (hr : Run sup txs st) (hc : CryptoHyp P (txs ++ [tx]))
-    {n : Note P} (hn : n ∈ tx.notes) (hm : n.amount = 0 ∨ n.cm ∈ st.leaves) :
+    {n : Note P} (hn : n ∈ tx.notes) (hwf : n.wf)
+    (hm : n.amount = 0 ∨ n.cm ∈ st.leaves) :
     n.amount = 0 ∨ n ∈ st.minted := by
   rcases hm with hz | hm
   · exact Or.inl hz
@@ -184,7 +184,8 @@ private theorem input_present {sup : P.Token → Prop}
         rw [runNotes_append]
         exact List.mem_append_left _ (hr.minted_mem_runNotes hm)) n (by
         rw [runNotes_append]
-        exact List.mem_append_right _ hn) heq
+        exact List.mem_append_right _ hn)
+      (hr.runNotes_wf m (hr.minted_mem_runNotes hm)) hwf heq
     exact Or.inr (hmn ▸ hm)
 
 theorem valueConservation_proof (P : PrimSpec) : valueConservation P := by
@@ -198,7 +199,8 @@ theorem valueConservation_proof (P : PrimSpec) : valueConservation P := by
       have hold := ih (crypto_prefix hc) t
       have hi : ∀ n ∈ tx.notes, ∀ m ∈ st.minted, m.cm = n.cm → m = n := by
         intro n hn m hm heq
-        apply hc.commit_inj m _ n _ heq
+        apply hc.commit_inj m _ n _
+          (hr.runNotes_wf m (hr.minted_mem_runNotes hm)) (hs.notes_wf n hn) heq
         · rw [runNotes_append]
           exact List.mem_append_left _ (hr.minted_mem_runNotes hm)
         · rw [runNotes_append]
@@ -230,7 +232,7 @@ theorem valueConservation_proof (P : PrimSpec) : valueConservation P := by
       | @transfer d hg =>
           have hs := Step.transfer hg
           obtain ⟨_, _, _, hm1, hm2, _, _, _, ht2, hto1, hto2,
-            _, _, _, _, hvalue, ho1, ho2, _⟩ := hg
+            hu1, hu2, _, _, hvalue, ho1, ho2, _⟩ := hg
           have hn1 : d.in1 ∈ (Tx.transfer d).notes := List.mem_cons_self
           have hn2 : d.in2 ∈ (Tx.transfer d).notes :=
             List.mem_cons_of_mem _ List.mem_cons_self
@@ -239,9 +241,9 @@ theorem valueConservation_proof (P : PrimSpec) : valueConservation P := by
           have hno2 : d.out2 ∈ (Tx.transfer d).notes :=
             List.mem_cons_of_mem _ (List.mem_cons_of_mem _
               (List.mem_cons_of_mem _ List.mem_cons_self))
-          have hp1 := input_present hr hc hn1
-            (hm1.imp id (fun h => List.mem_of_mem_take h))
-          have hp2 := input_present hr hc hn2
+          have hp1 := input_present hr hc hn1 hu1
+            (Or.inr (List.mem_of_mem_take hm1))
+          have hp2 := input_present hr hc hn2 hu2
             (hm2.imp id (fun h => List.mem_of_mem_take h))
           have hspent := (hr.step hs).spentCms_nodup hc
           obtain ⟨hf1, hrest⟩ := List.nodup_cons.mp hspent
@@ -279,7 +281,8 @@ theorem valueConservation_proof (P : PrimSpec) : valueConservation P := by
           omega
       | @withdraw d hg =>
           have hn : d.note ∈ (Tx.withdraw d).notes := List.mem_cons_self
-          have hp := input_present hr hc hn (Or.inr (List.mem_of_mem_take hg.2.1))
+          have hp := input_present hr hc hn hg.2.2.2.2.2.1
+            (Or.inr (List.mem_of_mem_take hg.2.1))
           have hf := (List.nodup_cons.mp
             ((hr.step (Step.withdraw hg)).spentCms_nodup hc)).1
           have hremove := liveSum_cons_spent st.minted st.spentCms t d.note

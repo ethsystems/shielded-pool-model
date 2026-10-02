@@ -1,8 +1,6 @@
 import LeanShieldedPool.Statements.L4B
 import LeanShieldedPool.Draft.NonVacuity
 
-/-! Promoted 2026-09-15 from Draft/EventLog.lean (worker bd-2sz). -/
-
 namespace LeanShieldedPool
 
 variable {P : PrimSpec}

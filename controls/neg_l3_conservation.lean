@@ -45,7 +45,7 @@ subsingleton), so the failure below is due only to the dropped guard.
 This part must elaborate. -/
 theorem ghost_cryptoHyp : CryptoHyp Toy [.deposit d0, .withdraw wGhost] := by
   constructor
-  · intro n hn m hm hcm
+  · intro n hn m hm _ _ hcm
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm

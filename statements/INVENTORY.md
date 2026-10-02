@@ -16,9 +16,9 @@ LeanShieldedPool.noOverWithdrawal :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.noMinting :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.balanceIsLiveValue :: (P : LeanShieldedPool.PrimSpec) → Prop
 # L4 Tier B statement Props and theorems (promoted and frozen 2026-09-15):
-LeanShieldedPool.noTheft :: (P : LeanShieldedPool.PrimSpec) → Prop
+LeanShieldedPool.spendRequiresOwnerKey :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.eventReplayFaithful :: (P : LeanShieldedPool.PrimSpec) → Prop
-LeanShieldedPool.noTheft_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.noTheft P
+LeanShieldedPool.spendRequiresOwnerKey_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.spendRequiresOwnerKey P
 LeanShieldedPool.eventReplayFaithful_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.eventReplayFaithful P
 # L3 theorems (proofs of the frozen Props; landed 2026-09-15):
 LeanShieldedPool.nullifierUniqueness_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.nullifierUniqueness P

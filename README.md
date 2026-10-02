@@ -13,7 +13,7 @@ This repo makes one claim.
 
 ## The claim
 
-> In a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision 4d4dce1), the protocol rules imply that no note spends twice and that value is conserved per token, from an empty pool over every accepted history, under one hypothesis: among the notes and keys that appear in that history, no two distinct notes share a commitment and no two distinct spending keys derive the same public key. Machine-checked with the three standard Lean axioms only. Whether the model says what the spec says is a human reading, still open.
+> In a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision 4d4dce1), the protocol rules imply that no note spends twice and that value is conserved per token, from an empty pool over every accepted history, under one hypothesis: among the notes and keys that appear in that history, no two distinct notes with `u128` amounts share a commitment and no two distinct spending keys derive the same public key. Machine-checked with the three standard Lean axioms only. Whether the model says what the spec says is a human reading, still open.
 
 The hypothesis is `CryptoHyp` in `LeanShieldedPool/Statements/L3.lean`.
 It covers one history only. It says nothing about Poseidon outside that
@@ -28,8 +28,9 @@ both are obligations on the implementation.
 The repo proves nine theorems. Three are about the core model: nullifier
 uniqueness, no double spend and value conservation. Six are supporting
 results about the same model: solvency, no over-withdrawal, no minting,
-balance equals live value, owner-key binding (`noTheft`) and event replay.
-CLAIMS.md gives each one with its hypothesis and spec clause.
+balance equals live value, owner-key binding (`spendRequiresOwnerKey`)
+and event replay. CLAIMS.md gives each one with its hypothesis and spec
+clause.
 
 The model makes 16 simplifications, for example a list for the Merkle
 tree, `Nat` amounts and opaque hashes. They are modelling choices, not
@@ -59,9 +60,9 @@ gate (below) checks mechanical conditions on the result: it rejects
 frozen-file changes. It does not by itself establish independence from
 malicious build or elaboration code: the axiom census reads printed
 output, and code imported during elaboration can affect that channel.
-The hardening work is listed as a follow-up. Oskar directed the
-work and read the statements against the spec. The review is the second
-pair of eyes: Track A asks whether the model says what the spec says.
+The hardening work is listed as a follow-up. Oskar directed the work and
+read the statements against the spec. The review is the second pair of
+eyes: Track A asks whether the model says what the spec says.
 
 ## What the theorems do not say
 
@@ -94,10 +95,47 @@ because their inputs are private. The repo is private; no license yet.
 ## Names
 
 The files keep the names they have in the research repo this model comes
-from (lean-shielded-pool at commit 67160b1). The 14 Lean files under
-`LeanShieldedPool/`, the 13 controls, four gate scripts and three build
-files are byte-identical to that commit. `sha256sum -c PROVENANCE.sha256`
-checks this. The level names come from that repo:
+from (lean-shielded-pool at commit 67160b1). Of the 34 files that came
+from there, 15 are still byte-identical to that commit;
+`sha256sum -c PROVENANCE.sha256` checks exactly those 15 and nothing
+else. The other 19 were edited here while answering the review of pull
+request 1, so they no longer match 67160b1. Nothing is written back to
+the research repo from here.
+
+What deviates from 67160b1, and why:
+
+- Model and statements. `Pool/Tx.lean`: the transfer guard requires
+  membership for the first input, following spec 4.2 and the reference
+  circuit, and two stale docstring lines are fixed.
+  `Statements/L3.lean`: `CryptoHyp.commit_inj` is restricted to `wf`
+  notes. `Statements/L4.lean`: the solvency docstring names
+  simplification 16 instead of citing 4.4. `Statements/L4B.lean`:
+  `noTheft` is renamed `spendRequiresOwnerKey` and the spec citations
+  are narrowed. `Pool/Events.lean` and `Statements/L4B.lean` lose their
+  promotion comments.
+- Proofs. `Proofs/Invariants.lean` adds `Step.notes_wf` and
+  `Run.runNotes_wf`. `Proofs/Conservation.lean`,
+  `Proofs/NoDoubleSpend.lean` and `Proofs/TierB.lean` follow the guard
+  change and the `wf` restriction. `Proofs/EventReplay.lean` and
+  `Proofs/TierB.lean` lose their promotion comments.
+- Controls. `controls/positive_l3.lean` proves `CryptoHyp` for the
+  deposit-transfer-withdraw run. `controls/neg_l3_double_spend.lean`
+  became the refutation control `controls/refute_l3_double_spend.lean`.
+  `controls/neg_l4b_notheft.lean` became
+  `controls/neg_l4b_ownerkey.lean` with the rename.
+  `controls/neg_l3_conservation.lean`, `controls/neg_l3_spentcms.lean`,
+  `controls/neg_l4_nominting.lean` and `controls/positive_l4b.lean`
+  follow the same two changes.
+- Gate. `scripts/gate.sh` takes modifier-prefixed axioms and builds the
+  refutation controls. `scripts/check_frozen.py` adds
+  `LeanShieldedPool/Proofs/*.lean` to the frozen surface, so the census
+  imports no unpinned project file.
+
+`statements/INVENTORY.md` and `scripts/gate_test.sh` also changed. They
+were never covered by PROVENANCE.sha256; `statements/FROZEN.sha256` pins
+both.
+
+The level names come from the research repo:
 
 - L3 is the core model claim (`Statements/L3.lean`).
 - L4 holds the accounting results (`Statements/L4.lean`).
@@ -117,7 +155,8 @@ checks this. The level names come from that repo:
    `L4B.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
 7. The controls: `controls/`. Each negative control weakens one guard,
-   post-state or replay step, and the proof must then fail.
+   post-state or replay step, and the proof must then fail. A refutation
+   control proves the negation on its mutated model and must build.
 8. The gate: `scripts/gate.sh`.
 
 REVIEW.md is the reviewer guide.
@@ -132,8 +171,8 @@ curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf 
 git clone --branch model-v1 git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
 lake exe cache get
 
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 37 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 206 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); 30 s measured
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 265 s measured
 ```
 
 Branch `model-v1` holds the model until the pull request merges.
@@ -141,12 +180,12 @@ Branch `model-v1` holds the model until the pull request merges.
 The gate builds a fresh clone of HEAD. It rejects `sorry`,
 `native_decide` and undeclared axioms. It checks the exact type and axioms
 of the 19 names in `statements/INVENTORY.md`, runs the controls, and
-checks the pins in `statements/FROZEN.sha256`. `gate_test.sh` plants 11
+checks the pins in `statements/FROZEN.sha256`. `gate_test.sh` plants 12
 cheats; each must make the gate fail.
 
-The 37 s gate time is one cold build with a copied Mathlib cache. The
-206 s fixture time is from two runs, 206 s each. Both ran on a Linux laptop
-with btrfs. Each gate run copies `.lake` (about 7.5 GB). Without cheap
+The 30 s gate time is one cold build with a copied Mathlib cache. The
+265 s fixture time is one run of the 12 fixtures. Both ran on a Linux
+laptop with btrfs. Each gate run copies `.lake` (about 7.5 GB). Without cheap
 file copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 AXIOMS.md lists the three allowed axioms: `propext`, `Classical.choice`

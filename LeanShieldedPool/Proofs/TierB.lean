@@ -3,8 +3,6 @@ import LeanShieldedPool.Proofs.Invariants
 import LeanShieldedPool.Proofs.NoDoubleSpend
 import LeanShieldedPool.Draft.NonVacuity
 
-/-! Promoted 2026-09-15 from Draft/TierB.lean (worker bd-36e). -/
-
 namespace LeanShieldedPool
 
 variable {P : PrimSpec}
@@ -24,13 +22,14 @@ theorem Run.step_of_mem {sup : P.Token → Prop}
         exact ⟨st, st', hs⟩
 
 /-- Only commitment binding is needed from the cryptographic hypotheses. -/
-theorem noTheft_proof (P : PrimSpec) : noTheft P := by
+theorem spendRequiresOwnerKey_proof (P : PrimSpec) : spendRequiresOwnerKey P := by
   intro sup txs st hr hc tx htx n hn hcons
   obtain ⟨before, after, hs⟩ := hr.step_of_mem htx
   obtain ⟨input, hin, k, hk, hcm, howned, _, _⟩ := hs.consumes_witness hcons
   have hinRun : input ∈ runNotes txs :=
     List.mem_flatMap.mpr ⟨tx, htx, hin⟩
-  have heq : input = n := hc.commit_inj input hinRun n hn hcm
+  have heq : input = n := hc.commit_inj input hinRun n hn
+    (hr.runNotes_wf input hinRun) (hr.runNotes_wf n hn) hcm
   exact ⟨k, hk, heq ▸ howned⟩
 
 /-- A spent commitment in the final state has an authorized consuming operation. -/
@@ -40,9 +39,9 @@ theorem Run.spent_ownedBy {sup : P.Token → Prop}
     (hspent : st.spent n) :
     ∃ tx ∈ txs, n.cm ∈ tx.consumes ∧ ∃ k ∈ tx.keys, n.ownedBy k := by
   obtain ⟨tx, htx, hcons⟩ := List.mem_flatMap.mp (hr.spentCms_mem_iff.mp hspent)
-  exact ⟨tx, htx, hcons, noTheft_proof P sup txs st hr hc tx htx n hn hcons⟩
+  exact ⟨tx, htx, hcons, spendRequiresOwnerKey_proof P sup txs st hr hc tx htx n hn hcons⟩
 
-namespace NoTheftNonVacuity
+namespace OwnerKeyNonVacuity
 
 open NonVacuity
 
@@ -71,7 +70,7 @@ theorem withdraw_run : Run (fun _ => True) [.deposit d0, .withdraw w0]
 
 theorem transfer_crypto : CryptoHyp Toy [.deposit d0, .transfer t0] := by
   constructor
-  · intro n hn m hm hcm
+  · intro n hn m hm _ _ hcm
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm
@@ -83,7 +82,7 @@ theorem transfer_crypto : CryptoHyp Toy [.deposit d0, .transfer t0] := by
 
 theorem withdraw_crypto : CryptoHyp Toy [.deposit d0, .withdraw w0] := by
   constructor
-  · intro n hn m hm _
+  · intro n hn m hm _ _ _
     simp only [runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
       List.cons_append, List.nil_append, List.append_nil, List.mem_cons,
       List.not_mem_nil, or_false] at hn hm
@@ -93,7 +92,7 @@ theorem withdraw_crypto : CryptoHyp Toy [.deposit d0, .withdraw w0] := by
 
 /-- Both spending operations have nonempty runs satisfying all hypotheses.
 The consumed note has value five; the transfer also consumes its ballast input. -/
-theorem noTheft_nonVacuity :
+theorem spendRequiresOwnerKey_nonVacuity :
     ∃ (sup : Toy.Token → Prop) (txs : List (Tx Toy)) (st : St Toy)
       (n : Note Toy),
       Run sup txs st ∧ CryptoHyp Toy txs ∧ n.amount > 0 ∧
@@ -106,20 +105,20 @@ theorem noTheft_nonVacuity :
     withdraw_run.spent_ownedBy withdraw_crypto hn hs⟩
 
 example : ∃ k ∈ (Tx.transfer t0).keys, t0.in1.ownedBy k :=
-  noTheft_proof Toy _ _ _ transfer_run transfer_crypto (.transfer t0)
+  spendRequiresOwnerKey_proof Toy _ _ _ transfer_run transfer_crypto (.transfer t0)
     (List.mem_cons_of_mem _ List.mem_cons_self) t0.in1 List.mem_cons_self
     List.mem_cons_self
 
 example : ∃ k ∈ (Tx.transfer t0).keys, t0.in2.ownedBy k :=
-  noTheft_proof Toy _ _ _ transfer_run transfer_crypto (.transfer t0)
+  spendRequiresOwnerKey_proof Toy _ _ _ transfer_run transfer_crypto (.transfer t0)
     (List.mem_cons_of_mem _ List.mem_cons_self) t0.in2
     (List.mem_cons_of_mem _ (List.mem_cons_of_mem _ List.mem_cons_self))
     (List.mem_cons_of_mem _ List.mem_cons_self)
 
-end NoTheftNonVacuity
+end OwnerKeyNonVacuity
 
-#print axioms noTheft_proof
+#print axioms spendRequiresOwnerKey_proof
 #print axioms Run.spent_ownedBy
-#print axioms NoTheftNonVacuity.noTheft_nonVacuity
+#print axioms OwnerKeyNonVacuity.spendRequiresOwnerKey_nonVacuity
 
 end LeanShieldedPool

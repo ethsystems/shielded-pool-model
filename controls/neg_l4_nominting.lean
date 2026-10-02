@@ -11,7 +11,7 @@ namespace NegL4NoMinting
 
 open NonVacuity
 
--- GUARD REMOVED: no `(d.in1.isBallast ∨ st.inTreeAt d.snapshot d.in1.cm)`.
+-- GUARD REMOVED: no `st.inTreeAt d.snapshot d.in1.cm`.
 def guardNoMembership (d : TransferData Toy) (st : St Toy) : Prop :=
   st.rootInWindow d.snapshot ∧
   d.in1.ownedBy d.key ∧

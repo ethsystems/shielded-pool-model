@@ -5,7 +5,7 @@ audit.
 
 ## 1. What is claimed
 
-> In a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision 4d4dce1), the protocol rules imply that no note spends twice and that value is conserved per token, from an empty pool over every accepted history, under one hypothesis: among the notes and keys that appear in that history, no two distinct notes share a commitment and no two distinct spending keys derive the same public key. Machine-checked with the three standard Lean axioms only. Whether the model says what the spec says is a human reading, still open.
+> In a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision 4d4dce1), the protocol rules imply that no note spends twice and that value is conserved per token, from an empty pool over every accepted history, under one hypothesis: among the notes and keys that appear in that history, no two distinct notes with `u128` amounts share a commitment and no two distinct spending keys derive the same public key. Machine-checked with the three standard Lean axioms only. Whether the model says what the spec says is a human reading, still open.
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -16,7 +16,7 @@ audit.
 | `noOverWithdrawal_proof` | withdrawn never exceeds deposited | 6.2 | none |
 | `noMinting_proof` | live value never exceeds deposited | 6.2 | `CryptoHyp` |
 | `balanceIsLiveValue_proof` | balance = live value | 4.4, 6.2 | `CryptoHyp` |
-| `noTheft_proof` | owner-key binding: the witness key owns each consumed note | 5.3 (319, 348, 365) | `CryptoHyp` |
+| `spendRequiresOwnerKey_proof` | owner-key binding: the witness key owns each consumed note | 5.3 (319, 348, 365) | `CryptoHyp` |
 | `eventReplayFaithful_proof` | log replay rebuilds the tree and the nullifier set | 4.4 (279) | none |
 
 ## 2. What is not claimed
@@ -34,19 +34,19 @@ audit.
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
 git clone --branch model-v1 git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
 lake exe cache get          # setup: about 30 minutes (estimate), .lake about 7.5 GB
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 37 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 206 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); 30 s measured
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 265 s measured
 ```
 
-Branch `model-v1` holds the model until the PR merges. The 37 s gate
+Branch `model-v1` holds the model until the PR merges. The 30 s gate
 time is one cold build with a copied Mathlib cache. The fixture time is
-from two runs, 206 s each, on Linux with btrfs. Without cheap file
+one run of the 12 fixtures, on Linux with btrfs. Without cheap file
 copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
 and unlisted axioms. It checks the exact type and axioms of the 19
 inventory names, runs the controls, and checks the pins last.
-`gate_test.sh` plants 11 cheats; each must make the gate fail.
+`gate_test.sh` plants 12 cheats; each must make the gate fail.
 
 ## 4. Trust base
 
@@ -79,18 +79,19 @@ Questions:
   "machine-checked (model)" after this review?
 - Is `CryptoHyp` (no commitment or key collision within one history) the
   right hypothesis, or too strong?
-- Two spec clauses seem inconsistent. 4.2 pads the second input. 5.3 lets
-  any zero-amount input skip membership. The model follows 5.3
-  (simplification 11). Which one does the spec intend?
+- Two spec clauses disagree. 4.2 pads the second input. 5.3 lets any
+  zero-amount input skip membership. The model now follows 4.2 and the
+  reference circuit (simplification 11), and a spec change is proposed
+  that makes 5.3 say the same. Is 4.2 the rule you intend?
 
 ## 6. What the theorems do not say
 
 They say nothing about the verifier, concrete Merkle implementations,
 encoded amounts, deployed caller and authorization behavior,
 re-entrancy, overflow, governance, privacy, or deployed code. A nullifier
-collision can lock a note, and locked value counts as live. `noTheft`
-is owner-key binding at the model level only; key secrecy and custody
-are out of the model.
+collision can lock a note, and locked value counts as live.
+`spendRequiresOwnerKey` is owner-key binding at the model level only; key
+secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
