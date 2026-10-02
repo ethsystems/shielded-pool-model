@@ -43,6 +43,10 @@ fixture broken-neg-control "GATE FAIL: negative control built" \
   'printf -- "-- EXPECT: nothing\ntheorem fx_neg : (1:Nat) = 1 := rfl\n" > controls/neg_fixture.lean'
 fixture broken-refute-control "GATE FAIL: control did not build" \
   'printf -- "theorem fx_refute : (1:Nat) = 2 := rfl\n" > controls/refute_fixture.lean'
+fixture refute-control-sorry "GATE FAIL: sorry in control" \
+  'printf -- "theorem fx_refute : (1:Nat) = 2 := by sorry\n" > controls/refute_fixture.lean'
+fixture control-axiom "GATE FAIL: axiom declared in control" \
+  'printf -- "private axiom\tprope : (1:Nat) = 2\ntheorem fx_pos : (1:Nat) = 2 := prope\n" > controls/positive_fixture.lean'
 fixture frozen-comment-edit "GATE FAIL: frozen" \
   'printf "\n-- tampered after pinning\n" >> LeanShieldedPool/Statements/L3.lean'
 fixture frozen-new-file "GATE FAIL: frozen" \
