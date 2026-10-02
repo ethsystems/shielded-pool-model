@@ -127,7 +127,9 @@ What deviates from 67160b1, and why:
   `controls/neg_l4_nominting.lean` and `controls/positive_l4b.lean`
   follow the same two changes.
 - Gate. `scripts/gate.sh` takes modifier-prefixed axioms and builds the
-  refutation controls. `scripts/check_frozen.py` adds
+  refutation controls. It also rejects a positive or refutation control
+  whose build reports a `sorry`, and an axiom declared in a control.
+  `scripts/check_frozen.py` adds
   `LeanShieldedPool/Proofs/*.lean` to the frozen surface, so the census
   imports no unpinned project file.
 
@@ -178,14 +180,14 @@ bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 265 s measured
 Branch `model-v1` holds the model until the pull request merges.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`,
-`native_decide` and undeclared axioms. It checks the exact type and axioms
-of the 19 names in `statements/INVENTORY.md`, runs the controls, and
-checks the pins in `statements/FROZEN.sha256`. `gate_test.sh` plants 12
-cheats; each must make the gate fail.
+`native_decide` and undeclared axioms, in the controls too. It checks the
+exact type and axioms of the 19 names in `statements/INVENTORY.md`, runs
+the controls, and checks the pins in `statements/FROZEN.sha256`.
+`gate_test.sh` plants 14 cheats; each must make the gate fail.
 
 The 30 s gate time is one cold build with a copied Mathlib cache. The
-265 s fixture time is one run of the 12 fixtures. Both ran on a Linux
-laptop with btrfs. Each gate run copies `.lake` (about 7.5 GB). Without cheap
+265 s fixture time is one run of the 12 earlier fixtures. Both ran on a
+Linux laptop with btrfs. Each gate run copies `.lake` (about 7.5 GB). Without cheap
 file copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 AXIOMS.md lists the three allowed axioms: `propext`, `Classical.choice`

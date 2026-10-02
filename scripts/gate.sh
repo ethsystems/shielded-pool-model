@@ -30,10 +30,11 @@ if grep -rnE --include="*.lean" "native_decide" LeanShieldedPool statements cont
 if grep -rnE --include="*.lean" "(^|[^_[:alnum:]])simp($| [^o])" LeanShieldedPool statements 2>/dev/null | grep -v "simp only"; then echo "GATE FAIL: bare simp (use simp only [...])"; exit 1; fi
 # every declared axiom must be listed in AXIOMS.md (grep belt; kernel census is the suspenders)
 while read -r f line; do
+  case "$f" in controls/*) echo "GATE FAIL: axiom declared in control $f"; exit 1;; esac
   ax=$(echo "$line" | sed -n 's/.*axiom \([A-Za-z0-9_.'"'"']*\).*/\1/p')
   [ -n "$ax" ] || continue
   grep -q "^- $ax" AXIOMS.md || { echo "GATE FAIL: axiom '$ax' in $f not listed in AXIOMS.md"; exit 1; }
-done < <(grep -rnE "^[[:space:]]*(private[[:space:]]+|protected[[:space:]]+)*axiom[[:space:]]" LeanShieldedPool statements 2>/dev/null | sed 's/:/ /')
+done < <(grep -rnE "^[[:space:]]*(private[[:space:]]+|protected[[:space:]]+)*axiom[[:space:]]" LeanShieldedPool statements controls 2>/dev/null | sed 's/:/ /')
 python3 scripts/mk_check.py statements/INVENTORY.md > "$WORK/CheckInventory.lean"
 if ! lake env lean "$WORK/CheckInventory.lean" > "$WORK/axioms.out" 2>&1; then
   echo "GATE FAIL: inventory did not elaborate"; cat "$WORK/axioms.out"; exit 1
@@ -54,6 +55,7 @@ done
 # reason the way an EXPECT marker can.
 for f in controls/positive*.lean controls/refute_*.lean; do
   lake env lean "$f" > "$WORK/pos.out" 2>&1 || { echo "GATE FAIL: control did not build: $f"; cat "$WORK/pos.out"; exit 1; }
+  if grep -Eq "declaration uses .sorry.|sorryAx" "$WORK/pos.out"; then echo "GATE FAIL: sorry in control: $f"; exit 1; fi
 done
 # frozen surface, last: pins and checker come from the checked-out HEAD (the
 # trusted base), files from the gated tree, so a GATE_REF candidate cannot
