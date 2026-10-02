@@ -17,7 +17,7 @@ audit.
 | `noMinting_proof` | live value never exceeds deposited | 6.2 | `CryptoHyp` |
 | `balanceIsLiveValue_proof` | balance = live value | 4.4, 6.2 | `CryptoHyp` |
 | `noTheft_proof` | owner-key binding: the witness key owns each consumed note | 5.3 (319, 348, 365) | `CryptoHyp` |
-| `eventReplayFaithful_proof` | log replay rebuilds the tree and the nullifier set | 4.4 (275-279) | none |
+| `eventReplayFaithful_proof` | log replay rebuilds the tree and the nullifier set | 4.4 (279) | none |
 
 ## 2. What is not claimed
 
@@ -58,7 +58,7 @@ inventory names, runs the controls, and checks the pins last.
   They bind an untrusted worker, not the maintainer, who can re-pin.
 - Your own build.
 
-## 5. The hypothesis and the 15 simplifications (Track A)
+## 5. The hypothesis and the 16 simplifications (Track A)
 
 Does the model say what the spec says? No machine can check this. Oskar
 has read the statements against the spec. Track A is the second pair of
@@ -67,7 +67,7 @@ eyes.
 1. Read spec 2 sections 4-6 at the model's revision:
    `git -C <specs-private> show 4d4dce1:specs/2/README.md`. SPEC-MAP line
    numbers refer to it.
-2. Read SPEC-MAP.md. The 15 simplifications are modelling choices, not
+2. Read SPEC-MAP.md. The 16 simplifications are modelling choices, not
    hypotheses.
 3. Read `Statements/L3.lean`, `L4.lean` and `L4B.lean` with CLAIMS.md.
 

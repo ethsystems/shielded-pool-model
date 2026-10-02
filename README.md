@@ -19,13 +19,19 @@ The hypothesis is `CryptoHyp` in `LeanShieldedPool/Statements/L3.lean`.
 It covers one history only. It says nothing about Poseidon outside that
 history, and it is not a Poseidon security claim.
 
+Two standing abstractions sit under the claim, next to `CryptoHyp`: a
+Merkle root stands for the exact leaf list it commits to
+(simplification 2), and the verifier and circuit constrain exactly what
+the guards state (simplification 1). Neither is a theorem hypothesis;
+both are obligations on the implementation.
+
 The repo proves nine theorems. Three are about the core model: nullifier
 uniqueness, no double spend and value conservation. Six are supporting
 results about the same model: solvency, no over-withdrawal, no minting,
 balance equals live value, owner-key binding (`noTheft`) and event replay.
 CLAIMS.md gives each one with its hypothesis and spec clause.
 
-The model makes 15 simplifications, for example a list for the Merkle
+The model makes 16 simplifications, for example a list for the Merkle
 tree, `Nat` amounts and opaque hashes. They are modelling choices, not
 hypotheses. SPEC-MAP.md lists them and maps each definition to its spec
 line.
@@ -48,9 +54,12 @@ check.
 A controller session released small bounded tasks to AI workers from two
 model families (Claude and GPT). The controller re-checked each result,
 and a session from the other family judged it, before it counted. The
-gate (below) makes the outcome independent of that process: it rejects
-`sorry`, undeclared axioms and statement edits, so a reader trusts the
-Lean kernel and the pinned statements, not the workers. Oskar directed the
+gate (below) checks mechanical conditions on the result: it rejects
+`sorry`, `native_decide`, undeclared axioms, statement edits and
+frozen-file changes. It does not by itself establish independence from
+malicious build or elaboration code: the axiom census reads printed
+output, and code imported during elaboration can affect that channel.
+The hardening work is listed as a follow-up. Oskar directed the
 work and read the statements against the spec. The review is the second
 pair of eyes: Track A asks whether the model says what the spec says.
 
@@ -59,7 +68,7 @@ pair of eyes: Track A asks whether the model says what the spec says.
 Nothing about the SNARK verifier, the concrete Merkle tree, field
 encodings, who may call the contract, re-entrancy, integer overflow,
 governance, privacy, or any deployed code. The tree is a list, amounts
-are `Nat`, hashes are opaque, steps are atomic: SPEC-MAP.md lists all 15
+are `Nat`, hashes are opaque, steps are atomic: SPEC-MAP.md lists all 16
 simplifications, each a review point. A nullifier collision can lock a
 note; locked value counts as live. Whether the model says what the spec
 says is a human reading, still open.
@@ -101,7 +110,7 @@ checks this. The level names come from that repo:
 
 1. README.md (this file).
 2. CLAIMS.md: each theorem in Lean and in English.
-3. SPEC-MAP.md: each definition against its spec line, then the 15
+3. SPEC-MAP.md: each definition against its spec line, then the 16
    simplifications.
 4. The model: `LeanShieldedPool/Pool/State.lean`, `Tx.lean`, `Events.lean`.
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,

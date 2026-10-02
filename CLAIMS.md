@@ -32,11 +32,15 @@ not an axiom. No theorem uses the global form `CryptoHypGlobal`.
 | 2 | `noDoubleSpend_proof` | No input commitment is consumed twice, ballast included. | 6.2 (441), 4.2 step 5 | `CryptoHyp` |
 | 3 | `valueConservation_proof` | For every token, total deposited equals total withdrawn plus the value of live notes. | 6.2 (442), 5.3 | `CryptoHyp` |
 | 4 | `poolSolvency_proof` | For every token, the contract balance plus total withdrawn equals total deposited. | 4.4 | none |
-| 5 | `noOverWithdrawal_proof` | For every token, total withdrawn never exceeds total deposited. | 6.2 | none |
-| 6 | `noMinting_proof` | For every token, live note value never exceeds total deposited. | 6.2 | `CryptoHyp` |
+| 5 | `noOverWithdrawal_proof` | For every token, total withdrawn never exceeds total deposited. | corollary supporting 6.2 (441-442); no own row | none |
+| 6 | `noMinting_proof` | For every token, live note value never exceeds total deposited. | corollary supporting 6.2 (441-442); no own row | `CryptoHyp` |
 | 7 | `balanceIsLiveValue_proof` | For every token, the contract balance equals the live note value. | 4.4, 6.2 | `CryptoHyp` |
 | 8 | `noTheft_proof` | This is owner-key binding: each operation's witness spending key owns every history note whose commitment the operation consumes. | 5.3 (319, 348, 365), 463 | `CryptoHyp` |
-| 9 | `eventReplayFaithful_proof` | Replaying the event log rebuilds the commitment tree and the nullifier set exactly. | 4.4 (275-279) | none |
+| 9 | `eventReplayFaithful_proof` | Replaying the event log rebuilds the commitment tree and the nullifier set exactly. | 4.4 (279) | none |
+
+In the Hypothesis column, "none" means no cryptographic hypothesis.
+Theorems 4 and 5 also rest on the withdraw payout bound, a modelling
+device (simplification 16).
 
 ## What the rows mean
 
@@ -46,7 +50,7 @@ not an axiom. No theorem uses the global form `CryptoHypGlobal`.
   groups. Accounting: theorems 4 to 7. Authorization: theorem 8. Event
   semantics: theorem 9. Value conservation does not imply theorems 8 and 9.
 - `noTheft` states owner-key binding at the model level only. Key secrecy
-  and signature custody (5.3, line 319; line 463) are out of the model
+  and signature custody (spec line 308; line 463) are out of the model
   (L4B.lean docstring).
 - Live value counts the unspent notes that the pool minted. A note that a
   nullifier collision locks still counts as live.
@@ -57,13 +61,24 @@ not an axiom. No theorem uses the global form `CryptoHypGlobal`.
 
 ## What the theorems rest on
 
-- The model in `LeanShieldedPool/Pool/`, with the 15 simplifications of
+- The model in `LeanShieldedPool/Pool/`, with the 16 simplifications of
   SPEC-MAP.md. They are modelling choices. Some are encoded in the guards;
   none is a separately quantified hypothesis of any theorem. No definition
   has an implementation-correspondence theorem in this repo.
 - `CryptoHyp`, where the table says so.
 - Three Lean axioms: `propext`, `Classical.choice` and `Quot.sound`
   (AXIOMS.md). The gate checks the axioms of each theorem.
+
+**Which guard conjuncts the proofs use.** The proofs consume membership,
+nullifier freshness and distinctness, owner-key binding, token
+consistency, the transfer sum equation, output-commitment freshness, the
+deposit duplicate check, and the withdraw payout bound. Two groups are
+not used by any theorem: the two root-window conjuncts and the `U128`
+range conjuncts. Weakening those leaves all nine theorems provable. They
+keep the model's accepted set aligned with the contract; root-window
+correctness and range enforcement are not among the nine claims. The
+root-window conformance bug fixed in pocs-private#12 is an example of a
+bug these theorems cannot see.
 
 ## Checks that the theorems have content
 

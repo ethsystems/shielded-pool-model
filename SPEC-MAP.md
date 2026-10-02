@@ -6,6 +6,9 @@ spec. Track A in REVIEW.md is the second reading.
 Source of truth: spec 2 at ethsystems/specs-private 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is
 byte-identical). Line numbers are that file's.
+Spec main (72414f4) adds the commitment-seen set in 5.2 and shifts later
+line numbers. This map stays pinned to 4d4dce1 until the 6.2 row change
+lands; the repin then remaps every line citation in one commit.
 Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`,
 `LeanShieldedPool/Statements/L3.lean`, `LeanShieldedPool/Draft/NonVacuity.lean`.
 
@@ -13,13 +16,13 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 
 | Lean definition | Spec clause | Lines |
 |---|---|---|
-| `maxU128`, `U128` | amount width `u128`; every amount witness range-checked; contract rejects public amounts at or above `2^128` | 5.1 (297), 5.3 (325-328) |
+| `maxU128`, `U128` | amount width `u128`; every amount witness range-checked; contract rejects public amounts at or above `2^128` | 5.1 (299), 5.3 (325-328) |
 | `rootWindow = 100` | "A window of 100 roots is RECOMMENDED" | 4.4 (262) |
 | `PrimSpec.derivePub` | `spending_pubkey = Poseidon1(spending_key)` | 5.1 (290) |
 | `PrimSpec.commit` | `commitment = Poseidon4(token, amount, owner_pubkey, salt)` | 5.1 (304) |
 | `PrimSpec.nullify` | `nullifier = Poseidon2(commitment, spending_key)` | 5.1 (305) |
 | `PrimSpec.Token/Address/PubKey/SpendKey/Salt/Commitment/Nullifier` | note and key field types | 5.1 (288-302) |
-| `Note` | `Note { token, amount, owner_pubkey, salt }` | 5.1 (294-299) |
+| `Note` | `Note { token, amount, owner_pubkey, salt }` | 5.1 (297-302) |
 | `Note.cm` | commitment of a note | 5.1 (304) |
 | `Note.wf` | amount inside the note amount width | 5.3 (325-328) |
 | `Note.isBallast` | ballast derived in-circuit from `amount == 0`, never a free selector | 5.3 (356-359) |
@@ -41,14 +44,14 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `liveValue`, `noteValue` | value still inside the pool, for the conservation statement | 6.2 (442) |
 | `DepositData` | deposit public inputs: commitment, token, amount, funding address | 5.3 (331-341) |
 | `DepositData.guard` | supported token; `amount != 0`; `u128` range; commitment not already in the tree | 4.4 (264-270), 5.3 (325-328) |
-| `DepositData.post` | append the commitment, record the new root, pull tokens | 4.1 steps 5-6 (200-204) |
-| `TransferData` | transfer public inputs: two nullifiers, two output commitments, root | 5.3 (344-346) |
+| `DepositData.post` | append the commitment, record the new root, pull tokens | 4.1 steps 5-6 (200-203), 4.4 (263) |
+| `TransferData` | transfer public inputs: two nullifiers, two output commitments, root | 5.3 (347) |
 | `TransferData.nf1`, `.nf2` | "each public nullifier equals `Poseidon2(commitment_in, spending_key)`" | 5.3 (351) |
 | `TransferData.guard` | root in window; both inputs under one key; membership unless ballast; both nullifiers unspent and distinct; token consistency; per-amount range checks; value conservation; no duplicate insertion. The former `U128 (in1 + in2)` conjunct is dropped: `Nat` sums never wrap, and the bound was stricter than spec 5.3 | 4.2 step 5 (233), 4.4 (260-264), 5.3 (348-359) |
 | `TransferData.post` | mark both nullifiers spent, append both outputs in public-input order, record the new root | 4.2 step 6 (234) |
 | `WithdrawData` | withdraw public inputs: nullifier, token, amount, recipient, root | 5.3 (362, 365-369) |
 | `WithdrawData.nf` | `nullifier == Poseidon2(commitment, spending_key)` | 5.3 (367) |
-| `WithdrawData.guard` | root in window; membership; owner key; nullifier unspent; `amount != 0`; `u128`; pool solvent for the payout | 4.3 step 4 (255), 4.4 (270), 5.3 (365-369) |
+| `WithdrawData.guard` | root in window; membership; owner key; nullifier unspent; `amount != 0`; `u128`; payout bound (modelling device, simplification 16; not a spec clause) | 4.3 step 4 (255), 4.4 (270), 5.3 (365-369) |
 | `WithdrawData.post` | mark spent, transfer tokens out; nothing inserted, so no new root | 4.3 step 5 (256), 4.4 (263) |
 | `Tx`, `Tx.spends` | the three protocol operations and the nullifiers each consumes | 4.1-4.3 (174-257) |
 | `Step` | one accepted operation; a failed guard reverts and is not a step | 4.1-4.3, 4.4 |
@@ -63,10 +66,11 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `Event`, `Tx.event`, `events` | operation events carrying commitments and nullifiers, transfer outputs in public-input order; no note or key witnesses; encrypted payloads out (simpl. 8) | 4.1 step 6 (201-202), 4.2 step 6 (234), 4.3 step 5 (256), 4.4 (279) |
 | `replayStep`, `replay`, `replayLeaves`, `replayNullifiers` | "events MUST carry enough data for a client to reconstruct the commitment tree and spent set from logs alone" | 4.4 (279) |
 | `noTheft` | spending authorization binds to the note's owner key; one spending-key witness feeds both derivations; key secrecy out of model | 5.3 (319, 348, 365), spec 463 |
-| `eventReplayFaithful` | honest bookkeeping: log replay reconstructs the commitment tree and nullifier set; timing vs external calls out (simpl. 9) | 4.4 (275-279) |
+| `eventReplayFaithful` | honest bookkeeping: log replay reconstructs the commitment tree and nullifier set; timing vs external calls out (simpl. 9) | 4.4 (279) |
 | `NonVacuity.*` | witnesses that each guard is satisfiable, so the statements are not vacuous | - |
+| `d.note.cm ∉ st.leaves`, `out cm ∉ st.leaves` (guard conjuncts) | duplicate check; spec main adds the commitment-seen set that answers it on-chain | 4.4 (264); 5.2 at 72414f4 (322-323) |
 
-## The 15 simplifications
+## The 16 simplifications
 
 Every item is a deliberate abstraction. Each is a review point.
 
@@ -76,7 +80,7 @@ value is conserved per token, from an empty pool over every accepted
 history, under one hypothesis: among the notes and keys that appear in
 that history, no two distinct notes share a commitment and no two
 distinct spending keys derive the same public key. That hypothesis is
-`CryptoHyp`, scoped to one history. The 15 items below are modelling
+`CryptoHyp`, scoped to one history. The 16 items below are modelling
 choices. Some are encoded in the guards; none is a separately quantified
 hypothesis of any theorem. No definition has an
 implementation-correspondence theorem in this repo, so the proofs give no
@@ -100,13 +104,22 @@ the model.
    the rule that the two transfer inputs must not share one length (5.3,
    322-323). It assumes concrete roots bind ordered leaves. That is an
    obligation on the implementation, not a premise of any theorem here.
+   The model also seeds the window with the empty-tree root; the
+   reference contract registers no root until the first operation. The
+   model accepts histories the contract rejects; for the universally
+   quantified theorems this is strictly more general.
 3. **Amounts are `Nat` with a side condition.** `U128 n` is `n <= 2^128 - 1`,
    not a 128-bit vector. `Nat` never wraps, so the model cannot exhibit the
    overflow-minting bug of 5.3 (325-328). The former `U128 (in1 + in2)`
    guard conjunct is dropped: it was stricter
    than the spec's per-amount checks and rejected spec-valid transfers.
    Each amount is still individually range-checked. A bitvector model
-   would make the bug reachable and the guards load-bearing.
+   would make the bug reachable and the guards load-bearing. The
+   circuit's checked `u128` additions also reject a transfer whose input
+   or output sum exceeds `2^128 - 1`; the model accepts such transfers
+   since the sum-range conjunct was dropped. The model is weaker than
+   the circuit here, which is conservative for the universally
+   quantified theorems.
 4. **Hashes are opaque with no properties.** `PrimSpec` declares `commit`,
    `nullify` and `derivePub` and asserts nothing about them: no collision
    resistance, no injectivity, no hiding. Deliberate, so no assumption hides
@@ -126,7 +139,7 @@ the model.
    271-272), which blocks the `nullifier + p` double-spend, cannot be stated:
    nullifiers are an opaque type with no encoding.
 7. **No deposit authorisation.** The funding address is carried as data, but
-   `msg.sender == funding_address` or the signature form (5.3, 337-341) is
+   `msg.sender == funding_address` or the signature form (5.3, 342-344) is
    not modelled: the model has no caller and no signatures. Withdraw's
    `recipient` is likewise data only.
 8. **Payload and encryption are out; events are modelled.** No encrypted
@@ -135,7 +148,7 @@ the model.
    (`LeanShieldedPool/Pool/Events.lean`); `eventReplayFaithful_proof` shows
    log replay rebuilds the commitment tree and the nullifier set.
 9. **Reentrancy and ordering are out.** Insertion-before-external-call (4.4,
-   277-279) and non-reentrancy (4.4) have no counterpart: `Step` is atomic.
+   275-276) and non-reentrancy (4.4, 278) have no counterpart: `Step` is atomic.
    These rules cannot be violated in the model, so the model gives no
    evidence about them.
 10. **Governance is frozen.** `St.supported` is fixed at pool creation and no
@@ -161,4 +174,18 @@ the model.
     and rebasing tokens from the supported set (4.4, 267). The model relies
     on that exclusion: `deposited` and `balance` credit the stated amount.
     A supported token that violates the exclusion is outside what the model
-    describes; the theorem itself stands.
+    describes; the theorem itself stands. The exclusion is an ongoing
+    obligation: a token that changes behavior after listing breaks it
+    silently, and no on-chain check enforces it; a spec issue proposes a
+    per-deposit balance-delta check, which narrows the deposit side of
+    that exposure.
+16. **The withdraw guard carries a payout bound.** `d.note.amount <=
+    st.balance` is not a clause of 4.3 or 4.4: 4.3 step 4 (255) checks the
+    proof and the nullifier only. It is a model assumption about token
+    transfer semantics, with a conventional ERC-20 rationale: the withdraw
+    transfer (checks-effects-interactions, ShieldedPool.sol:286) does not
+    complete when the pool balance is short, so the accepted operation set
+    matches for tokens with standard revert behavior. The unconditional
+    `poolSolvency` and `noOverWithdrawal` proofs use this conjunct
+    (TierA.lean:29-32). The existing solvency control removes membership
+    and the payout bound together, so it does not isolate this guard.
