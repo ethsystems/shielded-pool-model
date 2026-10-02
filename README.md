@@ -96,10 +96,11 @@ because their inputs are private. The repo is private; no license yet.
 
 The files keep the names they have in the research repo this model comes
 from (lean-shielded-pool at commit 67160b1). Of the 34 files that came
-from there, 15 are still byte-identical to that commit;
-`sha256sum -c PROVENANCE.sha256` checks exactly those 15 and nothing
-else. The other 19 were edited here while answering the review of pull
-request 1, so they no longer match 67160b1. Nothing is written back to
+from there, 11 are still byte-identical to that commit;
+`sha256sum -c PROVENANCE.sha256` checks exactly those 11 and nothing
+else. The other 23 were edited here: 19 while answering the review of
+pull request 1, and four more controls when the base negative controls
+became refutation controls. None of them matches 67160b1 now. Nothing is written back to
 the research repo from here.
 
 What deviates from 67160b1, and why:
@@ -118,7 +119,8 @@ What deviates from 67160b1, and why:
   `Proofs/NoDoubleSpend.lean` and `Proofs/TierB.lean` follow the guard
   change and the `wf` restriction. `Proofs/EventReplay.lean` and
   `Proofs/TierB.lean` lose their promotion comments.
-- Controls. `controls/positive_l3.lean` proves `CryptoHyp` for the
+- Controls, under the names they had in pull request 1.
+  `controls/positive_l3.lean` proves `CryptoHyp` for the
   deposit-transfer-withdraw run. `controls/neg_l3_double_spend.lean`
   became the refutation control `controls/refute_l3_double_spend.lean`.
   `controls/neg_l4b_notheft.lean` became
@@ -126,6 +128,13 @@ What deviates from 67160b1, and why:
   `controls/neg_l3_conservation.lean`, `controls/neg_l3_spentcms.lean`,
   `controls/neg_l4_nominting.lean` and `controls/positive_l4b.lean`
   follow the same two changes.
+- Refutation controls. The eight remaining base negative controls became
+  refutation controls with the same name after `refute_`:
+  `l3_conservation`, `l3_spentcms`, `l4_balancelive`, `l4_nominting`,
+  `l4_overwithdrawal`, `l4_solvency`, `l4b_eventreplay` and
+  `l4b_ownerkey`. Each keeps its mutation and must now build a proof of
+  the negation (CLAIMS.md, "Checks that the theorems have content").
+  `controls/refute_l3_double_spend.lean` names its renamed sibling.
 - Gate. `scripts/gate.sh` takes modifier-prefixed axioms and builds the
   refutation controls. `scripts/check_frozen.py` adds
   `LeanShieldedPool/Proofs/*.lean` to the frozen surface, so the census
@@ -154,9 +163,9 @@ The level names come from the research repo:
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
    `L4B.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
-7. The controls: `controls/`. Each negative control weakens one guard,
-   post-state or replay step, and the proof must then fail. A refutation
-   control proves the negation on its mutated model and must build.
+7. The controls: `controls/`. Each refutation control weakens one guard,
+   post-state or replay step and proves the negation of the frozen Prop
+   on its mutated model; it must build.
 8. The gate: `scripts/gate.sh`.
 
 REVIEW.md is the reviewer guide.

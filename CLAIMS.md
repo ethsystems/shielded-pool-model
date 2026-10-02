@@ -97,13 +97,20 @@ bug these theorems cannot see.
   `controls/positive_l3.lean` proves `CryptoHyp` for the
   deposit-transfer-withdraw run, so the conditional theorems apply to a
   nonempty accepted history.
-- Each negative control weakens one guard, post-state or replay step. The
-  proof attempt must then fail with "unsolved goals".
-- A refutation control goes further: it carries the accepted mutated run
-  and proves the explicit negation of the frozen Prop, and the file must
-  build, so an unrelated unsolved goal in its setup cannot be mistaken
-  for success. `controls/refute_l3_double_spend.lean` is the first one.
-  The remaining `neg_*` controls keep the marker check until they are
-  converted.
+- Each refutation control weakens one guard, post-state or replay step.
+  It carries a history that the mutated model accepts, shows that the
+  history meets the frozen Prop's other premises (`CryptoHyp` where the
+  Prop has it), and proves the negation of the frozen Prop restated over
+  the mutated model. For event replay the run is the real one and the
+  replay function is the mutated part. The file must build, so an
+  unrelated unsolved goal in its setup cannot be mistaken for success.
+  `controls/refute_l3_double_spend.lean` states the three parts as three
+  theorems; the eight others end in one theorem that negates a universal
+  statement over the mutated model (for replay: over the real `Run`, with
+  the lossy replay). None claims the negation of an
+  original theorem, which quantifies over the real `Run`.
+- The gate accepts a positive or refutation control when it builds. It
+  does not scan control output for `sorry` or the controls for local
+  axioms; the refutation controls contain neither.
 
 REVIEW.md part 6 lists what the theorems do not say.

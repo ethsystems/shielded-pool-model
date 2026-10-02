@@ -1,10 +1,11 @@
--- EXPECT: unsolved goals
--- Negative control for `eventReplayFaithful_proof`.
+-- Refutation control for `eventReplayFaithful_proof`. This file MUST BUILD.
 -- A lossy replay that IGNORES withdraw events (a log without withdraw
 -- nullifiers, violating spec 4.4 line 279: events must carry enough data
 -- to reconstruct the spent set) cannot reconstruct the nullifier list of
 -- the accepted deposit-transfer-withdraw run: it yields [5, 1] where the
--- state holds [10, 5, 1]. The proof attempt below must not close.
+-- state holds [10, 5, 1]. The mutation is in the replay, so the run is the
+-- real one; the final theorem proves the explicit negation of the frozen
+-- Prop with the lossy replay in place of `replay`.
 import LeanShieldedPool.Proofs.EventReplay
 
 namespace LeanShieldedPool
@@ -22,16 +23,17 @@ def replayStepLossy (state : List Toy.Commitment × List Toy.Nullifier) :
 def replayLossy (log : List (Event Toy)) : List Toy.Commitment × List Toy.Nullifier :=
   log.foldl replayStepLossy ([], [])
 
-/-- The faithful-replay claim under the lossy log. FALSE: the withdraw
-nullifier 10 is missing from the reconstruction. The control passes only
-if this proof fails. -/
-example :
-    replayLossy (events [.deposit d0, .transfer t0, .withdraw w1]) =
-      ((w1.post (t0.post (d0.post st0))).leaves,
-       (w1.post (t0.post (d0.post st0))).nullifiers) := by
+/-- `eventReplayFaithful`, with the lossy replay, is FALSE on the accepted
+deposit-transfer-withdraw run: the withdraw nullifier 10 is missing from
+the reconstruction. The control passes only if this refutation builds. -/
+theorem replay_counterexample :
+    ¬ ∀ (sup : Toy.Token → Prop) (txs : List (Tx Toy)) (st : St Toy),
+      Run sup txs st → replayLossy (events txs) = (st.leaves, st.nullifiers) := by
+  intro h
+  have hc := h _ _ _ all_operations_run
   norm_num [replayLossy, replayStepLossy, events, Tx.event, TransferData.nf1,
     TransferData.nf2, WithdrawData.nf, Note.nf, Note.cm, WithdrawData.post,
-    TransferData.post, DepositData.post, St.empty, St.leaves]
+    TransferData.post, DepositData.post, St.empty, St.leaves] at hc
 
 end NegL4BEventReplay
 end LeanShieldedPool
