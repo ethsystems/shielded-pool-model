@@ -1,9 +1,9 @@
--- EXPECT: unsolved goals
--- Negative control for `spendRequiresOwnerKey_proof`.
+-- Refutation control for `spendRequiresOwnerKey_proof`. This file MUST BUILD.
 -- On a PrimSpec with nontrivial ownership (PubKey = Bool), the withdraw
 -- guard with the ownedBy conjunct REMOVED accepts a spend of a note owned
--- by pubkey `true` using witness key `false`. The spendRequiresOwnerKey conclusion for
--- that operation is then FALSE. The proof attempt below must not close.
+-- by pubkey `true` using witness key `false`. The history satisfies
+-- `CryptoHyp`, so the final theorem proves the explicit negation of the
+-- frozen Prop, restated over the mutated model's runs.
 import LeanShieldedPool.Proofs.TierB
 
 namespace LeanShieldedPool
@@ -39,8 +39,7 @@ def guardNoOwner (d : WithdrawData K) (st : St K) : Prop :=
 /-- The thief's withdrawal: witness key `false` on the `true`-owned note. -/
 abbrev wSteal : WithdrawData K := ⟨false, nOwned, (), 1⟩
 
-/-- After the deposit, the ownership-free guard accepts the theft. This
-part must elaborate. -/
+/-- After the deposit, the ownership-free guard accepts the theft. -/
 theorem steal_guard : guardNoOwner wSteal (dOwned.post stK) := by
   refine ⟨?_, ?_, ?_, by norm_num, ?_, ?_⟩
   · show (1:Nat) ∈ _
@@ -72,8 +71,7 @@ theorem deposit_guard : dOwned.guard stK := by
     unfold U128 maxU128; norm_num
   · norm_num [St.empty, St.leaves]
 
-/-- The ownership-free model ACCEPTS the end-to-end theft history. This
-part must elaborate. -/
+/-- The ownership-free model ACCEPTS the end-to-end theft history. -/
 theorem theft_run :
     RunNT [.deposit dOwned, .withdraw wSteal] (wSteal.post (dOwned.post stK)) :=
   RunNT.step (RunNT.step RunNT.empty (StepNT.deposit deposit_guard))
@@ -81,7 +79,7 @@ theorem theft_run :
 
 /-- The theft history satisfies the conditional theorem's cryptographic
 hypotheses (one note; one run key), so the failure below is due only to
-the dropped ownership guard. This part must elaborate. -/
+the dropped ownership guard. -/
 theorem theft_cryptoHyp : CryptoHyp K [.deposit dOwned, .withdraw wSteal] := by
   constructor
   · intro n hn m hm _ _ _
@@ -95,11 +93,21 @@ theorem theft_cryptoHyp : CryptoHyp K [.deposit dOwned, .withdraw wSteal] := by
       List.not_mem_nil, or_false] at hk hk'
     subst hk; subst hk'; rfl
 
-/-- The spendRequiresOwnerKey conclusion for the theft operation in the accepted history.
-FALSE: the only witness key is `false` and `derivePub false = false ≠ true`.
-The control passes only if this proof fails. -/
-example : ∃ k ∈ (Tx.withdraw wSteal).keys, nOwned.ownedBy k := by
-  norm_num [Tx.keys, Note.ownedBy]
+/-- `spendRequiresOwnerKey`, restated over the mutated model's runs, is
+FALSE: in the accepted history the theft consumes `nOwned`, and its only
+witness key is `false`, with `derivePub false = false ≠ true`. The control
+passes only if this refutation builds. -/
+theorem ownerkey_counterexample :
+    ¬ ∀ (txs : List (Tx K)) (st : St K), RunNT txs st → CryptoHyp K txs →
+      ∀ tx ∈ txs, ∀ n ∈ runNotes txs, n.cm ∈ tx.consumes →
+        ∃ k ∈ tx.keys, n.ownedBy k := by
+  intro h
+  have hc := h _ _ theft_run theft_cryptoHyp (.withdraw wSteal)
+    (List.mem_cons_of_mem _ List.mem_cons_self) nOwned
+    (List.mem_flatMap.mpr ⟨.deposit dOwned, List.mem_cons_self, List.mem_cons_self⟩)
+    List.mem_cons_self
+  norm_num [Tx.keys, Note.ownedBy] at hc
+  exact Bool.false_ne_true hc
 
 end NegL4BOwnerKey
 end LeanShieldedPool

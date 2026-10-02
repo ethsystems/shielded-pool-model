@@ -7,7 +7,7 @@
 -- negation of the frozen Prop on an accepted mutated run. A refutation
 -- control states what fails; it cannot pass because of an unrelated
 -- unsolved goal in its setup, which an EXPECT marker cannot distinguish.
--- The dual single mutation (spentCms only) is neg_l3_spentcms.lean.
+-- The dual single mutation (spentCms only) is refute_l3_spentcms.lean.
 import LeanShieldedPool.Statements.L3
 import LeanShieldedPool.Draft.NonVacuity
 
