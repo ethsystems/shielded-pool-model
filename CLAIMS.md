@@ -109,8 +109,8 @@ bug these theorems cannot see.
   statement over the mutated model (for replay: over the real `Run`, with
   the lossy replay). None claims the negation of an
   original theorem, which quantifies over the real `Run`.
-- The gate accepts a positive or refutation control when it builds. It
-  does not scan control output for `sorry` or the controls for local
-  axioms; the refutation controls contain neither.
+- The gate rejects a positive or refutation control whose build reports
+  a `sorry`, and any axiom declared in a control. It runs no axiom census
+  on control theorems.
 
 REVIEW.md part 6 lists what the theorems do not say.
