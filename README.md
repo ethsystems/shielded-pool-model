@@ -218,8 +218,8 @@ git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-
 # Check out the revision under review before continuing.
 lake exe cache get
 
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); about a minute
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; about 10 minutes
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); 38 s measured
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 435 s measured
 ```
 
 The gate tests committed HEAD, so an uncommitted tree is not a gate
@@ -231,10 +231,11 @@ exact type and axioms of the 29 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
 `gate_test.sh` plants 18 cheats; each must make the gate fail.
 
-The times above are estimates for one cold build with a copied Mathlib
-cache on a Linux laptop with btrfs. Each gate run copies `.lake` (about
-7.5 GB). Without cheap file copies, set `GATE_WORK` to a directory on
-APFS, btrfs or XFS.
+The 38 s gate time is one cold build of this branch with a copied
+Mathlib cache. The 435 s fixture time is one run of the 18 fixtures.
+Both ran on a Linux laptop with btrfs, under a 5 GiB memory cap
+(5120 MiB). Each gate run copies `.lake` (about 7.5 GB). Without cheap
+file copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 AXIOMS.md lists the three allowed axioms: `propext`, `Classical.choice`
 and `Quot.sound`. There is no domain axiom.
