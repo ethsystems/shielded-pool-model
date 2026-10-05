@@ -19,11 +19,19 @@ audit.
 | `spendRequiresOwnerKey_proof` | owner-key binding: the witness key owns each consumed note | 5.3 (319, 348, 365) | `CryptoHyp` |
 | `eventReplayFaithful_proof` | log replay rebuilds the tree and the nullifier set | 4.4 (279) | none |
 
+L5 adds five separate results from the PoC extension spec. CLAIMS.md
+lists their exact scope and hypotheses; SPEC-MAP.md gives the source
+hash, clauses and epoch limits. The epoch commits pass the gate and the
+gate test.
+
 ## 2. What is not claimed
 
 - No implementation is verified (client, circuits, contract).
 - No privacy claim.
-- No epoch claim (L5). Its source is the PoC extension spec, not spec 2.
+- No recursive-proof or concrete nullifier-tree verification. The five
+  L5 claims concern the PoC extension's semantic model, separately from
+  spec 2.
+- No conservation or event replay result for arbitrary epoch runs.
 - The research repo's toy and smoke theorems are not here.
 - The root-window bug in the contract is not a claim of this repo (part 7).
 - The spec reading is human and still open (part 5).
@@ -32,21 +40,22 @@ audit.
 
 ```
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-git clone --branch model-v1 git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
+git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
+# Check out the revision under review before continuing.
 lake exe cache get          # setup: about 30 minutes (estimate), .lake about 7.5 GB
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 30 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 265 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); about a minute
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; about 10 minutes
 ```
 
-Branch `model-v1` holds the model until the PR merges. The 30 s gate
-time is one cold build with a copied Mathlib cache. The fixture time is
-one run of the 12 earlier fixtures, on Linux with btrfs. Without cheap file
-copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
+The gate tests committed HEAD, so an uncommitted tree is not a gate
+result. The times above are estimates for one cold build with a copied
+Mathlib cache, on Linux with btrfs. Without cheap file copies, set
+`GATE_WORK` to a directory on APFS, btrfs or XFS.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
 and unlisted axioms, in the controls too. It checks the exact type and
-axioms of the 19 inventory names, runs the controls, and checks the pins last.
-`gate_test.sh` plants 14 cheats; each must make the gate fail.
+axioms of the 29 inventory names, runs the controls, and checks the pins last.
+`gate_test.sh` plants 18 cheats; each must make the gate fail.
 
 ## 4. Trust base
 
@@ -83,6 +92,18 @@ Questions:
   zero-amount input skip membership. The model now follows 4.2 and the
   reference circuit (simplification 11), and a spec change is proposed
   that makes 5.3 say the same. Is 4.2 the rule you intend?
+
+For L5, read the extension clauses in SPEC-MAP.md, then `Pool/Epoch.lean`
+and `Statements/L5.lean`. Check these points:
+
+- Does `ChainFacts` cover each epoch from creation up to the current one,
+  with current freshness handled by `InsertionFacts`?
+- Is exact list preservation the right semantic reading of frozen roots?
+- Does the key-binding statement make its witness-level scope clear?
+- Does the initial-epoch reduction select the correct hashes and explain
+  why nullifier lists match by permutation?
+- Are omitted recursion, authenticated roots, encodings and caller checks
+  clear enough to prevent an implementation claim?
 
 ## 6. What the theorems do not say
 

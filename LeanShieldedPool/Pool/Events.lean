@@ -5,7 +5,7 @@ import LeanShieldedPool.Pool.Tx
 
 Events expose commitments and nullifiers without note or key witnesses.
 Transfer outputs keep public-input order (spec line 234). Encrypted
-payloads stay outside the model (CLAUSEMAP simplification 8). Atomic
+payloads stay outside the model (SPEC-MAP simplification 8). Atomic
 `Step` does not model event timing relative to external calls
 (simplification 9), so replay establishes reconstruction from logs only.
 -/

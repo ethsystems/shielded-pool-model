@@ -9,7 +9,8 @@ conservation" are marked "tested". This repo holds the candidate for
 spec's rules, the proofs, and a gate that re-checks them with one command.
 It is made to be read whole in an afternoon.
 
-This repo makes one claim.
+The base claim below is unchanged. L5 adds five results about the
+separate PoC epoch extension.
 
 ## The claim
 
@@ -25,17 +26,22 @@ Merkle root stands for the exact leaf list it commits to
 the guards state (simplification 1). Neither is a theorem hypothesis;
 both are obligations on the implementation.
 
-The repo proves nine theorems. Three are about the core model: nullifier
-uniqueness, no double spend and value conservation. Six are supporting
-results about the same model: solvency, no over-withdrawal, no minting,
-balance equals live value, owner-key binding (`spendRequiresOwnerKey`)
-and event replay. CLAIMS.md gives each one with its hypothesis and spec
-clause.
+The base model proves nine theorems. Three are about the core model:
+nullifier uniqueness, no double spend and value conservation. Six are
+supporting results about the same model: solvency, no over-withdrawal,
+no minting, balance equals live value, owner-key binding
+(`spendRequiresOwnerKey`) and event replay. L5 adds cross-epoch
+no-double-spend, frozen-list immutability, canonical append, chain key
+binding and a reduction to the base pool without rollover. CLAIMS.md
+gives all fourteen results with their hypotheses and spec clauses. The
+epoch results concern a semantic state machine; they do not verify
+recursive proofs or concrete nullifier trees.
 
-The model makes 16 simplifications, for example a list for the Merkle
-tree, `Nat` amounts and opaque hashes. They are modelling choices, not
-hypotheses. SPEC-MAP.md lists them and maps each definition to its spec
-line.
+The base model makes 16 simplifications, for example a list for the
+Merkle tree, `Nat` amounts and opaque hashes. They are modelling
+choices, not hypotheses. SPEC-MAP.md lists them and maps each
+definition to its spec line. The epoch extension has additional limits,
+listed separately there.
 
 ## Where it comes from
 
@@ -76,7 +82,8 @@ says is a human reading, still open.
 
 ## Status and the ask
 
-Proofs and gate complete. The spec reading needs a second reader.
+The base proofs and gate are complete, and the epoch commits pass the
+gate and the gate test. The spec reading needs a second reader.
 Aaryamann Challani and David Núñez are asked to review (REVIEW.md):
 Track A, does the model say what the spec says, plus anything wrong, too
 strong or unclear. After the review, either the two spec rows move to
@@ -86,22 +93,46 @@ shrinks to what survives. Findings go in issues here; Oskar answers each.
 ## What comes next
 
 Follow-up pull requests bring in other work one claim unit at a time,
-each behind the same gate: the epoch extension (its source is the PoC
-extension spec, not spec 2), the claim 1 rule table as a status page, and
-the privacy games once their build cost is decided. The implementation
-links stay in the research repo as claim records with re-check commands,
-because their inputs are private. The repo is private; no license yet.
+each behind the same gate: the claim 1 rule table as a status page, and
+the privacy games once their build cost is decided. The epoch extension
+is included here; its source is the PoC extension spec, not spec 2. The
+implementation links stay in the research repo as claim records with
+re-check commands, because their inputs are private. The repo is
+private; no license yet.
 
 ## Names
 
 The files keep the names they have in the research repo this model comes
 from (lean-shielded-pool at commit 67160b1). Of the 34 files that came
-from there, 11 are still byte-identical to that commit;
-`sha256sum -c PROVENANCE.sha256` checks exactly those 11 and nothing
-else. The other 23 were edited here: 19 while answering the review of
-pull request 1, and four more controls when the base negative controls
-became refutation controls. None of them matches 67160b1 now. Nothing is written back to
+from there, 11 are still byte-identical to that commit. The other 23
+were edited here: 19 while answering the review of pull request 1, and
+four more controls when the base negative controls became refutation
+controls. None of them matches 67160b1 now. Nothing is written back to
 the research repo from here.
+
+The seven L5 files come from the same research repo at commit
+`fa5526ee6f1a39829a494f61c66b147cb151e994`, which carries the same
+transfer-guard and `CryptoHyp` changes that pull request 1 made here.
+Two are byte-identical to that commit: `Proofs/EpochBase.lean` and
+`Proofs/Epoch.lean`. `sha256sum -c PROVENANCE.sha256` checks exactly
+those two plus the 11 above, and nothing else. The other five were
+edited or written here:
+
+- `Pool/Epoch.lean`: the header's source revision becomes `a04b8b3`,
+  the revision verified against the recorded spec hash; a reference to
+  a research file that is not cut is dropped; the simplification-7
+  input rule now says the first input must be a member and only a
+  zero-amount second input may omit membership.
+- `Statements/L5.lean`: the header names the two real proof files
+  instead of a stale proof-file name and a research note.
+- `controls/positive_l5.lean`: rewritten here. The source control only
+  instantiated theorem types; this one also proves an accepted run with
+  the epoch `CryptoHyp` (CLAIMS.md, "Checks that the theorems have
+  content").
+- `controls/refute_l5_chainfacts.lean` and
+  `controls/refute_l5_rollover.lean`: the source negative controls
+  `neg_l5_chainfacts` and `neg_l5_rollover`, converted to refutation
+  controls that must build, per the convention above.
 
 What deviates from 67160b1, and why:
 
@@ -113,7 +144,8 @@ What deviates from 67160b1, and why:
   simplification 16 instead of citing 4.4. `Statements/L4B.lean`:
   `noTheft` is renamed `spendRequiresOwnerKey` and the spec citations
   are narrowed. `Pool/Events.lean` and `Statements/L4B.lean` lose their
-  promotion comments.
+  promotion comments, and `Pool/Events.lean`'s header now names
+  SPEC-MAP instead of the research repo's clause map.
 - Proofs. `Proofs/Invariants.lean` adds `Step.notes_wf` and
   `Run.runNotes_wf`. `Proofs/Conservation.lean`,
   `Proofs/NoDoubleSpend.lean` and `Proofs/TierB.lean` follow the guard
@@ -151,6 +183,8 @@ The level names come from the research repo:
 - L3 is the core model claim (`Statements/L3.lean`).
 - L4 holds the accounting results (`Statements/L4.lean`).
 - L4B holds authorization and events (`Statements/L4B.lean`).
+- L5 holds the epoch extension (`Statements/L5.lean`). Its model and
+  guard witnesses are in `Pool/Epoch.lean`.
 - `Draft/NonVacuity.lean` is not a draft. It shows that each operation
   guard can fire, so the theorems are not vacuous. The directory keeps its
   old name so the bytes match.
@@ -161,9 +195,10 @@ The level names come from the research repo:
 2. CLAIMS.md: each theorem in Lean and in English.
 3. SPEC-MAP.md: each definition against its spec line, then the 16
    simplifications.
-4. The model: `LeanShieldedPool/Pool/State.lean`, `Tx.lean`, `Events.lean`.
+4. The model: `LeanShieldedPool/Pool/State.lean`, `Tx.lean`, `Events.lean`,
+   then `Epoch.lean`.
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
-   `L4B.lean`, and `statements/INVENTORY.md`.
+   `L4B.lean`, `L5.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
 7. The controls: `controls/`. Each refutation control weakens one guard,
    post-state or replay step and proves the negation of the frozen Prop
@@ -179,25 +214,27 @@ You need git, bash, python3 and about 8 GB of free disk.
 ```
 # setup: about 30 minutes (an estimate, not measured)
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-git clone --branch model-v1 git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
+git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
+# Check out the revision under review before continuing.
 lake exe cache get
 
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 30 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 265 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); about a minute
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; about 10 minutes
 ```
 
-Branch `model-v1` holds the model until the pull request merges.
+The gate tests committed HEAD, so an uncommitted tree is not a gate
+result.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`,
 `native_decide` and undeclared axioms, in the controls too. It checks the
-exact type and axioms of the 19 names in `statements/INVENTORY.md`, runs
+exact type and axioms of the 29 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
-`gate_test.sh` plants 14 cheats; each must make the gate fail.
+`gate_test.sh` plants 18 cheats; each must make the gate fail.
 
-The 30 s gate time is one cold build with a copied Mathlib cache. The
-265 s fixture time is one run of the 12 earlier fixtures. Both ran on a
-Linux laptop with btrfs. Each gate run copies `.lake` (about 7.5 GB). Without cheap
-file copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
+The times above are estimates for one cold build with a copied Mathlib
+cache on a Linux laptop with btrfs. Each gate run copies `.lake` (about
+7.5 GB). Without cheap file copies, set `GATE_WORK` to a directory on
+APFS, btrfs or XFS.
 
 AXIOMS.md lists the three allowed axioms: `propext`, `Classical.choice`
 and `Quot.sound`. There is no domain axiom.

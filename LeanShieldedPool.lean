@@ -12,3 +12,7 @@ import LeanShieldedPool.Proofs.TierA
 import LeanShieldedPool.Proofs.TierAConditional
 import LeanShieldedPool.Proofs.TierB
 import LeanShieldedPool.Proofs.EventReplay
+import LeanShieldedPool.Pool.Epoch
+import LeanShieldedPool.Statements.L5
+import LeanShieldedPool.Proofs.EpochBase
+import LeanShieldedPool.Proofs.Epoch
