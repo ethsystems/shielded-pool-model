@@ -142,6 +142,17 @@ checksum.
   reproduction, not a theorem; it says nothing about soundness or deployed
   code.
 
+## The compiled-circuit package
+
+`circuits-acir/` is a separate Lean package with its own check. It
+proves amount bounds, transfer conservation and token equality over the
+compiled ACIR constraints of the three PoC circuits at
+ethsystems/pocs-private `a04b8b3`, and it carries its private-derived
+inputs with it. It imports no model module, and the model gate does not
+build it, so it adds nothing to the claim of this repo.
+`circuits-acir/README.md` states what it trusts; `circuits-acir/check.sh`
+replays it.
+
 ## Names
 
 The files keep the names they have in the research repo this model comes
