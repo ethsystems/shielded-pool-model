@@ -1,0 +1,3671 @@
+{
+ "extraction": {
+  "deposit": {
+   "abi_layout_matches_print": true,
+   "artifact_sha256": "c14f69a0123f6095a7f645bfe20f0f999eb8b455bfd809d9e6bb90719c44da38",
+   "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
+   "chunk": 256,
+   "chunks": 30,
+   "counts": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "func0_sha256": "e09ceed51dbc595dfda5a274623261301663c553d344d89c3f0dae2f3693f78a",
+   "max_witness": 28269,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 7662,
+   "parts": 2,
+   "ranges": 63,
+   "reprint_mismatches": 0
+  },
+  "transfer": {
+   "abi_layout_matches_print": true,
+   "artifact_sha256": "4d337288ee4c8ec800e66372b72036623353d9eb9cc3725bfb901bec605d5098",
+   "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
+   "chunk": 256,
+   "chunks": 92,
+   "counts": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "func0_sha256": "dc747fb033334d70f691a3fbaef07ffd97b894b88714449aa9d42de759f91d5e",
+   "max_witness": 88158,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 23543,
+   "parts": 5,
+   "ranges": 199,
+   "reprint_mismatches": 0
+  },
+  "withdraw": {
+   "abi_layout_matches_print": true,
+   "artifact_sha256": "e798d4c6f7028b9172de2dd472f693d9ed539bfedaa0b465e3c616a077d6448e",
+   "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
+   "chunk": 256,
+   "chunks": 45,
+   "counts": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "func0_sha256": "c68939b13f52dde72917c7e07880ff1c95cfbcbe2519d2f2c7340246b7ec1a3c",
+   "max_witness": 42752,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 11508,
+   "parts": 3,
+   "ranges": 97,
+   "reprint_mismatches": 0
+  }
+ },
+ "generated_files": {
+  "AcirLean/Deposit/Data.lean": "1e39095c567360e029ac6d8c028c83f61c4c421077809fda5b212ea1ffe7556b",
+  "AcirLean/Deposit/Data.lean.json": "a8003568a6099217d79f074c38ff250c715ae0bffc0243ffca5e9d00ec75a8d9",
+  "AcirLean/Deposit/Data/Part0.lean": "adbce2e95d521d921b660c24c15ec2371a812bb7ddad5f4d64ef5598fa5568e8",
+  "AcirLean/Deposit/Data/Part1.lean": "89c29ae237e870ca579e91b5d067002429d588595853eb0d6b6c18296b0ca1c1",
+  "AcirLean/Deposit/NV/G0.lean": "90814419895be5e3fc6baff5daccbdd52b4738aeca43ce618e82a30b088ecf22",
+  "AcirLean/Deposit/NV/G1.lean": "ffc8f65300c0aa93c2627943aa94f3470bff7167186a67ac7cc5e50260219780",
+  "AcirLean/Deposit/NV/G2.lean": "1785458d463a98fc94d800767ce7c2d2b87d4efbcbdadbddfcc4af423ec78d08",
+  "AcirLean/Deposit/NV/G3.lean": "651afe47131d9edc86feee7f9d9fc016db4e7f0fd73a1547afc3b28b0666d9ae",
+  "AcirLean/Deposit/NV/G4.lean": "31b81ffc02945548ffb2c61101cbf12aeffcc0c72be1d09e0f31fdf54d913f7c",
+  "AcirLean/Deposit/NV/G5.lean": "fea766685d80acd77c08616267e0119040869bc9146e7e26c7108977940be715",
+  "AcirLean/Deposit/NV/G6.lean": "86824a8cc2f39869e229d24630cca5dace70c8bf1309f4500f6b04fb985c0d5e",
+  "AcirLean/Deposit/NV/G7.lean": "b7ae0f74ea359eed5879fdd8f1878aacce29db3e72f8327388f0dd4a6efc01b1",
+  "AcirLean/Deposit/NonVacuity.lean": "df66ba33cab8940b4faaeb25a6f16b3d580a13bc211a0e9a5ecc773d90ef6902",
+  "AcirLean/Deposit/WitnessData.lean": "b1d4923c555b7107110a544b6f2fe45e08025fe6a425c1faa3531a06889a355b",
+  "AcirLean/Transfer/Data.lean": "4023daba74d66a62b855cb26c89a31e298632c4a6c6d055ac8a6c9dc1fbbe3d3",
+  "AcirLean/Transfer/Data.lean.json": "0ef3740dfd7a1ce404d8a3484c78ab3879cc14012a13ee01f350b2e05223eb8c",
+  "AcirLean/Transfer/Data/Part0.lean": "e6661b4ecc6dd990b35c30714b98c7ba5f3b96210ddca76852a28dbce8cf492a",
+  "AcirLean/Transfer/Data/Part1.lean": "bc528e87886409c40253b751a99f7f97e5ae7f131ab4209b21556384498eb564",
+  "AcirLean/Transfer/Data/Part2.lean": "ce825cde9faa54ce88614600e8f835f1202036136b225ee6b30012e570f66296",
+  "AcirLean/Transfer/Data/Part3.lean": "29aed750625d176a9e4c5603ffd5e581204dcadc44b2fd097d5778d2bf329029",
+  "AcirLean/Transfer/Data/Part4.lean": "2bc659c0bd4c49ff6a93795af7e21fde80e83bfc5b3879fc85857f0997190419",
+  "AcirLean/Transfer/NV/G0.lean": "ea9f81143d8daa852d01916c70c6967bad7055c7eb6520f3c23a1c372336e81d",
+  "AcirLean/Transfer/NV/G1.lean": "d14c3a0dfabf09873be8184579743f7c7a27bf9fdb2825a94beae63b6856c108",
+  "AcirLean/Transfer/NV/G10.lean": "b17199d7e96b213035470189d786a49def097c6913371eef3ac3856c39fe7086",
+  "AcirLean/Transfer/NV/G11.lean": "4b62e0275e9e544fb8754c77f01e8978c35999d4a087af8eb8bb7a3cb384d402",
+  "AcirLean/Transfer/NV/G12.lean": "261a3a245b6d95e619e242463a31b3925935fa842d8d69fd4b148760fec1f547",
+  "AcirLean/Transfer/NV/G13.lean": "fe5d9d6e2f51002ad34bd15414db1bce1943e7ee32435fd36eedef0ef7052442",
+  "AcirLean/Transfer/NV/G14.lean": "1cb79a5b8d58996a297ae66a22b00ef6b131db0dc6608250cb7f9bdad9952577",
+  "AcirLean/Transfer/NV/G15.lean": "86ed025d1e3839a12e344b1f62f292ebc734eeab09d7c0ee009287538ebe9256",
+  "AcirLean/Transfer/NV/G16.lean": "aed9b943c2a42331ecd487f3f3b36eb3dbe08c199cf5dd70356f62e7485aef01",
+  "AcirLean/Transfer/NV/G17.lean": "89ef037e32326a6bb3d6701603f25d0ba3dbf14760fdad1bb3e7801c045b6281",
+  "AcirLean/Transfer/NV/G18.lean": "661aea0226f0e5044266275386c8c1efc45a815e85a302c2d5e56c849a757d49",
+  "AcirLean/Transfer/NV/G19.lean": "5b69da1a21c35a0a3ce2364c568bd2cb366bfd516e47811ac26d020e62c064fc",
+  "AcirLean/Transfer/NV/G2.lean": "c79a6e93520b8b66eea5c7661642dd512fcd8e77c11d80b51b0b4b50efd3dfa7",
+  "AcirLean/Transfer/NV/G20.lean": "d741d656d4dae9ab3cd0d4906c5350bccf64b5cb10668c29ad52024799c43356",
+  "AcirLean/Transfer/NV/G21.lean": "1308d3add967651987d92a78aa4e751e3e0f8f0b413078ae0540798431b8f246",
+  "AcirLean/Transfer/NV/G22.lean": "8dbd40028bc68475abd938757bde427a0a1e56722aedd94be71bef736d1e4252",
+  "AcirLean/Transfer/NV/G23.lean": "06c6613b143933d1b4e94ac79b4cd62a7901d95c399fa5dfb8382566ae1716b5",
+  "AcirLean/Transfer/NV/G3.lean": "3bd7457711e775b0877431c93afaeb21367f1d65b8ce0f03865b65e0f0be4524",
+  "AcirLean/Transfer/NV/G4.lean": "03dc5aaa7e0f6ad79af2afa81bc5b03cf61a03930441b8d513cd3b68c7e2fb7d",
+  "AcirLean/Transfer/NV/G5.lean": "7c06eeea8c8a6e301d49f1aeeef2966bafa19bd3b8faf9e4fb08bc4ab3832ac1",
+  "AcirLean/Transfer/NV/G6.lean": "c8fcbd8d6042b65ec7e3e5ffcb1e3b656ba62fd2aaee9cf871173d8aa66675db",
+  "AcirLean/Transfer/NV/G7.lean": "ca3c95bc5e07e16c8ae903a6b6890d112b89348aae154a53b0863c7c2ff90595",
+  "AcirLean/Transfer/NV/G8.lean": "7b048eff9787d404ba4e7d2100edfea055a2fde7c738408c30adddf63cc73d30",
+  "AcirLean/Transfer/NV/G9.lean": "b48e532d013a20da88c861350e2282d94c8a259ac4466004fb0defea4b264d3c",
+  "AcirLean/Transfer/NonVacuity.lean": "8cd54235336a706c568c3b21cf29b402f17bb8668dc1de76d331d09b80beea73",
+  "AcirLean/Transfer/WitnessData.lean": "f0f48ed6bfff5bc9e37e5a7a98f372b29fdc163474eb11d4e1eee360b65ba4a1",
+  "AcirLean/Withdraw/Data.lean": "dbd58fee24576081288857dd143200a790981c40aeeb3d38fa6f78d148003321",
+  "AcirLean/Withdraw/Data.lean.json": "bbeec64873c391e713803a28d57a21a2fbdea45d7854a8bb78214457f1afb3e5",
+  "AcirLean/Withdraw/Data/Part0.lean": "f202d685493db573ae9cad947728165e70f90a656ea81bc4cacdbe3ca782547e",
+  "AcirLean/Withdraw/Data/Part1.lean": "3d332597fc6f343ca7ec250807aa7809399bb622ed2f0225d026114aec9be9d8",
+  "AcirLean/Withdraw/Data/Part2.lean": "5ceb4dacfa72dfa8f0426c82bcac56f3301a74ef592d53f2d1c22eeb861a9937",
+  "AcirLean/Withdraw/NV/G0.lean": "7e4b02387ae41185f3901c04f9c689cf3c4224429cc92c044d22ef183bcd87d8",
+  "AcirLean/Withdraw/NV/G1.lean": "e346d98805f13f9b05228d5edf6037e2c436b8fc993a84c50f6f09a7fb6f4219",
+  "AcirLean/Withdraw/NV/G10.lean": "268ca9be05d27d4e158bbce1ec32c4baf1e778cddb38d692125afe67277abb25",
+  "AcirLean/Withdraw/NV/G11.lean": "96013a8a1dafa3829d5215fc9555944514c330c7431e33307cdd18e15c2c4634",
+  "AcirLean/Withdraw/NV/G2.lean": "14aebd89efb16696e0aad25f64c7c12affaee7c274eb7e73811e9cdbb168b8d7",
+  "AcirLean/Withdraw/NV/G3.lean": "4398cfd2ba1d70ae1ff731a619a45f947c730e680e51d5d4b25da908f532b1ee",
+  "AcirLean/Withdraw/NV/G4.lean": "04b0d3b3281aa25b4180844a1976641cfd5020cd71d16a30f065f965be7aa7a2",
+  "AcirLean/Withdraw/NV/G5.lean": "113de5e5bd5a3c763ccaecbefd3802f9eb5238a8814c3a470fcc18c6c6f4b440",
+  "AcirLean/Withdraw/NV/G6.lean": "1073a6d811e80dd22aa733d055226bf56f36e793ae8b8de10a6f46446f6b5ce7",
+  "AcirLean/Withdraw/NV/G7.lean": "b7a40be6bb653f1c326fe01e4170acc4a238868a28b823db3177fa8e052e79d7",
+  "AcirLean/Withdraw/NV/G8.lean": "d0580aa4a32563791fb8570f6cbc11930acf6cb15a7eee9eee952489ed84594c",
+  "AcirLean/Withdraw/NV/G9.lean": "5a3e62e15f6f08d5ac9a473f41506d29717b0329af2043e410753722c114bd95",
+  "AcirLean/Withdraw/NonVacuity.lean": "3630c14d8480c8950ab399e56412a78cd0820d181fd65f216064df4e30619cc2",
+  "AcirLean/Withdraw/WitnessData.lean": "e1d6ea6b8f0d542e792b209db00d309c1a6edf864302907c52487f2c77c186cd"
+ },
+ "inputs": {
+  "deposit": {
+   "artifact_sha256": "c14f69a0123f6095a7f645bfe20f0f999eb8b455bfd809d9e6bb90719c44da38",
+   "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
+   "func0_sha256": "e09ceed51dbc595dfda5a274623261301663c553d344d89c3f0dae2f3693f78a",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "a7b217947d30e7f5816efce1b9230790a907ddadfa76a339a647d457e69e9b4c",
+   "witness_sha256": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b"
+  },
+  "transfer": {
+   "artifact_sha256": "4d337288ee4c8ec800e66372b72036623353d9eb9cc3725bfb901bec605d5098",
+   "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
+   "func0_sha256": "dc747fb033334d70f691a3fbaef07ffd97b894b88714449aa9d42de759f91d5e",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "e2704cb56c12875712bcc428517eafe385298da51f5547e5422dd3ecac9564c9",
+   "witness_sha256": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b"
+  },
+  "withdraw": {
+   "artifact_sha256": "e798d4c6f7028b9172de2dd472f693d9ed539bfedaa0b465e3c616a077d6448e",
+   "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
+   "func0_sha256": "c68939b13f52dde72917c7e07880ff1c95cfbcbe2519d2f2c7340246b7ec1a3c",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "25510cf0c6cc6b8b8eb4168385d067cc31e2fbb1c47ae8f1386747009204aaf9",
+   "witness_sha256": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c"
+  }
+ },
+ "negative_controls": {
+  "Neg/DepositBound127.lean": {
+   "compiled": false,
+   "first_error": "Neg/DepositBound127.lean:7:76: error: Tactic `decide` proved that the proposition"
+  },
+  "Neg/TransferNoRange.lean": {
+   "compiled": false,
+   "first_error": "Neg/TransferNoRange.lean:14:2: error: omega could not prove the goal:"
+  },
+  "Neg/TransferTokenSwap.lean": {
+   "compiled": false,
+   "first_error": "Neg/TransferTokenSwap.lean:6:55: error: (kernel) application type mismatch"
+  },
+  "Neg/WithdrawBound127.lean": {
+   "compiled": false,
+   "first_error": "Neg/WithdrawBound127.lean:7:77: error: Tactic `decide` proved that the proposition"
+  }
+ },
+ "python_controls": {
+  "deposit w2=340282366920938463463374607431768211456": {
+   "failing_assert": 2,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    23,
+    356,
+    357
+   ],
+   "mutation": "w2=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23
+  },
+  "deposit w2=501": {
+   "failing_assert": 2,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    356,
+    357
+   ],
+   "mutation": "w2=501",
+   "rc": 0,
+   "required_fails": null,
+   "required_opcode": null
+  },
+  "deposit w5=7": {
+   "failing_assert": 0,
+   "failing_range": 0,
+   "first_failing_opcodes": [],
+   "mutation": "w5=7",
+   "rc": 0,
+   "required_fails": null,
+   "required_opcode": null
+  },
+  "transfer w17=435537695816263162368054109405345813312609277317": {
+   "failing_assert": 3,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    23143,
+    23144,
+    23542
+   ],
+   "mutation": "w17=435537695816263162368054109405345813312609277317",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23542
+  },
+  "transfer w18=340282366920938463463374607431768211456": {
+   "failing_assert": 3,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    3,
+    23146,
+    23147,
+    23537
+   ],
+   "mutation": "w18=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 3
+  },
+  "transfer w8=1001": {
+   "failing_assert": 3,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    402,
+    403,
+    23535
+   ],
+   "mutation": "w8=1001",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23535
+  },
+  "withdraw w2=340282366920938463463374607431768211456": {
+   "failing_assert": 2,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    362,
+    366,
+    367
+   ],
+   "mutation": "w2=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 362
+  }
+ },
+ "source_files": {
+  "AcirLean/Deposit/Amount.lean": "25a0a1814f016fe672c4e8a042912b9c34a6c7386118f5861190d1d0e87d39b8",
+  "AcirLean/Deposit/Controls.lean": "278b737b490d6d46d0d71f7c150e7b145af23068e05a174cab380a85fff66bb5",
+  "AcirLean/Deposit/Solved.lean": "4c534f8bfbf93380676c39dc19131a854417f8786ad0488df47d80edbabd6085",
+  "AcirLean/Linear.lean": "e28389d51a337baf13e2fb1a6dc708a61f872b8f978ebbe9aea30d1c78be21df",
+  "AcirLean/Semantics.lean": "8ae4ca3a8579af8b2409d1e93dcedb1707d02357636a95ba6b986bde7bce2765",
+  "AcirLean/Transfer/Controls.lean": "5c29b58d15eeb9c96e4432a25e9c5e0802aaf9a2857290c040e11e3c93dc6056",
+  "AcirLean/Transfer/Rules.lean": "08dc420b67532f6a20a6fb9673f53f40abb78648032813463e99de54837411ae",
+  "AcirLean/Transfer/Solved.lean": "d8d3933c427b50af5cd3121e52c7f5d94c0fc34a7f8d29a7efc64e64a6b911b8",
+  "AcirLean/Withdraw/Amount.lean": "018f5bc6abfd166037e5864763bc2aec6f2576bc8589583565bc22ffe17a2c6b",
+  "AcirLean/Withdraw/Controls.lean": "9d61de895fe05fa78b860d7c9051e37b601d433ee840c1b48cfb94383cdfcc86",
+  "AcirLean/Withdraw/Solved.lean": "f2a70def09a198a85212617ebdd1b5d710ec65df5abcaf54d31f20c56b823daa",
+  "AcirLean/Witness.lean": "aaf9fc18074ea50bdb045c850e7b795b58956c4a54f3140f4dd5d43a3005b108",
+  "Census.lean": "1cab0aedf20d3828076df131cee5c3cdca05e24248d3d859817f22e468925fb2",
+  "Neg/DepositBound127.lean": "5a738b39ddd591f5d8aa3079e490c205d693a286c4003e1c95f22e4603fb15b5",
+  "Neg/TransferNoRange.lean": "e0883543675e1165a47c8e232c1623e5a73f760df68af0953e3d7e4f12c0a346",
+  "Neg/TransferTokenSwap.lean": "421e7266eeb27a99ba23697b9f4612f583f585110e425a7678fc822675247cf8",
+  "Neg/WithdrawBound127.lean": "6f09f5b14f8ed39cbbf590d131f08c5e0309832dba0d983c40dae89bb384cbe1",
+  "check.sh": "ddaa7271c3f0586d9de16700ee816d1188223bd694808247820018c092703423",
+  "inputs/PROVENANCE.md": "c929a8cb8bb1d4b7c2d6790e9f53fb53043b995c7e24dc46e109bf630569bffd",
+  "inputs/deposit-witness.gz": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b",
+  "inputs/deposit.acir.txt.xz": "3c9a98863b4deaa11709ed6070ee29bcb8a76e7db2ec28f23c7a59007319aa02",
+  "inputs/deposit.json.xz": "20c16e22f2c13bfbeceb8ede33a154bd06eefef8e8dc4f675849322e266d468b",
+  "inputs/transfer-witness.gz": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b",
+  "inputs/transfer.acir.txt.xz": "64d34ca7e8feeb894416fc8a60b8663e9ad4ed5a29baf1b947769d960948578f",
+  "inputs/transfer.json.xz": "75abfedb17f4ac07e639e1c3a04e3c98c2b85c28073da198ea70f54cf87ad3ff",
+  "inputs/withdraw-witness.gz": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c",
+  "inputs/withdraw.acir.txt.xz": "044abf72835adeb91868963bac1f9c15efa0f820b2f170c64078a7357125357d",
+  "inputs/withdraw.json.xz": "06058c7e98a610f86794aefafa79c85d02c53a68e4025b8893c1b6260e7add79",
+  "lake-manifest.json": "d5f5c483a5dd7780a5c350da2361cd8dccc39bad3ee36a2f2669b0b42ebe7b70",
+  "lakefile.toml": "980b683100326e2144414fc3e248e7d6db2f811522239f7e826167cd374ee589",
+  "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+  "scripts/acir2lean.py": "575b7a088a3a2f88c33025d3922d9eb6a99d64deac88d3c0e032f45773e60a5d",
+  "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
+  "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
+  "scripts/replay.py": "3ad8461aacfdd8809ca32d0d9e2486004e6f0cd30680d55c7e41886b91dca6b7",
+  "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
+ },
+ "theorems": {
+  "AcirLean.Circuit.holds_of_mem": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, c.Satisfied w → ∀ {op : AcirLean.Opcode}, op ∈ c.opcodes → op.Holds w"
+  },
+  "AcirLean.Circuit.mk.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {privateParams publicParams returnValues : List Nat} {opcodes : List AcirLean.Opcode} {privateParams_1 publicParams_1 returnValues_1 : List Nat} {opcodes_1 : List AcirLean.Opcode}, { privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = { privateParams := privateParams_1, publicParams := publicParams_1, returnValues := returnValues_1, opcodes := opcodes_1 } → privateParams = privateParams_1 ∧ publicParams = publicParams_1 ∧ returnValues = returnValues_1 ∧ opcodes = opcodes_1"
+  },
+  "AcirLean.Circuit.mk.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (privateParams publicParams returnValues : List Nat) (opcodes : List AcirLean.Opcode) (privateParams_1 publicParams_1 returnValues_1 : List Nat) (opcodes_1 : List AcirLean.Opcode), ({ privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = { privateParams := privateParams_1, publicParams := publicParams_1, returnValues := returnValues_1, opcodes := opcodes_1 }) = (privateParams = privateParams_1 ∧ publicParams = publicParams_1 ∧ returnValues = returnValues_1 ∧ opcodes = opcodes_1)"
+  },
+  "AcirLean.Circuit.mk.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (privateParams publicParams returnValues : List Nat) (opcodes : List AcirLean.Opcode), sizeOf { privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = 1 + sizeOf privateParams + sizeOf publicParams + sizeOf returnValues + sizeOf opcodes"
+  },
+  "AcirLean.Circuit.range_of_mem": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, c.Satisfied w → ∀ {i bits : Nat}, AcirLean.Opcode.range i bits ∈ c.opcodes → ↑(w i) < 2 ^ bits"
+  },
+  "AcirLean.Circuit.satisfied_of_all": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, (c.opcodes.all fun op => op.check w) = true → c.Satisfied w"
+  },
+  "AcirLean.Deposit.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true"
+  },
+  "AcirLean.Deposit.amount_is_public_input_2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "AcirLean.Deposit.circuit.publicParams[2]? = some 2 ∧ AcirLean.Deposit.publicNames[2]? = some \"amount\""
+  },
+  "AcirLean.Deposit.amount_lt_two_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Deposit.circuit.Satisfied w → ↑(w 2) < 2 ^ 128"
+  },
+  "AcirLean.Deposit.control_bound_500_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Deposit.circuit.Satisfied w → ↑(w 2) < 500"
+  },
+  "AcirLean.Deposit.control_chunk0_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128))) = false"
+  },
+  "AcirLean.Deposit.control_chunk0_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128))) = false"
+  },
+  "AcirLean.Deposit.control_range_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128)) = false"
+  },
+  "AcirLean.Deposit.control_range_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128)) = false"
+  },
+  "AcirLean.Deposit.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk1.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk1.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk10.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk10.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk11.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk11.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk12.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk12.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk13.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk13.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk14.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk14.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk15.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk15.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk16.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk16.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk17.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk17.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk18.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk18.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk19.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk19.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk2.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk2.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk20.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk20.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk21.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk21.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk22.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk22.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk23.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk23.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk24.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk24.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk25.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk25.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk26.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk26.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk27.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk27.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk28.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk28.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk29.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk29.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk3.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk3.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk4.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk4.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk5.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk5.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk6.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk6.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk7.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk7.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk8.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk8.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk9.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk9.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.range_amount_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "AcirLean.Opcode.range 2 128 ∈ AcirLean.Deposit.circuit.opcodes"
+  },
+  "AcirLean.Deposit.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "∃ w, AcirLean.Deposit.circuit.Satisfied w"
+  },
+  "AcirLean.Deposit.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "(AcirLean.Deposit.circuit.opcodes.all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "((AcirLean.Deposit.chunk0 ++ (AcirLean.Deposit.chunk1 ++ (AcirLean.Deposit.chunk2 ++ (AcirLean.Deposit.chunk3 ++ (AcirLean.Deposit.chunk4 ++ (AcirLean.Deposit.chunk5 ++ (AcirLean.Deposit.chunk6 ++ (AcirLean.Deposit.chunk7 ++ (AcirLean.Deposit.chunk8 ++ (AcirLean.Deposit.chunk9 ++ (AcirLean.Deposit.chunk10 ++ (AcirLean.Deposit.chunk11 ++ (AcirLean.Deposit.chunk12 ++ (AcirLean.Deposit.chunk13 ++ (AcirLean.Deposit.chunk14 ++ (AcirLean.Deposit.chunk15 ++ (AcirLean.Deposit.chunk16 ++ (AcirLean.Deposit.chunk17 ++ (AcirLean.Deposit.chunk18 ++ (AcirLean.Deposit.chunk19 ++ (AcirLean.Deposit.chunk20 ++ (AcirLean.Deposit.chunk21 ++ (AcirLean.Deposit.chunk22 ++ (AcirLean.Deposit.chunk23 ++ (AcirLean.Deposit.chunk24 ++ (AcirLean.Deposit.chunk25 ++ (AcirLean.Deposit.chunk26 ++ (AcirLean.Deposit.chunk27 ++ (AcirLean.Deposit.chunk28 ++ AcirLean.Deposit.chunk29))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Deposit.solved) = true"
+  },
+  "AcirLean.Deposit.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "AcirLean.Deposit.circuit.Satisfied AcirLean.Deposit.solved"
+  },
+  "AcirLean.Deposit.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "↑(AcirLean.Deposit.solved 2) = 500"
+  },
+  "AcirLean.Deposit.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "↑(AcirLean.Deposit.solved 2) = 500"
+  },
+  "AcirLean.Expr.eval.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (e : AcirLean.Expr) (w : AcirLean.Assignment), e.eval w = List.foldl (fun acc t => acc + t.fst * ↑↑(w t.snd.fst) * ↑↑(w t.snd.snd)) 0 e.mul + List.foldl (fun acc t => acc + t.fst * ↑↑(w t.snd)) 0 e.lin + e.const"
+  },
+  "AcirLean.Expr.mk.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {mul : List (Int × Nat × Nat)} {lin : List (Int × Nat)} {const : Int} {mul_1 : List (Int × Nat × Nat)} {lin_1 : List (Int × Nat)} {const_1 : Int}, { mul := mul, lin := lin, const := const } = { mul := mul_1, lin := lin_1, const := const_1 } → mul = mul_1 ∧ lin = lin_1 ∧ const = const_1"
+  },
+  "AcirLean.Expr.mk.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (mul : List (Int × Nat × Nat)) (lin : List (Int × Nat)) (const : Int) (mul_1 : List (Int × Nat × Nat)) (lin_1 : List (Int × Nat)) (const_1 : Int), ({ mul := mul, lin := lin, const := const } = { mul := mul_1, lin := lin_1, const := const_1 }) = (mul = mul_1 ∧ lin = lin_1 ∧ const = const_1)"
+  },
+  "AcirLean.Expr.mk.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (mul : List (Int × Nat × Nat)) (lin : List (Int × Nat)) (const : Int), sizeOf { mul := mul, lin := lin, const := const } = 1 + sizeOf mul + sizeOf lin + sizeOf const"
+  },
+  "AcirLean.Opcode.Holds.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (lhs : Option Nat) (rhs : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs).Holds x = ((AcirLean.lhsVal lhs x - rhs.eval x) % ↑AcirLean.P = 0)"
+  },
+  "AcirLean.Opcode.Holds.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (i bits : Nat), (AcirLean.Opcode.range i bits).Holds x = (↑(x i) < 2 ^ bits)"
+  },
+  "AcirLean.Opcode.Holds.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (func : Nat) (outputs : List Nat), (AcirLean.Opcode.brilligCall func outputs).Holds x = True"
+  },
+  "AcirLean.Opcode.assertZero.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {lhs : Option Nat} {rhs : AcirLean.Expr} {lhs_1 : Option Nat} {rhs_1 : AcirLean.Expr}, AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.assertZero lhs_1 rhs_1 → lhs = lhs_1 ∧ rhs = rhs_1"
+  },
+  "AcirLean.Opcode.assertZero.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (lhs_1 : Option Nat) (rhs_1 : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.assertZero lhs_1 rhs_1) = (lhs = lhs_1 ∧ rhs = rhs_1)"
+  },
+  "AcirLean.Opcode.assertZero.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr), sizeOf (AcirLean.Opcode.assertZero lhs rhs) = 1 + sizeOf lhs + sizeOf rhs"
+  },
+  "AcirLean.Opcode.brilligCall.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {func : Nat} {outputs : List Nat} {func_1 : Nat} {outputs_1 : List Nat}, AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.brilligCall func_1 outputs_1 → func = func_1 ∧ outputs = outputs_1"
+  },
+  "AcirLean.Opcode.brilligCall.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (func_1 : Nat) (outputs_1 : List Nat), (AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.brilligCall func_1 outputs_1) = (func = func_1 ∧ outputs = outputs_1)"
+  },
+  "AcirLean.Opcode.brilligCall.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat), sizeOf (AcirLean.Opcode.brilligCall func outputs) = 1 + sizeOf func + sizeOf outputs"
+  },
+  "AcirLean.Opcode.check.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (lhs : Option Nat) (rhs : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs).check x = decide ((AcirLean.lhsVal lhs x - rhs.eval x) % ↑AcirLean.P = 0)"
+  },
+  "AcirLean.Opcode.check.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (i bits : Nat), (AcirLean.Opcode.range i bits).check x = decide (↑(x i) < 2 ^ bits)"
+  },
+  "AcirLean.Opcode.check.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (func : Nat) (outputs : List Nat), (AcirLean.Opcode.brilligCall func outputs).check x = true"
+  },
+  "AcirLean.Opcode.check_iff": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (op : AcirLean.Opcode) (w : AcirLean.Assignment), op.check w = true ↔ op.Holds w"
+  },
+  "AcirLean.Opcode.holds_add": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i j : Nat}, (AcirLean.Opcode.assertZero (some k) { mul := [], lin := [(1, i), (1, j)], const := 0 }).Holds w → ↑(w i) + ↑(w j) < AcirLean.P → ↑(w k) = ↑(w i) + ↑(w j)"
+  },
+  "AcirLean.Opcode.holds_add._proof_1_5": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i j : Nat}, (↑↑(w k) - (0 + (0 + 1 * ↑↑(w i) + 1 * ↑↑(w j)) + 0)) % 21888242871839275222246405745257275088548364400416034343698204186575808495617 = 0 → ↑(w k) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ↑(w i) + ↑(w j) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ¬↑(w k) = ↑(w i) + ↑(w j) → False"
+  },
+  "AcirLean.Opcode.holds_copy": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i : Nat}, (AcirLean.Opcode.assertZero (some k) { mul := [], lin := [(1, i)], const := 0 }).Holds w → w k = w i"
+  },
+  "AcirLean.Opcode.holds_copy._proof_1_5": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i : Nat}, (↑↑(w k) - (0 + (0 + 1 * ↑↑(w i)) + 0)) % 21888242871839275222246405745257275088548364400416034343698204186575808495617 = 0 → ↑(w k) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ↑(w i) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ¬↑(w k) = ↑(w i) → False"
+  },
+  "AcirLean.Opcode.range.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {input bits input_1 bits_1 : Nat}, AcirLean.Opcode.range input bits = AcirLean.Opcode.range input_1 bits_1 → input = input_1 ∧ bits = bits_1"
+  },
+  "AcirLean.Opcode.range.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits input_1 bits_1 : Nat), (AcirLean.Opcode.range input bits = AcirLean.Opcode.range input_1 bits_1) = (input = input_1 ∧ bits = bits_1)"
+  },
+  "AcirLean.Opcode.range.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits : Nat), sizeOf (AcirLean.Opcode.range input bits) = 1 + sizeOf input + sizeOf bits"
+  },
+  "AcirLean.P_int": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "↑AcirLean.P = 21888242871839275222246405745257275088548364400416034343698204186575808495617"
+  },
+  "AcirLean.P_pos": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "0 < AcirLean.P"
+  },
+  "AcirLean.Transfer.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true"
+  },
+  "AcirLean.Transfer.amount_names": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.paramNames[8]? = some \"amount_in_0\" ∧ AcirLean.Transfer.paramNames[11]? = some \"amount_in_1\" ∧ AcirLean.Transfer.paramNames[14]? = some \"amount_out_0\" ∧ AcirLean.Transfer.paramNames[18]? = some \"amount_out_1\""
+  },
+  "AcirLean.Transfer.amount_ranges": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) < 2 ^ 128 ∧ ↑(w 11) < 2 ^ 128 ∧ ↑(w 14) < 2 ^ 128 ∧ ↑(w 18) < 2 ^ 128"
+  },
+  "AcirLean.Transfer.conservation": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) + ↑(w 11) = ↑(w 14) + ↑(w 18) ∧ ↑(w 8) + ↑(w 11) < 2 ^ 128"
+  },
+  "AcirLean.Transfer.conservation._proof_1_1": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 8) < 2 ^ 128 → ↑(w 11) < 2 ^ 128 → 2 ^ 128 + 2 ^ 128 < AcirLean.P → ¬↑(w 8) + ↑(w 11) < AcirLean.P → False"
+  },
+  "AcirLean.Transfer.conservation._proof_1_2": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 14) < 2 ^ 128 → ↑(w 18) < 2 ^ 128 → 2 ^ 128 + 2 ^ 128 < AcirLean.P → ¬↑(w 14) + ↑(w 18) < AcirLean.P → False"
+  },
+  "AcirLean.Transfer.conservation._proof_1_3": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 17906) = ↑(w 8) + ↑(w 11) → ↑(w 17907) = ↑(w 14) + ↑(w 18) → ↑(w 17907) = ↑(w 17906) → ¬↑(w 8) + ↑(w 11) = ↑(w 14) + ↑(w 18) → False"
+  },
+  "AcirLean.Transfer.conservation._proof_1_4": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 17906) < 2 ^ 128 → ↑(w 17906) = ↑(w 8) + ↑(w 11) → ↑(w 17907) = ↑(w 17906) → ¬↑(w 8) + ↑(w 11) < 2 ^ 128 → False"
+  },
+  "AcirLean.Transfer.control_amount_bound_1000_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) < 1000"
+  },
+  "AcirLean.Transfer.control_asserts_alone_allow_wrap": {
+   "axioms": [],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.range 8 128).check AcirLean.Transfer.wrapW = false ∧ ↑(AcirLean.Transfer.wrapW 8) + ↑(AcirLean.Transfer.wrapW 11) ≠ ↑(AcirLean.Transfer.wrapW 14) + ↑(AcirLean.Transfer.wrapW 18)"
+  },
+  "AcirLean.Transfer.control_asserts_alone_allow_wrap._proof_1_1": {
+   "axioms": [],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.range 8 128).check AcirLean.Transfer.wrapW = false ∧ ↑(AcirLean.Transfer.wrapW 8) + ↑(AcirLean.Transfer.wrapW 11) ≠ ↑(AcirLean.Transfer.wrapW 14) + ↑(AcirLean.Transfer.wrapW 18)"
+  },
+  "AcirLean.Transfer.control_chunk0_rejects_amount_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128))) = false"
+  },
+  "AcirLean.Transfer.control_chunk0_rejects_amount_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128))) = false"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_amount_in_0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 8 1001)) = false"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_amount_in_0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 8 1001)) = false"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_token_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317)) = false"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_token_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317)) = false"
+  },
+  "AcirLean.Transfer.control_range_rejects_amount_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.range 18 128).check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128)) = false"
+  },
+  "AcirLean.Transfer.control_range_rejects_amount_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.range 18 128).check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128)) = false"
+  },
+  "AcirLean.Transfer.control_sum_in_rejects": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 8 1001) = false"
+  },
+  "AcirLean.Transfer.control_sum_in_rejects._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 8 1001) = false"
+  },
+  "AcirLean.Transfer.control_token_rejects": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317) = false"
+  },
+  "AcirLean.Transfer.control_token_rejects._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317) = false"
+  },
+  "AcirLean.Transfer.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk1.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk1.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk10.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk10.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk11.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk11.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk12.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk12.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk13.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk13.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk14.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk14.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk15.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk15.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk16.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk16.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk17.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk17.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk18.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk18.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk19.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk19.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk2.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk2.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk20.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk20.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk21.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk21.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk22.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk22.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk23.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk23.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk24.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk24.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk25.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk25.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk26.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk26.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk27.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk27.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk28.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk28.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk29.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk29.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk3.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk3.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk30": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk30.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk30._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk30.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk31": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk31.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk31._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk31.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk32": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk32.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk32._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk32.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk33": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk33.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk33._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk33.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk34": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk34.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk34._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk34.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk35": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk35.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk35._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk35.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk36": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk36.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk36._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk36.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk37": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk37.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk37._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk37.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk38": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk38.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk38._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk38.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk39": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk39.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk39._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk39.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk4.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk4.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk40": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk40.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk40._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk40.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk41": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk41.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk41._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk41.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk42": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk42.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk42._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk42.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk43": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk43.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk43._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk43.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk44": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk44.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk44._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk44.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk45": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk45.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk45._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk45.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk46": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk46.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk46._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk46.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk47": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk47.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk47._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk47.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk48": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk48.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk48._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk48.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk49": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk49.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk49._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk49.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk5.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk5.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk50": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk50.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk50._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk50.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk51": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk51.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk51._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk51.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk52": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk52.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk52._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk52.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk53": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk53.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk53._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk53.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk54": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk54.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk54._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk54.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk55": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk55.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk55._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk55.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk56": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk56.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk56._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk56.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk57": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk57.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk57._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk57.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk58": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk58.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk58._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk58.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk59": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk59.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk59._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk59.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk6.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk6.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk60": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk60.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk60._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk60.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk61": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk61.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk61._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk61.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk62": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk62.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk62._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk62.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk63": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk63.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk63._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk63.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk64": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk64.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk64._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk64.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk65": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk65.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk65._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk65.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk66": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk66.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk66._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk66.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk67": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk67.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk67._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk67.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk68": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk68.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk68._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk68.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk69": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk69.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk69._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk69.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk7.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk7.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk70": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk70.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk70._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk70.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk71": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk71.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk71._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk71.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk72": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk72.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk72._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk72.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk73": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk73.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk73._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk73.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk74": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk74.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk74._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk74.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk75": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk75.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk75._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk75.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk76": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk76.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk76._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk76.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk77": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk77.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk77._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk77.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk78": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk78.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk78._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk78.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk79": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk79.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk79._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk79.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk8.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk8.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk80": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk80.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk80._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk80.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk81": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk81.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk81._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk81.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk82": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk82.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk82._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk82.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk83": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk83.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk83._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk83.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk84": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk84.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk84._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk84.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk85": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk85.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk85._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk85.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk86": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk86.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk86._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk86.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk87": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk87.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk87._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk87.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk88": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk88.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk88._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk88.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk89": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk89.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk89._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk89.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk9.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk9.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk90": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk90.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk90._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk90.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk91": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.nv_chunk91._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.range_amount_in_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 8 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_amount_in_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 11 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_amount_out_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 14 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_amount_out_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 18 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_sum_in_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 17906 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_sum_in_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23536]? = some (AcirLean.Opcode.range 17906 128)"
+  },
+  "AcirLean.Transfer.range_sum_out_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 17907 128 ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.range_sum_out_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23538]? = some (AcirLean.Opcode.range 17907 128)"
+  },
+  "AcirLean.Transfer.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "∃ w, AcirLean.Transfer.circuit.Satisfied w"
+  },
+  "AcirLean.Transfer.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "(AcirLean.Transfer.circuit.opcodes.all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "((AcirLean.Transfer.chunk0 ++ (AcirLean.Transfer.chunk1 ++ (AcirLean.Transfer.chunk2 ++ (AcirLean.Transfer.chunk3 ++ (AcirLean.Transfer.chunk4 ++ (AcirLean.Transfer.chunk5 ++ (AcirLean.Transfer.chunk6 ++ (AcirLean.Transfer.chunk7 ++ (AcirLean.Transfer.chunk8 ++ (AcirLean.Transfer.chunk9 ++ (AcirLean.Transfer.chunk10 ++ (AcirLean.Transfer.chunk11 ++ (AcirLean.Transfer.chunk12 ++ (AcirLean.Transfer.chunk13 ++ (AcirLean.Transfer.chunk14 ++ (AcirLean.Transfer.chunk15 ++ (AcirLean.Transfer.chunk16 ++ (AcirLean.Transfer.chunk17 ++ (AcirLean.Transfer.chunk18 ++ (AcirLean.Transfer.chunk19 ++ (AcirLean.Transfer.chunk20 ++ (AcirLean.Transfer.chunk21 ++ (AcirLean.Transfer.chunk22 ++ (AcirLean.Transfer.chunk23 ++ (AcirLean.Transfer.chunk24 ++ (AcirLean.Transfer.chunk25 ++ (AcirLean.Transfer.chunk26 ++ (AcirLean.Transfer.chunk27 ++ (AcirLean.Transfer.chunk28 ++ (AcirLean.Transfer.chunk29 ++ (AcirLean.Transfer.chunk30 ++ (AcirLean.Transfer.chunk31 ++ (AcirLean.Transfer.chunk32 ++ (AcirLean.Transfer.chunk33 ++ (AcirLean.Transfer.chunk34 ++ (AcirLean.Transfer.chunk35 ++ (AcirLean.Transfer.chunk36 ++ (AcirLean.Transfer.chunk37 ++ (AcirLean.Transfer.chunk38 ++ (AcirLean.Transfer.chunk39 ++ (AcirLean.Transfer.chunk40 ++ (AcirLean.Transfer.chunk41 ++ (AcirLean.Transfer.chunk42 ++ (AcirLean.Transfer.chunk43 ++ (AcirLean.Transfer.chunk44 ++ (AcirLean.Transfer.chunk45 ++ (AcirLean.Transfer.chunk46 ++ (AcirLean.Transfer.chunk47 ++ (AcirLean.Transfer.chunk48 ++ ⋯))))))))))))))))))))))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Transfer.solved) = true"
+  },
+  "AcirLean.Transfer.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "AcirLean.Transfer.circuit.Satisfied AcirLean.Transfer.solved"
+  },
+  "AcirLean.Transfer.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "↑(AcirLean.Transfer.solved 8) = 1000 ∧ ↑(AcirLean.Transfer.solved 11) = 0 ∧ ↑(AcirLean.Transfer.solved 14) = 700 ∧ ↑(AcirLean.Transfer.solved 18) = 300 ∧ AcirLean.Transfer.solved 10 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 13 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 17 = AcirLean.Transfer.solved 7"
+  },
+  "AcirLean.Transfer.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "↑(AcirLean.Transfer.solved 8) = 1000 ∧ ↑(AcirLean.Transfer.solved 11) = 0 ∧ ↑(AcirLean.Transfer.solved 14) = 700 ∧ ↑(AcirLean.Transfer.solved 18) = 300 ∧ AcirLean.Transfer.solved 10 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 13 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 17 = AcirLean.Transfer.solved 7"
+  },
+  "AcirLean.Transfer.sum_in_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.sum_in_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23535]? = some (AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 })"
+  },
+  "AcirLean.Transfer.sum_out_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.sum_out_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23537]? = some (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 })"
+  },
+  "AcirLean.Transfer.sums_eq_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.sums_eq_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23539]? = some (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 })"
+  },
+  "AcirLean.Transfer.token_consistency": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → w 10 = w 7 ∧ w 13 = w 7 ∧ w 17 = w 7"
+  },
+  "AcirLean.Transfer.token_in_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 10) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.token_in_1_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23540]? = some (AcirLean.Opcode.assertZero (some 10) { mul := [], lin := [(1, 7)], const := 0 })"
+  },
+  "AcirLean.Transfer.token_names": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.paramNames[7]? = some \"token_in_0\" ∧ AcirLean.Transfer.paramNames[10]? = some \"token_in_1\" ∧ AcirLean.Transfer.paramNames[13]? = some \"token_out_0\" ∧ AcirLean.Transfer.paramNames[17]? = some \"token_out_1\""
+  },
+  "AcirLean.Transfer.token_out_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 13) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.token_out_0_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23541]? = some (AcirLean.Opcode.assertZero (some 13) { mul := [], lin := [(1, 7)], const := 0 })"
+  },
+  "AcirLean.Transfer.token_out_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes"
+  },
+  "AcirLean.Transfer.token_out_1_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23542]? = some (AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 })"
+  },
+  "AcirLean.Trie.brecOn.eq": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {motive : AcirLean.Trie → Sort u} (t : AcirLean.Trie) (F_1 : (t : AcirLean.Trie) → AcirLean.Trie.below t → motive t), AcirLean.Trie.brecOn t F_1 = F_1 t (AcirLean.Trie.brecOn.go t F_1).2"
+  },
+  "AcirLean.Trie.leaf.inj": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {v v_1 : Nat}, AcirLean.Trie.leaf v = AcirLean.Trie.leaf v_1 → v = v_1"
+  },
+  "AcirLean.Trie.leaf.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (v v_1 : Nat), (AcirLean.Trie.leaf v = AcirLean.Trie.leaf v_1) = (v = v_1)"
+  },
+  "AcirLean.Trie.leaf.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ (v : Nat), sizeOf (AcirLean.Trie.leaf v) = 1 + sizeOf v"
+  },
+  "AcirLean.Trie.node.inj": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {l r l_1 r_1 : AcirLean.Trie}, l.node r = l_1.node r_1 → l = l_1 ∧ r = r_1"
+  },
+  "AcirLean.Trie.node.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (l r l_1 r_1 : AcirLean.Trie), (l.node r = l_1.node r_1) = (l = l_1 ∧ r = r_1)"
+  },
+  "AcirLean.Trie.node.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ (l r : AcirLean.Trie), sizeOf (l.node r) = 1 + sizeOf l + sizeOf r"
+  },
+  "AcirLean.Trie.toAssignment._proof_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (t : AcirLean.Trie) (d i : Nat), t.get d i % AcirLean.P < AcirLean.P"
+  },
+  "AcirLean.Withdraw.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true"
+  },
+  "AcirLean.Withdraw.amount_is_public_input_2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Withdraw.circuit.publicParams[2]? = some 2 ∧ AcirLean.Withdraw.publicNames[2]? = some \"amount\""
+  },
+  "AcirLean.Withdraw.amount_lt_two_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Withdraw.circuit.Satisfied w → ↑(w 2) < 2 ^ 128"
+  },
+  "AcirLean.Withdraw.control_bound_700_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Withdraw.circuit.Satisfied w → ↑(w 2) < 700"
+  },
+  "AcirLean.Withdraw.control_chunk1_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128))) = false"
+  },
+  "AcirLean.Withdraw.control_chunk1_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128))) = false"
+  },
+  "AcirLean.Withdraw.control_range_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128)) = false"
+  },
+  "AcirLean.Withdraw.control_range_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128)) = false"
+  },
+  "AcirLean.Withdraw.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk0.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk0.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk10.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk10.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk11.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk11.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk12.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk12.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk13.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk13.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk14.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk14.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk15.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk15.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk16.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk16.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk17.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk17.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk18.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk18.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk19.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk19.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk2.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk2.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk20.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk20.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk21.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk21.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk22.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk22.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk23.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk23.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk24.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk24.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk25.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk25.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk26.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk26.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk27.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk27.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk28.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk28.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk29.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk29.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk3.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk3.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk30": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk30.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk30._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk30.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk31": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk31.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk31._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk31.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk32": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk32.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk32._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk32.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk33": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk33.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk33._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk33.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk34": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk34.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk34._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk34.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk35": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk35.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk35._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk35.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk36": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk36.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk36._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk36.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk37": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk37.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk37._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk37.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk38": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk38.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk38._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk38.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk39": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk39.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk39._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk39.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk4.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk4.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk40": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk40.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk40._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk40.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk41": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk41.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk41._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk41.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk42": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk42.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk42._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk42.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk43": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk43.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk43._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk43.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk44": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk44.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk44._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk44.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk5.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk5.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk6.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk6.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk7.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk7.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk8.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk8.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk9.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk9.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.range_amount_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Opcode.range 2 128 ∈ AcirLean.Withdraw.circuit.opcodes"
+  },
+  "AcirLean.Withdraw.range_amount_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Withdraw.opcodes[362]? = some (AcirLean.Opcode.range 2 128)"
+  },
+  "AcirLean.Withdraw.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "∃ w, AcirLean.Withdraw.circuit.Satisfied w"
+  },
+  "AcirLean.Withdraw.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "(AcirLean.Withdraw.circuit.opcodes.all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "((AcirLean.Withdraw.chunk0 ++ (AcirLean.Withdraw.chunk1 ++ (AcirLean.Withdraw.chunk2 ++ (AcirLean.Withdraw.chunk3 ++ (AcirLean.Withdraw.chunk4 ++ (AcirLean.Withdraw.chunk5 ++ (AcirLean.Withdraw.chunk6 ++ (AcirLean.Withdraw.chunk7 ++ (AcirLean.Withdraw.chunk8 ++ (AcirLean.Withdraw.chunk9 ++ (AcirLean.Withdraw.chunk10 ++ (AcirLean.Withdraw.chunk11 ++ (AcirLean.Withdraw.chunk12 ++ (AcirLean.Withdraw.chunk13 ++ (AcirLean.Withdraw.chunk14 ++ (AcirLean.Withdraw.chunk15 ++ (AcirLean.Withdraw.chunk16 ++ (AcirLean.Withdraw.chunk17 ++ (AcirLean.Withdraw.chunk18 ++ (AcirLean.Withdraw.chunk19 ++ (AcirLean.Withdraw.chunk20 ++ (AcirLean.Withdraw.chunk21 ++ (AcirLean.Withdraw.chunk22 ++ (AcirLean.Withdraw.chunk23 ++ (AcirLean.Withdraw.chunk24 ++ (AcirLean.Withdraw.chunk25 ++ (AcirLean.Withdraw.chunk26 ++ (AcirLean.Withdraw.chunk27 ++ (AcirLean.Withdraw.chunk28 ++ (AcirLean.Withdraw.chunk29 ++ (AcirLean.Withdraw.chunk30 ++ (AcirLean.Withdraw.chunk31 ++ (AcirLean.Withdraw.chunk32 ++ (AcirLean.Withdraw.chunk33 ++ (AcirLean.Withdraw.chunk34 ++ (AcirLean.Withdraw.chunk35 ++ (AcirLean.Withdraw.chunk36 ++ (AcirLean.Withdraw.chunk37 ++ (AcirLean.Withdraw.chunk38 ++ (AcirLean.Withdraw.chunk39 ++ (AcirLean.Withdraw.chunk40 ++ (AcirLean.Withdraw.chunk41 ++ (AcirLean.Withdraw.chunk42 ++ (AcirLean.Withdraw.chunk43 ++ AcirLean.Withdraw.chunk44)))))))))))))))))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Withdraw.solved) = true"
+  },
+  "AcirLean.Withdraw.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "AcirLean.Withdraw.circuit.Satisfied AcirLean.Withdraw.solved"
+  },
+  "AcirLean.Withdraw.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "↑(AcirLean.Withdraw.solved 2) = 700"
+  },
+  "AcirLean.Withdraw.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "↑(AcirLean.Withdraw.solved 2) = 700"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int), { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := a_1, const := a_2 }"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 b : Int), ¬a_2 = b → { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := a_1, const := b } → False"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int) (b : List (Int × Nat)) (b_1 : Int), ¬a_1 = b → { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := b, const := b_1 } → False"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_4": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int) (b : List (Int × Nat × Nat)) (b_1 : List (Int × Nat)) (b_2 : Int), ¬a = b → { mul := a, lin := a_1, const := a_2 } = { mul := b, lin := b_1, const := b_2 } → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 : AcirLean.Expr), AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero a a_1"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_10": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits func : Nat) (outputs : List Nat), AcirLean.Opcode.range input bits = AcirLean.Opcode.brilligCall func outputs → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_11": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (lhs : Option Nat) (rhs : AcirLean.Expr), AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.assertZero lhs rhs → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_12": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (input bits : Nat), AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.range input bits → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_13": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 : List Nat), AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall a a_1"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_14": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 b : List Nat), ¬a_1 = b → AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall a b → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_15": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 : List Nat) (b : Nat) (b_1 : List Nat), ¬a = b → AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall b b_1 → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 b : AcirLean.Expr), ¬a_1 = b → AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero a b → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 : AcirLean.Expr) (b : Option Nat) (b_1 : AcirLean.Expr), ¬a = b → AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero b b_1 → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_4": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (input bits : Nat), AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.range input bits → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_5": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (func : Nat) (outputs : List Nat), AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.brilligCall func outputs → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_6": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits : Nat) (lhs : Option Nat) (rhs : AcirLean.Expr), AcirLean.Opcode.range input bits = AcirLean.Opcode.assertZero lhs rhs → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_7": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 : Nat), AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range a a_1"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_8": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 b : Nat), ¬a_1 = b → AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range a b → False"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_9": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 b b_1 : Nat), ¬a = b → AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range b b_1 → False"
+  },
+  "AcirLean.lhsVal.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : AcirLean.Assignment) (k : Nat), AcirLean.lhsVal (some k) x = ↑↑(x k)"
+  },
+  "AcirLean.lhsVal.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : AcirLean.Assignment), AcirLean.lhsVal none x = 0"
+  },
+  "AcirLean.two_pow_128_add_lt_P": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "2 ^ 128 + 2 ^ 128 < AcirLean.P"
+  },
+  "AcirLean.val_lt_P_lit": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : Fin AcirLean.P), ↑x < 21888242871839275222246405745257275088548364400416034343698204186575808495617"
+  },
+  "_private.AcirLean.Linear.0.AcirLean.lhsVal.match_1.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (motive : Option Nat → AcirLean.Assignment → Sort u_1) (k : Nat) (w : AcirLean.Assignment) (h_1 : (k : Nat) → (w : AcirLean.Assignment) → motive (some k) w) (h_2 : (x : AcirLean.Assignment) → motive none x),\n  (match some k, w with\n    | some k, w => h_1 k w\n    | none, x => h_2 x) =\n    h_1 k w"
+  },
+  "_private.AcirLean.Linear.0.AcirLean.lhsVal.match_1.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (motive : Option Nat → AcirLean.Assignment → Sort u_1) (x : AcirLean.Assignment) (h_1 : (k : Nat) → (w : AcirLean.Assignment) → motive (some k) w) (h_2 : (x : AcirLean.Assignment) → motive none x),\n  (match none, x with\n    | some k, w => h_1 k w\n    | none, x => h_2 x) =\n    h_2 x"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (lhs : Option Nat) (rhs : AcirLean.Expr) (w : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.assertZero lhs rhs, w with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_1 lhs rhs w"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (i bits : Nat) (w : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.range i bits, w with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_2 i bits w"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (func : Nat) (outputs : List Nat) (x : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.brilligCall func outputs, x with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_3 func outputs x"
+  }
+ },
+ "toolchain": {
+  "lake_reports_lean_4_33_1": true,
+  "lean-toolchain": "leanprover/lean4:v4.33.1",
+  "python_ge_3_10": true
+ },
+ "witness_check": {
+  "deposit": {
+   "checked": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 32768,
+   "missing_witness_refs": 0,
+   "trie_depth": 15,
+   "trie_nodes": 24913,
+   "values": {
+    "2": 500
+   },
+   "witness_sha256": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b"
+  },
+  "transfer": {
+   "checked": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 131072,
+   "missing_witness_refs": 0,
+   "trie_depth": 17,
+   "trie_nodes": 76861,
+   "values": {
+    "10": 435537695816263162368054109405345813312609277316,
+    "11": 0,
+    "13": 435537695816263162368054109405345813312609277316,
+    "14": 700,
+    "17": 435537695816263162368054109405345813312609277316,
+    "17906": 1000,
+    "17907": 1000,
+    "18": 300,
+    "7": 435537695816263162368054109405345813312609277316,
+    "8": 1000
+   },
+   "witness_sha256": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b"
+  },
+  "withdraw": {
+   "checked": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 65536,
+   "missing_witness_refs": 0,
+   "trie_depth": 16,
+   "trie_nodes": 37557,
+   "values": {
+    "2": 700
+   },
+   "witness_sha256": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c"
+  }
+ }
+}
