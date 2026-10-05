@@ -1,9 +1,9 @@
-# Clause map: Lean model to 2/SHIELDED-POOL
+# Clause map: base pool and epoch extension
 
-Status: the author has read the model and the statements against the
-spec. Track A in REVIEW.md is the second reading.
+Base model status: the author has read its model and statements against
+spec 2. Track A in REVIEW.md is the second reading.
 
-Source of truth: spec 2 at ethsystems/specs-private 4d4dce1 (`specs/2/README.md`;
+Base source of truth: spec 2 at ethsystems/specs-private 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is
 byte-identical). Line numbers are that file's.
 Spec main (72414f4) adds the commitment-seen set in 5.2 and shifts later
@@ -113,8 +113,9 @@ the model.
    overflow-minting bug of 5.3 (325-328). The former `U128 (in1 + in2)`
    guard conjunct is dropped: it was stricter
    than the spec's per-amount checks and rejected spec-valid transfers.
-   Each amount is still individually range-checked. A bitvector model
-   would make the bug reachable and the guards load-bearing. The
+   Each amount is still individually range-checked, and the proofs use
+   those checks to establish well-formed notes for the restricted
+   hypothesis. A bitvector model would make the overflow bug reachable. The
    circuit's checked `u128` additions also reject a transfer whose input
    or output sum exceeds `2^128 - 1`; the model accepts such transfers
    since the sum-range conjunct was dropped. The model is weaker than
@@ -167,8 +168,8 @@ the model.
     as real leaves.
 12. **Privacy guarantees are not stated.** Confidentiality, unlinkability and
     selective disclosure (6.2) need an observer model, which this repo does
-    not have. It states no privacy result; the nine integrity results of
-    `statements/INVENTORY.md` are the whole claim set (CLAIMS.md).
+    not have. It states no privacy result. CLAIMS.md lists the nine base
+    integrity results and five epoch results.
 13. **`open Classical`.** Used so per-token maps and `liveValue` can branch on
     undecidable propositions. It makes `bump`, `drop` and `liveValue`
     noncomputable. No axiom is declared; `Classical.choice` is already
@@ -194,3 +195,60 @@ the model.
     `poolSolvency` and `noOverWithdrawal` proofs use this conjunct
     (TierA.lean:29-32). The existing solvency control removes membership
     and the payout bound together, so it does not isolate this guard.
+
+## L5: epoch extension
+
+L5 has a separate source: `ethsystems/pocs-private`,
+`pocs/private-payment/shielded-pool-extension/SPEC.md`.
+Its SHA-256 is
+`a05e86a53a00725486c319f3ca40b35bd77db954bc4b3c1b233085ec7e6a5da0`.
+The line numbers below refer to that exact file.
+
+The file at revision `a04b8b38969dfc2ee64de47edee7e396454204a8` matches
+that hash, and `Pool/Epoch.lean` names that verified revision. The
+extension export originally recorded revision
+`94e30f3f0b9fb4a3ba0d0a3b220c49c075c42672`, which is not available in
+the local spec checkout; the hash is the file's identity.
+
+Names below are relative to `LeanShieldedPool.Epoch`.
+These are semantic interpretations of the clauses, with the limits below.
+
+| Lean definition or theorem | Extension spec clause | Lines |
+|---|---|---|
+| `PrimSpec.commitE`, `Note.epochCreated`, `Note.cm` | Data Types: extended note and commitment | 84-100 |
+| `PrimSpec.nfE`, `Note.nfE` | Data Types: extended nullifier | 102-108 |
+| `St.currentEpoch`, `St.active`, `St.frozen`, `St.rollover` | On-Chain State: active state and sealing at rollover | 139-167 |
+| `ChainFacts`, `SpendGuard` | Full lifetime coverage, with the current epoch checked separately | 125-135, 167, 365-374 |
+| `AppendFresh`, `InsertionFacts`, `TransferData.nullifiers` | Sequential insertion and equality of ordered nullifier lists | 161, 167, 394-409 |
+| `DepositData.guard`, `TransferData.guard`, `WithdrawData.guard` | Parent guards plus creation epoch, frozen history and active insertion checks | 51-60, 358-374 |
+| `Verifiers`, `VerifierSoundness` | Abstract extraction of chain and insertion facts | 37-41, 324-338, 394-409 |
+| `Candidates.CryptoHyp` | Run-scoped commitment and owner-key binding, including creation epoch | 99, 336, 372 |
+| `crossEpochNoDoubleSpend_proof` | Guarantees: cross-epoch double-spend safety | 436 |
+| `frozenRootImmutability_proof` | Preserve sealed contents after rollover | 163 |
+| `canonicalAppend_proof` | Preserve exact append order and sequential freshness | 161, 167, 394-409 |
+| `chainKeyBinding_proof` | One owned note and key across consuming witnesses | 336-337, 366, 372 |
+| `baseCaseSoundness_proof`, `Candidates.basePrim`, `Candidates.BaseStateMatches` | Translate an initial-epoch run to the parent rules; no recursive-verifier claim | 51-60, 324-340 |
+| `Examples.*` | Concrete guard witnesses and rejected repeat attempts | model checks, no spec clause |
+
+The base map and its 16 simplifications still apply to L0-L4.
+The epoch model retains their amount, ownership, ballast and accounting
+abstractions. It adds these limits:
+
+- Frozen and active nullifier trees are lists. There are no authenticated
+  roots, predecessor pointers, Merkle paths or encoded leaf slots.
+- `ChainFacts` supplies non-membership over the entire lifetime directly.
+  There are no proof bytes, recursive witnesses, accumulator transitions
+  or checks against a deployed verifier.
+- One supplied key covers the chain interval. The model does not prove
+  that separate recursive circuits bind their keys to that same key.
+- `InsertionFacts` supplies exact order and sequential freshness. It does
+  not verify a concrete tree update or public-input encoding.
+- Epochs are unbounded `Nat`. Rollover is atomic, with no clock or caller.
+  The model does not establish `u64` bounds, authorization or liveness.
+- `EpochDistinct` is defined but unused by these five theorems. Hash
+  collisions can reject valid spends without violating at-most-once safety.
+- The base reduction fixes hashes at epoch zero and compares nullifier
+  lists by permutation. The parent prepends batches; the epoch model appends.
+- Epoch conservation, epoch event replay, PIR, privacy, storage bounds
+  and proof costs are not proved here. The nine base theorems retain their
+  original scope.

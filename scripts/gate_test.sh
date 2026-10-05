@@ -56,6 +56,19 @@ fixture repinned-census-tamper "GATE FAIL: census" \
   'python3 -c "
 p=open(\"statements/INVENTORY.md\").read()
 open(\"statements/INVENTORY.md\",\"w\").write(p.replace(\"LeanShieldedPool.noDoubleSpend ::\",\"LeanShieldedPool.noDoubleSpend :: TAMPERED\",1))" && python3 scripts/check_frozen.py --write statements/FROZEN.sha256 .'
+# The L5 epoch files are part of the build, census, controls and frozen surface.
+fixture l5-sorry "GATE FAIL: sorry" \
+  'printf "\ntheorem fx_l5_sorry : 2 = 2 := by sorry\n" >> LeanShieldedPool/Proofs/Epoch.lean'
+fixture l5-rogue-axiom "GATE FAIL: axiom" \
+  'printf "\naxiom fx_l5_cheat : False\n" >> LeanShieldedPool/Proofs/EpochBase.lean'
+fixture l5-inventory-edit "GATE FAIL: census" \
+  'python3 -c "
+p=open(\"statements/INVENTORY.md\").read()
+k=\"LeanShieldedPool.Epoch.crossEpochNoDoubleSpend_proof ::\"
+assert p.count(k)==1
+open(\"statements/INVENTORY.md\",\"w\").write(p.replace(k,k+\" TAMPERED\",1))"'
+fixture l5-statement-comment "GATE FAIL: frozen" \
+  'printf "\n-- tampered after pinning\n" >> LeanShieldedPool/Statements/L5.lean'
 # GATE_REF: a bad candidate commit must fail even when the checked-out HEAD is clean
 W=$(mktemp -d "$GTEST_WORK/gtest.XXXXXX"); git clone --quiet "$REPO" "$W/r"
 copy_lake "$REPO/.lake" "$W/r/.lake"

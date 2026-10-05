@@ -28,3 +28,15 @@ LeanShieldedPool.poolSolvency_proof :: ∀ (P : LeanShieldedPool.PrimSpec), Lean
 LeanShieldedPool.noOverWithdrawal_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.noOverWithdrawal P
 LeanShieldedPool.noMinting_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.noMinting P
 LeanShieldedPool.balanceIsLiveValue_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.balanceIsLiveValue P
+# L5 epoch statement Props (semantic model of the PoC extension spec):
+LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.frozenRootImmutability :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.canonicalAppend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.chainKeyBinding :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.baseCaseSoundness :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+# L5 epoch theorems:
+LeanShieldedPool.Epoch.crossEpochNoDoubleSpend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend P
+LeanShieldedPool.Epoch.frozenRootImmutability_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.frozenRootImmutability P
+LeanShieldedPool.Epoch.canonicalAppend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.canonicalAppend P
+LeanShieldedPool.Epoch.chainKeyBinding_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.chainKeyBinding P
+LeanShieldedPool.Epoch.baseCaseSoundness_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.baseCaseSoundness P

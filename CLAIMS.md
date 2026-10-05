@@ -1,15 +1,16 @@
 # Claims
 
-The nine proved theorems, each with its Lean name, English, spec clause
-and hypothesis. The statement files `LeanShieldedPool/Statements/L3.lean`,
-`L4.lean` and `L4B.lean` are the source of truth. The gate checks the type
-of each name against `statements/INVENTORY.md`.
+The fourteen proved theorems, each with its Lean name, English, spec
+clause and hypothesis. The statement files
+`LeanShieldedPool/Statements/L3.lean`, `L4.lean`, `L4B.lean` and
+`L5.lean` are the source of truth. The gate checks the type of each
+name against `statements/INVENTORY.md`.
 
 ## How to read a row
 
 Each claim is a Prop, such as `noDoubleSpend`, and a theorem that proves
 it for every `P : PrimSpec` (the opaque hashes and field types), such as
-`noDoubleSpend_proof`. Each Prop covers every accepted history:
+`noDoubleSpend_proof`. Each base Prop covers every accepted history:
 `Run sup txs st` says that the operations `txs` run from the empty pool
 and reach the state `st`. Spec clauses refer to spec 2 at 4d4dce1
 (`specs/2/README.md` in ethsystems/specs-private); numbers in brackets
@@ -30,7 +31,7 @@ the hashes outside it, and it is not a Poseidon security claim. It is a
 theorem hypothesis, not an axiom. No theorem uses the global form
 `CryptoHypGlobal`.
 
-## The nine theorems
+## The nine base theorems
 
 | # | Lean name | English | Spec clause | Hypothesis |
 |---|---|---|---|---|
@@ -48,7 +49,53 @@ In the Hypothesis column, "none" means no cryptographic hypothesis.
 Theorems 4 and 5 also rest on the withdraw payout bound, a modelling
 device (simplification 16).
 
-## What the rows mean
+## The five epoch theorems
+
+Names below have the prefix `LeanShieldedPool.Epoch`. Their statements
+are in `Statements/L5.lean`, under `Candidates`. That namespace retains
+its source name; all five statements have proofs.
+
+These rows concern the PoC extension spec, whose hash and clauses appear
+in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
+
+| # | Lean name | English | Extension spec clause | Hypothesis |
+|---|---|---|---|---|
+| 10 | `crossEpochNoDoubleSpend_proof` | No commitment is consumed twice across an accepted history, including rollovers and ballast. | Guarantees: cross-epoch double-spend safety (436) | epoch `Candidates.CryptoHyp` |
+| 11 | `frozenRootImmutability_proof` | After rollover, every accepted suffix preserves the newly sealed nullifier list and all older sealed lists. | On-Chain State (163) | reachable starting state; accepted suffix |
+| 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-409) | accepted step or segment; unchanged epoch |
+| 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and run key, with equal derivations throughout its epoch interval. | Chain-Update Circuit (336-337); Spend Circuit (366, 372) | epoch `Candidates.CryptoHyp` |
+| 14 | `baseCaseSoundness_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. | Diff vs Parent (51-60); base-case branch (324-340), at the semantic level only | epoch `Candidates.CryptoHyp`; no rollover |
+
+Rows 10, 13 and 14 quantify over accepted epoch runs. The epoch
+hypothesis binds full notes, including `epochCreated`, and spending keys
+within that run. It is separate from the base model's `CryptoHyp`, and
+unlike that one its commitment part is not restricted to `wf` notes.
+The epoch guards require `wf` for every note they record, so on
+accepted runs the two forms impose the same condition; that agreement
+is a reading argument here, not a proved lemma. Rows 11 and 12 require
+no collision hypothesis. None of these results uses `EpochDistinct`.
+
+The epoch model follows the repinned base: its transfer guard requires
+membership for the first input, as the base guard does. No L5 statement
+text differs from the research-repo source, but the model admits fewer
+histories than the pre-repin export did, and row 14 targets the revised
+base `CryptoHyp`.
+
+Row 14 also states the implication from the base `noDoubleSpend`
+proposition to the epoch consumption claim. It does not prove a
+recursive circuit's base case, or conservation for arbitrary epoch
+runs.
+
+`frozenRootImmutability` preserves list contents. It does not mention
+concrete Merkle roots. `chainKeyBinding` compares supplied semantic
+witnesses; it does not extract keys from separate recursive proofs.
+
+`Step` uses `ChainFacts` and `InsertionFacts` directly.
+`VerifierSoundness` names a possible implementation assumption, but is
+not a premise of these five theorems. No verifier correspondence
+theorem is supplied.
+
+## What the base rows mean
 
 - Theorems 2 and 3 are the claim. Theorem 1 follows from the
   guards alone.
@@ -70,10 +117,11 @@ device (simplification 16).
 
 ## What the theorems rest on
 
-- The model in `LeanShieldedPool/Pool/`, with the 16 simplifications of
-  SPEC-MAP.md. They are modelling choices. Some are encoded in the guards;
-  none is a separately quantified hypothesis of any theorem. No definition
-  has an implementation-correspondence theorem in this repo.
+- The model in `LeanShieldedPool/Pool/`, with the 16 base
+  simplifications and the epoch limits in SPEC-MAP.md. They are
+  modelling choices. Some are encoded in the guards; none is a
+  separately quantified hypothesis of any theorem. No definition has an
+  implementation-correspondence theorem in this repo.
 - `CryptoHyp`, where the table says so.
 - Three Lean axioms: `propext`, `Classical.choice` and `Quot.sound`
   (AXIOMS.md). The gate checks the axioms of each theorem.
@@ -81,22 +129,30 @@ device (simplification 16).
 **Which guard conjuncts the proofs use.** The proofs consume membership,
 nullifier freshness and distinctness, owner-key binding, token
 consistency, the transfer sum equation, output-commitment freshness, the
-deposit duplicate check, and the withdraw payout bound. Two groups are
-not used by any theorem: the two root-window conjuncts and the `U128`
-range conjuncts. Weakening those leaves all nine theorems provable. They
-keep the model's accepted set aligned with the contract; root-window
-correctness and range enforcement are not among the nine claims. The
-root-window conformance bug fixed in pocs-private#12 is an example of a
-bug these theorems cannot see.
+deposit duplicate check, and the withdraw payout bound. The base proofs
+also use the `U128` range conjuncts: they establish well-formed notes
+(`Run.runNotes_wf`) before applying the restricted `CryptoHyp`. The
+epoch base-case proof transports the range and root-window conjuncts
+into the accepted base run it constructs. Beyond that transport, no
+theorem consumes the root-window conjuncts; they keep the model's
+accepted set aligned with the contract. None of this verifies concrete
+root-window code or machine arithmetic; root-window correctness and
+range enforcement are not among the claims. The root-window conformance
+bug fixed in pocs-private#12 is an example of a bug these theorems
+cannot see.
 
 ## Checks that the theorems have content
 
 - `Draft/NonVacuity.lean` shows on a toy instance that each operation
-  guard can fire, so `Run` is not empty.
-- The positive controls apply the nine theorems to that toy instance, and
-  `controls/positive_l3.lean` proves `CryptoHyp` for the
-  deposit-transfer-withdraw run, so the conditional theorems apply to a
-  nonempty accepted history.
+  guard can fire, so `Run` is not empty. `Pool/Epoch.lean` also
+  supplies epoch guard witnesses, including a spend after rollover and
+  rejection of a repeated spend.
+- The positive controls apply all fourteen theorems to concrete toy
+  instances. `controls/positive_l3.lean` proves `CryptoHyp` for the
+  deposit-transfer-withdraw run, and `controls/positive_l5.lean` proves
+  the epoch `CryptoHyp` for an accepted run that crosses a rollover,
+  plus a no-rollover prefix for row 14's premise, so the conditional
+  theorems apply to nonempty accepted histories.
 - Each refutation control weakens one guard, post-state or replay step.
   It carries a history that the mutated model accepts, shows that the
   history meets the frozen Prop's other premises (`CryptoHyp` where the
@@ -104,11 +160,12 @@ bug these theorems cannot see.
   the mutated model. For event replay the run is the real one and the
   replay function is the mutated part. The file must build, so an
   unrelated unsolved goal in its setup cannot be mistaken for success.
-  `controls/refute_l3_double_spend.lean` states the three parts as three
-  theorems; the eight others end in one theorem that negates a universal
-  statement over the mutated model (for replay: over the real `Run`, with
-  the lossy replay). None claims the negation of an
-  original theorem, which quantifies over the real `Run`.
+  `controls/refute_l3_double_spend.lean` states the three parts as
+  three theorems; the ten others end in one theorem that negates a
+  universal statement over the mutated model (for replay: over the real
+  `Run`, with the lossy replay). None claims the negation of an
+  original theorem, which quantifies over the real `Run` or the real
+  epoch model.
 - The gate rejects a positive or refutation control whose build reports
   a `sorry`, and any axiom declared in a control. It runs no axiom census
   on control theorems.
