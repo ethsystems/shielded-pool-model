@@ -27,7 +27,10 @@ gate test.
 ## 2. What is not claimed
 
 - No implementation is verified (client, circuits, contract).
-- No privacy claim.
+- No deployed-privacy claim. The symbolic k-anonymity extension
+  (`LeanShieldedPool/Extensions/`, CLAIMS.md "Extension") proves
+  properties of a symbolic observer relation; no real cryptographic
+  hiding instance is proved. It is outside Track A.
 - No recursive-proof or concrete nullifier-tree verification. The six
   L5 claims concern the PoC extension's semantic model, separately from
   spec 2.
@@ -35,7 +38,8 @@ gate test.
   chain check, as in the circuit (CLAIMS.md, "Ballast and the chain
   check").
 - No conservation or event replay result for arbitrary epoch runs.
-- The research repo's toy and smoke theorems are not here.
+- The research repo's toy and smoke theorems are not here, except the
+  toy instances inside the k-anonymity extension file.
 - The root-window bug in the contract is not a claim of this repo (part 7).
 - The spec reading is human and still open (part 5).
 
@@ -60,8 +64,8 @@ btrfs or XFS.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
 and unlisted axioms, in the controls too. It checks the exact type and
-axioms of the 29 inventory names, runs the controls, and checks the pins last.
-`gate_test.sh` plants 18 cheats; each must make the gate fail.
+axioms of the 55 inventory names, runs the controls, and checks the pins last.
+`gate_test.sh` plants 22 cheats; each must make the gate fail.
 
 ## 4. Trust base
 
@@ -117,9 +121,11 @@ and `Statements/L5.lean`. Check these points:
 
 ## 6. What the theorems do not say
 
-They say nothing about the verifier, concrete Merkle implementations,
-encoded amounts, deployed caller and authorization behavior,
-re-entrancy, overflow, governance, privacy, or deployed code. A nullifier
+The fifteen core theorems say nothing about the verifier, concrete Merkle
+implementations, encoded amounts, deployed caller and authorization
+behavior, re-entrancy, overflow, governance, privacy, or deployed code
+(the extension's symbolic observer result is not a privacy claim about
+any of these either). A nullifier
 collision can lock a note, and locked value counts as live.
 `spendRequiresOwnerKey` is owner-key binding at the model level only; key
 secrecy and custody are out of the model.

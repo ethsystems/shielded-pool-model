@@ -19,6 +19,7 @@ FROZEN = [
     "LeanShieldedPool/Pool/*.lean",
     "LeanShieldedPool/Statements/*.lean",
     "LeanShieldedPool/Proofs/*.lean",
+    "LeanShieldedPool/Extensions/*.lean",
     "LeanShieldedPool/Draft/NonVacuity.lean",
     "statements/INVENTORY.md",
     "controls/*.lean",

@@ -16,3 +16,4 @@ import LeanShieldedPool.Pool.Epoch
 import LeanShieldedPool.Statements.L5
 import LeanShieldedPool.Proofs.EpochBase
 import LeanShieldedPool.Proofs.Epoch
+import LeanShieldedPool.Extensions.KAnonymity
