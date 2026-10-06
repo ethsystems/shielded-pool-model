@@ -28,7 +28,8 @@ def windowBoundary (P : PrimSpec) : Prop :=
 current tree, with a fresh nullifier, a nonzero amount and enough pool
 balance, has an accepted withdrawal against the current root
 (`st.leaves.length`), and the pool pays out exactly the amount. The note's
-`u128` range, its window root and its tree membership are not assumed. -/
+`u128` range, the window membership of the current root and the
+commitment's membership at that root are derived, not assumed. -/
 def honestWithdraw (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st →
