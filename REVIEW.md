@@ -55,8 +55,8 @@ bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 644 s measured
 ```
 
 The gate tests committed HEAD, so an uncommitted tree is not a gate
-result. The 53 s gate time is one cold build of this branch with a
-copied Mathlib cache; the 644 s fixture time is one run of the 18
+result. The 53 s gate time is one fresh clone of this branch with a
+copied `.lake` cache; the 644 s fixture time is one run of the 18
 fixtures, on Linux with btrfs, no memory cap, `LEAN_NUM_THREADS=4`,
 while another Lean build ran on the same machine.
 Without cheap file copies, set `GATE_WORK` to a directory on APFS,

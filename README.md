@@ -76,7 +76,7 @@ eyes: Track A asks whether the model says what the spec says.
 
 ## What the theorems do not say
 
-Nothing about the SNARK verifier, the concrete Merkle tree, field
+The fifteen core theorems say nothing about the SNARK verifier, the concrete Merkle tree, field
 encodings, who may call the contract, re-entrancy, integer overflow,
 governance, privacy, or any deployed code. The tree is a list, amounts
 are `Nat`, hashes are opaque, steps are atomic: SPEC-MAP.md lists all 16
@@ -107,11 +107,13 @@ private; no license yet.
 ## Names
 
 The files keep the names they have in the research repo this model comes
-from (lean-shielded-pool at commit 67160b1). Of the 34 files that came
-from there, 11 are still byte-identical to that commit. The other 23
-were edited here: 19 while answering the review of pull request 1, and
-four more controls when the base negative controls became refutation
-controls. None of them matches 67160b1 now. Nothing is written back to
+from. This section's accounting covers the original core import
+(lean-shielded-pool at commit 67160b1) and the L5 files; the
+k-anonymity extension came later from the L5 pin, below. Of the 34
+files that came from 67160b1, 11 are still byte-identical to that
+commit. The other 23 were edited here: 19 while answering the review of
+pull request 1, and four more controls when the base negative controls
+became refutation controls. None of them matches 67160b1 now. Nothing is written back to
 the research repo from here.
 
 The seven L5 files come from the same research repo at commit
@@ -185,6 +187,15 @@ What deviates from 67160b1, and why:
 were never covered by PROVENANCE.sha256; `statements/FROZEN.sha256` pins
 both.
 
+The k-anonymity extension comes from the same pin as the L5 files,
+lean-shielded-pool `fa5526e`, file
+`LeanShieldedPool/Statements/KAnonymity.lean`, moved
+here to `LeanShieldedPool/Extensions/KAnonymity.lean` with a header-only
+fitting (a draft marker and a research-repo path dropped). Everything
+from `namespace` on is byte-identical to that pin. The file is not in
+PROVENANCE.sha256, which lists only byte-identical files and keeps its
+11 entries; `statements/FROZEN.sha256` pins it.
+
 The level names come from the research repo:
 
 - L3 is the core model claim (`Statements/L3.lean`).
@@ -207,9 +218,10 @@ The level names come from the research repo:
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
    `L4B.lean`, `L5.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
-7. The controls: `controls/`. Each refutation control weakens one guard,
-   post-state or replay step and proves the negation of the frozen Prop
-   on its mutated model; it must build.
+7. The controls: `controls/`. Each base or epoch refutation control
+   weakens one guard, post-state or replay step; the two extension
+   refutation controls mutate a frozen definition instead. Each proves
+   the negation of a frozen statement over its mutation; it must build.
 8. The gate: `scripts/gate.sh`.
 
 REVIEW.md is the reviewer guide.
@@ -238,8 +250,8 @@ exact type and axioms of the 55 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
 `gate_test.sh` plants 22 cheats; each must make the gate fail.
 
-The 53 s gate time is one cold build of this branch with a copied
-Mathlib cache. The 644 s fixture time is one run of the 18 fixtures.
+The 53 s gate time is one fresh clone of this branch with a copied
+`.lake` cache. The 644 s fixture time is one run of the 18 fixtures.
 Both ran on a Linux laptop with btrfs, with no memory cap and
 `LEAN_NUM_THREADS=4`, while another Lean build ran on the same machine.
 Each gate run copies `.lake` (about 7.5 GB). Without cheap
