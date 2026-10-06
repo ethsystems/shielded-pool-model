@@ -166,10 +166,15 @@ the model.
     makes 5.3 match 4.2. First-slot membership does not remove zero-value
     notes from the tree: transfer outputs may be zero-value and enter it
     as real leaves.
-12. **Privacy guarantees are not stated.** Confidentiality, unlinkability and
-    selective disclosure (6.2) need an observer model, which this repo does
-    not have. It states no privacy result. CLAIMS.md lists the nine base
-    integrity results and six epoch results.
+12. **Privacy guarantees are not claimed.** Confidentiality, unlinkability
+    and selective disclosure (6.2) need an observer model. The core has
+    none and states no privacy result; the nine base and six epoch
+    integrity theorems are the repo's claim set (CLAIMS.md). The gated
+    extension `LeanShieldedPool/Extensions/KAnonymity.lean` adds a
+    symbolic event-log observer and proves possibilistic k-anonymity
+    families under the limits in CLAIMS.md "Extension: symbolic
+    k-anonymity"; it proves no deployed-privacy property and no hiding
+    bound, and it is not one of the claims.
 13. **`open Classical`.** Used so per-token maps and `liveValue` can branch on
     undecidable propositions. It makes `bump`, `drop` and `liveValue`
     noncomputable. No axiom is declared; `Classical.choice` is already

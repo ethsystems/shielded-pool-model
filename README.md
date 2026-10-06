@@ -37,6 +37,9 @@ pool without rollover, and spendability after rollover. CLAIMS.md
 gives all fifteen results with their hypotheses and spec clauses. The
 epoch results concern a semantic state machine; they do not verify
 recursive proofs or concrete nullifier trees.
+`LeanShieldedPool/Extensions/` holds gated extensions outside this core
+read; the first is symbolic k-anonymity (CLAIMS.md, "Extension: symbolic
+k-anonymity").
 
 The base model makes 16 simplifications, for example a list for the
 Merkle tree, `Nat` amounts and opaque hashes. They are modelling
@@ -231,9 +234,9 @@ result.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`,
 `native_decide` and undeclared axioms, in the controls too. It checks the
-exact type and axioms of the 29 names in `statements/INVENTORY.md`, runs
+exact type and axioms of the 55 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
-`gate_test.sh` plants 18 cheats; each must make the gate fail.
+`gate_test.sh` plants 22 cheats; each must make the gate fail.
 
 The 53 s gate time is one cold build of this branch with a copied
 Mathlib cache. The 644 s fixture time is one run of the 18 fixtures.

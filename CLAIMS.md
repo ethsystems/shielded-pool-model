@@ -1,10 +1,12 @@
 # Claims
 
-The fifteen proved theorems, each with its Lean name, English, spec
-clause and hypothesis. The statement files
+The fifteen core theorems (nine base, six epoch), each with its Lean
+name, English, spec clause and hypothesis. The statement files
 `LeanShieldedPool/Statements/L3.lean`, `L4.lean`, `L4B.lean` and
 `L5.lean` are the source of truth. The gate checks the type of each
-name against `statements/INVENTORY.md`.
+name against `statements/INVENTORY.md`. These fifteen are the repo's
+claim; the gated extension at the end of this file is supporting
+material, not a sixteenth claim.
 
 ## How to read a row
 
@@ -199,7 +201,8 @@ cannot see.
   the transfer as a non-rollover step, and the no-rollover prefix as a
   segment; for row 15, the first transfer output after that prefix and
   its rollover.
-- Each refutation control weakens one guard, post-state or replay step.
+- Each base or epoch refutation control weakens one guard, post-state
+  or replay step.
   It carries a history that the mutated model accepts, shows that the
   history meets the frozen Prop's other premises (`CryptoHyp` where the
   Prop has it), and proves the negation of the frozen Prop restated over
@@ -212,8 +215,73 @@ cannot see.
   `Run`, with the lossy replay). None claims the negation of an
   original theorem, which quantifies over the real `Run` or the real
   epoch model.
+- The extension's refutation controls (below) mutate a frozen definition
+  instead of a guard: one drops the injectivity of the atom renamings,
+  one deletes the last-owner equation of the anonymity-set definition.
+  Each proves the negation of a frozen universal restated over its
+  mutation and must build, like the base controls.
 - The gate rejects a positive or refutation control whose build reports
   a `sorry`, and any axiom declared in a control. It runs no axiom census
   on control theorems.
 
 REVIEW.md part 6 lists what the theorems do not say.
+
+## Extension: symbolic k-anonymity
+
+`LeanShieldedPool/Extensions/KAnonymity.lean` is gated supporting
+material: same frozen pins, census rows (the 22 extension names in
+`statements/INVENTORY.md`), axiom rules and controls as the core, but
+not one of the fifteen claims above.
+
+**The observer.** The observer sees the ordered `Event` log and nothing
+else: no keys, no encrypted payloads, no network or timing data. This is
+weaker than the public observer of spec 6.1 (424), which sees all
+on-chain state and traffic. Spec 6.1 is context for the file, not a
+proved match to its observer.
+
+**The relation.** `ObsEquiv` relates two logs when injective renamings
+of commitment atoms and nullifier atoms map one to the other.
+Constructors, slot order and repeated atoms stay observable; on finite
+logs injections and permutations give the same relation
+(`obsEquiv_iff_permutations`), and the relation is an equivalence.
+
+**The target.** The protected attribute is the owner of the first
+output of the last transfer (`lastTransferFirstOwner`). Not every
+recipient, not a withdrawal address, not every accepted log.
+
+**What is proved.** `hasAnonymitySet sup log k` asks for k injectively
+distinct accepted explanations of `log` (each an accepted run with its
+own `CryptoHyp`, observationally equivalent to `log`) whose targets are
+pairwise distinct. `acceptedAnonymityCandidate` is an existence
+statement: some accepted history reaches a k-member family. It gives no
+universal anonymity lower bound, and k = 0 is vacuous by design; a
+one-candidate set establishes no ambiguity. Two positive families are
+proved, and they are distinct results:
+
+- The two-recipient toy (`candidate_two`): both worlds share one
+  primitive profile, only output owners and salts vary, and symbolic
+  equivalence of the two logs is proved. Collision freedom also holds
+  across both histories' combined witnesses
+  (`crypto_cross_history`); that concatenation is a witness
+  collection, not an accepted run.
+- The k-recipient family (`ManyRecipientToy.candidate`), for every
+  positive finite k: the primitive profile `Toy' k` varies with k,
+  owner-independent commitments make all worlds' logs equal, and
+  collision freedom holds within each history only. No combined-witness
+  collision freedom is claimed for this family.
+
+**The counterexample.** Key and salt cardinalities alone do not give
+the candidate: with a constant commitment function no transfer guard
+can fire (`constant_commit_blocks_transfer`), so the cardinality-only
+implication is false at every positive count
+(`not_cardinalityOnlyCandidate`).
+
+**The hypothesis.** `HashHidingHyp` names the assumption that a chosen
+real observer cannot distinguish symbolically equivalent logs. The
+symbolic results above do not need it; only the bridge to a chosen
+observer does (`indistinguishable_under_hiding`). No real cryptographic
+hiding instance is proved. The extension proves no Poseidon hiding
+bound and no deployed-privacy property. The toys' `commit` and
+`nullify` are not hashes; collision freedom is checked per history via
+`CryptoHyp`. The counting is possibilistic: it counts possible targets
+and assigns no probabilities or equal likelihood.
