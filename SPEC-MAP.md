@@ -220,10 +220,10 @@ These are semantic interpretations of the clauses, with the limits below.
 | `St.currentEpoch`, `St.active`, `St.frozen`, `St.rollover` | On-Chain State: active state and sealing at rollover | 139-167 |
 | `ChainFacts`, `SpendGuard` | Full lifetime coverage, with the current epoch checked separately | 125-135, 167, 365-374 |
 | `AppendFresh`, `InsertionFacts`, `TransferData.nullifiers` | Sequential insertion and equality of ordered nullifier lists | 161, 167, 394-409 |
-| `DepositData.guard`, `TransferData.guard`, `WithdrawData.guard` | Parent guards plus creation epoch, frozen history and active insertion checks | 51-60, 358-374 |
+| `DepositData.guard`, `TransferData.guard`, `WithdrawData.guard` | Parent guards plus creation epoch, frozen history and active insertion checks. The chain check is skipped for a zero-amount second input, following the circuit, not 358-366 (simplification 7) | 51-60, 358-374 |
 | `Verifiers`, `VerifierSoundness` | Abstract extraction of chain and insertion facts | 37-41, 324-338, 394-409 |
 | `Candidates.CryptoHyp` | Run-scoped commitment and owner-key binding, including creation epoch | 99, 336, 372 |
-| `crossEpochNoDoubleSpend_proof` | Guarantees: cross-epoch double-spend safety | 436 |
+| `Tx.valueConsumes`, `crossEpochNoDoubleSpend_proof` | Guarantees: cross-epoch double-spend safety, for inputs with nonzero amount; ballast is excluded because its chain check is skipped | 436 |
 | `frozenRootImmutability_proof` | Preserve sealed contents after rollover. Line 163 says only what a rollover writes; 205 calls sealed data immutable. Immutability of sealed entries is a model choice | 163, 205 |
 | `canonicalAppend_proof` | Preserve exact append order and sequential freshness. The single-step half restates the guard conjunct; the segment half is the content. Cross-proof binding (407-409) is simplification 4, assumed | 161, 167, 394-405 |
 | `chainKeyBinding_proof` | One owned note and key across consuming witnesses. The chain key binding of 336-337 is assumed (simplification 2) | 366, 372 |
@@ -247,6 +247,10 @@ abstractions. It adds these limits:
   not verify a concrete tree update or public-input encoding.
 - Epochs are unbounded `Nat`. Rollover is atomic, with no clock or caller.
   The model does not establish `u64` bounds, authorization or liveness.
+- A zero-amount second input (ballast) passes the transfer guard without a
+  chain check and with an unconstrained creation epoch, as in the circuit.
+  Row 10 counts only value-bearing consumption; row 14 assumes epoch-0
+  ballast (`Candidates.BallastStamped`).
 - `EpochDistinct` is defined but unused by these five theorems. Hash
   collisions can reject valid spends without violating at-most-once safety.
 - The base reduction fixes hashes at epoch zero and compares nullifier
