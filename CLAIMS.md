@@ -61,10 +61,10 @@ in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
 | # | Lean name | English | Extension spec clause | Hypothesis |
 |---|---|---|---|---|
 | 10 | `crossEpochNoDoubleSpend_proof` | No commitment is consumed twice across an accepted history, including rollovers and ballast. | Guarantees: cross-epoch double-spend safety (436) | epoch `Candidates.CryptoHyp` |
-| 11 | `frozenRootImmutability_proof` | After rollover, every accepted suffix preserves the newly sealed nullifier list and all older sealed lists. | On-Chain State (163) | reachable starting state; accepted suffix |
-| 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-409) | accepted step or segment; unchanged epoch |
-| 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and run key, with equal derivations throughout its epoch interval. | Chain-Update Circuit (336-337); Spend Circuit (366, 372) | epoch `Candidates.CryptoHyp` |
-| 14 | `baseCaseSoundness_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. | Diff vs Parent (51-60); base-case branch (324-340), at the semantic level only | epoch `Candidates.CryptoHyp`; no rollover |
+| 11 | `frozenRootImmutability_proof` | After rollover, every accepted suffix preserves the newly sealed nullifier list and all older sealed lists. A frame property of the step relation: it holds from any state, because only rollover writes `frozen`. | On-Chain State (163); sealed data is immutable (205) | accepted suffix |
+| 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-405) | accepted step or segment; unchanged epoch |
+| 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and the same run key. | Spend Circuit (366, 372); the chain key binding of 336-337 is assumed (simplification 2), not proved | epoch `Candidates.CryptoHyp` |
+| 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover |
 
 Rows 10, 13 and 14 quantify over accepted epoch runs. The epoch
 hypothesis binds full notes, including `epochCreated`, and spending keys
@@ -83,12 +83,18 @@ base `CryptoHyp`.
 
 Row 14 also states the implication from the base `noDoubleSpend`
 proposition to the epoch consumption claim. It does not prove a
-recursive circuit's base case, or conservation for arbitrary epoch
-runs.
+recursive circuit's base case (extension spec 324-340), or conservation
+for arbitrary epoch runs.
 
 `frozenRootImmutability` preserves list contents. It does not mention
 concrete Merkle roots. `chainKeyBinding` compares supplied semantic
-witnesses; it does not extract keys from separate recursive proofs.
+witnesses; it does not extract keys from separate recursive proofs, and
+it states nothing about per-epoch derivations beyond note and key
+equality. In `canonicalAppend` the single-step half restates the guard's
+`InsertionFacts` conjunct; the segment half is the content. The
+cross-proof binding of extension spec 407-409 (the spend proof's and the
+insertion proof's nullifier lists are equal) is simplification 4 of
+`Pool/Epoch.lean`, assumed, not proved.
 
 `Step` uses `ChainFacts` and `InsertionFacts` directly.
 `VerifierSoundness` names a possible implementation assumption, but is
@@ -152,7 +158,11 @@ cannot see.
   deposit-transfer-withdraw run, and `controls/positive_l5.lean` proves
   the epoch `CryptoHyp` for an accepted run that crosses a rollover,
   plus a no-rollover prefix for row 14's premise, so the conditional
-  theorems apply to nonempty accepted histories.
+  theorems apply to nonempty accepted histories. For rows 11 and 12 it
+  also instantiates the conclusions at concrete antecedents: the
+  rollover inside that run with the epoch-1 withdrawal as the suffix,
+  the transfer as a non-rollover step, and the no-rollover prefix as a
+  segment.
 - Each refutation control weakens one guard, post-state or replay step.
   It carries a history that the mutated model accepts, shows that the
   history meets the frozen Prop's other premises (`CryptoHyp` where the
