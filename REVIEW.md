@@ -46,14 +46,15 @@ curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf 
 git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
 # Check out the revision under review before continuing.
 lake exe cache get          # setup: about 30 minutes (estimate), .lake about 7.5 GB
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 38 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 435 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); 53 s measured
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 644 s measured
 ```
 
 The gate tests committed HEAD, so an uncommitted tree is not a gate
-result. The 38 s gate time is one cold build of this branch with a
-copied Mathlib cache; the 435 s fixture time is one run of the 18
-fixtures, on Linux with btrfs under a 5 GiB memory cap (5120 MiB).
+result. The 53 s gate time is one cold build of this branch with a
+copied Mathlib cache; the 644 s fixture time is one run of the 18
+fixtures, on Linux with btrfs, no memory cap, `LEAN_NUM_THREADS=4`,
+while another Lean build ran on the same machine.
 Without cheap file copies, set `GATE_WORK` to a directory on APFS,
 btrfs or XFS.
 
