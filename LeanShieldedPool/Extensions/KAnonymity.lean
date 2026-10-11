@@ -14,7 +14,15 @@ JUSTIFICATION: `HashHidingHyp` is a named hiding assumption, not a theorem
 about the observer's real power. It assumes hashes hide their inputs and
 nullifiers cannot be linked to commitments without spending keys (spec
 line 424). `CryptoHyp` supplies collision freedom, not this hiding property.
-Any real privacy claim must state this assumption explicitly. This file proves only properties of the symbolic relation.
+Only a relation at least as coarse as `ObsEquiv` can satisfy it: `Eq` fails,
+because `deposit_obsEquiv` relates two deposits with different commitment
+values. Real hiding is a statement about distributions over salts, not
+about two fixed logs, so no observer that sees actual values satisfies the
+hypothesis as stated. The protected owner also sits inside the note
+ciphertext that the sender encrypts to the recipient's viewing key (spec
+line 230); a real bridge needs key privacy of that encryption too, and this
+file does not model it. Any real privacy claim must state these assumptions
+explicitly. This file proves only properties of the symbolic relation.
 The observer omits keys, encrypted payloads, and other on-chain or network
 data outside `Event`; it does not model the full public observer by itself.
 -/
