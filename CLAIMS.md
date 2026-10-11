@@ -287,10 +287,15 @@ proved, and they are distinct results:
   (`crypto_cross_history`); that concatenation is a witness
   collection, not an accepted run.
 - The k-recipient family (`ManyRecipientToy.candidate`), for every
-  positive finite k: the primitive profile `Toy' k` varies with k,
-  owner-independent commitments make all worlds' logs equal, and
-  collision freedom holds within each history only. No combined-witness
-  collision freedom is claimed for this family.
+  positive finite k: the primitive profile `Toy' k` varies with k, its
+  commitment binds the owner (`Nat.pair owner salt`), the output salts
+  vary with the world, and the k logs are pairwise symbolically
+  equivalent through an explicit commitment permutation
+  (`pairwise_obs`, `cmPerm`). Collision freedom holds within each
+  history (`crypto`) and across any two histories' combined witnesses
+  (`crypto_cross_history`). The toys' `commit` is still not a hash:
+  `Nat.pair` is injective, so a collision cannot occur at all, which
+  is stronger than what a hash gives.
 
 **A limit of `explanations`.** An explanation matches the log only up
 to `ObsEquiv`, and `Event` carries no token, amount, address or root.
