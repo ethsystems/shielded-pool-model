@@ -19,7 +19,7 @@ audit.
 | `spendRequiresOwnerKey_proof` | owner-key binding: the witness key owns each consumed note | 5.3 (319, 348, 365) | `CryptoHyp` |
 | `eventReplayFaithful_proof` | log replay rebuilds the tree and the nullifier set | 4.4 (279) | none |
 
-L5 adds five separate results from the PoC extension spec. CLAIMS.md
+L5 adds six separate results from the PoC extension spec. CLAIMS.md
 lists their exact scope and hypotheses; SPEC-MAP.md gives the source
 hash, clauses and epoch limits. The epoch commits pass the gate and the
 gate test.
@@ -28,9 +28,12 @@ gate test.
 
 - No implementation is verified (client, circuits, contract).
 - No privacy claim.
-- No recursive-proof or concrete nullifier-tree verification. The five
+- No recursive-proof or concrete nullifier-tree verification. The six
   L5 claims concern the PoC extension's semantic model, separately from
   spec 2.
+- No cross-epoch claim for ballast: a zero-amount second input skips the
+  chain check, as in the circuit (CLAIMS.md, "Ballast and the chain
+  check").
 - No conservation or event replay result for arbitrary epoch runs.
 - The research repo's toy and smoke theorems are not here.
 - The root-window bug in the contract is not a claim of this repo (part 7).
@@ -106,6 +109,10 @@ and `Statements/L5.lean`. Check these points:
   why nullifier lists match by permutation?
 - Are omitted recursion, authenticated roots, encodings and caller checks
   clear enough to prevent an implementation claim?
+- Is excluding ballast from row 10 the right reading of the circuit, or
+  should the circuit check the chain for a zero-amount input too?
+- Does `spendableAfterRollover` state the liveness you expect, with the
+  balance as a premise and no payout claim?
 
 ## 6. What the theorems do not say
 

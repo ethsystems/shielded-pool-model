@@ -1,6 +1,6 @@
 # Claims
 
-The fourteen proved theorems, each with its Lean name, English, spec
+The fifteen proved theorems, each with its Lean name, English, spec
 clause and hypothesis. The statement files
 `LeanShieldedPool/Statements/L3.lean`, `L4.lean`, `L4B.lean` and
 `L5.lean` are the source of truth. The gate checks the type of each
@@ -49,11 +49,11 @@ In the Hypothesis column, "none" means no cryptographic hypothesis.
 Theorems 4 and 5 also rest on the withdraw payout bound, a modelling
 device (simplification 16).
 
-## The five epoch theorems
+## The six epoch theorems
 
 Names below have the prefix `LeanShieldedPool.Epoch`. Their statements
 are in `Statements/L5.lean`, under `Candidates`. That namespace retains
-its source name; all five statements have proofs.
+its source name; all six statements have proofs.
 
 These rows concern the PoC extension spec, whose hash and clauses appear
 in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
@@ -65,8 +65,9 @@ in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
 | 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-405) | accepted step or segment; unchanged epoch |
 | 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and the same run key. | Spend Circuit (366, 372); the chain key binding of 336-337 is assumed (simplification 2), not proved | epoch `Candidates.CryptoHyp` |
 | 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover; `BallastStamped` (every ballast created in epoch 0) |
+| 15 | `spendableAfterRollover_proof` | After a rollover, an owned, unspent note in the tree with a clear history passes the withdraw guard at the current root; this is model liveness, not a payout claim. | Guarantees (436, second sentence); Chain Maintenance (267) | owner key; nonzero amount; enough pool balance; clear history (its nullifier is in no sealed list since creation and not in the active list) |
 
-Rows 10, 13 and 14 quantify over accepted epoch runs. The epoch
+Rows 10, 13, 14 and 15 quantify over accepted epoch runs. The epoch
 hypothesis binds full notes, including `epochCreated`, and spending keys
 within that run. It is separate from the base model's `CryptoHyp`, and
 unlike that one its commitment part is not restricted to `wf` notes.
@@ -105,6 +106,14 @@ extension spec and the circuit is reported upstream; if the circuit
 changes to check ballast too, the guard can take the stronger form and
 row 10 can count ballast again.
 
+`spendableAfterRollover` is the liveness counterpart of rows 10 to 14:
+a model that rejected every spend after a rollover would satisfy all five
+safety rows, and this row rules that out. It derives window membership of
+the current root, tree membership at that root, well-formedness and the
+creation-epoch bound from the run; the balance stays a premise. It says
+the epoch model accepts the step and debits the pool field, not that a
+token moves.
+
 `frozenRootImmutability` preserves list contents. It does not mention
 concrete Merkle roots. `chainKeyBinding` compares supplied semantic
 witnesses; it does not extract keys from separate recursive proofs, and
@@ -117,7 +126,7 @@ insertion proof's nullifier lists are equal) is simplification 4 of
 
 `Step` uses `ChainFacts` and `InsertionFacts` directly.
 `VerifierSoundness` names a possible implementation assumption, but is
-not a premise of these five theorems. No verifier correspondence
+not a premise of these six theorems. No verifier correspondence
 theorem is supplied.
 
 ## What the base rows mean
@@ -171,8 +180,9 @@ cannot see.
 - `Draft/NonVacuity.lean` shows on a toy instance that each operation
   guard can fire, so `Run` is not empty. `Pool/Epoch.lean` also
   supplies epoch guard witnesses, including a spend after rollover and
-  rejection of a repeated spend.
-- The positive controls apply all fourteen theorems to concrete toy
+  rejection of a repeated spend; row 15 states the former for every
+  accepted run.
+- The positive controls apply all fifteen theorems to concrete toy
   instances. `controls/positive_l3.lean` proves `CryptoHyp` for the
   deposit-transfer-withdraw run, and `controls/positive_l5.lean` proves
   the epoch `CryptoHyp` for an accepted run that crosses a rollover,
@@ -181,7 +191,8 @@ cannot see.
   also instantiates the conclusions at concrete antecedents: the
   rollover inside that run with the epoch-1 withdrawal as the suffix,
   the transfer as a non-rollover step, and the no-rollover prefix as a
-  segment.
+  segment; for row 15, the first transfer output after that prefix and
+  its rollover.
 - Each refutation control weakens one guard, post-state or replay step.
   It carries a history that the mutated model accepts, shows that the
   history meets the frozen Prop's other premises (`CryptoHyp` where the
@@ -190,7 +201,7 @@ cannot see.
   replay function is the mutated part. The file must build, so an
   unrelated unsolved goal in its setup cannot be mistaken for success.
   `controls/refute_l3_double_spend.lean` states the three parts as
-  three theorems; the ten others end in one theorem that negates a
+  three theorems; the eleven others end in one theorem that negates a
   universal statement over the mutated model (for replay: over the real
   `Run`, with the lossy replay). None claims the negation of an
   original theorem, which quantifies over the real `Run` or the real
