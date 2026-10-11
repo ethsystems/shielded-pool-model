@@ -281,8 +281,10 @@ one-candidate set establishes no ambiguity. Two positive families are
 proved, and they are distinct results:
 
 - The two-recipient toy (`candidate_two`): both worlds share one
-  primitive profile, only output owners and salts vary, and symbolic
-  equivalence of the two logs is proved. Collision freedom also holds
+  primitive profile with the owner-binding commitment
+  `Nat.pair owner salt`, only output owners and salts vary, and symbolic
+  equivalence of the two logs is proved through an explicit commitment
+  permutation (`perm01`). Collision freedom also holds
   across both histories' combined witnesses
   (`crypto_cross_history`); that concatenation is a witness
   collection, not an accepted run.
