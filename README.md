@@ -38,8 +38,9 @@ gives all fifteen results with their hypotheses and spec clauses. The
 epoch results concern a semantic state machine; they do not verify
 recursive proofs or concrete nullifier trees.
 `LeanShieldedPool/Extensions/` holds gated extensions outside this core
-read; the first is symbolic k-anonymity (CLAIMS.md, "Extension: symbolic
-k-anonymity").
+read; the first is symbolic k-anonymity: possibilistic, over a symbolic
+event-log observer, no deployed-privacy claim (CLAIMS.md, "Extension:
+symbolic k-anonymity").
 
 The base model makes 16 simplifications, for example a list for the
 Merkle tree, `Nat` amounts and opaque hashes. They are modelling
