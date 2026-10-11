@@ -102,9 +102,9 @@ input (`ShieldedPoolExt.sol:268-270`; `expectedChainAccumulator` returns
 the circuit: `TransferData.guard` requires `isBallast ∨ ChainFacts` for
 the second input (simplification 7), and row 10 counts value-bearing
 consumption only (`Tx.valueConsumes`). The deviation between the
-extension spec and the circuit is reported upstream; if the circuit
-changes to check ballast too, the guard can take the stronger form and
-row 10 can count ballast again.
+extension spec and the circuit is to be raised in pocs-private; if the
+circuit changes to check ballast too, the guard can take the stronger
+form and row 10 can count ballast again.
 
 `spendableAfterRollover` is the liveness counterpart of rows 10 to 14:
 a model that rejected every spend after a rollover would satisfy all five
