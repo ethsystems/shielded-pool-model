@@ -60,11 +60,11 @@ in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
 
 | # | Lean name | English | Extension spec clause | Hypothesis |
 |---|---|---|---|---|
-| 10 | `crossEpochNoDoubleSpend_proof` | No commitment is consumed twice across an accepted history, including rollovers and ballast. | Guarantees: cross-epoch double-spend safety (436) | epoch `Candidates.CryptoHyp` |
+| 10 | `crossEpochNoDoubleSpend_proof` | No commitment of a note with nonzero amount is consumed twice across an accepted history, including rollovers. A zero-amount second input (ballast) is excluded: the circuit skips its chain check, so a ballast commitment can be consumed again in a later epoch; no value moves. | Guarantees: cross-epoch double-spend safety (436), for value-bearing inputs | epoch `Candidates.CryptoHyp` |
 | 11 | `frozenRootImmutability_proof` | After rollover, every accepted suffix preserves the newly sealed nullifier list and all older sealed lists. A frame property of the step relation: it holds from any state, because only rollover writes `frozen`. | On-Chain State (163); sealed data is immutable (205) | accepted suffix |
 | 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-405) | accepted step or segment; unchanged epoch |
 | 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and the same run key. | Spend Circuit (366, 372); the chain key binding of 336-337 is assumed (simplification 2), not proved | epoch `Candidates.CryptoHyp` |
-| 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover |
+| 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover; `BallastStamped` (every ballast created in epoch 0) |
 
 Rows 10, 13 and 14 quantify over accepted epoch runs. The epoch
 hypothesis binds full notes, including `epochCreated`, and spending keys
@@ -82,9 +82,28 @@ histories than the pre-repin export did, and row 14 targets the revised
 base `CryptoHyp`.
 
 Row 14 also states the implication from the base `noDoubleSpend`
-proposition to the epoch consumption claim. It does not prove a
-recursive circuit's base case (extension spec 324-340), or conservation
-for arbitrary epoch runs.
+proposition to the epoch consumption claim (over `Tx.valueConsumes`, a
+sublist of the base consumption log). It does not prove a recursive
+circuit's base case (extension spec 324-340), or conservation for
+arbitrary epoch runs. Its `BallastStamped` premise says every transfer's
+second input was created in epoch 0: what an honest client does in a run
+without rollover (extension spec 267-269), and not something the code
+enforces for a zero-amount input.
+
+**Ballast and the chain check.** The extension spec states the chain
+check per input note with no ballast exception (358-366). The reference
+transfer circuit skips both the membership and the chain check for a
+zero-amount second input
+(`shielded-pool-extension/circuits/transfer/src/main.nr:143-156`), and
+the contract then accepts any `epoch_created` and accumulator for that
+input (`ShieldedPoolExt.sol:268-270`; `expectedChainAccumulator` returns
+0 when `epochCreated` is at or above `currentEpoch`). The model follows
+the circuit: `TransferData.guard` requires `isBallast ∨ ChainFacts` for
+the second input (simplification 7), and row 10 counts value-bearing
+consumption only (`Tx.valueConsumes`). The deviation between the
+extension spec and the circuit is reported upstream; if the circuit
+changes to check ballast too, the guard can take the stronger form and
+row 10 can count ballast again.
 
 `frozenRootImmutability` preserves list contents. It does not mention
 concrete Merkle roots. `chainKeyBinding` compares supplied semantic
