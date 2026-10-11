@@ -192,8 +192,10 @@ The k-anonymity extension comes from the same pin as the L5 files,
 lean-shielded-pool `fa5526e`, file
 `LeanShieldedPool/Statements/KAnonymity.lean`, moved
 here to `LeanShieldedPool/Extensions/KAnonymity.lean` with a header-only
-fitting (a draft marker and a research-repo path dropped). Everything
-from `namespace` on is byte-identical to that pin. The file is not in
+fitting (a draft marker and a research-repo path dropped). It was
+byte-identical to that pin from `namespace` on until the review of this
+pull request, which changed the module docstring and gave both toy
+families owner-binding commitments with varied salts. The file is not in
 PROVENANCE.sha256, which lists only byte-identical files and keeps its
 11 entries; `statements/FROZEN.sha256` pins it.
 
