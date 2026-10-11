@@ -376,8 +376,9 @@ end ConstantCommitToy
 
 namespace TwoRecipientToy
 
-/-- Salt atoms witness the symbolic relation only. These functions are not
-cryptographic hashes; collision freedom will be checked within each run. -/
+/-- Owner-binding commitments `Nat.pair owner salt`; the nullifier is the
+commitment. These functions are not cryptographic hashes; collision freedom
+is checked within each run. -/
 abbrev Toy : PrimSpec where
   Token := Unit
   Address := Unit
@@ -387,7 +388,7 @@ abbrev Toy : PrimSpec where
   Commitment := Nat
   Nullifier := Nat
   derivePub := id
-  commit := fun _ _ _ salt => salt
+  commit := fun _ _ owner salt => Nat.pair owner.val salt
   nullify := fun cm _ => cm
 
 abbrev sup : Toy.Token → Prop := fun _ => True
@@ -418,7 +419,7 @@ theorem transfer_guard (i : Fin 2) :
     norm_num [TransferData.guard, TransferData.nf1, TransferData.nf2, Note.nf,
       Note.cm, Note.ownedBy, Note.isBallast, St.rootInWindow, St.inTreeAt,
       St.fresh, St.leaves, St.empty, St.pushWindow, rootWindow, DepositData.post,
-      U128, maxU128]
+      U128, maxU128] <;> simp only [Nat.pair_eq_pair] <;> decide
 
 theorem accepted (i : Fin 2) : Run sup (history i) (finalState i) := by
   exact Run.step (Run.step Run.empty (Step.deposit deposit_guard))
@@ -432,7 +433,7 @@ theorem crypto (i : Fin 2) : CryptoHyp Toy (history i) := by
       or_false] at hn hn'
     rcases hn with rfl | rfl | rfl | rfl | rfl <;>
       rcases hn' with rfl | rfl | rfl | rfl | rfl
-    all_goals first | rfl | (fin_cases i <;> norm_num [Note.cm] at h)
+    all_goals first | rfl | (fin_cases i <;> simp only [Note.cm, Nat.pair_eq_pair] at h <;> omega)
   · intro key _ key' _ h
     exact h
 
@@ -446,17 +447,28 @@ theorem crypto_cross_history : CryptoHyp Toy (history 0 ++ history 1) := by
       List.mem_cons, List.not_mem_nil, or_false] at hn hn'
     rcases hn with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
       rcases hn' with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
-    all_goals first | rfl | norm_num [Note.cm] at h
+    all_goals first | rfl | (simp only [Note.cm, Nat.pair_eq_pair] at h; omega)
   · intro key _ key' _ h
     exact h
 
 theorem recipient (i : Fin 2) : lastTransferFirstOwner (history i) = some i := rfl
 
+/-- The commitment renaming from world 0 to world 1: the two output atoms. -/
+abbrev perm01 : Equiv.Perm Nat :=
+  (Equiv.swap (Nat.pair 0 2) (Nat.pair 1 4)).trans (Equiv.swap (Nat.pair 0 3) (Nat.pair 0 5))
+
+private theorem perm01_in : perm01 (Nat.pair 0 0) = Nat.pair 0 0 := by decide
+private theorem perm01_out1 : perm01 (Nat.pair 0 2) = Nat.pair 1 4 := by decide
+private theorem perm01_out2 : perm01 (Nat.pair 0 3) = Nat.pair 0 5 := by decide
+
 private theorem zero_obs_one : ObsEquiv (events (history 0)) (events (history 1)) := by
   apply (obsEquiv_iff_permutations _ _).mpr
-  refine ⟨(Equiv.swap 2 4).trans (Equiv.swap 3 5), Equiv.refl _, ?_⟩
-  norm_num [history, events, Tx.event, Note.cm, TransferData.nf1,
-    TransferData.nf2, Note.nf, renameEvent, Equiv.swap_apply_def]
+  refine ⟨perm01, Equiv.refl _, ?_⟩
+  show [Event.deposit (perm01 (Nat.pair 0 0)),
+    Event.transfer (Nat.pair 0 0) (Nat.pair 0 1) (perm01 (Nat.pair 0 2))
+      (perm01 (Nat.pair 0 3))] = events (history 1)
+  rw [perm01_in, perm01_out1, perm01_out2]
+  rfl
 
 /-- Every pair of accepted worlds has the same symbolic observation. -/
 theorem pairwise_obs (i j : Fin 2) : ObsEquiv (events (history i)) (events (history j)) := by
