@@ -382,4 +382,119 @@ theorem chainKeyBinding_proof (P : PrimSpec) : chainKeyBinding P := by
   have hkEq := hcrypto.derivePub_inj input.2 hiKeys key hk hpub
   exact ⟨hnEq, hkEq⟩
 
+/-! ## Liveness after rollover -/
+
+/-- A step either keeps the window and the tree, or pushes the leaf count of
+its post-state. Rollover keeps both. -/
+theorem Step.window_eq {st st' : St P} {tx : Tx P} (h : Step st tx st') :
+    (st'.window = st.window ∧ st'.leaves = st.leaves) ∨
+      st'.window = LeanShieldedPool.St.pushWindow st.window st'.leaves.length := by
+  cases h with
+  | @deposit d _ =>
+      right
+      show LeanShieldedPool.St.pushWindow st.window (st.minted.length + 1) =
+        LeanShieldedPool.St.pushWindow st.window ((st.minted ++ [d.note]).map Note.cm).length
+      rw [List.length_map, List.length_append]
+      rfl
+  | @transfer d _ =>
+      right
+      show LeanShieldedPool.St.pushWindow st.window (st.minted.length + 2) =
+        LeanShieldedPool.St.pushWindow st.window ((st.minted ++ [d.out1, d.out2]).map Note.cm).length
+      rw [List.length_map, List.length_append]
+      rfl
+  | withdraw _ => exact Or.inl ⟨rfl, rfl⟩
+  | rollover => exact Or.inl ⟨rfl, rfl⟩
+
+/-- The newest window entry is the current root. -/
+theorem Run.window_head {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (h : Run sup txs st) : st.window.head? = some st.leaves.length := by
+  induction h with
+  | empty => rfl
+  | @step txs st st' tx hr hs ih =>
+      rcases hs.window_eq with ⟨hw, hl⟩ | hw
+      · rw [hw, hl]
+        exact ih
+      · rw [hw]
+        rfl
+
+theorem Step.minted_wf {st st' : St P} {tx : Tx P} (h : Step st tx st')
+    (hm : ∀ n ∈ st.minted, n.wf) : ∀ n ∈ st'.minted, n.wf := by
+  cases h with
+  | @deposit d hg =>
+      intro n hn
+      rcases List.mem_append.mp hn with hn | hn
+      · exact hm n hn
+      · rw [List.mem_singleton] at hn
+        subst hn
+        exact hg.2.2.1
+  | @transfer d hg =>
+      obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, hw3, hw4, _⟩ := hg
+      intro n hn
+      rcases List.mem_append.mp hn with hn | hn
+      · exact hm n hn
+      · simp only [List.mem_cons, List.not_mem_nil, or_false] at hn
+        rcases hn with rfl | rfl
+        · exact hw3
+        · exact hw4
+  | withdraw _ => exact hm
+  | rollover => exact hm
+
+/-- Every minted note is well-formed: the guards check the range of every
+note they record. -/
+theorem Run.minted_wf {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (h : Run sup txs st) : ∀ n ∈ st.minted, n.wf := by
+  induction h with
+  | empty => exact fun _ hn => False.elim (List.not_mem_nil hn)
+  | step _ hs ih => exact hs.minted_wf ih
+
+theorem Step.minted_epoch_le {st st' : St P} {tx : Tx P} (h : Step st tx st')
+    (hm : ∀ n ∈ st.minted, n.epochCreated ≤ st.currentEpoch) :
+    ∀ n ∈ st'.minted, n.epochCreated ≤ st'.currentEpoch := by
+  cases h with
+  | @deposit d hg =>
+      intro n hn
+      rcases List.mem_append.mp hn with hn | hn
+      · exact hm n hn
+      · rw [List.mem_singleton] at hn
+        subst hn
+        exact Nat.le_of_eq hg.2.2.2.2
+  | @transfer d hg =>
+      obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, ho1, ho2⟩ := hg
+      intro n hn
+      rcases List.mem_append.mp hn with hn | hn
+      · exact hm n hn
+      · simp only [List.mem_cons, List.not_mem_nil, or_false] at hn
+        rcases hn with rfl | rfl
+        · exact Nat.le_of_eq ho1
+        · exact Nat.le_of_eq ho2
+  | withdraw _ => exact hm
+  | rollover =>
+      intro n hn
+      exact Nat.le_succ_of_le (hm n hn)
+
+/-- Every minted note was created in the current epoch or earlier. -/
+theorem Run.minted_epoch_le {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (h : Run sup txs st) : ∀ n ∈ st.minted, n.epochCreated ≤ st.currentEpoch := by
+  induction h with
+  | empty => exact fun _ hn => False.elim (List.not_mem_nil hn)
+  | step _ hs ih => exact hs.minted_epoch_le ih
+
+theorem spendableAfterRollover_proof (P : PrimSpec) : spendableAfterRollover P := by
+  intro sup txs st hr k n r hn hown hne hbal hclear
+  have hwin : st.rollover.rootInWindow st.leaves.length :=
+    List.mem_of_mem_head? hr.window_head
+  have htree : st.rollover.inTreeAt st.leaves.length n.cm := by
+    change n.cm ∈ st.leaves.take st.leaves.length
+    rw [List.take_length]
+    exact List.mem_map_of_mem hn
+  have hwf : n.wf := hr.minted_wf n hn
+  have hepoch : n.epochCreated ≤ st.currentEpoch := hr.minted_epoch_le n hn
+  have hchain : ChainFacts st.rollover n k := by
+    refine ⟨Nat.le_succ_of_le hepoch, ?_⟩
+    intro e he1 he2
+    exact hclear e he1 (Nat.le_of_lt_succ he2)
+  have hg : WithdrawData.guard ⟨k, n, r, st.leaves.length⟩ st.rollover :=
+    ⟨hwin, htree, hown, ⟨hchain, ⟨⟨List.not_mem_nil, trivial⟩, rfl⟩⟩, hne, hwf, hbal⟩
+  exact ⟨hg, _, Step.withdraw hg⟩
+
 end LeanShieldedPool.Epoch

@@ -36,9 +36,11 @@ LeanShieldedPool.Epoch.Candidates.frozenRootImmutability :: (P : LeanShieldedPoo
 LeanShieldedPool.Epoch.Candidates.canonicalAppend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.chainKeyBinding :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.epochZeroRefinesBase :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.spendableAfterRollover :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 # L5 epoch theorems:
 LeanShieldedPool.Epoch.crossEpochNoDoubleSpend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend P
 LeanShieldedPool.Epoch.frozenRootImmutability_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.frozenRootImmutability P
 LeanShieldedPool.Epoch.canonicalAppend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.canonicalAppend P
 LeanShieldedPool.Epoch.chainKeyBinding_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.chainKeyBinding P
 LeanShieldedPool.Epoch.epochZeroRefinesBase_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.epochZeroRefinesBase P
+LeanShieldedPool.Epoch.spendableAfterRollover_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.spendableAfterRollover P

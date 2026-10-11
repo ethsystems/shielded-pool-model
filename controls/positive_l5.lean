@@ -1,11 +1,12 @@
--- Positive control: the five L5 theorems instantiate on the concrete toy
+-- Positive control: the six L5 theorems instantiate on the concrete toy
 -- epoch profile, and a concrete accepted run through deposit, transfer,
 -- rollover and a later withdrawal satisfies the epoch `CryptoHyp`, so
 -- `crossEpochNoDoubleSpend` and `chainKeyBinding` apply to a nonempty
 -- accepted history that crosses a rollover. A no-rollover prefix witnesses
 -- `epochZeroRefinesBase`'s antecedent. The rollover inside that run and
 -- its non-rollover steps give concrete antecedents for
--- `frozenRootImmutability` and `canonicalAppend`. Must build.
+-- `frozenRootImmutability` and `canonicalAppend`; the prefix and its
+-- rollover give one for `spendableAfterRollover`. Must build.
 import LeanShieldedPool.Proofs.Epoch
 import LeanShieldedPool.Proofs.EpochBase
 
@@ -21,6 +22,8 @@ example : Candidates.chainKeyBinding Examples.Toy :=
   chainKeyBinding_proof _
 example : Candidates.epochZeroRefinesBase Examples.Toy :=
   epochZeroRefinesBase_proof _
+example : Candidates.spendableAfterRollover Examples.Toy :=
+  spendableAfterRollover_proof _
 
 namespace LeanShieldedPool.Epoch.PositiveL5
 
@@ -133,6 +136,23 @@ theorem prefix_cryptoHyp : Candidates.CryptoHyp Toy txsP := by
       first | rfl | exact absurd hcm (by decide)
   · intro k _ k' _ _
     exact Subsingleton.elim k k'
+
+/-- Row 15 (`spendableAfterRollover`) at a concrete antecedent: the first
+transfer output after the no-rollover prefix, then the rollover. The
+conclusion is the guard that `g3` proves directly for `wOut`. -/
+example :
+    WithdrawData.guard ⟨(), note 3 2 0, (), (t0.post st1).leaves.length⟩
+        (t0.post st1).rollover ∧
+      ∃ st', Step (t0.post st1).rollover
+        (.withdraw ⟨(), note 3 2 0, (), (t0.post st1).leaves.length⟩) st' :=
+  spendableAfterRollover_proof Toy (fun _ => True) txsP _ prefix_run () (note 3 2 0) ()
+    (by norm_num [TransferData.post, st1, DepositData.post, St.empty]) rfl (by decide)
+    (by norm_num [TransferData.post, st1, DepositData.post, St.empty, bump])
+    (by
+      intro e _ he
+      have h0 : e = 0 := Nat.le_zero.mp he
+      subst h0
+      decide)
 
 /-- The prefix's one transfer uses a ballast minted in epoch 0, so the
 `BallastStamped` premise of row 14 holds. -/
