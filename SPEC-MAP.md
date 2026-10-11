@@ -169,7 +169,7 @@ the model.
 12. **Privacy guarantees are not stated.** Confidentiality, unlinkability and
     selective disclosure (6.2) need an observer model, which this repo does
     not have. It states no privacy result. CLAIMS.md lists the nine base
-    integrity results and five epoch results.
+    integrity results and six epoch results.
 13. **`open Classical`.** Used so per-token maps and `liveValue` can branch on
     undecidable propositions. It makes `bump`, `drop` and `liveValue`
     noncomputable. No axiom is declared; `Classical.choice` is already
@@ -228,6 +228,7 @@ These are semantic interpretations of the clauses, with the limits below.
 | `canonicalAppend_proof` | Preserve exact append order and sequential freshness. The single-step half restates the guard conjunct; the segment half is the content. Cross-proof binding (407-409) is simplification 4, assumed | 161, 167, 394-405 |
 | `chainKeyBinding_proof` | One owned note and key across consuming witnesses. The chain key binding of 336-337 is assumed (simplification 2) | 366, 372 |
 | `epochZeroRefinesBase_proof`, `Candidates.basePrim`, `Candidates.BaseStateMatches` | Translate an initial-epoch run to the parent rules, one way; no recursive-verifier claim and not the circuit's base case | 47-62 |
+| `spendableAfterRollover_proof` | A clear-history note stays spendable after rollover (model liveness); notes created in the current epoch already satisfy the chain condition | 436 (second sentence), 267 |
 | `Examples.*` | Concrete guard witnesses and rejected repeat attempts | model checks, no spec clause |
 
 The base map and its 16 simplifications still apply to the base model
@@ -246,12 +247,14 @@ abstractions. It adds these limits:
 - `InsertionFacts` supplies exact order and sequential freshness. It does
   not verify a concrete tree update or public-input encoding.
 - Epochs are unbounded `Nat`. Rollover is atomic, with no clock or caller.
-  The model does not establish `u64` bounds, authorization or liveness.
+  The model does not establish `u64` bounds or authorization. Liveness is
+  stated at the model level only (`spendableAfterRollover`): the guard
+  admits the step; nothing is said about relayers, proofs or tokens.
 - A zero-amount second input (ballast) passes the transfer guard without a
   chain check and with an unconstrained creation epoch, as in the circuit.
   Row 10 counts only value-bearing consumption; row 14 assumes epoch-0
   ballast (`Candidates.BallastStamped`).
-- `EpochDistinct` is defined but unused by these five theorems. Hash
+- `EpochDistinct` is defined but unused by these six theorems. Hash
   collisions can reject valid spends without violating at-most-once safety.
 - The base reduction fixes hashes at epoch zero and compares nullifier
   lists by permutation. The parent prepends batches; the epoch model appends.

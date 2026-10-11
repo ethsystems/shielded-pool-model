@@ -31,9 +31,10 @@ nullifier uniqueness, no double spend and value conservation. Six are
 supporting results about the same model: solvency, no over-withdrawal,
 no minting, balance equals live value, owner-key binding
 (`spendRequiresOwnerKey`) and event replay. L5 adds cross-epoch
-no-double-spend, frozen-list immutability, canonical append, chain key
-binding and a reduction to the base pool without rollover. CLAIMS.md
-gives all fourteen results with their hypotheses and spec clauses. The
+no-double-spend for value-bearing inputs, frozen-list immutability,
+canonical append, chain key binding, a one-way refinement to the base
+pool without rollover, and spendability after rollover. CLAIMS.md
+gives all fifteen results with their hypotheses and spec clauses. The
 epoch results concern a semantic state machine; they do not verify
 recursive proofs or concrete nullifier trees.
 
