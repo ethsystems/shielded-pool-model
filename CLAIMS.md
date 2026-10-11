@@ -171,10 +171,16 @@ theorem is supplied.
 **Which guard conjuncts the proofs use.** The proofs consume membership,
 nullifier freshness and distinctness, owner-key binding, token
 consistency, the transfer sum equation, output-commitment freshness, the
-deposit duplicate check, and the withdraw payout bound. The base proofs
-also use the `U128` range conjuncts: they establish well-formed notes
-(`Run.runNotes_wf`) before applying the restricted `CryptoHyp`. The
-epoch base-case proof transports the range and root-window conjuncts
+deposit duplicate check, the withdraw payout bound, and the `U128` range
+conjuncts: `Step.notes_wf` and `Run.runNotes_wf` extract well-formedness
+from the range checks, and every proof that applies
+`CryptoHyp.commit_inj` passes those facts to it: no double spend
+(`Proofs/NoDoubleSpend.lean:125`, `:131`, `:143`), value conservation and
+its private helpers (`Proofs/Conservation.lean:23`, `:166`, `:183`,
+`:202`), and owner-key binding (`Proofs/TierB.lean:31-32`). No minting
+and balance equals live value call value conservation and inherit the
+dependency (`Proofs/TierAConditional.lean`). The epoch base-case proof
+transports the range and root-window conjuncts
 into the accepted base run it constructs. Beyond that transport, no
 theorem consumes the root-window conjuncts; they keep the model's
 accepted set aligned with the contract. None of this verifies concrete
@@ -190,8 +196,10 @@ cannot see.
   supplies epoch guard witnesses, including a spend after rollover and
   rejection of a repeated spend; row 15 states the former for every
   accepted run.
-- The positive controls apply all fifteen theorems to concrete toy
-  instances. `controls/positive_l3.lean` proves `CryptoHyp` for the
+- The base and epoch positive controls apply all fifteen theorems to
+  concrete toy instances; `controls/positive_k_anonymity.lean` applies
+  the extension's frozen names to its own toys.
+  `controls/positive_l3.lean` proves `CryptoHyp` for the
   deposit-transfer-withdraw run, and `controls/positive_l5.lean` proves
   the epoch `CryptoHyp` for an accepted run that crosses a rollover,
   plus a no-rollover prefix for row 14's premise, so the conditional
@@ -234,10 +242,16 @@ material: same frozen pins, census rows (the 22 extension names in
 not one of the fifteen claims above.
 
 **The observer.** The observer sees the ordered `Event` log and nothing
-else: no keys, no encrypted payloads, no network or timing data. This is
+else. It does not see these on-chain fields: the deposit token, amount
+and funding address (331), the withdraw token, amount and recipient
+(362), the commitment root (347, 460) and the payload commitments. It
+also sees no encrypted payloads and no network or timing data. Spending
+and viewing keys are not on-chain, so no observer sees them. This is
 weaker than the public observer of spec 6.1 (424), which sees all
-on-chain state and traffic. Spec 6.1 is context for the file, not a
-proved match to its observer.
+on-chain state and traffic. The threats of 6.1 (424-426) and 6.3
+(455-461) are out of scope here; in particular a compromised viewing
+key shows the owner of `out1` directly. Spec 6.1 is context for the
+file, not a proved match to its observer.
 
 **The relation.** `ObsEquiv` relates two logs when injective renamings
 of commitment atoms and nullifier atoms map one to the other.
@@ -247,7 +261,15 @@ logs injections and permutations give the same relation
 
 **The target.** The protected attribute is the owner of the first
 output of the last transfer (`lastTransferFirstOwner`). Not every
-recipient, not a withdrawal address, not every accepted log.
+recipient, not a withdrawal address, not every accepted log. In both
+toys every explanation has the same spend key, input owner and `out2`
+owner; only the owner of `out1` varies, so the sender and the change
+owner have an anonymity set of size 1. The phrase "anonymity set" also
+differs from the spec's: in spec 458-459 it is pool traffic, and a
+quiet pool gives weak anonymity; here it is a set of possible recipient
+keys, and `ManyRecipientToy.candidate` gives any k from a pool with one
+deposit and one transfer, so this count is not the spec's traffic-based
+set.
 
 **What is proved.** `hasAnonymitySet sup log k` asks for k injectively
 distinct accepted explanations of `log` (each an accepted run with its
@@ -270,6 +292,17 @@ proved, and they are distinct results:
   collision freedom holds within each history only. No combined-witness
   collision freedom is claimed for this family.
 
+**A limit of `explanations`.** An explanation matches the log only up
+to `ObsEquiv`, and `Event` carries no token, amount, address or root.
+So two explanations can withdraw different public amounts to different
+recipients, or deposit different public amounts, and both count as
+members. Spec 455-456 names exactly those fields as the linking
+surface, so for a log with deposits or withdrawals `hasAnonymitySet`
+can count more members than the spec observer allows. The toys do not
+show this: they use `Unit` tokens and addresses and have no withdraw.
+The follow-up is to require each explanation to match the public fields
+of deposits and withdrawals and the snapshot. It is not done here.
+
 **The counterexample.** Key and salt cardinalities alone do not give
 the candidate: with a constant commitment function no transfer guard
 can fire (`constant_commit_blocks_transfer`), so the cardinality-only
@@ -284,4 +317,13 @@ hiding instance is proved. The extension proves no Poseidon hiding
 bound and no deployed-privacy property. The toys' `commit` and
 `nullify` are not hashes; collision freedom is checked per history via
 `CryptoHyp`. The counting is possibilistic: it counts possible targets
-and assigns no probabilities or equal likelihood.
+and assigns no probabilities or equal likelihood. Only a relation at
+least as coarse as `ObsEquiv` can satisfy `HashHidingHyp`:
+`CannotDistinguish := Eq` fails, because `deposit_obsEquiv` relates two
+deposits with different commitment values. Real hiding is a statement
+about distributions over salts, not about two fixed logs, so no observer
+that sees actual values can satisfy the hypothesis as stated. The
+protected owner is also inside the note ciphertext that the sender
+encrypts to the recipient's viewing key (spec 2 line 230), so a real
+bridge needs key privacy of that encryption as well. This file does not
+model that encryption.
