@@ -18,8 +18,10 @@ open KAnonymity
 /-- The frozen constant-commitment toy: no transfer guard can ever fire. -/
 abbrev K : PrimSpec := ConstantCommitToy.Toy
 
--- MUTATION: only the last conjunct is REMOVED; `owners` and both
--- injectivity premises stay.
+-- MUTATION: only the last conjunct is REMOVED; both injectivity premises
+-- stay. `owners` stays, but it is unconstrained: with the last-owner
+-- equation removed nothing connects it to the explanations, so its
+-- injectivity premise has no content.
 def hasAnonymitySetNoOwnerEq (sup : K.Token → Prop) (log : List (Event K))
     (k : Nat) : Prop :=
   ∃ (es : Fin k → List (Tx K) × St K) (owners : Fin k → K.PubKey),
