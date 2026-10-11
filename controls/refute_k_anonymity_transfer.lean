@@ -19,9 +19,9 @@ open KAnonymity
 abbrev K : PrimSpec := ConstantCommitToy.Toy
 
 -- MUTATION: only the last conjunct is REMOVED; both injectivity premises
--- stay. `owners` stays, but it is unconstrained: with the last-owner
--- equation removed nothing connects it to the explanations, so its
--- injectivity premise has no content.
+-- stay. `owners` stays, but the explanations no longer constrain it: with
+-- the last-owner equation removed, injectivity still requires distinct
+-- keys, but it no longer gives distinct recipients.
 def hasAnonymitySetNoOwnerEq (sup : K.Token → Prop) (log : List (Event K))
     (k : Nat) : Prop :=
   ∃ (es : Fin k → List (Tx K) × St K) (owners : Fin k → K.PubKey),
