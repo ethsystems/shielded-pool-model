@@ -69,9 +69,30 @@ theorem SpendGuard.not_recorded {st : St P} {n : Note P} {key : P.SpendKey}
     exact h.2.1.1 (by simpa only [ite_true, eq_self_iff_true] using hm)
   · exact h.1.2 e hc (by omega) (by simpa only [if_neg eq] using hm)
 
-/-- Both transfer slots yield the full history guard, including ballast. -/
-theorem Step.consumes_witness {st st' : St P} {tx : Tx P}
+/-- Every consumed commitment, ballast included, is a witnessed note owned by
+the step's key. No chain or insertion fact is claimed here. -/
+theorem Step.consumes_owned {st st' : St P} {tx : Tx P}
     (h : Step st tx st') {c : P.Commitment} (hc : c ∈ tx.consumes) :
+    ∃ n ∈ notes tx, ∃ key ∈ (inputs tx).map Prod.snd, n.cm = c ∧ n.ownedBy key := by
+  cases h with
+  | deposit _ => exact False.elim (List.not_mem_nil hc)
+  | rollover => exact False.elim (List.not_mem_nil hc)
+  | @transfer d hg =>
+      obtain ⟨_, ho1, ho2, _⟩ := hg
+      simp only [Tx.consumes, List.mem_cons, List.not_mem_nil, or_false] at hc
+      rcases hc with hc | hc
+      · exact ⟨d.in1, List.mem_cons_self, d.key, List.mem_cons_self, hc.symm, ho1⟩
+      · exact ⟨d.in2, List.mem_cons_of_mem _ List.mem_cons_self, d.key,
+          List.mem_cons_self, hc.symm, ho2⟩
+  | @withdraw d hg =>
+      simp only [Tx.consumes, List.mem_singleton] at hc
+      exact ⟨d.note, List.mem_cons_self, d.key, List.mem_cons_self, hc.symm, hg.2.2.1⟩
+
+/-- A value-bearing consumed commitment carries the full history guard: the
+first input always does, and a nonzero second input is not ballast, so its
+chain check applies. -/
+theorem Step.valueConsumes_witness {st st' : St P} {tx : Tx P}
+    (h : Step st tx st') {c : P.Commitment} (hc : c ∈ tx.valueConsumes) :
     ∃ n ∈ notes tx, ∃ key ∈ (inputs tx).map Prod.snd,
       n.cm = c ∧ n.ownedBy key ∧ SpendGuard st n key ∧ Recorded st' n key := by
   cases h with
@@ -83,25 +104,45 @@ theorem Step.consumes_witness {st st' : St P} {tx : Tx P}
       have hf2 : d.in2.nfE d.key st.currentEpoch ∉ st.active := by
         intro hm
         exact hins.1.2.1 (List.mem_append_left _ hm)
-      simp only [Tx.consumes, List.mem_cons, List.not_mem_nil, or_false] at hc
-      rcases hc with hc | hc
-      · refine ⟨d.in1, List.mem_cons_self, d.key, ?_, hc.symm, ho1,
+      have first : ∃ n ∈ notes (Tx.transfer d), ∃ key ∈ (inputs (Tx.transfer d)).map Prod.snd,
+          n.cm = d.in1.cm ∧ n.ownedBy key ∧ SpendGuard st n key ∧
+          Recorded (d.post st) n key := by
+        refine ⟨d.in1, List.mem_cons_self, d.key, List.mem_cons_self, rfl, ho1,
           ⟨hchain1, ⟨⟨hf1, trivial⟩, rfl⟩⟩, ?_⟩
-        · exact List.mem_cons_self
-        · refine ⟨st.currentEpoch, hchain1.1, Nat.le_refl _, ?_⟩
-          simp only [TransferData.post, ite_true, TransferData.nullifiers,
-            List.mem_append, List.mem_cons, List.not_mem_nil, or_false]
-          exact Or.inr (Or.inl trivial)
-      · refine ⟨d.in2, List.mem_cons_of_mem _ List.mem_cons_self, d.key, ?_,
-          hc.symm, ho2, ⟨hchain2, ⟨⟨hf2, trivial⟩, rfl⟩⟩, ?_⟩
-        · exact List.mem_cons_self
-        · refine ⟨st.currentEpoch, hchain2.1, Nat.le_refl _, ?_⟩
-          simp only [TransferData.post, ite_true, TransferData.nullifiers,
-            List.mem_append, List.mem_cons, List.not_mem_nil, or_false]
-          exact Or.inr (Or.inr trivial)
+        refine ⟨st.currentEpoch, hchain1.1, Nat.le_refl _, ?_⟩
+        simp only [TransferData.post, ite_true, TransferData.nullifiers,
+          List.mem_append, List.mem_cons, List.not_mem_nil, or_false]
+        exact Or.inr (Or.inl trivial)
+      have second (h2 : ¬ d.in2.amount = 0) :
+          ∃ n ∈ notes (Tx.transfer d), ∃ key ∈ (inputs (Tx.transfer d)).map Prod.snd,
+          n.cm = d.in2.cm ∧ n.ownedBy key ∧ SpendGuard st n key ∧
+          Recorded (d.post st) n key := by
+        have hchain2' : ChainFacts st d.in2 d.key := hchain2.resolve_left (fun hb => h2 hb)
+        refine ⟨d.in2, List.mem_cons_of_mem _ List.mem_cons_self, d.key,
+          List.mem_cons_self, rfl, ho2, ⟨hchain2', ⟨⟨hf2, trivial⟩, rfl⟩⟩, ?_⟩
+        refine ⟨st.currentEpoch, hchain2'.1, Nat.le_refl _, ?_⟩
+        simp only [TransferData.post, ite_true, TransferData.nullifiers,
+          List.mem_append, List.mem_cons, List.not_mem_nil, or_false]
+        exact Or.inr (Or.inr trivial)
+      change c ∈ (if d.in1.amount = 0 then
+          (if d.in2.amount = 0 then [] else [d.in2.cm])
+        else
+          (if d.in2.amount = 0 then [d.in1.cm] else [d.in1.cm, d.in2.cm])) at hc
+      split_ifs at hc with h1 h2 h2
+      · exact False.elim (List.not_mem_nil hc)
+      · rw [List.mem_singleton] at hc
+        subst hc
+        exact second h2
+      · rw [List.mem_singleton] at hc
+        subst hc
+        exact first
+      · simp only [List.mem_cons, List.not_mem_nil, or_false] at hc
+        rcases hc with rfl | rfl
+        · exact first
+        · exact second h2
   | @withdraw d hg =>
       have hg' := hg.2.2.2.1
-      simp only [Tx.consumes, List.mem_singleton] at hc
+      simp only [Tx.valueConsumes, List.mem_singleton] at hc
       refine ⟨d.note, List.mem_cons_self, d.key, List.mem_cons_self,
         hc.symm, hg.2.2.1, hg', st.currentEpoch, hg'.1.1, Nat.le_refl _, ?_⟩
       simp only [WithdrawData.post, WithdrawData.nf, ite_true, List.mem_append,
@@ -124,6 +165,10 @@ theorem Step.consumes_nodup {st st' : St P} {tx : Tx P}
       apply List.mem_append_right
       simp only [List.mem_singleton, Note.nfE, heq]
 
+theorem Step.valueConsumes_nodup {st st' : St P} {tx : Tx P}
+    (h : Step st tx st') : tx.valueConsumes.Nodup :=
+  List.Nodup.sublist (Tx.valueConsumes_sublist tx) h.consumes_nodup
+
 theorem runNotes_append (txs : List (Tx P)) (tx : Tx P) :
     Candidates.runNotes (txs ++ [tx]) = Candidates.runNotes txs ++ notes tx := by
   simp only [Candidates.runNotes, List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
@@ -134,10 +179,11 @@ theorem runKeys_append (txs : List (Tx P)) (tx : Tx P) :
   simp only [Candidates.runKeys, List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
     List.append_nil, List.map_append]
 
-/-- This invariant records every consumption in the complete transaction log. -/
+/-- This invariant records every value-bearing consumption in the complete
+transaction log. -/
 theorem Run.consumed_recorded {sup : P.Token → Prop} {txs : List (Tx P)}
     {st : St P} (h : Run sup txs st) {c : P.Commitment}
-    (hc : c ∈ txs.flatMap Tx.consumes) :
+    (hc : c ∈ txs.flatMap Tx.valueConsumes) :
     ∃ n ∈ Candidates.runNotes txs, ∃ key ∈ Candidates.runKeys txs,
       n.cm = c ∧ n.ownedBy key ∧ Recorded st n key := by
   induction h with
@@ -150,9 +196,28 @@ theorem Run.consumed_recorded {sup : P.Token → Prop} {txs : List (Tx P)}
       · obtain ⟨n, hn, key, hk, hcm, ho, hm⟩ := ih hc
         exact ⟨n, List.mem_append_left _ hn, key, List.mem_append_left _ hk,
           hcm, ho, hs.recorded_preserved hm⟩
-      · obtain ⟨n, hn, key, hk, hcm, ho, _, hm⟩ := hs.consumes_witness hc
+      · obtain ⟨n, hn, key, hk, hcm, ho, _, hm⟩ := hs.valueConsumes_witness hc
         exact ⟨n, List.mem_append_right _ hn, key, List.mem_append_right _ hk,
           hcm, ho, hm⟩
+
+/-- Every consumed commitment in the log, ballast included, is a witnessed
+note owned by a run key. -/
+theorem Run.consumed_owned {sup : P.Token → Prop} {txs : List (Tx P)}
+    {st : St P} (h : Run sup txs st) {c : P.Commitment}
+    (hc : c ∈ txs.flatMap Tx.consumes) :
+    ∃ n ∈ Candidates.runNotes txs, ∃ key ∈ Candidates.runKeys txs,
+      n.cm = c ∧ n.ownedBy key := by
+  induction h with
+  | empty => exact False.elim (List.not_mem_nil hc)
+  | @step txs st st' tx hr hs ih =>
+      simp only [List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
+        List.append_nil, List.mem_append] at hc
+      rw [runNotes_append, runKeys_append]
+      rcases hc with hc | hc
+      · obtain ⟨n, hn, key, hk, hcm, ho⟩ := ih hc
+        exact ⟨n, List.mem_append_left _ hn, key, List.mem_append_left _ hk, hcm, ho⟩
+      · obtain ⟨n, hn, key, hk, hcm, ho⟩ := hs.consumes_owned hc
+        exact ⟨n, List.mem_append_right _ hn, key, List.mem_append_right _ hk, hcm, ho⟩
 
 theorem crossEpochNoDoubleSpend_proof (P : PrimSpec) : crossEpochNoDoubleSpend P := by
   intro sup txs st hr
@@ -171,14 +236,14 @@ theorem crossEpochNoDoubleSpend_proof (P : PrimSpec) : crossEpochNoDoubleSpend P
       have hp : Candidates.CryptoHyp P txs :=
         ⟨fun n hn n' hn' => hcrypto.commit_inj n (oldNotes hn) n' (oldNotes hn'),
          fun k hk k' hk' => hcrypto.derivePub_inj k (oldKeys hk) k' (oldKeys hk')⟩
-      change ((txs ++ [tx]).flatMap Tx.consumes).Nodup
+      change ((txs ++ [tx]).flatMap Tx.valueConsumes).Nodup
       simp only [List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
         List.append_nil]
       apply List.nodup_append.mpr
-      refine ⟨ih hp, hs.consumes_nodup, ?_⟩
+      refine ⟨ih hp, hs.valueConsumes_nodup, ?_⟩
       intro c hc c' hc' heq
       obtain ⟨n, hn, k, hk, hcm, ho, hm⟩ := hr.consumed_recorded hc
-      obtain ⟨n', hn', k', hk', hcm', ho', hg, _⟩ := hs.consumes_witness hc'
+      obtain ⟨n', hn', k', hk', hcm', ho', hg, _⟩ := hs.valueConsumes_witness hc'
       have hnEq := hcrypto.commit_inj n (oldNotes hn) n' (newNotes hn')
         (hcm.trans (heq.trans hcm'.symm))
       have hpub : P.derivePub k = P.derivePub k' :=
@@ -301,7 +366,7 @@ theorem input_mem_notes {tx : Tx P} {input : Note P × P.SpendKey}
 
 theorem chainKeyBinding_proof (P : PrimSpec) : chainKeyBinding P := by
   intro sup txs st hr hcrypto n hn hc
-  obtain ⟨w, hw, key, hk, hcm, ho, _⟩ := hr.consumed_recorded hc
+  obtain ⟨w, hw, key, hk, hcm, ho⟩ := hr.consumed_owned hc
   have hwEq := hcrypto.commit_inj w hw n hn hcm
   subst w
   refine ⟨key, hk, ho, ?_⟩

@@ -44,7 +44,12 @@ with the creation-epoch and nullifier changes in Diff vs Parent.
 7. The note extends the parent note. State and operations use that note type,
    retaining the root window, ghost accounting and the parent's input rule:
    the first input must be a member; only a zero-amount second input may
-   omit membership.
+   omit membership. Following the reference circuit
+   (`shielded-pool-extension/circuits/transfer/src/main.nr:143-156`), a
+   zero-amount second input also skips the chain check, so its creation
+   epoch is unconstrained; the extension spec (358-366) states no such
+   exception. `Tx.valueConsumes` therefore counts only value-bearing
+   consumption across epochs.
    Amount bounds and non-wrapping sums follow the parent abstraction.
    This file does not establish a refinement to the base pool.
 8. PIR, privacy, events, liveness, proof costs and storage bounds are outside
@@ -226,7 +231,7 @@ def guard (d : TransferData P) (st : St P) : Prop :=
   d.in1.ownedBy d.key ∧ d.in2.ownedBy d.key ∧
   st.inTreeAt d.snapshot d.in1.cm ∧
   (d.in2.isBallast ∨ st.inTreeAt d.snapshot d.in2.cm) ∧
-  ChainFacts st d.in1 d.key ∧ ChainFacts st d.in2 d.key ∧
+  ChainFacts st d.in1 d.key ∧ (d.in2.isBallast ∨ ChainFacts st d.in2 d.key) ∧
   InsertionFacts (P := P) st.active (d.nullifiers st.currentEpoch)
     (st.active ++ d.nullifiers st.currentEpoch) ∧
   d.in2.token = d.in1.token ∧ d.out1.token = d.in1.token ∧
@@ -275,11 +280,44 @@ def Tx.spends (epoch : Nat) : Tx P → List P.Nullifier
   | .withdraw d => [d.nf epoch]
   | .rollover => []
 
+/-- Every consumed input commitment, ballast included. -/
 def Tx.consumes : Tx P → List P.Commitment
   | .deposit _ => []
   | .transfer d => [d.in1.cm, d.in2.cm]
   | .withdraw d => [d.note.cm]
   | .rollover => []
+
+/-- The consumed commitments of inputs that carry value. A zero-amount input
+is consumed by its transfer, but a zero-amount second input skips the chain
+check (simplification 7), so only value-bearing consumption is counted
+across epochs. A withdrawal always carries value (its guard requires a
+nonzero amount). -/
+def Tx.valueConsumes : Tx P → List P.Commitment
+  | .deposit _ => []
+  | .transfer d =>
+      if d.in1.amount = 0 then
+        (if d.in2.amount = 0 then [] else [d.in2.cm])
+      else
+        (if d.in2.amount = 0 then [d.in1.cm] else [d.in1.cm, d.in2.cm])
+  | .withdraw d => [d.note.cm]
+  | .rollover => []
+
+theorem Tx.valueConsumes_sublist (tx : Tx P) : tx.valueConsumes.Sublist tx.consumes := by
+  cases tx with
+  | deposit _ => exact List.Sublist.refl _
+  | rollover => exact List.Sublist.refl _
+  | withdraw _ => exact List.Sublist.refl _
+  | transfer d =>
+      change (if d.in1.amount = 0 then
+          (if d.in2.amount = 0 then [] else [d.in2.cm])
+        else
+          (if d.in2.amount = 0 then [d.in1.cm] else [d.in1.cm, d.in2.cm])).Sublist
+        [d.in1.cm, d.in2.cm]
+      split_ifs
+      · exact List.nil_sublist _
+      · exact (List.Sublist.refl [d.in2.cm]).cons d.in1.cm
+      · exact (List.nil_sublist [d.in2.cm]).cons₂ d.in1.cm
+      · exact List.Sublist.refl _
 
 /-- Ideal accepted operations. This is not a claim about an actual verifier. -/
 inductive Step : St P → Tx P → St P → Prop where

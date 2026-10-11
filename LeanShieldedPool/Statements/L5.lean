@@ -38,9 +38,19 @@ structure CryptoHyp (P : PrimSpec) (txs : List (Tx P)) : Prop where
   derivePub_inj : ∀ k ∈ runKeys txs, ∀ k' ∈ runKeys txs,
     P.derivePub k = P.derivePub k' → k = k'
 
-/-- The log spans every epoch. Rollover does not reset it. -/
+/-- The log spans every epoch. Rollover does not reset it. Only value-bearing
+consumption counts (`Tx.valueConsumes`): a zero-amount second input skips the
+chain check, following the circuit, so its commitment can be consumed again
+in a later epoch; no value moves with it. -/
 def noteSpentAtMostOnce (txs : List (Tx P)) : Prop :=
-  (txs.flatMap Tx.consumes).Nodup
+  (txs.flatMap Tx.valueConsumes).Nodup
+
+/-- Every transfer's second input was created in epoch 0. In a run without
+rollover this is what an honest client does: it mints ballast in the current
+epoch (extension spec 267-269). The code does not enforce it for a
+zero-amount input, so it is a premise of `epochZeroRefinesBase` only. -/
+def BallastStamped (txs : List (Tx P)) : Prop :=
+  ∀ tx ∈ txs, ∀ d : TransferData P, tx = .transfer d → d.in2.epochCreated = 0
 
 def crossEpochNoDoubleSpend (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
@@ -109,7 +119,8 @@ way: an epoch model that rejects honest base runs still satisfies it. This is
 not the circuit's base case (extension spec 324-340). -/
 def epochZeroRefinesBase (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
-    Run sup txs st → (∀ tx ∈ txs, tx ≠ .rollover) → CryptoHyp P txs →
+    Run sup txs st → (∀ tx ∈ txs, tx ≠ .rollover) → BallastStamped txs →
+      CryptoHyp P txs →
       (∃ base : LeanShieldedPool.St (basePrim P),
         LeanShieldedPool.Run (P := basePrim P) sup (txs.flatMap baseTxs) base ∧
         BaseStateMatches st base ∧
