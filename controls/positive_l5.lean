@@ -134,12 +134,22 @@ theorem prefix_cryptoHyp : Candidates.CryptoHyp Toy txsP := by
   · intro k _ k' _ _
     exact Subsingleton.elim k k'
 
+/-- The prefix's one transfer uses a ballast minted in epoch 0, so the
+`BallastStamped` premise of row 14 holds. -/
+theorem prefix_ballastStamped : Candidates.BallastStamped txsP := by
+  intro tx ht d hd
+  simp only [List.mem_cons, List.not_mem_nil, or_false] at ht
+  rcases ht with rfl | rfl
+  · cases hd
+  · cases hd
+    rfl
+
 /-- Row 14's antecedent is satisfiable: a nonempty accepted run without
-rollover, with its epoch `CryptoHyp`. -/
+rollover, with epoch-0 ballast and its epoch `CryptoHyp`. -/
 example : ∃ (txs : List (Tx Toy)) (st : St Toy),
     Run (fun _ => True) txs st ∧ Candidates.CryptoHyp Toy txs ∧
-    (∀ tx ∈ txs, tx ≠ .rollover) ∧ txs ≠ [] := by
-  refine ⟨txsP, _, prefix_run, prefix_cryptoHyp, ?_, by simp⟩
+    (∀ tx ∈ txs, tx ≠ .rollover) ∧ Candidates.BallastStamped txs ∧ txs ≠ [] := by
+  refine ⟨txsP, _, prefix_run, prefix_cryptoHyp, ?_, prefix_ballastStamped, by simp⟩
   intro tx ht
   simp only [List.mem_cons, List.not_mem_nil, or_false] at ht
   rcases ht with rfl | rfl <;> nofun

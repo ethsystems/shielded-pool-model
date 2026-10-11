@@ -108,15 +108,15 @@ theorem txs_cryptoHyp : Candidates.CryptoHyp Toy txs := by
     exact Subsingleton.elim k k'
 
 /-- `crossEpochNoDoubleSpend`, restated over the mutated model's runs, is
-FALSE: the accepted history consumes (5, 0, 0) twice. The control passes
-only if this refutation builds. -/
+FALSE: the accepted history consumes (5, 0, 0), a note with value, twice.
+The control passes only if this refutation builds. -/
 theorem cross_epoch_double_spend_counterexample :
     ¬ ∀ (txs : List (Tx Toy)) (st : St Toy), RunNC txs st →
       Candidates.CryptoHyp Toy txs → Candidates.noteSpentAtMostOnce txs := by
   intro h
   obtain ⟨st, hr⟩ := accepted
   have hc := h txs st hr txs_cryptoHyp
-  norm_num [Candidates.noteSpentAtMostOnce, Tx.consumes, Note.cm,
+  norm_num [Candidates.noteSpentAtMostOnce, Tx.valueConsumes, Note.cm,
     List.flatMap] at hc
 
 end NegChainFacts

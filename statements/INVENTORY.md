@@ -29,6 +29,8 @@ LeanShieldedPool.noOverWithdrawal_proof :: ∀ (P : LeanShieldedPool.PrimSpec), 
 LeanShieldedPool.noMinting_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.noMinting P
 LeanShieldedPool.balanceIsLiveValue_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.balanceIsLiveValue P
 # L5 epoch statement Props (semantic model of the PoC extension spec):
+LeanShieldedPool.Epoch.Tx.valueConsumes :: {P : LeanShieldedPool.Epoch.PrimSpec} → LeanShieldedPool.Epoch.Tx P → List.{0} (LeanShieldedPool.PrimSpec.Commitment (LeanShieldedPool.Epoch.PrimSpec.toPrimSpec P))
+LeanShieldedPool.Epoch.Candidates.BallastStamped :: {P : LeanShieldedPool.Epoch.PrimSpec} → (txs : List.{0} (LeanShieldedPool.Epoch.Tx P)) → Prop
 LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.frozenRootImmutability :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.canonicalAppend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop

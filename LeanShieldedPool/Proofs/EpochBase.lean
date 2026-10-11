@@ -14,7 +14,8 @@ variable {P : PrimSpec}
 
 theorem Step.notes_zero {before after : St P} {tx : Tx P}
     (hs : Step before tx after) (he : before.currentEpoch = 0)
-    (hne : tx ≠ .rollover) :
+    (hne : tx ≠ .rollover)
+    (hb : ∀ d : TransferData P, tx = .transfer d → d.in2.epochCreated = 0) :
     after.currentEpoch = 0 ∧ ∀ n ∈ notes tx, n.epochCreated = 0 := by
   cases hs with
   | deposit hg =>
@@ -23,14 +24,14 @@ theorem Step.notes_zero {before after : St P} {tx : Tx P}
       simp only [notes, List.mem_singleton] at hn
       subst n
       exact hg.2.2.2.2.trans he
-  | transfer hg =>
-      obtain ⟨_, _, _, _, _, hc1, hc2, _, _, _, _, _, _, _, _, _, _, _, _, ho1, ho2⟩ := hg
+  | @transfer d hg =>
+      obtain ⟨_, _, _, _, _, hc1, _, _, _, _, _, _, _, _, _, _, _, _, _, ho1, ho2⟩ := hg
       refine ⟨he, ?_⟩
       intro n hn
       simp only [notes, List.mem_cons, List.not_mem_nil, or_false] at hn
       rcases hn with rfl | rfl | rfl | rfl
       · have h := hc1.1; omega
-      · have h := hc2.1; omega
+      · exact hb d rfl
       · exact ho1.trans he
       · exact ho2.trans he
   | withdraw hg =>
@@ -62,7 +63,8 @@ theorem Step.minted_zero {before after : St P} {tx : Tx P}
   | rollover => exact hb
 
 theorem Run.zero_epoch {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
-    (hr : Run sup txs st) (hn : ∀ tx ∈ txs, tx ≠ .rollover) :
+    (hr : Run sup txs st) (hn : ∀ tx ∈ txs, tx ≠ .rollover)
+    (hb : BallastStamped txs) :
     st.currentEpoch = 0 ∧
     (∀ n ∈ Candidates.runNotes txs, n.epochCreated = 0) ∧
     (∀ n ∈ st.minted, n.epochCreated = 0) := by
@@ -71,7 +73,9 @@ theorem Run.zero_epoch {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
       fun _ h => False.elim (List.not_mem_nil h)⟩
   | @step txs st st' tx hr hs ih =>
       obtain ⟨he, hnotes, hm⟩ := ih (fun t ht => hn t (List.mem_append_left _ ht))
+        (fun t ht d hd => hb t (List.mem_append_left _ ht) d hd)
       obtain ⟨he', ht⟩ := hs.notes_zero he (hn tx (List.mem_append_right _ List.mem_cons_self))
+        (fun d hd => hb tx (List.mem_append_right _ List.mem_cons_self) d hd)
       refine ⟨he', ?_, hs.minted_zero hm ht⟩
       intro n hm
       simp only [Candidates.runNotes, List.flatMap_append, List.flatMap_cons,
@@ -101,11 +105,12 @@ theorem BaseStateMatches.leaves {st : St P} {base : LeanShieldedPool.St (basePri
 /-- Translate one accepted step, retaining the parent's prepend convention. -/
 theorem Step.base_simulation {st st' : St P} {tx : Tx P}
     (hs : Step st tx st') (hne : tx ≠ .rollover)
+    (hb : ∀ d : TransferData P, tx = .transfer d → d.in2.epochCreated = 0)
     {base : LeanShieldedPool.St (basePrim P)} (hm : BaseStateMatches st base)
     (hz : ∀ n ∈ st.minted, n.epochCreated = 0) :
     ∃ btx after, baseTxs tx = [btx] ∧
       LeanShieldedPool.Step base btx after ∧ BaseStateMatches st' after := by
-  have hnotes := (hs.notes_zero hm.1 hne).2
+  have hnotes := (hs.notes_zero hm.1 hne hb).2
   have hl := BaseStateMatches.leaves hm hz
   obtain ⟨he, hf, hmint, hspent, hwin, hperm, hbal, hsup, hdep, hwith⟩ := hm
   cases hs with
@@ -240,7 +245,8 @@ theorem Step.base_simulation {st st' : St P} {tx : Tx P}
   | rollover => exact False.elim (hne rfl)
 
 theorem Run.base_simulation {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
-    (hr : Run sup txs st) (hn : ∀ tx ∈ txs, tx ≠ .rollover) :
+    (hr : Run sup txs st) (hn : ∀ tx ∈ txs, tx ≠ .rollover)
+    (hb : BallastStamped txs) :
     ∃ base, LeanShieldedPool.Run (P := basePrim P) sup (txs.flatMap baseTxs) base ∧ BaseStateMatches st base := by
   induction hr with
   | empty =>
@@ -248,12 +254,15 @@ theorem Run.base_simulation {sup : P.Token → Prop} {txs : List (Tx P)} {st : S
         rfl, fun _ => rfl, rfl, rfl, rfl, List.Perm.refl _, rfl, rfl, rfl, rfl⟩
   | @step txs st st' tx hr hs ih =>
       have hp := fun t ht => hn t (List.mem_append_left [tx] ht)
-      obtain ⟨base, hb, hm⟩ := ih hp
+      have hbp : BallastStamped txs := fun t ht d hd => hb t (List.mem_append_left [tx] ht) d hd
+      obtain ⟨base, hbase, hm⟩ := ih hp hbp
       obtain ⟨btx, after, ht, hs', hm'⟩ := hs.base_simulation
-        (hn tx (List.mem_append_right _ List.mem_cons_self)) hm (hr.zero_epoch hp).2.2
+        (hn tx (List.mem_append_right _ List.mem_cons_self))
+        (fun d hd => hb tx (List.mem_append_right _ List.mem_cons_self) d hd)
+        hm (hr.zero_epoch hp hbp).2.2
       refine ⟨after, ?_, hm'⟩
       simpa only [List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
-        List.append_nil, ht] using LeanShieldedPool.Run.step hb hs'
+        List.append_nil, ht] using LeanShieldedPool.Run.step hbase hs'
 
 theorem baseTxs_notes (tx : Tx P) :
     (baseTxs tx).flatMap LeanShieldedPool.Tx.notes = (notes tx).map baseNote := by
@@ -320,17 +329,25 @@ theorem base_consumes {txs : List (Tx P)}
   intro tx ht
   exact baseTxs_consumes (fun n hn => hz n (List.mem_flatMap.mpr ⟨tx, ht, hn⟩))
 
+theorem flatMap_valueConsumes_sublist (txs : List (Tx P)) :
+    (txs.flatMap Tx.valueConsumes).Sublist (txs.flatMap Tx.consumes) := by
+  induction txs with
+  | nil => exact List.Sublist.refl _
+  | cons tx txs ih =>
+      simp only [List.flatMap_cons]
+      exact (Tx.valueConsumes_sublist tx).append ih
+
 theorem epochZeroRefinesBase_proof (P : PrimSpec) : epochZeroRefinesBase P := by
-  intro sup txs st hr hn hc
-  obtain ⟨base, hb, hm⟩ := hr.base_simulation hn
-  have hz := (hr.zero_epoch hn).2.1
+  intro sup txs st hr hn hb hc
+  obtain ⟨base, hbase, hm⟩ := hr.base_simulation hn hb
+  have hz := (hr.zero_epoch hn hb).2.1
   have hcrypto := base_crypto hc hz
   have hconsumes := base_consumes hz
-  refine ⟨⟨base, hb, hm, hcrypto, hconsumes⟩, ?_⟩
+  refine ⟨⟨base, hbase, hm, hcrypto, hconsumes⟩, ?_⟩
   intro hl3
-  have hnodup := hl3 sup (txs.flatMap baseTxs) base hb hcrypto
+  have hnodup := hl3 sup (txs.flatMap baseTxs) base hbase hcrypto
   change ((txs.flatMap baseTxs).flatMap LeanShieldedPool.Tx.consumes).Nodup at hnodup
   rw [hconsumes] at hnodup
-  exact hnodup
+  exact List.Nodup.sublist (flatMap_valueConsumes_sublist txs) hnodup
 
 end LeanShieldedPool.Epoch
