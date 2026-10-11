@@ -114,10 +114,13 @@ the research repo from here.
 The seven L5 files come from the same research repo at commit
 `fa5526ee6f1a39829a494f61c66b147cb151e994`, which carries the same
 transfer-guard and `CryptoHyp` changes that pull request 1 made here.
-Two are byte-identical to that commit: `Proofs/EpochBase.lean` and
-`Proofs/Epoch.lean`. `sha256sum -c PROVENANCE.sha256` checks exactly
-those two plus the 11 above, and nothing else. The other five were
-edited or written here:
+None is byte-identical to that commit any more: `Proofs/EpochBase.lean`
+and `Proofs/Epoch.lean` were byte-identical until the review of pull
+request 5, which changed the ballast guard, the consumption log, the
+chain-key-binding clause and the base-case premise, and added the
+liveness proofs. `sha256sum -c PROVENANCE.sha256` checks exactly the 11
+files above, and nothing else. The other five were edited or written
+here:
 
 - `Pool/Epoch.lean`: the header's source revision becomes `a04b8b3`,
   the revision verified against the recorded spec hash; a reference to
