@@ -3,8 +3,9 @@
 -- conjunct REMOVED accepts spending the same note in epoch 0 and again in
 -- epoch 1: the epoch-1 nullifier differs, active-list freshness passes,
 -- and only the frozen-history check knows about the old spend. The real
--- model rejects the analogous repeated spend (`Pool/Epoch.lean`, Examples,
--- the "changed active nullifier" example). The accepted history consumes
+-- model rejects this exact second spend: `real_guard_rejects` below shows
+-- the real withdraw guard fails at the `ChainFacts` conjunct for epoch 0.
+-- The accepted history consumes
 -- one commitment twice and satisfies the epoch `CryptoHyp` (proven below),
 -- so the final theorem proves the explicit negation of the frozen Prop
 -- restated over the mutated model.
@@ -77,6 +78,13 @@ theorem g4 : guardNoChain wAgain s3 := by
     St.leaves, LeanShieldedPool.St.pushWindow, rootWindow, Note.ownedBy,
     LeanShieldedPool.Note.ownedBy, Note.wf, LeanShieldedPool.Note.wf,
     U128, maxU128, Note.cm, Note.nfE, InsertionFacts, AppendFresh, bump, drop]
+
+/-- The REAL withdraw guard rejects the same second spend: its `ChainFacts`
+conjunct finds the epoch-0 nullifier of the note in the sealed epoch-0 list. -/
+theorem real_guard_rejects : ¬ wAgain.guard s3 := by
+  intro h
+  have hmissing := h.2.2.2.1.1.2 0 (by decide) (by decide)
+  exact hmissing (by decide)
 
 /-- The weakened model ACCEPTS the cross-epoch double spend. -/
 theorem accepted : ∃ st, RunNC txs st :=
