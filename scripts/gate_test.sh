@@ -51,7 +51,7 @@ fixture frozen-comment-edit "GATE FAIL: frozen" \
   'printf "\n-- tampered after pinning\n" >> LeanShieldedPool/Statements/L3.lean'
 fixture frozen-new-file "GATE FAIL: frozen" \
   'printf "def fxExtra : Nat := 1\n" > LeanShieldedPool/Statements/Extra.lean'
-# re-pinning does not launder a tampered statement: the census still bites
+# The k-anonymity extension is part of the build, census and frozen surface.
 fixture k-anonymity-sorry "GATE FAIL: sorry" \
   'printf "\ntheorem fx_ka_sorry : 2 = 2 := by sorry\n" >> LeanShieldedPool/Extensions/KAnonymity.lean'
 fixture k-anonymity-frozen-edit "GATE FAIL: frozen" \
@@ -62,6 +62,7 @@ p=open(\"statements/INVENTORY.md\").read()
 open(\"statements/INVENTORY.md\",\"w\").write(p.replace(\"LeanShieldedPool.KAnonymity.hasAnonymitySet ::\",\"LeanShieldedPool.KAnonymity.hasAnonymitySet :: TAMPERED\",1))"'
 fixture extensions-new-file "GATE FAIL: frozen" \
   'printf "def fxExtensionExtra : Nat := 1\n" > LeanShieldedPool/Extensions/Extra.lean'
+# re-pinning does not launder a tampered statement: the census still bites
 fixture repinned-census-tamper "GATE FAIL: census" \
   'python3 -c "
 p=open(\"statements/INVENTORY.md\").read()
