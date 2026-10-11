@@ -141,4 +141,23 @@ def chainKeyBinding (P : PrimSpec) : Prop :=
           ∀ tx ∈ txs, ∀ input ∈ inputs tx, input.1.cm = n.cm →
             input.1 = n ∧ input.2 = key
 
+/-- Model liveness after a rollover: an owned note in the tree with nonzero
+amount, enough pool balance and a clear history (its nullifier is in no
+sealed list since its creation and not in the active list) passes the
+withdraw guard at the current root, so the epoch model admits its
+withdrawal. Window membership of the current root, tree membership at that
+root, well-formedness and the creation-epoch bound are derived from the
+run. The balance stays a premise. This is not a payout or token-movement
+claim. -/
+def spendableAfterRollover (P : PrimSpec) : Prop :=
+  ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
+    Run sup txs st →
+    ∀ (k : P.SpendKey) (n : Note P) (r : P.Address),
+      n ∈ st.minted → n.ownedBy k → n.amount ≠ 0 →
+      n.amount ≤ st.balance n.token →
+      (∀ e, n.epochCreated ≤ e → e ≤ st.currentEpoch →
+        n.nfE k e ∉ (if e = st.currentEpoch then st.active else st.frozen e)) →
+      WithdrawData.guard ⟨k, n, r, st.leaves.length⟩ st.rollover ∧
+      ∃ st' : St P, Step st.rollover (.withdraw ⟨k, n, r, st.leaves.length⟩) st'
+
 end LeanShieldedPool.Epoch.Candidates
