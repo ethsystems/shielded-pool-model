@@ -492,8 +492,11 @@ end TwoRecipientToy
 
 namespace ManyRecipientToy
 
-/-- Owner-independent commitments give equal logs with fixed output salts.
-Collision freedom is scoped to each history, not their combined witnesses. -/
+/-- Owner-binding commitments: `Nat.pair owner salt`. The output salts vary
+with the world, as in `TwoRecipientToy`, so the k logs differ in their
+output atoms and are related by a commitment permutation (`cmPerm`).
+Collision freedom holds within each history and across any two histories'
+combined witnesses. -/
 abbrev Toy' (k : Nat) : PrimSpec where
   Token := Unit
   Address := Unit
@@ -503,7 +506,7 @@ abbrev Toy' (k : Nat) : PrimSpec where
   Commitment := Nat
   Nullifier := Nat
   derivePub := id
-  commit := fun _ _ _ salt => salt
+  commit := fun _ _ owner salt => Nat.pair owner.val salt
   nullify := fun cm _ => cm
 
 variable {k : Nat}
@@ -514,13 +517,13 @@ abbrev input (hk : 0 < k) : Note (Toy' k) := ⟨(), 5, baseOwner hk, 0⟩
 abbrev ballast (hk : 0 < k) : Note (Toy' k) := ⟨(), 0, baseOwner hk, 1⟩
 abbrev deposit (hk : 0 < k) : DepositData (Toy' k) := ⟨input hk, ()⟩
 
-/-- Only the first output owner varies with the world index. -/
+/-- Only the first output owner and the output salts vary with the world. -/
 abbrev transfer (hk : 0 < k) (i : Fin k) : TransferData (Toy' k) :=
   { key := baseOwner hk
     in1 := input hk
     in2 := ballast hk
-    out1 := ⟨(), 3, i, 2⟩
-    out2 := ⟨(), 2, baseOwner hk, 3⟩
+    out1 := ⟨(), 3, i, 2 + 2 * i.val⟩
+    out2 := ⟨(), 2, baseOwner hk, 3 + 2 * i.val⟩
     snapshot := 1 }
 
 def history (hk : 0 < k) (i : Fin k) : List (Tx (Toy' k)) :=
@@ -528,6 +531,9 @@ def history (hk : 0 < k) (i : Fin k) : List (Tx (Toy' k)) :=
 
 noncomputable def finalState (hk : 0 < k) (i : Fin k) : St (Toy' k) :=
   (transfer hk i).post ((deposit hk).post (St.empty (Toy' k) sup))
+
+private theorem pair_ne {a b c d : Nat} (h : b ≠ d) : Nat.pair a b ≠ Nat.pair c d :=
+  fun heq => h (Nat.pair_eq_pair.mp heq).2
 
 theorem deposit_guard (hk : 0 < k) :
     (deposit hk).guard (St.empty (Toy' k) sup) := by
@@ -539,6 +545,7 @@ theorem transfer_guard (hk : 0 < k) (i : Fin k) :
     Note.cm, Note.ownedBy, Note.isBallast, St.rootInWindow, St.inTreeAt,
     St.fresh, St.leaves, St.empty, St.pushWindow, rootWindow, DepositData.post,
     U128, maxU128]
+  refine ⟨pair_ne ?_, pair_ne ?_, pair_ne ?_, pair_ne ?_⟩ <;> omega
 
 theorem accepted (hk : 0 < k) (i : Fin k) :
     Run sup (history hk i) (finalState hk i) :=
@@ -553,21 +560,76 @@ theorem crypto (hk : 0 < k) (i : Fin k) : CryptoHyp (Toy' k) (history hk i) := b
       or_false] at hn hn'
     rcases hn with rfl | rfl | rfl | rfl | rfl <;>
       rcases hn' with rfl | rfl | rfl | rfl | rfl
-    all_goals first | rfl | norm_num [Note.cm] at h
+    all_goals first | rfl | (simp only [Note.cm, Nat.pair_eq_pair] at h; omega)
+  · intro key _ key' _ h
+    exact h
+
+/-- Collision freedom also holds across any two worlds' combined witnesses.
+The concatenation is a witness collection, not an asserted accepted run. -/
+theorem crypto_cross_history (hk : 0 < k) (i j : Fin k) :
+    CryptoHyp (Toy' k) (history hk i ++ history hk j) := by
+  constructor
+  · intro n hn n' hn' _ _ h
+    simp only [history, runNotes, List.flatMap_cons, List.flatMap_nil, Tx.notes,
+      List.cons_append, List.nil_append, List.mem_cons, List.not_mem_nil,
+      or_false] at hn hn'
+    rcases hn with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      rcases hn' with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
+    all_goals first
+      | rfl
+      | (simp only [Note.cm, Nat.pair_eq_pair] at h
+         first
+           | omega
+           | (obtain ⟨h1, h2⟩ := h
+              cases Fin.ext (by omega : i.val = j.val)
+              rfl))
   · intro key _ key' _ h
     exact h
 
 theorem recipient (hk : 0 < k) (i : Fin k) :
     lastTransferFirstOwner (history hk i) = some i := rfl
 
-theorem equal_logs (hk : 0 < k) (i j : Fin k) :
-    events (history hk i) = events (history hk j) := rfl
+/-- The commitment renaming between worlds `i` and `j`: swap the two output
+atoms of world `i` with those of world `j`. -/
+def cmPerm (i j : Fin k) : Equiv.Perm Nat :=
+  (Equiv.swap (Nat.pair i.val (2 + 2 * i.val)) (Nat.pair j.val (2 + 2 * j.val))).trans
+    (Equiv.swap (Nat.pair 0 (3 + 2 * i.val)) (Nat.pair 0 (3 + 2 * j.val)))
+
+private theorem cmPerm_input (i j : Fin k) : cmPerm i j (Nat.pair 0 0) = Nat.pair 0 0 := by
+  simp only [cmPerm, Equiv.trans_apply]
+  rw [Equiv.swap_apply_of_ne_of_ne (pair_ne ?_) (pair_ne ?_),
+    Equiv.swap_apply_of_ne_of_ne (pair_ne ?_) (pair_ne ?_)] <;> omega
+
+private theorem cmPerm_out1 (i j : Fin k) :
+    cmPerm i j (Nat.pair i.val (2 + 2 * i.val)) = Nat.pair j.val (2 + 2 * j.val) := by
+  simp only [cmPerm, Equiv.trans_apply]
+  rw [Equiv.swap_apply_left,
+    Equiv.swap_apply_of_ne_of_ne (pair_ne ?_) (pair_ne ?_)] <;> omega
+
+private theorem cmPerm_out2 (i j : Fin k) :
+    cmPerm i j (Nat.pair 0 (3 + 2 * i.val)) = Nat.pair 0 (3 + 2 * j.val) := by
+  simp only [cmPerm, Equiv.trans_apply]
+  rw [Equiv.swap_apply_of_ne_of_ne (pair_ne ?_) (pair_ne ?_),
+    Equiv.swap_apply_left] <;> omega
+
+/-- Every pair of accepted worlds has the same symbolic observation: the
+input and ballast atoms are shared, and `cmPerm` carries the output atoms. -/
+theorem pairwise_obs (hk : 0 < k) (i j : Fin k) :
+    ObsEquiv (events (history hk i)) (events (history hk j)) := by
+  apply (obsEquiv_iff_permutations _ _).mpr
+  refine ⟨cmPerm i j, Equiv.refl _, ?_⟩
+  show [Event.deposit (cmPerm i j (Nat.pair 0 0)),
+    Event.transfer (Nat.pair 0 0) (Nat.pair 0 1)
+      (cmPerm i j (Nat.pair i.val (2 + 2 * i.val)))
+      (cmPerm i j (Nat.pair 0 (3 + 2 * i.val)))] = events (history hk j)
+  rw [cmPerm_input, cmPerm_out1, cmPerm_out2]
+  rfl
 
 theorem anonymity (hk : 0 < k) :
     hasAnonymitySet sup (events (history hk (baseOwner hk))) k := by
   refine ⟨fun i => (history hk i, finalState hk i), id, ?_, ?_, ?_, ?_⟩
   · intro i
-    exact ⟨accepted hk i, crypto hk i, ObsEquiv.refl _⟩
+    exact ⟨accepted hk i, crypto hk i, pairwise_obs hk i (baseOwner hk)⟩
   · intro i j h
     have hr := congrArg (fun e : List (Tx (Toy' k)) × St (Toy' k) =>
       lastTransferFirstOwner e.1) h
@@ -575,7 +637,8 @@ theorem anonymity (hk : 0 < k) :
   · exact Function.injective_id
   · exact recipient hk
 
-/-- Arbitrarily large finite counts, under per-history collision freedom. -/
+/-- Arbitrarily large finite counts, with owner-binding commitments and
+per-history collision freedom. -/
 theorem candidate (hk : 0 < k) : acceptedAnonymityCandidate (Toy' k) sup k :=
   ⟨history hk (baseOwner hk), finalState hk (baseOwner hk),
     accepted hk (baseOwner hk), crypto hk (baseOwner hk), anonymity hk⟩
