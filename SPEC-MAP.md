@@ -224,13 +224,15 @@ These are semantic interpretations of the clauses, with the limits below.
 | `Verifiers`, `VerifierSoundness` | Abstract extraction of chain and insertion facts | 37-41, 324-338, 394-409 |
 | `Candidates.CryptoHyp` | Run-scoped commitment and owner-key binding, including creation epoch | 99, 336, 372 |
 | `crossEpochNoDoubleSpend_proof` | Guarantees: cross-epoch double-spend safety | 436 |
-| `frozenRootImmutability_proof` | Preserve sealed contents after rollover | 163 |
-| `canonicalAppend_proof` | Preserve exact append order and sequential freshness | 161, 167, 394-409 |
-| `chainKeyBinding_proof` | One owned note and key across consuming witnesses | 336-337, 366, 372 |
-| `baseCaseSoundness_proof`, `Candidates.basePrim`, `Candidates.BaseStateMatches` | Translate an initial-epoch run to the parent rules; no recursive-verifier claim | 51-60, 324-340 |
+| `frozenRootImmutability_proof` | Preserve sealed contents after rollover. Line 163 says only what a rollover writes; 205 calls sealed data immutable. Immutability of sealed entries is a model choice | 163, 205 |
+| `canonicalAppend_proof` | Preserve exact append order and sequential freshness. The single-step half restates the guard conjunct; the segment half is the content. Cross-proof binding (407-409) is simplification 4, assumed | 161, 167, 394-405 |
+| `chainKeyBinding_proof` | One owned note and key across consuming witnesses. The chain key binding of 336-337 is assumed (simplification 2) | 366, 372 |
+| `epochZeroRefinesBase_proof`, `Candidates.basePrim`, `Candidates.BaseStateMatches` | Translate an initial-epoch run to the parent rules, one way; no recursive-verifier claim and not the circuit's base case | 47-62 |
 | `Examples.*` | Concrete guard witnesses and rejected repeat attempts | model checks, no spec clause |
 
-The base map and its 16 simplifications still apply to L0-L4.
+The base map and its 16 simplifications still apply to the base model
+(`Pool/State.lean`, `Tx.lean`, `Events.lean`) and the statements L3, L4
+and L4B.
 The epoch model retains their amount, ownership, ballast and accounting
 abstractions. It adds these limits:
 
