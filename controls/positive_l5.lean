@@ -3,7 +3,9 @@
 -- rollover and a later withdrawal satisfies the epoch `CryptoHyp`, so
 -- `crossEpochNoDoubleSpend` and `chainKeyBinding` apply to a nonempty
 -- accepted history that crosses a rollover. A no-rollover prefix witnesses
--- `baseCaseSoundness`'s antecedent. Must build.
+-- `epochZeroRefinesBase`'s antecedent. The rollover inside that run and
+-- its non-rollover steps give concrete antecedents for
+-- `frozenRootImmutability` and `canonicalAppend`. Must build.
 import LeanShieldedPool.Proofs.Epoch
 import LeanShieldedPool.Proofs.EpochBase
 
@@ -17,8 +19,8 @@ example : Candidates.canonicalAppend Examples.Toy :=
   canonicalAppend_proof _
 example : Candidates.chainKeyBinding Examples.Toy :=
   chainKeyBinding_proof _
-example : Candidates.baseCaseSoundness Examples.Toy :=
-  baseCaseSoundness_proof _
+example : Candidates.epochZeroRefinesBase Examples.Toy :=
+  epochZeroRefinesBase_proof _
 
 namespace LeanShieldedPool.Epoch.PositiveL5
 
@@ -77,7 +79,7 @@ theorem txs_cryptoHyp : Candidates.CryptoHyp Toy txs := by
 
 /-- Rows 10 and 13 (`crossEpochNoDoubleSpend`, `chainKeyBinding`): a
 nonempty accepted history that crosses a rollover satisfies the epoch
-`CryptoHyp`. This does not witness `baseCaseSoundness`'s no-rollover
+`CryptoHyp`. This does not witness `epochZeroRefinesBase`'s no-rollover
 premise; the prefix below does. -/
 example : ∃ (txs : List (Tx Toy)) (st : St Toy),
     Run (fun _ => True) txs st ∧ Candidates.CryptoHyp Toy txs ∧
@@ -85,7 +87,36 @@ example : ∃ (txs : List (Tx Toy)) (st : St Toy),
   ⟨txs, _, epoch_run, txs_cryptoHyp,
     List.mem_cons_of_mem _ (List.mem_cons_of_mem _ List.mem_cons_self)⟩
 
-/-- The no-rollover prefix, for row 14 (`baseCaseSoundness`). -/
+/-- Row 11 (`frozenRootImmutability`) at a concrete antecedent: the rollover
+inside `epoch_run`, sealing the epoch-0 list, followed by the epoch-1
+withdrawal as the suffix. The sealed list and all older lists survive. -/
+example :
+    (wOut.post (t0.post st1).rollover).frozen (t0.post st1).currentEpoch =
+        (t0.post st1).active ∧
+      ∀ e, e < (t0.post st1).currentEpoch →
+        (wOut.post (t0.post st1).rollover).frozen e = (t0.post st1).frozen e :=
+  frozenRootImmutability_proof Toy (t0.post st1) _ [.withdraw wOut]
+    (Candidates.Steps.cons (Step.withdraw g3) (Candidates.Steps.nil _))
+
+/-- Row 12 (`canonicalAppend`), single-step half at a concrete non-rollover
+step: the transfer appends its two nullifiers in spend order. -/
+example :
+    (t0.post st1).currentEpoch = st1.currentEpoch ∧
+      InsertionFacts (P := Toy) st1.active ((Tx.transfer t0).spends st1.currentEpoch)
+        (t0.post st1).active :=
+  (canonicalAppend_proof Toy).1 st1 _ (.transfer t0) (Step.transfer g2) (by nofun)
+
+/-- Row 12, segment half at a concrete segment: the no-rollover prefix
+`[.deposit d0, .transfer t0]`, whose endpoint epochs agree. -/
+example :
+    InsertionFacts (P := Toy) st0.active
+      ([Tx.deposit d0, Tx.transfer t0].flatMap (Tx.spends st0.currentEpoch))
+      (t0.post st1).active :=
+  (canonicalAppend_proof Toy).2 st0 _ [.deposit d0, .transfer t0]
+    (Candidates.Steps.cons (Step.deposit g1)
+      (Candidates.Steps.cons (Step.transfer g2) (Candidates.Steps.nil _))) rfl
+
+/-- The no-rollover prefix, for row 14 (`epochZeroRefinesBase`). -/
 abbrev txsP : List (Tx Toy) := [.deposit d0, .transfer t0]
 
 theorem prefix_run : Run (fun _ => True) txsP (t0.post st1) :=

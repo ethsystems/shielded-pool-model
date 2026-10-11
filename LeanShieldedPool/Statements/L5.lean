@@ -53,10 +53,12 @@ inductive Steps : St P → List (Tx P) → St P → Prop where
       Step before tx middle → Steps middle txs after →
       Steps before (tx :: txs) after
 
-/-- Seal the current list and preserve every sealed entry through any suffix. -/
+/-- Seal the current list and preserve every sealed entry through any suffix.
+A frame property of the step relation: it holds from any state, reachable or
+not, because only rollover writes `frozen`. -/
 def frozenRootImmutability (P : PrimSpec) : Prop :=
-  ∀ (sup : P.Token → Prop) (before after : St P) (suffix : List (Tx P)),
-    Reachable sup before → Steps before.rollover suffix after →
+  ∀ (before after : St P) (suffix : List (Tx P)),
+    Steps before.rollover suffix after →
       after.frozen before.currentEpoch = before.active ∧
       ∀ e, e < before.currentEpoch → after.frozen e = before.frozen e
 
@@ -100,9 +102,12 @@ def BaseStateMatches (st : St P) (base : LeanShieldedPool.St (basePrim P)) : Pro
   base.balance = st.balance ∧ base.supported = st.supported ∧
   base.deposited = st.deposited ∧ base.withdrawn = st.withdrawn
 
-/-- Reduction to L3 theorem 1 for a full run in the initial epoch. This demands
-a parent run and transported hypotheses, not just an empty chain interval. -/
-def baseCaseSoundness (P : PrimSpec) : Prop :=
+/-- A run without rollover refines the parent pool: it translates to an
+accepted base run with matching state and transported hypotheses, and base
+no-double-spend then gives the epoch consumption claim. The refinement is one
+way: an epoch model that rejects honest base runs still satisfies it. This is
+not the circuit's base case (extension spec 324-340). -/
+def epochZeroRefinesBase (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st → (∀ tx ∈ txs, tx ≠ .rollover) → CryptoHyp P txs →
       (∃ base : LeanShieldedPool.St (basePrim P),
@@ -113,17 +118,16 @@ def baseCaseSoundness (P : PrimSpec) : Prop :=
           txs.flatMap Tx.consumes) ∧
       (LeanShieldedPool.noDoubleSpend (basePrim P) → noteSpentAtMostOnce txs)
 
-/-- One owner key accounts for every consumed witness of a commitment and
-every derived value from creation through the final epoch. This does not
-extract separate recursive witnesses from proof bytes. -/
+/-- One owner key accounts for every consumed witness of a commitment. This
+does not extract separate recursive witnesses from proof bytes: the chain
+key binding of the extension spec (336-337) is simplification 2 of
+`Pool/Epoch.lean`, an assumption, not a consequence of this statement. -/
 def chainKeyBinding (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st → CryptoHyp P txs →
       ∀ n ∈ runNotes txs, n.cm ∈ txs.flatMap Tx.consumes →
         ∃ key ∈ runKeys txs, n.ownedBy key ∧
           ∀ tx ∈ txs, ∀ input ∈ inputs tx, input.1.cm = n.cm →
-            input.1 = n ∧ input.2 = key ∧
-            ∀ e, n.epochCreated ≤ e → e ≤ st.currentEpoch →
-              input.1.nfE input.2 e = n.nfE key e
+            input.1 = n ∧ input.2 = key
 
 end LeanShieldedPool.Epoch.Candidates
