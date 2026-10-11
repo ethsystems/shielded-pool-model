@@ -201,7 +201,7 @@ theorem Candidates.Steps.frozen_preserved {before after : St P} {txs : List (Tx 
       exact (ih (Nat.lt_of_lt_of_le he hs.epoch_mono)).trans (hs.frozen_preserved he)
 
 theorem frozenRootImmutability_proof (P : PrimSpec) : frozenRootImmutability P := by
-  intro sup before after suffix _ hs
+  intro before after suffix hs
   constructor
   · calc
       after.frozen before.currentEpoch = before.rollover.frozen before.currentEpoch :=
@@ -315,8 +315,6 @@ theorem chainKeyBinding_proof (P : PrimSpec) : chainKeyBinding P := by
   have hpub : P.derivePub input.2 = P.derivePub key :=
     howned.trans ((congrArg (fun n : Note P => n.ownerPubkey) hnEq).trans ho.symm)
   have hkEq := hcrypto.derivePub_inj input.2 hiKeys key hk hpub
-  refine ⟨hnEq, hkEq, ?_⟩
-  intro e _ _
-  rw [hnEq, hkEq]
+  exact ⟨hnEq, hkEq⟩
 
 end LeanShieldedPool.Epoch

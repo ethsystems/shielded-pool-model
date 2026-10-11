@@ -320,7 +320,7 @@ theorem base_consumes {txs : List (Tx P)}
   intro tx ht
   exact baseTxs_consumes (fun n hn => hz n (List.mem_flatMap.mpr ⟨tx, ht, hn⟩))
 
-theorem baseCaseSoundness_proof (P : PrimSpec) : baseCaseSoundness P := by
+theorem epochZeroRefinesBase_proof (P : PrimSpec) : epochZeroRefinesBase P := by
   intro sup txs st hr hn hc
   obtain ⟨base, hb, hm⟩ := hr.base_simulation hn
   have hz := (hr.zero_epoch hn).2.1

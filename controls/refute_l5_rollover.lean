@@ -61,24 +61,26 @@ theorem g2 : w0.guard st1 := by
 bad and real rollovers agree, because there is no older sealed list yet. -/
 noncomputable abbrev sealed : St Toy := rolloverBad (w0.post st1)
 
-/-- The mutated model REACHES the sealed state. -/
+/-- The mutated model REACHES the sealed state. The frozen Prop no longer
+carries a reachability premise (it is a frame property of the step
+relation), so the restatement below does not need this; it stays as evidence
+that the counterexample state is one the mutated model produces. -/
 theorem sealed_reachable : ReachableRB sealed :=
   ReachableRB.step (ReachableRB.step (ReachableRB.step ReachableRB.empty
     (StepRB.deposit g1)) (StepRB.withdraw g2)) StepRB.rollover
 
 /-- `frozenRootImmutability`, restated over the mutated model, is FALSE:
-one further bad rollover (here, the sealing step itself, with an empty
-suffix) erases the epoch-0 list that the real model preserves. The
-control passes only if this refutation builds. -/
+the next bad rollover, from the sealed state, with an empty suffix, erases
+the epoch-0 list that the real model preserves. The control passes only if
+this refutation builds. -/
 theorem frozen_erased_counterexample :
     ¬ ∀ (before after : St Toy) (suffix : List (Tx Toy)),
-      ReachableRB before → StepsRB (rolloverBad before) suffix after →
+      StepsRB (rolloverBad before) suffix after →
         after.frozen before.currentEpoch = before.active ∧
         ∀ e, e < before.currentEpoch → after.frozen e = before.frozen e := by
   intro h
-  have h2 := (h sealed (rolloverBad sealed) [] sealed_reachable
-    (StepsRB.nil _)).2 0 (by norm_num [rolloverBad, WithdrawData.post, st1,
-      DepositData.post, St.empty])
+  have h2 := (h sealed (rolloverBad sealed) [] (StepsRB.nil _)).2 0
+    (by norm_num [rolloverBad, WithdrawData.post, st1, DepositData.post, St.empty])
   norm_num [rolloverBad, WithdrawData.post, WithdrawData.nf, st1,
     DepositData.post, St.empty, Note.nfE, Note.cm] at h2
 

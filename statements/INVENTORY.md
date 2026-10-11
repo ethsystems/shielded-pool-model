@@ -33,10 +33,10 @@ LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend :: (P : LeanShieldedPo
 LeanShieldedPool.Epoch.Candidates.frozenRootImmutability :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.canonicalAppend :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 LeanShieldedPool.Epoch.Candidates.chainKeyBinding :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
-LeanShieldedPool.Epoch.Candidates.baseCaseSoundness :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
+LeanShieldedPool.Epoch.Candidates.epochZeroRefinesBase :: (P : LeanShieldedPool.Epoch.PrimSpec) → Prop
 # L5 epoch theorems:
 LeanShieldedPool.Epoch.crossEpochNoDoubleSpend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.crossEpochNoDoubleSpend P
 LeanShieldedPool.Epoch.frozenRootImmutability_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.frozenRootImmutability P
 LeanShieldedPool.Epoch.canonicalAppend_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.canonicalAppend P
 LeanShieldedPool.Epoch.chainKeyBinding_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.chainKeyBinding P
-LeanShieldedPool.Epoch.baseCaseSoundness_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.baseCaseSoundness P
+LeanShieldedPool.Epoch.epochZeroRefinesBase_proof :: ∀ (P : LeanShieldedPool.Epoch.PrimSpec), LeanShieldedPool.Epoch.Candidates.epochZeroRefinesBase P
