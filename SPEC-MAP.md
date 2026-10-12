@@ -32,7 +32,7 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `St.window`, `St.pushWindow` | bounded historical-root window; only the root after the final insertion of an operation enters it | 4.4 (260-263) |
 | `St.rootInWindow` | contract accepts proofs against any root in the window | 4.4 (260-261) |
 | `windowBoundary_proof` | every window entry is 0 or the leaf count after a nonempty accepted prefix of the same history; no between-insert root enters the window | 4.4 (260-263) |
-| `honestWithdraw_proof` | an honest owner's withdrawal at the current root is accepted, with exact payout on the pool field; window and tree membership derived | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) |
+| `honestWithdraw_proof` | an honest owner's withdrawal at the current root is accepted (premises in CLAIMS.md row 11), with exact payout on the pool field; window and tree membership derived | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) |
 | `St.inTreeAt` | "member of the tree at the public commitment root" | 5.3 (350, 366) |
 | `St.nullifiers`, `St.fresh` | nullifier set, append-only; nullifier unspent | 5.2 (313-314), 4.2 step 5 (233), 4.3 step 4 |
 | `St.balance` | ERC-20 held by the pool per token | 4.1 step 6, 4.3 step 5 |
