@@ -24,9 +24,10 @@ def windowBoundary (P : PrimSpec) : Prop :=
         pre ++ [tx] <+: txs ∧ Run sup pre st₀ ∧ Step st₀ tx st₁ ∧
         s = st₁.leaves.length
 
-/-- **Honest withdrawal** (issue #2, liveness). The owner of a note in the
-current tree, with a fresh nullifier, a nonzero amount and enough pool
-balance, has an accepted withdrawal against the current root
+/-- **Honest withdrawal** (issue #2, liveness). The owner of a note that
+the pool minted (`n ∈ st.minted`, the ghost note list behind the tree),
+with a fresh nullifier, a nonzero amount and enough pool balance, has an
+accepted withdrawal against the current root
 (`st.leaves.length`), and the pool pays out exactly the amount. The note's
 `u128` range, the window membership of the current root and the
 commitment's membership at that root are derived, not assumed. -/
