@@ -42,6 +42,16 @@ read; the first is symbolic k-anonymity: possibilistic, over a symbolic
 event-log observer, no deployed-privacy claim (CLAIMS.md, "Extension:
 symbolic k-anonymity").
 
+Two further results about the historical-root window (spec 2 section
+4.4, issue #2) sit outside the fifteen and are gated with them: every
+window entry is an operation boundary (`windowBoundary`), and the owner
+of a note in the current tree, with a fresh nullifier, a nonzero amount
+and enough pool balance, has an accepted withdrawal at the current root
+(`honestWithdraw`). Both are over the base model. No exact-retention
+claim and no claim about the contract's window code. Files:
+`Statements/Window.lean`, `Proofs/Window.lean`, two refutation controls
+under `controls/`, and their rows in CLAIMS.md and SPEC-MAP.md.
+
 The base model makes 16 simplifications, for example a list for the
 Merkle tree, `Nat` amounts and opaque hashes. They are modelling
 choices, not hypotheses. SPEC-MAP.md lists them and maps each
@@ -59,7 +69,8 @@ or conditional, and none is claimed here. One result from that work is
 worth knowing: a bounded check of the contract against the root-window
 rule that the spec and this model share found a conformance bug, fixed in
 ethsystems/pocs-private pull request 12. This repo does not reproduce that
-check.
+check. CLAIMS.md rows 10 and 11 state the window rule in the model; they
+do not check the contract.
 
 ## How it was built
 
@@ -219,7 +230,7 @@ The level names come from the research repo:
 4. The model: `LeanShieldedPool/Pool/State.lean`, `Tx.lean`, `Events.lean`,
    then `Epoch.lean`.
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
-   `L4B.lean`, `L5.lean`, and `statements/INVENTORY.md`.
+   `L4B.lean`, `L5.lean`, `Window.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
 7. The controls: `controls/`. Each base or epoch refutation control
    weakens one guard, post-state or replay step; the two extension
@@ -249,7 +260,7 @@ result.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`,
 `native_decide` and undeclared axioms, in the controls too. It checks the
-exact type and axioms of the 55 names in `statements/INVENTORY.md`, runs
+exact type and axioms of the 59 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
 `gate_test.sh` plants 22 cheats; each must make the gate fail.
 

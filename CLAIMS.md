@@ -1,12 +1,13 @@
 # Claims
 
-The fifteen core theorems (nine base, six epoch), each with its Lean
-name, English, spec clause and hypothesis. The statement files
-`LeanShieldedPool/Statements/L3.lean`, `L4.lean`, `L4B.lean` and
-`L5.lean` are the source of truth. The gate checks the type of each
-name against `statements/INVENTORY.md`. These fifteen are the repo's
-claim; the gated extension at the end of this file is supporting
-material, not a sixteenth claim.
+The fifteen core theorems (nine base, six epoch) and two root-window
+results, each with its Lean name, English, spec clause and hypothesis.
+The statement files `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
+`L4B.lean`, `L5.lean` and `Window.lean` are the source of truth. The
+gate checks the type of each name against `statements/INVENTORY.md`.
+These fifteen are the repo's claim; the root-window results and the
+gated extension at the end of this file are supporting material, not
+further claims.
 
 ## How to read a row
 
@@ -137,6 +138,32 @@ insertion proof's nullifier lists are equal) is simplification 4 of
 not a premise of these six theorems. No verifier correspondence
 theorem is supplied.
 
+## The two root-window theorems
+
+Stated in `Statements/Window.lean`, proved in `Proofs/Window.lean`, over
+the base model (not the epoch model). Issue #2 asked for both. They are
+supporting results, not part of the nine-theorem claim. Spec clauses
+refer to spec 2 at 4d4dce1.
+
+| # | Lean name | English | Spec clause | Hypothesis |
+|---|---|---|---|---|
+| 16 | `windowBoundary_proof` | Every window entry is 0 (the empty tree) or the leaf count of the state after some nonempty accepted prefix of the same history. So the window holds operation boundaries only, never the root between a transfer's two inserts. | 4.4 (260-263) | none |
+| 17 | `honestWithdraw_proof` | The owner of a note in the current tree, with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root, the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none |
+
+Row 16 is model evidence for the bug class of pocs-private#12: the
+control `controls/refute_window_intermediate.lean` makes the transfer
+also record its between-insert root and proves the negation; the weak
+bound "every entry is at most the leaf count" still holds on that
+mutant, so the boundary form is the one with content. Row 16 says
+nothing about zero or repeated hash roots (pocs-private#15), exact
+eviction, or the contract. Row 17 is model liveness: the model accepts
+the step and debits the pool's per-token field; there is no recipient
+balance and no ERC-20 in the model. The balance premise stays a
+premise; the note must be in the ghost `minted` list. The control
+`controls/refute_honestwithdraw_norecord.lean` (a deposit that does not
+record its root) proves the negation. Neither theorem has a positive
+control; the two refutation controls are their content check.
+
 ## What the base rows mean
 
 - Theorems 2 and 3 are the claim. Theorem 1 follows from the
@@ -181,13 +208,20 @@ its private helpers (`Proofs/Conservation.lean:23`, `:166`, `:183`,
 and balance equals live value call value conservation and inherit the
 dependency (`Proofs/TierAConditional.lean`). The epoch base-case proof
 transports the range and root-window conjuncts
-into the accepted base run it constructs. Beyond that transport, no
-theorem consumes the root-window conjuncts; they keep the model's
-accepted set aligned with the contract. None of this verifies concrete
-root-window code or machine arithmetic; root-window correctness and
+into the accepted base run it constructs. Beyond that transport, and
+beyond row 15, which discharges the epoch model's window conjunct
+through its own `Run.window_head` (`Proofs/Epoch.lean`), none of the
+fifteen theorems consumes the root-window conjuncts; they keep the
+model's accepted set aligned with the contract. Rows 16 and 17 are the
+base results that read the window: `windowBoundary` states what the
+window contains, and `honestWithdraw` discharges the withdraw guard's
+window conjunct from the base `Run.window_head` and its range conjunct
+from `Run.runNotes_wf`. None of this verifies concrete root-window code
+or machine arithmetic; root-window correctness of the contract and
 range enforcement are not among the claims. The root-window conformance
-bug fixed in pocs-private#12 is an example of a bug these theorems
-cannot see.
+bug fixed in pocs-private#12 is the bug class that row 16's control
+reproduces in the model; the theorems still cannot see the contract's
+code.
 
 ## Checks that the theorems have content
 
@@ -218,11 +252,13 @@ cannot see.
   replay function is the mutated part. The file must build, so an
   unrelated unsolved goal in its setup cannot be mistaken for success.
   `controls/refute_l3_double_spend.lean` states the three parts as
-  three theorems; the eleven others end in one theorem that negates a
+  three theorems; the thirteen others end in one theorem that negates a
   universal statement over the mutated model (for replay: over the real
-  `Run`, with the lossy replay). None claims the negation of an
-  original theorem, which quantifies over the real `Run` or the real
-  epoch model.
+  `Run`, with the lossy replay).
+  `controls/refute_window_intermediate.lean` adds a second theorem,
+  `weak_holds`, which shows that the weak bound survives its mutation.
+  None claims the negation of an original theorem, which quantifies over
+  the real `Run` or the real epoch model.
 - The extension's refutation controls (below) mutate a frozen definition
   instead of a guard: one drops the injectivity of the atom renamings,
   one deletes the last-owner equation of the anonymity-set definition.
