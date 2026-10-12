@@ -107,8 +107,8 @@ check for a ballast (`ShieldedPoolExt.sol:268-270`;
 the circuit: `TransferData.guard` requires `isBallast ∨ ChainFacts` for
 the second input (simplification 7), and row 10 counts value-bearing
 consumption only (`Tx.valueConsumes`). The deviation between the
-extension spec and the circuit is flagged to the spec owner in the PR #5
-review (thread on the ballast chain check); if the
+extension spec and the circuit is proposed as a one-paragraph spec exception in
+pocs-private PR #18; if the
 circuit changes to check ballast too, the guard can take the stronger
 form and row 10 can count ballast again.
 
