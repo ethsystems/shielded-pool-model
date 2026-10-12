@@ -262,9 +262,11 @@ logs injections and permutations give the same relation
 **The target.** The protected attribute is the owner of the first
 output of the last transfer (`lastTransferFirstOwner`). Not every
 recipient, not a withdrawal address, not every accepted log. In both
-toys every explanation has the same spend key, input owner and `out2`
-owner; only the owner of `out1` varies, so the sender and the change
-owner have an anonymity set of size 1. The phrase "anonymity set" also
+toys every explanation in the proved families has the same spend key,
+input owner and `out2` owner; only the owner of `out1` varies, so those
+families give the sender and the change owner an anonymity set of
+size 1. `explanations` itself does not fix those fields, and no theorem
+bounds them. The phrase "anonymity set" also
 differs from the spec's: in spec 458-459 it is pool traffic, and a
 quiet pool gives weak anonymity; here it is a set of possible recipient
 keys, and `ManyRecipientToy.candidate` gives any k from a pool with one
@@ -296,8 +298,10 @@ proved, and they are distinct results:
   (`pairwise_obs`, `cmPerm`). Collision freedom holds within each
   history (`crypto`) and across any two histories' combined witnesses
   (`crypto_cross_history`). The toys' `commit` is still not a hash:
-  `Nat.pair` is injective, so a collision cannot occur at all, which
-  is stronger than what a hash gives.
+  `Nat.pair owner salt` binds the owner and the salt but ignores the
+  token and the amount, so two notes with the same owner and salt
+  collide. Collision freedom is proved for the witness histories named
+  above, not in general.
 
 **A limit of `explanations`.** An explanation matches the log only up
 to `ObsEquiv`, and `Event` carries no token, amount, address or root.
