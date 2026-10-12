@@ -43,7 +43,7 @@ gate test.
 - The root-window bug in the contract is not a claim of this repo (part 7).
   The root-window theorems (`windowBoundary`, `honestWithdraw`) state
   what the model's window contains and that an honest owner can
-  withdraw; they do not prove exact retention of 100 roots or anything
+  withdraw (premises in CLAIMS.md row 11); they do not prove exact retention of 100 roots or anything
   about the contract (zero and repeated roots are pocs-private#15).
 - The spec reading is human and still open (part 5).
 
@@ -91,7 +91,8 @@ eyes.
    numbers refer to it.
 2. Read SPEC-MAP.md. The 16 simplifications are modelling choices, not
    hypotheses.
-3. Read `Statements/L3.lean`, `L4.lean` and `L4B.lean` with CLAIMS.md.
+3. Read `Statements/L3.lean`, `L4.lean`, `L4B.lean` and `Window.lean`
+   with CLAIMS.md.
 
 Questions:
 

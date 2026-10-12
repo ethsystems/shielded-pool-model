@@ -148,18 +148,18 @@ refer to spec 2 at 4d4dce1.
 | # | Lean name | English | Spec clause | Hypothesis |
 |---|---|---|---|---|
 | 16 | `windowBoundary_proof` | Every window entry is 0 (the empty tree) or the leaf count of the state after some nonempty accepted prefix of the same history. So the window holds operation boundaries only, never the root between a transfer's two inserts. | 4.4 (260-263) | none |
-| 17 | `honestWithdraw_proof` | The owner of a note in the current tree, with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root, the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none |
+| 17 | `honestWithdraw_proof` | The owner of a note that the pool minted (the ghost `minted` list behind the tree), with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root, the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none |
 
 Row 16 is model evidence for the bug class of pocs-private#12: the
 control `controls/refute_window_intermediate.lean` makes the transfer
 also record its between-insert root and proves the negation; the weak
-bound "every entry is at most the leaf count" still holds on that
-mutant, so the boundary form is the one with content. Row 16 says
+bound "every entry is at most the leaf count" still holds on the same
+counterexample history, so the boundary form is the one with content. Row 16 says
 nothing about zero or repeated hash roots (pocs-private#15), exact
 eviction, or the contract. Row 17 is model liveness: the model accepts
 the step and debits the pool's per-token field; there is no recipient
 balance and no ERC-20 in the model. The balance premise stays a
-premise; the note must be in the ghost `minted` list. The control
+premise. The control
 `controls/refute_honestwithdraw_norecord.lean` (a deposit that does not
 record its root) proves the negation. Neither theorem has a positive
 control; the two refutation controls are their content check.
@@ -256,7 +256,8 @@ code.
   universal statement over the mutated model (for replay: over the real
   `Run`, with the lossy replay).
   `controls/refute_window_intermediate.lean` adds a second theorem,
-  `weak_holds`, which shows that the weak bound survives its mutation.
+  `weak_holds`, which shows that the weak bound holds on the same
+  counterexample history.
   None claims the negation of an original theorem, which quantifies over
   the real `Run` or the real epoch model.
 - The extension's refutation controls (below) mutate a frozen definition

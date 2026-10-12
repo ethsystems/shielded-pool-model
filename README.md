@@ -45,7 +45,7 @@ symbolic k-anonymity").
 Two further results about the historical-root window (spec 2 section
 4.4, issue #2) sit outside the fifteen and are gated with them: every
 window entry is an operation boundary (`windowBoundary`), and the owner
-of a note in the current tree, with a fresh nullifier, a nonzero amount
+of a note that the pool minted, with a fresh nullifier, a nonzero amount
 and enough pool balance, has an accepted withdrawal at the current root
 (`honestWithdraw`). Both are over the base model. No exact-retention
 claim and no claim about the contract's window code. Files:
