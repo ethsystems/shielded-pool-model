@@ -60,11 +60,11 @@ in SPEC-MAP.md. They do not extend the guarantees attributed to spec 2.
 
 | # | Lean name | English | Extension spec clause | Hypothesis |
 |---|---|---|---|---|
-| 10 | `crossEpochNoDoubleSpend_proof` | No commitment of a note with nonzero amount is consumed twice across an accepted history, including rollovers. A zero-amount second input (ballast) is excluded: the circuit skips its chain check, so a ballast commitment can be consumed again in a later epoch; no value moves. | Guarantees: cross-epoch double-spend safety (436), for value-bearing inputs | epoch `Candidates.CryptoHyp` |
+| 10 | `crossEpochNoDoubleSpend_proof` | No commitment of a note with nonzero amount is consumed twice across an accepted history, including rollovers. A zero-amount second input (ballast) is excluded: the circuit skips its chain check, so a ballast commitment can be consumed again in a later epoch; it carries zero value. | Guarantees: cross-epoch double-spend safety (436), for value-bearing inputs | epoch `Candidates.CryptoHyp` |
 | 11 | `frozenRootImmutability_proof` | After rollover, every accepted suffix preserves the newly sealed nullifier list and all older sealed lists. A frame property of the step relation: it holds from any state, because only rollover writes `frozen`. | On-Chain State (163); sealed data is immutable (205) | accepted suffix |
 | 12 | `canonicalAppend_proof` | Each non-rollover step appends fresh nullifiers in spend order. The same holds for any segment whose endpoint epochs agree. | On-Chain State (161, 167); Insertion Circuit (394-405) | accepted step or segment; unchanged epoch |
 | 13 | `chainKeyBinding_proof` | All consuming witnesses for one commitment use the same owned note and the same run key. | Spend Circuit (366, 372); the chain key binding of 336-337 is assumed (simplification 2), not proved | epoch `Candidates.CryptoHyp` |
-| 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover; `BallastStamped` (every ballast created in epoch 0) |
+| 14 | `epochZeroRefinesBase_proof` | A run without rollover translates to an accepted base run with matching state, hypotheses and consumption log. The refinement is one way: an epoch model that rejects honest base runs still satisfies it. | Diff vs Parent (47-62) | epoch `Candidates.CryptoHyp`; no rollover; `BallastStamped` (every transfer's second input carries creation epoch 0) |
 | 15 | `spendableAfterRollover_proof` | After a rollover, an owned, unspent note in the tree with a clear history passes the withdraw guard at the current root; this is model liveness, not a payout claim. | Guarantees (436, second sentence); Chain Maintenance (267) | owner key; nonzero amount; enough pool balance; clear history (its nullifier is in no sealed list since creation and not in the active list) |
 
 Rows 10, 13, 14 and 15 quantify over accepted epoch runs. The epoch
@@ -87,22 +87,28 @@ proposition to the epoch consumption claim (over `Tx.valueConsumes`, a
 sublist of the base consumption log). It does not prove a recursive
 circuit's base case (extension spec 324-340), or conservation for
 arbitrary epoch runs. Its `BallastStamped` premise says every transfer's
-second input was created in epoch 0: what an honest client does in a run
-without rollover (extension spec 267-269), and not something the code
-enforces for a zero-amount input.
+second input carries creation epoch 0. For a value-bearing second input
+this already follows from the chain check in a run without rollover; for
+a ballast it is an assumption about the client: the spec gives every
+created note `epoch_created = currentEpoch` (263, 269), which is 0 before
+any rollover, but says nothing about what a ballast carries, and the code
+does not constrain it.
 
 **Ballast and the chain check.** The extension spec states the chain
 check per input note with no ballast exception (358-366). The reference
 transfer circuit skips both the membership and the chain check for a
 zero-amount second input
 (`shielded-pool-extension/circuits/transfer/src/main.nr:143-156`), and
-the contract then accepts any `epoch_created` and accumulator for that
-input (`ShieldedPoolExt.sol:268-270`; `expectedChainAccumulator` returns
-0 when `epochCreated` is at or above `currentEpoch`). The model follows
+the contract then accepts any caller-supplied `epoch_created` for that
+input and derives the accumulator from it, which the circuit does not
+check for a ballast (`ShieldedPoolExt.sol:268-270`;
+`expectedChainAccumulator` returns 0 when `epochCreated` is at or above
+`currentEpoch`). The model follows
 the circuit: `TransferData.guard` requires `isBallast ∨ ChainFacts` for
 the second input (simplification 7), and row 10 counts value-bearing
 consumption only (`Tx.valueConsumes`). The deviation between the
-extension spec and the circuit is to be raised in pocs-private; if the
+extension spec and the circuit is flagged to the spec owner in the PR #5
+review (thread on the ballast chain check); if the
 circuit changes to check ballast too, the guard can take the stronger
 form and row 10 can count ballast again.
 

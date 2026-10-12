@@ -252,8 +252,9 @@ abstractions. It adds these limits:
   admits the step; nothing is said about relayers, proofs or tokens.
 - A zero-amount second input (ballast) passes the transfer guard without a
   chain check and with an unconstrained creation epoch, as in the circuit.
-  Row 10 counts only value-bearing consumption; row 14 assumes epoch-0
-  ballast (`Candidates.BallastStamped`).
+  Row 10 counts only value-bearing consumption; row 14 assumes every
+  transfer's second input carries creation epoch 0
+  (`Candidates.BallastStamped`).
 - `EpochDistinct` is defined but unused by these six theorems. Hash
   collisions can reject valid spends without violating at-most-once safety.
 - The base reduction fixes hashes at epoch zero and compares nullifier
