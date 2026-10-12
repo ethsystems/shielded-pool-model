@@ -41,6 +41,10 @@ gate test.
 - The research repo's toy and smoke theorems are not here, except the
   toy instances inside the k-anonymity extension file.
 - The root-window bug in the contract is not a claim of this repo (part 7).
+  The root-window theorems (`windowBoundary`, `honestWithdraw`) state
+  what the model's window contains and that an honest owner can
+  withdraw; they do not prove exact retention of 100 roots or anything
+  about the contract (zero and repeated roots are pocs-private#15).
 - The spec reading is human and still open (part 5).
 
 ## 3. How to check
@@ -63,7 +67,7 @@ btrfs or XFS.
 
 The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
 and unlisted axioms, in the controls too. It checks the exact type and
-axioms of the 55 inventory names, runs the controls, and checks the pins last.
+axioms of the 59 inventory names, runs the controls, and checks the pins last.
 `gate_test.sh` plants 22 cheats; each must make the gate fail.
 
 ## 4. Trust base
@@ -120,11 +124,11 @@ and `Statements/L5.lean`. Check these points:
 
 ## 6. What the theorems do not say
 
-The fifteen core theorems say nothing about the verifier, concrete Merkle
-implementations, encoded amounts, deployed caller and authorization
-behavior, re-entrancy, overflow, governance, privacy, or deployed code
-(the extension's symbolic observer result is not a privacy claim about
-any of these either). A nullifier
+The fifteen core theorems and the two root-window results say nothing
+about the verifier, concrete Merkle implementations, encoded amounts,
+deployed caller and authorization behavior, re-entrancy, overflow,
+governance, privacy, or deployed code (the extension's symbolic observer
+result is not a privacy claim about any of these either). A nullifier
 collision can lock a note, and locked value counts as live.
 `spendRequiresOwnerKey` is owner-key binding at the model level only; key
 secrecy and custody are out of the model.
