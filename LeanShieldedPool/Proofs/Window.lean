@@ -72,21 +72,29 @@ theorem windowBoundary_proof (P : PrimSpec) : windowBoundary P := by
         · exact Or.inr ⟨txs, tx, st, st', List.prefix_refl _, hr, hs, h⟩
         · exact boundary_extend (ih s h)
 
-theorem honestWithdraw_proof (P : PrimSpec) : honestWithdraw P := by
-  intro sup txs st hr k n r hn hown hfresh hne hbal
-  have hwin : st.rootInWindow st.leaves.length :=
-    List.mem_of_mem_head? hr.window_head
-  have htree : st.inTreeAt st.leaves.length n.cm := by
-    unfold St.inTreeAt
-    rw [List.take_length]
+theorem honestWithdrawWindow_proof (P : PrimSpec) : honestWithdrawWindow P := by
+  intro sup txs st hr k n r s hs hn hown hfresh hne hbal
+  have htree : st.inTreeAt s n.cm := by
+    show n.cm ∈ (st.minted.map Note.cm).take s
+    rw [← List.map_take]
     exact List.mem_map_of_mem hn
-  have hwf : U128 n.amount := hr.runNotes_wf n (hr.minted_mem_runNotes hn)
-  have hg : WithdrawData.guard ⟨k, n, r, st.leaves.length⟩ st :=
-    ⟨hwin, htree, hown, hfresh, hne, hwf, hbal⟩
+  have hwf : U128 n.amount :=
+    hr.runNotes_wf n (hr.minted_mem_runNotes (List.mem_of_mem_take hn))
+  have hg : WithdrawData.guard ⟨k, n, r, s⟩ st :=
+    ⟨hs, htree, hown, hfresh, hne, hwf, hbal⟩
   refine ⟨_, Step.withdraw hg, Run.step hr (Step.withdraw hg), ?_⟩
   show drop st.balance n.token n.amount n.token + n.amount = st.balance n.token
   rw [show drop st.balance n.token n.amount n.token = st.balance n.token - n.amount
     from if_pos rfl]
   exact Nat.sub_add_cancel hbal
+
+theorem honestWithdraw_proof (P : PrimSpec) : honestWithdraw P := by
+  intro sup txs st hr k n r hn hown hfresh hne hbal
+  have hwin : st.leaves.length ∈ st.window := List.mem_of_mem_head? hr.window_head
+  have hmem : n ∈ st.minted.take st.leaves.length := by
+    show n ∈ st.minted.take (st.minted.map Note.cm).length
+    rw [List.length_map, List.take_length]
+    exact hn
+  exact honestWithdrawWindow_proof P sup txs st hr k n r _ hwin hmem hown hfresh hne hbal
 
 end LeanShieldedPool
