@@ -236,10 +236,11 @@ The level names come from the research repo:
 5. The statements: `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
    `L4B.lean`, `L5.lean`, `Window.lean`, and `statements/INVENTORY.md`.
 6. The proofs: `LeanShieldedPool/Proofs/` and `Draft/NonVacuity.lean`.
-7. The controls: `controls/`. Each base or epoch refutation control
-   weakens one guard, post-state or replay step; the two extension
-   refutation controls mutate a frozen definition instead. Each proves
-   the negation of a frozen statement over its mutation; it must build.
+7. The controls: `controls/`. Each base, epoch or window refutation
+   control changes one guard, post-state or replay step; the two
+   extension refutation controls mutate a frozen definition instead. Each
+   proves the negation of a frozen statement over its mutation; it must
+   build.
 8. The gate: `scripts/gate.sh`.
 
 REVIEW.md is the reviewer guide.
