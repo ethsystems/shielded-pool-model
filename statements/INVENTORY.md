@@ -69,8 +69,10 @@ LeanShieldedPool.KAnonymity.not_obsEquiv_of_shapes_ne :: ∀ {P : LeanShieldedPo
 LeanShieldedPool.KAnonymity.constant_commit_blocks_transfer :: ∀ {P : LeanShieldedPool.PrimSpec} (c : LeanShieldedPool.PrimSpec.Commitment P) (hc : ∀ (token : LeanShieldedPool.PrimSpec.Token P) (amount : Nat) (owner : LeanShieldedPool.PrimSpec.PubKey P) (salt : LeanShieldedPool.PrimSpec.Salt P), @Eq.{1} (LeanShieldedPool.PrimSpec.Commitment P) (LeanShieldedPool.PrimSpec.commit P token amount owner salt) c) (d : LeanShieldedPool.TransferData P) (st : LeanShieldedPool.St P), Not (@LeanShieldedPool.TransferData.guard P d st)
 # Root-window statement Props and theorems (issue #2, 2026-10-07, dispatch/xo-night-rootwindow):
 LeanShieldedPool.windowBoundary :: (P : LeanShieldedPool.PrimSpec) → Prop
+LeanShieldedPool.windowHead :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.honestWithdrawWindow :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.honestWithdraw :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.windowBoundary_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.windowBoundary P
+LeanShieldedPool.windowHead_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.windowHead P
 LeanShieldedPool.honestWithdrawWindow_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.honestWithdrawWindow P
 LeanShieldedPool.honestWithdraw_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.honestWithdraw P

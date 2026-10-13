@@ -3,19 +3,21 @@ import LeanShieldedPool.Pool.Tx
 /-!
 # Root-window statements (issue #2)
 
-The historical-root window holds only operation boundaries (Section 4.4).
-An honest owner can withdraw against any root in the window, and so
-against the current root. No cryptographic hypotheses.
+The historical-root window holds only operation boundaries, and the root
+after each operation's final insertion enters it (Section 4.4). An
+honest owner can withdraw against any root in the window, and so against
+the current root. No cryptographic hypotheses.
 -/
 
 namespace LeanShieldedPool
 
-/-- **Window boundary** (Section 4.4: a root enters the window only after
-an operation's final insertion). Every window entry is 0 (the empty tree)
-or the leaf count of the state after some accepted prefix of the same
-history. The right side does not read the window. An intermediate root,
-such as the one banked between the two transfer inserts before
-pocs-private#12, breaks it. -/
+/-- **Window boundary** (Section 4.4, the half "intermediate roots do
+not" enter). Every window entry is 0 (the empty tree) or the leaf count of
+the state after some accepted prefix of the same history. The right side
+does not read the window. This bounds what can enter; it does not say
+that anything enters (a model that never pushes satisfies it). The other
+half is `windowHead`. An intermediate root, such as the one banked
+between the two transfer inserts before pocs-private#12, breaks it. -/
 def windowBoundary (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st → ∀ s ∈ st.window,
@@ -23,6 +25,13 @@ def windowBoundary (P : PrimSpec) : Prop :=
       ∃ (pre : List (Tx P)) (tx : Tx P) (st₀ st₁ : St P),
         pre ++ [tx] <+: txs ∧ Run sup pre st₀ ∧ Step st₀ tx st₁ ∧
         s = st₁.leaves.length
+
+/-- **Window head** (Section 4.4, the half "the root recorded after the
+final insertion of each operation enters the window"). After every
+accepted history, the newest window entry is the current leaf count. -/
+def windowHead (P : PrimSpec) : Prop :=
+  ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
+    Run sup txs st → st.window.head? = some st.leaves.length
 
 /-- **Honest withdrawal at a window root** (issue #2, liveness; Section
 4.4, "accept proofs against any root in the window"). For any root `s`
