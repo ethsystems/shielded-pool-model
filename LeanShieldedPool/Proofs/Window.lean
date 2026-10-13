@@ -72,6 +72,9 @@ theorem windowBoundary_proof (P : PrimSpec) : windowBoundary P := by
         · exact Or.inr ⟨txs, tx, st, st', List.prefix_refl _, hr, hs, h⟩
         · exact boundary_extend (ih s h)
 
+theorem windowHead_proof (P : PrimSpec) : windowHead P :=
+  fun _ _ _ hr => hr.window_head
+
 theorem honestWithdrawWindow_proof (P : PrimSpec) : honestWithdrawWindow P := by
   intro sup txs st hr k n r s hs hn hown hfresh hne hbal
   have htree : st.inTreeAt s n.cm := by

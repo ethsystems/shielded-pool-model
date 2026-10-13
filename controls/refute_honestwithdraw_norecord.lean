@@ -1,15 +1,17 @@
--- Refutation control for `honestWithdraw_proof`. This file MUST BUILD.
+-- Refutation control for `honestWithdraw_proof` and `windowHead_proof`.
+-- This file MUST BUILD.
 -- The deposit post-state does NOT push its root into the window. Every
 -- guard and every other post-state is the real one. After one 5-unit
--- deposit the window is still [0], so the honest owner's withdrawal
--- against the current root (1 leaf) has no accepted step. In the model
--- the current root is accepted only through the window, so the missing
--- push blocks it. The contract would still accept that withdrawal:
--- `isKnownRoot` accepts the current root before it reads the window
--- (ShieldedPool.sol:314 at pocs-private a04b8b3). This control checks the
--- model's push, not the contract. `refute_honestwithdraw_currentroot.lean`
--- checks old roots. The final theorem proves the explicit negation of the
--- frozen Prop, restated over the mutated model's runs.
+-- deposit the window is still [0]: the newest entry is not the current
+-- leaf count, and the honest owner's withdrawal against the current root
+-- (1 leaf) has no accepted step. In the model the current root is
+-- accepted only through the window, so the missing push blocks it. The
+-- contract would still accept that withdrawal: `isKnownRoot` accepts the
+-- current root before it reads the window (ShieldedPool.sol:314 at
+-- pocs-private a04b8b3). This control checks the model's push, not the
+-- contract. `refute_honestwithdraw_currentroot.lean` checks old roots.
+-- The final theorems prove the explicit negations of the frozen Props,
+-- restated over the mutated model's runs.
 import LeanShieldedPool.Proofs.TierB
 
 namespace LeanShieldedPool
@@ -69,6 +71,17 @@ theorem honest_counterexample :
       have hw : (1 : Nat) ∈ stNR.window := hg.1
       rw [window_eq] at hw
       exact absurd hw (by decide)
+
+/-- `windowHead`, restated over the mutated model's runs, is FALSE: after
+the accepted deposit the newest window entry is 0, the leaf count is 1. -/
+theorem head_counterexample :
+    ¬ ∀ (txs : List (Tx Toy)) (st : St Toy), RunNR txs st →
+      st.window.head? = some st.leaves.length := by
+  intro h
+  have hh := h _ _ accepted
+  have hl : stNR.leaves.length = 1 := rfl
+  rw [window_eq, hl] at hh
+  exact absurd hh (by decide)
 
 end NegHonestWithdrawNoRecord
 end LeanShieldedPool
