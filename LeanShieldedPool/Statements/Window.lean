@@ -3,10 +3,11 @@ import LeanShieldedPool.Pool.Tx
 /-!
 # Root-window statements (issue #2)
 
-The historical-root window holds only operation boundaries, and the root
-after each operation's final insertion enters it (Section 4.4). An
-honest owner can withdraw against any root in the window, and so against
-the current root. No cryptographic hypotheses.
+The historical-root window holds only operation boundaries, the root
+after each operation's final insertion enters it, and no root between a
+transfer's two inserts is in it (Section 4.4). An honest owner can
+withdraw against any root in the window, and so against the current
+root. No cryptographic hypotheses.
 -/
 
 namespace LeanShieldedPool
@@ -32,6 +33,17 @@ accepted history, the newest window entry is the current leaf count. -/
 def windowHead (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st → st.window.head? = some st.leaves.length
+
+/-- **No mid-transfer root** (Section 4.4, "intermediate roots do not"
+enter). For every accepted transfer in a history, the leaf count between
+its two inserts (one more than the count before the transfer) is not in
+the window at the end of the history. -/
+def noMidTransferRoot (P : PrimSpec) : Prop :=
+  ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
+    Run sup txs st →
+    ∀ (pre : List (Tx P)) (d : TransferData P) (st₀ : St P),
+      pre ++ [.transfer d] <+: txs → Run sup pre st₀ →
+      st₀.leaves.length + 1 ∉ st.window
 
 /-- **Honest withdrawal at a window root** (issue #2, liveness; Section
 4.4, "accept proofs against any root in the window"). For any root `s`

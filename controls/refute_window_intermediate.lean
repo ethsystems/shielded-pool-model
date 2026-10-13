@@ -1,12 +1,14 @@
--- Refutation control for `windowBoundary_proof`. This file MUST BUILD.
+-- Refutation control for `windowBoundary_proof` and
+-- `noMidTransferRoot_proof`. This file MUST BUILD.
 -- The transfer post-state ALSO records the root between its two inserts
 -- (leaf count + 1): the intermediate-root bug that pocs-private#12 fixed.
 -- Every guard is the real one. After one deposit and one transfer the
 -- window is [3, 2, 1, 0]. Entry 2 is not an operation boundary: the
--- accepted prefixes of that history end at 1 and 3 leaves. The final
--- theorems prove the explicit negation of the frozen Prop, restated over
--- the mutated model's runs, and show that the weak bound
--- `s ≤ leaf count` still holds on the same history.
+-- accepted prefixes of that history end at 1 and 3 leaves, and 2 is the
+-- count between the transfer's two inserts. The final theorems prove the
+-- explicit negations of the two frozen Props, restated over the mutated
+-- model's runs, and show that the weak bound `s ≤ leaf count` still holds
+-- on the same history.
 import LeanShieldedPool.Proofs.TierB
 
 namespace LeanShieldedPool
@@ -105,6 +107,23 @@ theorem boundary_counterexample :
     · rw [hl] at hsum
       rw [hsum] at hlen
       exact absurd hlen (by decide)
+
+/-- `noMidTransferRoot`, restated over the mutated model's runs, is FALSE:
+the transfer follows a prefix that ends at 1 leaf, and 2 is in the
+window. -/
+theorem midroot_counterexample :
+    ¬ ∀ (txs : List (Tx Toy)) (st : St Toy), RunMid txs st →
+      ∀ (pre : List (Tx Toy)) (d : TransferData Toy) (st₀ : St Toy),
+        pre ++ [.transfer d] <+: txs → RunMid pre st₀ →
+        st₀.leaves.length + 1 ∉ st.window := by
+  intro h
+  have hpre : RunMid [.deposit d0] (d0.post st0) :=
+    RunMid.step RunMid.empty (StepMid.deposit deposit_guard)
+  have h2 : (d0.post st0).leaves.length + 1 ∈ stMid.window := by
+    show (2 : Nat) ∈ stMid.window
+    rw [window_eq]
+    decide
+  exact h txs stMid accepted [.deposit d0] t0 (d0.post st0) (List.prefix_refl _) hpre h2
 
 /-- The weak bound misses the bug: on the same accepted history every
 window entry is at most the leaf count. -/
