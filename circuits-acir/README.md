@@ -1,13 +1,19 @@
 # circuits-acir: compiled-constraint proofs for deposit, withdraw and transfer
 
 This package proves range and linear rules over the compiled constraints of the three
-shielded-pool Noir circuits. Its input is what the compiler emitted, not the Noir
-source: the ACIR printed by `noir-inspector` for the beta.21 artifacts of
-ethsystems/pocs-private `a04b8b3`. A Python extractor turns each print into Lean data, a
-small semantics gives it meaning, and the Lean kernel checks the theorems. The package
-is separate from the model in the parent directory: it has its own lakefile, uses the
-same toolchain (Lean 4.33.1, core only, no Mathlib), and imports no model module. Nothing
-here changes the claim in the parent README.
+shielded-pool Noir circuits. Its input is what the compiler emitted, not the Noir source:
+the ACIR printed by `noir-inspector` for the beta.21 artifacts of the circuits committed
+at `a04b8b3` of ethsystems/pocs (public; ethsystems/pocs-private has the same commit). A
+Python extractor turns each print into Lean data, a small semantics gives it meaning, and
+the Lean kernel checks the theorems. The package is separate from the model in the parent
+directory: it has its own lakefile, uses the same toolchain (Lean 4.33.1, core only, no
+Mathlib), and imports no model module. Nothing here changes the claim in the parent
+README.
+
+The pin is not the latest circuit. ethsystems/pocs-private pull request 16 (`748884e`,
+merged 2026-10-08) changed `circuits/transfer/src/main.nr` and `TransferVerifier.sol`
+after `a04b8b3`. The package stays at the pin; the newer transfer circuit is not covered
+here.
 
 ## The theorems
 
@@ -185,6 +191,6 @@ same text as the archived `Data.lean`. New here: `Deposit/Solved.lean` (now
 `Neg/TransferNoRange.lean` now
 describes a failed proof attempt, after that review.
 
-The inputs derive from pocs-private sources, and the witnesses from its private
-`Prover.toml` fixtures. Keep this package private with the rest of the repo; review it
-again before any public release.
+The inputs derive from the circuit sources at `a04b8b3`, and the witnesses from the
+`Prover.toml` fixtures committed there; that commit is public in ethsystems/pocs. Keep
+this package private with the rest of the repo; review it again before any public release.

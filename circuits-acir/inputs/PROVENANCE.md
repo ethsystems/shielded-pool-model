@@ -41,11 +41,17 @@ remain to preserve the archived artifact hashes.
   `Nargo.toml` sha256: deposit 943dd0ccf79c52d54fe7b82c8eb9c714ab4b186c4e225fc8316f5c17bc1ec4c3,
   withdraw bf3f9ce44081660bad67a0ad775af00e0603b9066dc5d8739ba03523f82d60d1,
   transfer e5fd8e9f7835106096fb5da834ebc00ec95ab3c71e8b17963403fa81ba34fc18.
+- Public copy and later changes: the public repo ethsystems/pocs
+  (https://github.com/ethsystems/pocs) has the same commit; its master pointed at it on
+  2026-10-13. After the pin, ethsystems/pocs-private pull request 16 (`748884e`, merged
+  2026-10-08) changed `circuits/transfer/src/main.nr` and
+  `contracts/src/verifiers/TransferVerifier.sol`. The package stays at `a04b8b3`; the
+  newer transfer circuit is not covered here.
 - Witness inputs: the committed `Prover.toml` of each circuit at the same revision
   (sha256 deposit d35f0c1de32062769a1e2711a580e153975a8d1d3109c3c53afd015f20199322,
   withdraw 1ad20cfd7cd091b38dbaa9fe7e161913bb80a40a3f5f2051d56af87403e69fc2,
   transfer 96620f05ad8f524fa43b123c942e3bb343c8c708f5dcde14160f342425f6e922).
-  These files are not included.
+  These files are not included; they are public in ethsystems/pocs at the same commit.
 - Noir dependencies: poseidon v0.3.0 (git 0880c371), binary-merkle-root v0.0.2
   (git ff307011).
 - Tools: nargo 1.0.0-beta.21, noirc 1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277
