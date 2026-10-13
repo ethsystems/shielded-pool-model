@@ -29,4 +29,12 @@ theorem control_bound_500_false :
     ¬ ∀ w : Assignment, circuit.Satisfied w → (w 2).val < 500 := fun hall =>
   absurd (hall solved solved_satisfies) (by rw [solved_values]; decide)
 
+/-- The RANGE opcode alone allows amount `2^127`, the smallest amount that breaks a 127-bit
+    bound: it accepts the solved witness with w2 set to `2^127`. This shows only that the
+    RANGE opcode gives no 127-bit bound. It does not show that the whole circuit accepts
+    amount `2^127`. -/
+theorem control_range_alone_allows_2_pow_127 :
+    (Opcode.range 2 128).check (setW solved 2 (2 ^ 127)) = true := by
+  decide +kernel
+
 end AcirLean.Deposit

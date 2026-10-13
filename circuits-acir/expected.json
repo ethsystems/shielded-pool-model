@@ -261,7 +261,7 @@
  },
  "source_files": {
   "AcirLean/Deposit/Amount.lean": "25a0a1814f016fe672c4e8a042912b9c34a6c7386118f5861190d1d0e87d39b8",
-  "AcirLean/Deposit/Controls.lean": "278b737b490d6d46d0d71f7c150e7b145af23068e05a174cab380a85fff66bb5",
+  "AcirLean/Deposit/Controls.lean": "6b037fabfc8417ed264252c28f563257f22857da2a21fdd214e10df17c542b19",
   "AcirLean/Deposit/Solved.lean": "4c534f8bfbf93380676c39dc19131a854417f8786ad0488df47d80edbabd6085",
   "AcirLean/Linear.lean": "e28389d51a337baf13e2fb1a6dc708a61f872b8f978ebbe9aea30d1c78be21df",
   "AcirLean/Semantics.lean": "8ae4ca3a8579af8b2409d1e93dcedb1707d02357636a95ba6b986bde7bce2765",
@@ -269,7 +269,7 @@
   "AcirLean/Transfer/Rules.lean": "08dc420b67532f6a20a6fb9673f53f40abb78648032813463e99de54837411ae",
   "AcirLean/Transfer/Solved.lean": "d8d3933c427b50af5cd3121e52c7f5d94c0fc34a7f8d29a7efc64e64a6b911b8",
   "AcirLean/Withdraw/Amount.lean": "018f5bc6abfd166037e5864763bc2aec6f2576bc8589583565bc22ffe17a2c6b",
-  "AcirLean/Withdraw/Controls.lean": "9d61de895fe05fa78b860d7c9051e37b601d433ee840c1b48cfb94383cdfcc86",
+  "AcirLean/Withdraw/Controls.lean": "69bdb3138892dca9c71a912984ac65a3846dec6c6c98849bd7d085d9f3933e68",
   "AcirLean/Withdraw/Solved.lean": "f2a70def09a198a85212617ebdd1b5d710ec65df5abcaf54d31f20c56b823daa",
   "AcirLean/Witness.lean": "aaf9fc18074ea50bdb045c850e7b795b58956c4a54f3140f4dd5d43a3005b108",
   "Census.lean": "9013bc439f86230f11c66cc3be4c7ad5c558a2a79e45502eafbeb2bcfa58dfd3",
@@ -387,6 +387,22 @@
    "module": "AcirLean.Deposit.Controls",
    "type": "(AcirLean.Deposit.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128))) = false",
    "type_sha256": "9d66a008af9447c44d1c58b356cb4ecf6923212b7227eb29673443c9a6a1acdc"
+  },
+  "AcirLean.Deposit.control_range_alone_allows_2_pow_127": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "96158564a64d73596b9e71845b720a395006454ad40054d670243e02979e2f38"
+  },
+  "AcirLean.Deposit.control_range_alone_allows_2_pow_127._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "96158564a64d73596b9e71845b720a395006454ad40054d670243e02979e2f38"
   },
   "AcirLean.Deposit.control_range_rejects_2_pow_128": {
    "axioms": [
@@ -3107,6 +3123,22 @@
    "module": "AcirLean.Withdraw.Controls",
    "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128))) = false",
    "type_sha256": "049a6f8c98f5bc4038e032e4a0d0602ada22279f04947723d8f11a99a62cc0e2"
+  },
+  "AcirLean.Withdraw.control_range_alone_allows_2_pow_127": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "69c9be46552348a5c4c3c56b3a3692b25bd2b8d67d022de065cc8b29ecff0157"
+  },
+  "AcirLean.Withdraw.control_range_alone_allows_2_pow_127._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "69c9be46552348a5c4c3c56b3a3692b25bd2b8d67d022de065cc8b29ecff0157"
   },
   "AcirLean.Withdraw.control_range_rejects_2_pow_128": {
    "axioms": [

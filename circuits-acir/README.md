@@ -64,6 +64,16 @@ checks use kernel reduction (`decide +kernel`), never `native_decide`.
 - `Neg/TransferNoRange.lean` is a failed proof attempt, not a false full-circuit
   statement: it drops the RANGE facts from the conservation proof, so `omega` cannot
   close it. The wrap counterexample itself is `control_asserts_alone_allow_wrap`.
+- `Neg/DepositBound127.lean` and `Neg/WithdrawBound127.lean` are failed proof attempts
+  too. Each claims a 127-bit amount bound with the proof of the 128-bit one, and fails at
+  the membership step because opcode 23 (deposit) or 362 (withdraw) has 128 bits. They do
+  not show that a 127-bit bound is false, and no control shows that the 128-bit bound is
+  tight: the controls refute only the bounds 500, 700 and 1000. The control
+  `control_range_alone_allows_2_pow_127` (deposit and withdraw) shows only that the RANGE
+  opcode accepts amount `2^127`. A solved witness with amount `2^127` would refute the
+  127-bit bound for the whole circuit. It needs new public inputs (the commitment for
+  deposit; the commitment root and the nullifier for withdraw) and a second non-vacuity
+  proof per circuit, and it is not included.
 - The witness fixtures are solver outputs, not contract-accepted executions.
 
 ## Re-check
