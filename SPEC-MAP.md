@@ -171,10 +171,10 @@ the model.
     input 1 may skip membership when its amount is zero
     (transfer/src/main.nr:106-131 at pocs-private a04b8b3). 5.3 (356-358)
     derives ballast from `amount == 0` alone and does not restrict the
-    slot, so the two readings disagree; a spec change is proposed that
-    makes 5.3 match 4.2. First-slot membership does not remove zero-value
-    notes from the tree: transfer outputs may be zero-value and enter it
-    as real leaves.
+    slot, so the two readings disagree at 4d4dce1; specs-private#40
+    (merged 2026-10-06) makes 5.3 match 4.2 on spec main. First-slot
+    membership does not remove zero-value notes from the tree: transfer
+    outputs may be zero-value and enter it as real leaves.
 12. **Privacy guarantees are not claimed.** Confidentiality, unlinkability
     and selective disclosure (6.2) need an observer model. The core has
     none and states no privacy result; the nine base and six epoch
