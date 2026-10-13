@@ -328,6 +328,8 @@ def parse_census(text, failures):
                                'axioms': r['axioms']}
             if '⋯' in r['type']:
                 failures.append(f'ELIDED statement of {r["name"]}: the census print contains ⋯')
+            if '(dsyntax)' in r['raw']:
+                failures.append(f'SYNTAX METADATA in the type of {r["name"]}: the raw form does not cover it')
             bad = sorted(set(r['axioms']) - ALLOWED_AXIOMS)
             if bad:
                 failures.append(f'NON-STANDARD AXIOM {bad} in {r["name"]}')
@@ -640,7 +642,7 @@ def self_test():
             out = p.stdout.decode(errors='replace')
             fails = [l for l in out.split('\n') if re.match(r'^(MISSING|UNEXPECTED|MISMATCH|DUPLICATE|FATAL|'
                                                             r'FORBIDDEN|NON-STANDARD|AXIOM|OPAQUE|NEGATIVE|PYTHON|'
-                                                            r'ELIDED|BYTECODE)', l)]
+                                                            r'ELIDED|BYTECODE|SYNTAX)', l)]
             if fx is None:
                 ok = p.returncode == 0 and not fails
             else:

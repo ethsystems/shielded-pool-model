@@ -126,9 +126,10 @@ the included inputs and compares every result with `expected.json`. In order, it
 9. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement, printed
    with no elision (`pp.deepTerms`, `pp.proofs`, `pp.maxSteps` raised to 10^8; a `⋯` in a
    statement fails), the SHA-256 of a raw form of its type (every node of the expression,
-   with full names and literal values), and its axioms (`Lean.collectAxioms`, as
-   `#print axioms`); any axiom outside `propext`, `Quot.sound` and `Classical.choice`, and any
-   declared axiom or opaque constant, fails;
+   with a tag per constructor, names component by component and strings quoted; a syntax
+   value in metadata fails), and its axioms (`Lean.collectAxioms`, as `#print axioms`);
+   any axiom outside `propext`, `Quot.sound` and `Classical.choice`, and any declared
+   axiom or opaque constant, fails;
 10. compiles each `Neg/*.lean` file, which must fail with the expected first error;
 11. compares everything with `expected.json`. A missing, duplicate or unexpected
     theorem, control, input or file fails, as does any changed statement, raw-type hash or
