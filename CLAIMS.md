@@ -1,6 +1,6 @@
 # Claims
 
-The fifteen core theorems (nine base, six epoch) and two root-window
+The fifteen core theorems (nine base, six epoch) and five root-window
 results, each with its Lean name, English, spec clause and hypothesis.
 The statement files `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
 `L4B.lean`, `L5.lean` and `Window.lean` are the source of truth. The
@@ -138,31 +138,52 @@ insertion proof's nullifier lists are equal) is simplification 4 of
 not a premise of these six theorems. No verifier correspondence
 theorem is supplied.
 
-## The two root-window theorems
+## The five root-window theorems
 
 Stated in `Statements/Window.lean`, proved in `Proofs/Window.lean`, over
-the base model (not the epoch model). Issue #2 asked for both. They are
-supporting results, not part of the nine-theorem claim. Spec clauses
-refer to spec 2 at 4d4dce1.
+the base model (not the epoch model). Issue #2 asked for the boundary
+and liveness results. They are supporting results, not part of the
+nine-theorem claim. Spec clauses refer to spec 2 at 4d4dce1.
 
 | # | Lean name | English | Spec clause | Hypothesis |
 |---|---|---|---|---|
-| 16 | `windowBoundary_proof` | Every window entry is 0 (the empty tree) or the leaf count of the state after some nonempty accepted prefix of the same history. So the window holds operation boundaries only, never the root between a transfer's two inserts. | 4.4 (260-263) | none |
-| 17 | `honestWithdraw_proof` | The owner of a note that the pool minted (the ghost `minted` list behind the tree), with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root, the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none |
+| 16 | `windowBoundary_proof` | Every window entry is 0 (the empty tree) or the leaf count of the state after some nonempty accepted prefix of the same history. This is the half "intermediate roots do not" enter: it bounds what can enter, and a model that never pushes a root satisfies it. | 4.4 (260-263) | none |
+| 17 | `windowHead_proof` | After every accepted history, the newest window entry is the current leaf count. This is the half "the root recorded after the final insertion of each operation enters the window". | 4.4 (263) | none |
+| 18 | `noMidTransferRoot_proof` | For every accepted transfer in a history, the leaf count between its two inserts is not in the window at the end of the history. Proved from row 16 and the leaf count of a history (one insert per deposit, two per transfer, none per withdrawal; `Run.leaves_length`). | 4.4 (263) | none |
+| 19 | `honestWithdrawWindow_proof` | For any root in the window, the owner of a note that the pool minted before that root (the ghost `minted` list behind the tree), with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against that root, and the pool balance drops by exactly the amount. The commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none; token set frozen (simplification 10) |
+| 20 | `honestWithdraw_proof` | Row 19 at the current root: the owner of a note that the pool minted, with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root (row 17), the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none; token set frozen (simplification 10) |
 
-Row 16 is model evidence for the bug class of pocs-private#12: the
-control `controls/refute_window_intermediate.lean` makes the transfer
-also record its between-insert root and proves the negation; the weak
-bound "every entry is at most the leaf count" still holds on the same
-counterexample history, so the boundary form is the one with content. Row 16 says
-nothing about zero or repeated hash roots (pocs-private#15), exact
-eviction, or the contract. Row 17 is model liveness: the model accepts
-the step and debits the pool's per-token field; there is no recipient
-balance and no ERC-20 in the model. The balance premise stays a
-premise. The control
+Rows 16 and 18 are model evidence for the bug class of
+pocs-private#12: the control `controls/refute_window_intermediate.lean`
+makes the transfer also record its between-insert root and proves the
+negations of both; the weak bound "every entry is at most the leaf
+count" still holds on the same counterexample history, so the boundary
+form is the one with content. The control
 `controls/refute_honestwithdraw_norecord.lean` (a deposit that does not
-record its root) proves the negation. Neither theorem has a positive
-control; the two refutation controls are their content check.
+push its root) proves the negations of rows 17 and 20. In the model the
+current root is accepted only through the window. The contract also
+accepts it directly (`isKnownRoot`, `ShieldedPool.sol:314` at
+pocs-private a04b8b3), so that control checks the model's push, not the
+contract. The control `controls/refute_honestwithdraw_currentroot.lean`
+(a withdraw guard that accepts only the current root, as a contract
+without the window lookup at `ShieldedPool.sol:315` would) proves the
+negation of row 19: it rejects a withdrawal against an older root that
+is still in the window. Rows 16 to 18 say nothing about zero or repeated
+hash roots (pocs-private#15), exact eviction, or the contract. Rows 19
+and 20 are model liveness: the model accepts the step and debits the
+pool's per-token field; there is no recipient balance and no ERC-20 in
+the model. The balance premise stays a premise. None of the five has a
+positive control; the three refutation controls are their content check.
+
+**Token removal.** Rows 19 and 20 hold in a model whose supported-token
+set never changes and whose withdraw guard does not read it
+(simplification 10). Spec 2 says that removing a token must not block
+withdrawals of existing notes (4.4, 266). The contract at pocs-private
+a04b8b3 does not meet this: `withdraw` reverts with `UnsupportedToken`
+when the token is no longer supported (`ShieldedPool.sol:254`). So the
+liveness of rows 19 and 20 does not carry over to the contract after the
+owner removes a token. This is a deviation of the contract from the
+spec; the model does not show it.
 
 ## What the base rows mean
 
@@ -207,21 +228,21 @@ its private helpers (`Proofs/Conservation.lean:23`, `:166`, `:183`,
 `:202`), and owner-key binding (`Proofs/TierB.lean:31-32`). No minting
 and balance equals live value call value conservation and inherit the
 dependency (`Proofs/TierAConditional.lean`). The epoch base-case proof
-transports the range and root-window conjuncts
-into the accepted base run it constructs. Beyond that transport, and
-beyond row 15, which discharges the epoch model's window conjunct
-through its own `Run.window_head` (`Proofs/Epoch.lean`), none of the
-fifteen theorems consumes the root-window conjuncts; they keep the
-model's accepted set aligned with the contract. Rows 16 and 17 are the
-base results that read the window: `windowBoundary` states what the
-window contains, and `honestWithdraw` discharges the withdraw guard's
-window conjunct from the base `Run.window_head` and its range conjunct
-from `Run.runNotes_wf`. None of this verifies concrete root-window code
-or machine arithmetic; root-window correctness of the contract and
-range enforcement are not among the claims. The root-window conformance
-bug fixed in pocs-private#12 is the bug class that row 16's control
-reproduces in the model; the theorems still cannot see the contract's
-code.
+transports the range and root-window conjuncts into the accepted base
+run it constructs. Beyond that transport, and beyond row 15, which
+discharges the epoch model's window conjunct through its own
+`Run.window_head` (`Proofs/Epoch.lean`), none of the fifteen theorems
+consumes the root-window conjuncts; they keep the model's accepted set
+aligned with the contract. Rows 16 to 20 are the base results that
+read the window: rows 16 to 18 state what the window contains, row 19
+discharges the withdraw guard's range conjunct from `Run.runNotes_wf`
+and takes the window root as a premise, and row 20 discharges the
+window conjunct at the current root from row 17. None of this verifies
+concrete root-window code or machine arithmetic; root-window correctness
+of the contract and range enforcement are not among the claims. The
+root-window conformance bug fixed in pocs-private#12 is the bug class
+that the control of rows 16 and 18 reproduces in the model; the
+theorems still cannot see the contract's code.
 
 ## Checks that the theorems have content
 
@@ -252,12 +273,13 @@ code.
   replay function is the mutated part. The file must build, so an
   unrelated unsolved goal in its setup cannot be mistaken for success.
   `controls/refute_l3_double_spend.lean` states the three parts as
-  three theorems; the thirteen others end in one theorem that negates a
-  universal statement over the mutated model (for replay: over the real
-  `Run`, with the lossy replay).
-  `controls/refute_window_intermediate.lean` adds a second theorem,
-  `weak_holds`, which shows that the weak bound holds on the same
-  counterexample history.
+  three theorems. `controls/refute_window_intermediate.lean` and
+  `controls/refute_honestwithdraw_norecord.lean` each negate two frozen
+  Props over one mutation; the first also proves `weak_holds`, which
+  shows that the weak bound holds on the same counterexample history.
+  The twelve others end in one theorem that negates a universal
+  statement over the mutated model (for replay: over the real `Run`,
+  with the lossy replay).
   None claims the negation of an original theorem, which quantifies over
   the real `Run` or the real epoch model.
 - The extension's refutation controls (below) mutate a frozen definition
@@ -266,8 +288,11 @@ code.
   Each proves the negation of a frozen universal restated over its
   mutation and must build, like the base controls.
 - The gate rejects a positive or refutation control whose build reports
-  a `sorry`, and any axiom declared in a control. It runs no axiom census
-  on control theorems.
+  a `sorry`, and any axiom declared in a control. Its text check rejects
+  `native_decide`, its synonyms (`decide +native`, `(native := true)`)
+  and direct use of `ofReduceBool` or `ofReduceNat` in the model,
+  statement and control files. It runs no axiom census on control
+  theorems.
 
 REVIEW.md part 6 lists what the theorems do not say.
 

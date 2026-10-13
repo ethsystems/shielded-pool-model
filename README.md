@@ -42,15 +42,19 @@ read; the first is symbolic k-anonymity: possibilistic, over a symbolic
 event-log observer, no deployed-privacy claim (CLAIMS.md, "Extension:
 symbolic k-anonymity").
 
-Two further results about the historical-root window (spec 2 section
-4.4, issue #2) sit outside the fifteen and are gated with them: every
-window entry is an operation boundary (`windowBoundary`), and the owner
-of a note that the pool minted, with a fresh nullifier, a nonzero amount
-and enough pool balance, has an accepted withdrawal at the current root
-(`honestWithdraw`). Both are over the base model. No exact-retention
-claim and no claim about the contract's window code. Files:
-`Statements/Window.lean`, `Proofs/Window.lean`, two refutation controls
-under `controls/`, and their rows in CLAIMS.md and SPEC-MAP.md.
+Five further results about the historical-root window (spec 2 section
+4.4, issue #2) sit outside the fifteen and are gated with them. Every
+window entry is an operation boundary (`windowBoundary`), the newest
+entry is the current root (`windowHead`), and the root between a
+transfer's two inserts is not in the window (`noMidTransferRoot`). The
+owner of a note that the pool minted, with a fresh nullifier, a nonzero
+amount and enough pool balance, has an accepted withdrawal against any
+window root that covers the note (`honestWithdrawWindow`), and so
+against the current root (`honestWithdraw`). All five are over the base
+model, whose token set never changes (simplification 10). No
+exact-retention claim and no claim about the contract's window code.
+Files: `Statements/Window.lean`, `Proofs/Window.lean`, three refutation
+controls under `controls/`, and their rows in CLAIMS.md and SPEC-MAP.md.
 
 The base model makes 16 simplifications, for example a list for the
 Merkle tree, `Nat` amounts and opaque hashes. They are modelling
@@ -69,7 +73,7 @@ or conditional, and none is claimed here. One result from that work is
 worth knowing: a bounded check of the contract against the root-window
 rule that the spec and this model share found a conformance bug, fixed in
 ethsystems/pocs-private pull request 12. This repo does not reproduce that
-check. CLAIMS.md rows 16 and 17 state the window rule in the model; they
+check. CLAIMS.md rows 16 to 20 state the window rule in the model; they
 do not check the contract.
 
 ## How it was built
@@ -258,11 +262,14 @@ bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 711 s measured
 The gate tests committed HEAD, so an uncommitted tree is not a gate
 result.
 
-The gate builds a fresh clone of HEAD. It rejects `sorry`,
-`native_decide` and undeclared axioms, in the controls too. It checks the
-exact type and axioms of the 59 names in `statements/INVENTORY.md`, runs
-the controls, and checks the pins in `statements/FROZEN.sha256`.
-`gate_test.sh` plants 22 cheats; each must make the gate fail.
+The gate builds a fresh clone of HEAD. It rejects `sorry`, axioms not
+listed in AXIOMS.md, and `native_decide` and its synonyms such as
+`decide +native`. In the controls it rejects a `sorry` in the build
+output, any declared axiom, and the same `native_decide` text; it runs no
+axiom census on control theorems. It checks the exact type and axioms of
+the 65 names in `statements/INVENTORY.md`, runs the controls, and checks
+the pins in `statements/FROZEN.sha256`. `gate_test.sh` plants 23 cheats;
+each must make the gate fail.
 
 The 56 s gate time is one fresh clone of this branch with a copied
 `.lake` cache. The 711 s fixture time is one run of the 22 fixtures.
