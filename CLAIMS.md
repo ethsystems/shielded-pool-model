@@ -294,6 +294,15 @@ theorems still cannot see the contract's code.
   statement and control files. It runs no axiom census on control
   theorems.
 
+## Extension outside the gate: hash agreement
+
+One separate package, [hash-agreement/](hash-agreement/README.md), with its
+own check and trust base. It does not change the nine rows above.
+
+| Package | Lean names | English | What it narrows | Hypothesis |
+|---|---|---|---|---|
+| `hash-agreement/` | `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | Simplification 4 (opaque hashes), only to "the transcriptions agree as functions". Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
+
 REVIEW.md part 6 lists what the theorems do not say.
 
 ## Extension: symbolic k-anonymity

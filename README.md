@@ -120,6 +120,15 @@ implementation links stay in the research repo as claim records with
 re-check commands, because their inputs are private. The repo is
 private; no license yet.
 
+Already in the repo, outside the gate:
+
+- [hash-agreement/](hash-agreement/README.md): the Noir, plain and
+  segmented Solidity transcriptions of Poseidon2 (the two-input
+  Poseidon, x^5, t = 3) agree as
+  functions over the BN254 scalar field, all 65 rounds, inputs pinned
+  and carried. Separate package, own check and trust base; the gate
+  does not build it.
+
 ## Names
 
 The files keep the names they have in the research repo this model comes
