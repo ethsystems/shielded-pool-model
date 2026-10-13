@@ -69,7 +69,7 @@ or conditional, and none is claimed here. One result from that work is
 worth knowing: a bounded check of the contract against the root-window
 rule that the spec and this model share found a conformance bug, fixed in
 ethsystems/pocs-private pull request 12. This repo does not reproduce that
-check. CLAIMS.md rows 10 and 11 state the window rule in the model; they
+check. CLAIMS.md rows 16 and 17 state the window rule in the model; they
 do not check the contract.
 
 ## How it was built
