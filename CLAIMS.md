@@ -264,8 +264,8 @@ theorems still cannot see the contract's code.
   the transfer as a non-rollover step, and the no-rollover prefix as a
   segment; for row 15, the first transfer output after that prefix and
   its rollover.
-- Each base or epoch refutation control weakens one guard, post-state
-  or replay step.
+- Each base, epoch or window refutation control changes one guard,
+  post-state or replay step.
   It carries a history that the mutated model accepts, shows that the
   history meets the frozen Prop's other premises (`CryptoHyp` where the
   Prop has it), and proves the negation of the frozen Prop restated over
