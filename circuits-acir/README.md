@@ -90,8 +90,10 @@ the included inputs and compares every result with `expected.json`. In order, it
 4. regenerates the Lean data, the witness tries and the non-vacuity modules with the
    scripts in `scripts/`, then hashes them; the generated files are not tracked;
 5. runs seven mutated-witness checks in Python and compares the failing opcodes with
-   `expected.json`: five mutations must break the rule opcode they target, and setting
-   the unconstrained deposit `payload_hash` (w5) must break nothing;
+   `expected.json`: five mutations must break the rule opcode they target; setting the
+   deposit `amount` (w2) to 501 has no required opcode and breaks exactly opcodes 356 and
+   357, two ASSERTs over w2; and setting the unconstrained deposit `payload_hash` (w5) must
+   break nothing;
 6. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
    `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
    kernel check) in every Lean file of the package, `Census.lean` included, and in
