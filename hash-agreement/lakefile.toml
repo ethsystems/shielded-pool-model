@@ -1,0 +1,11 @@
+name = "hash-agreement"
+defaultTargets = ["HashAgreement"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.33.1"
+
+[[lean_lib]]
+name = "HashAgreement"
+moreLeanArgs = ["-M4096"]
