@@ -240,8 +240,8 @@ git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-
 # Check out the revision under review before continuing.
 lake exe cache get
 
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 53 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 644 s measured
+bash scripts/gate.sh        # expect: GATE PASS (<commit>); 56 s measured
+bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 711 s measured
 ```
 
 The gate tests committed HEAD, so an uncommitted tree is not a gate
@@ -253,10 +253,10 @@ exact type and axioms of the 55 names in `statements/INVENTORY.md`, runs
 the controls, and checks the pins in `statements/FROZEN.sha256`.
 `gate_test.sh` plants 22 cheats; each must make the gate fail.
 
-The 53 s gate time is one fresh clone of this branch with a copied
-`.lake` cache. The 644 s fixture time is one run of the 18 fixtures.
+The 56 s gate time is one fresh clone of this branch with a copied
+`.lake` cache. The 711 s fixture time is one run of the 22 fixtures.
 Both ran on a Linux laptop with btrfs, with no memory cap and
-`LEAN_NUM_THREADS=4`, while another Lean build ran on the same machine.
+`LEAN_NUM_THREADS=2`.
 Each gate run copies `.lake` (about 7.5 GB). Without cheap
 file copies, set `GATE_WORK` to a directory on APFS, btrfs or XFS.
 
