@@ -7,7 +7,8 @@ usage: replay.py check              run every stage; exit 0 only if build/observ
 
 Stages of `check`: tool pins, source inventory, input artifacts, regeneration of the Lean
 data, Python witness controls, forbidden-token scan, sequential Lean builds, theorem census
-(statements and axioms of every theorem in an AcirLean module), negative controls, and an
+(statements, raw-type hashes and axioms of every theorem in an AcirLean module), negative
+controls, and an
 exact comparison with expected.json. Missing, duplicate and unexpected entries fail.
 """
 import glob
@@ -303,7 +304,11 @@ def parse_census(text, failures):
         if r['kind'] == 'theorem':
             if r['name'] in thms:
                 failures.append(f'DUPLICATE theorem {r["name"]}')
-            thms[r['name']] = {'module': r['module'], 'type': r['type'], 'axioms': r['axioms']}
+            thms[r['name']] = {'module': r['module'], 'type': r['type'],
+                               'type_sha256': hashlib.sha256(r['raw'].encode()).hexdigest(),
+                               'axioms': r['axioms']}
+            if '⋯' in r['type']:
+                failures.append(f'ELIDED statement of {r["name"]}: the census print contains ⋯')
             bad = sorted(set(r['axioms']) - ALLOWED_AXIOMS)
             if bad:
                 failures.append(f'NON-STANDARD AXIOM {bad} in {r["name"]}')
@@ -576,7 +581,8 @@ def self_test():
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             out = p.stdout.decode(errors='replace')
             fails = [l for l in out.split('\n') if re.match(r'^(MISSING|UNEXPECTED|MISMATCH|DUPLICATE|FATAL|'
-                                                            r'FORBIDDEN|NON-STANDARD|AXIOM|OPAQUE|NEGATIVE|PYTHON)', l)]
+                                                            r'FORBIDDEN|NON-STANDARD|AXIOM|OPAQUE|NEGATIVE|PYTHON|'
+                                                            r'ELIDED)', l)]
             if fx is None:
                 ok = p.returncode == 0 and not fails
             else:

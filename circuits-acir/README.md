@@ -99,13 +99,17 @@ the included inputs and compares every result with `expected.json`. In order, it
    kernel check) in every Lean file of the package, `Census.lean` included, and in
    `lakefile.toml`;
 7. builds every module, one at a time;
-8. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its exact statement
-   and its axioms (`Lean.collectAxioms`, as `#print axioms`); any axiom outside
+8. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement,
+   printed with no elision (`pp.deepTerms`, `pp.proofs`, `pp.maxSteps` raised to 10^8; a `⋯` in a
+   statement fails), the SHA-256 of a raw form of its type (every node of the expression,
+   with full names and literal values), and its axioms (`Lean.collectAxioms`, as
+   `#print axioms`); any axiom outside
    `propext`, `Quot.sound` and `Classical.choice`, and any declared axiom or opaque
    constant, fails;
 9. compiles each `Neg/*.lean` file, which must fail with the expected first error;
 10. compares everything with `expected.json`. A missing, duplicate or unexpected
-    theorem, control, input or file fails, as does any changed statement or axiom list.
+    theorem, control, input or file fails, as does any changed statement, raw-type hash or
+    axiom list.
 
 The source scan and the census are checks against mistakes, not against a hostile
 package. Code that runs during elaboration (an `elab` command, a direct `addDecl`, an
