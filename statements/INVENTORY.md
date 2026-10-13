@@ -70,9 +70,11 @@ LeanShieldedPool.KAnonymity.constant_commit_blocks_transfer :: ∀ {P : LeanShie
 # Root-window statement Props and theorems (issue #2, 2026-10-07, dispatch/xo-night-rootwindow):
 LeanShieldedPool.windowBoundary :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.windowHead :: (P : LeanShieldedPool.PrimSpec) → Prop
+LeanShieldedPool.noMidTransferRoot :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.honestWithdrawWindow :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.honestWithdraw :: (P : LeanShieldedPool.PrimSpec) → Prop
 LeanShieldedPool.windowBoundary_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.windowBoundary P
 LeanShieldedPool.windowHead_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.windowHead P
+LeanShieldedPool.noMidTransferRoot_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.noMidTransferRoot P
 LeanShieldedPool.honestWithdrawWindow_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.honestWithdrawWindow P
 LeanShieldedPool.honestWithdraw_proof :: ∀ (P : LeanShieldedPool.PrimSpec), LeanShieldedPool.honestWithdraw P

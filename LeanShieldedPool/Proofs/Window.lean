@@ -75,6 +75,60 @@ theorem windowBoundary_proof (P : PrimSpec) : windowBoundary P := by
 theorem windowHead_proof (P : PrimSpec) : windowHead P :=
   fun _ _ _ hr => hr.window_head
 
+/-- Leaves inserted by each operation (Section 4): one per deposit, two
+per transfer, none per withdrawal. -/
+def Tx.leafDelta : Tx P → Nat
+  | .deposit _ => 1
+  | .transfer _ => 2
+  | .withdraw _ => 0
+
+theorem Step.leaves_length {st st' : St P} {tx : Tx P} (h : Step st tx st') :
+    st'.leaves.length = st.leaves.length + tx.leafDelta := by
+  cases h with
+  | @deposit d hg =>
+      show ((st.minted ++ [d.note]).map Note.cm).length = (st.minted.map Note.cm).length + 1
+      rw [List.length_map, List.length_append, List.length_map]
+      rfl
+  | @transfer d hg =>
+      show ((st.minted ++ [d.out1, d.out2]).map Note.cm).length =
+        (st.minted.map Note.cm).length + 2
+      rw [List.length_map, List.length_append, List.length_map]
+      rfl
+  | withdraw hg => rfl
+
+/-- The leaf count after a history is the sum of its insertions. -/
+theorem Run.leaves_length {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (h : Run sup txs st) : st.leaves.length = (txs.map Tx.leafDelta).sum := by
+  induction h with
+  | empty => rfl
+  | @step txs st st' tx hr hs ih =>
+      rw [hs.leaves_length, ih, List.map_append, List.sum_append]
+      rfl
+
+private theorem sum_le_of_prefix {l₁ l₂ : List (Tx P)} (h : l₁ <+: l₂) :
+    (l₁.map Tx.leafDelta).sum ≤ (l₂.map Tx.leafDelta).sum := by
+  obtain ⟨t, rfl⟩ := h
+  rw [List.map_append, List.sum_append]
+  exact Nat.le_add_right _ _
+
+theorem noMidTransferRoot_proof (P : PrimSpec) : noMidTransferRoot P := by
+  intro sup txs st hr pre d st₀ hp h0 hmem
+  have hpre : pre <+: txs := (List.prefix_append pre _).trans hp
+  have e0 := h0.leaves_length
+  rcases windowBoundary_proof P sup txs st hr _ hmem with hz | ⟨q, tx, st₁, st₂, hq, h1, hs, hlen⟩
+  · omega
+  · have e2 := (Run.step h1 hs).leaves_length
+    rcases Nat.lt_or_ge pre.length (q ++ [tx]).length with hl | hl
+    · have hle : (pre ++ [Tx.transfer d]).length ≤ (q ++ [tx]).length := by
+        rw [List.length_append, List.length_singleton]
+        omega
+      have hpq := sum_le_of_prefix (List.prefix_of_prefix_length_le hp hq hle)
+      rw [List.map_append, List.sum_append] at hpq
+      have h2 : ([Tx.transfer d].map (Tx.leafDelta (P := P))).sum = 2 := rfl
+      omega
+    · have hqp := sum_le_of_prefix (List.prefix_of_prefix_length_le hq hpre hl)
+      omega
+
 theorem honestWithdrawWindow_proof (P : PrimSpec) : honestWithdrawWindow P := by
   intro sup txs st hr k n r s hs hn hown hfresh hne hbal
   have htree : st.inTreeAt s n.cm := by
