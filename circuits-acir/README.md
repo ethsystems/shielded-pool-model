@@ -48,8 +48,13 @@ checks use kernel reduction (`decide +kernel`), never `native_decide`.
   checks it in 256-opcode chunks (`NV/G*.lean`, `NonVacuity.lean`). The witnesses give
   deposit amount 500, withdraw amount 700, and transfer amounts 1000, 0, 700 and 300
   with four equal tokens.
-- Trusted, not proved: the printer (`noir-inspector` beta.21 prints the bytecode
-  faithfully), the extractor (`scripts/acir2lean.py`), the semantics
+- Checked, not trusted: the printer. `scripts/bytecode_check.py` decodes each
+  artifact's `bytecode` (base64, gzip, a format byte, then msgpack) and compares it with
+  the parsed print of `func 0`: the parameter lists, the opcode count, and at each index
+  the opcode kind, each RANGE witness and bit count, each ASSERT expression up to a factor
+  of 1 or -1 over the field, and each Brillig function id and outputs. The decoder and
+  the comparison are reviewed code, not proved.
+- Trusted, not proved: the extractor (`scripts/acir2lean.py`), the semantics
   (`AcirLean/Semantics.lean` means what ACIR means), and the ABI allocation. The
   extractor re-prints every AssertZero and RANGE line from its parsed form and requires
   byte equality; Brillig lines keep only the function id and outputs. Witness names
@@ -97,27 +102,29 @@ the included inputs and compares every result with `expected.json`. In order, it
 2. hashes every tracked file except README.md, expected.json and .gitignore;
 3. decompresses `inputs/` and checks the print, `func 0`, artifact, bytecode and witness
    hashes (a mismatch stops the check before anything is built);
-4. regenerates the Lean data, the witness tries and the non-vacuity modules with the
+4. decodes each artifact's `bytecode` and compares it with the print, opcode by opcode
+   (`scripts/bytecode_check.py`, described above); a difference stops the check before
+   anything is built;
+5. regenerates the Lean data, the witness tries and the non-vacuity modules with the
    scripts in `scripts/`, then hashes them; the generated files are not tracked;
-5. runs seven mutated-witness checks in Python and compares the failing opcodes with
+6. runs seven mutated-witness checks in Python and compares the failing opcodes with
    `expected.json`: five mutations must break the rule opcode they target; setting the
    deposit `amount` (w2) to 501 has no required opcode and breaks exactly opcodes 356 and
    357, two ASSERTs over w2; and setting the unconstrained deposit `payload_hash` (w5) must
    break nothing;
-6. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
+7. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
    `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
    kernel check) in every Lean file of the package, `Census.lean` included, and in
    `lakefile.toml`;
-7. builds every module, one at a time;
-8. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement,
-   printed with no elision (`pp.deepTerms`, `pp.proofs`, `pp.maxSteps` raised to 10^8; a `⋯` in a
+8. builds every module, one at a time;
+9. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement, printed
+   with no elision (`pp.deepTerms`, `pp.proofs`, `pp.maxSteps` raised to 10^8; a `⋯` in a
    statement fails), the SHA-256 of a raw form of its type (every node of the expression,
    with full names and literal values), and its axioms (`Lean.collectAxioms`, as
-   `#print axioms`); any axiom outside
-   `propext`, `Quot.sound` and `Classical.choice`, and any declared axiom or opaque
-   constant, fails;
-9. compiles each `Neg/*.lean` file, which must fail with the expected first error;
-10. compares everything with `expected.json`. A missing, duplicate or unexpected
+   `#print axioms`); any axiom outside `propext`, `Quot.sound` and `Classical.choice`, and any
+   declared axiom or opaque constant, fails;
+10. compiles each `Neg/*.lean` file, which must fail with the expected first error;
+11. compares everything with `expected.json`. A missing, duplicate or unexpected
     theorem, control, input or file fails, as does any changed statement, raw-type hash or
     axiom list.
 
@@ -131,13 +138,14 @@ the hand-written files cover a hostile package.
 `--self-test` copies the built package and plants one change per copy. Each change must
 make `check.sh` fail for its intended reason: a removed theorem, an added theorem, a
 weakened statement, an altered input artifact, a rogue axiom, a `sorry`, a negative
-control that compiles, a negative control that fails with a different error, and a false
-theorem whose kernel check is turned off with `set_option debug.skipKernelTC true in`. That
-last fixture also re-blesses the census entries of that theorem and of its auxiliary
-lemma into its copy of `expected.json`, and every failure must then come from the scan. A
-duplicated census entry is tested on the comparator alone. The unchanged copy must pass.
-To show that the deeper check catches each change, the fixtures also update the file
-hash in their copy of `expected.json`.
+control that compiles, a negative control that fails with a different error, a print that
+differs from the bytecode in one opcode, a print that drops an opcode (both with the print
+hashes repinned), and a false theorem whose kernel check is turned off with
+`set_option debug.skipKernelTC true in`. That last fixture also re-blesses the census entries of that
+theorem and of its auxiliary lemma into its copy of `expected.json`, and every failure
+must then come from the scan. A duplicated census entry is tested on the comparator alone.
+The unchanged copy must pass. To show that the deeper check catches each change, the
+fixtures also update the file hash in their copy of `expected.json`.
 
 Cost on a Linux laptop (xps26, btrfs), one build at a time, `LEAN_NUM_THREADS=2`:
 the first full run built 75 modules in 1,101 s of wall time (the slowest module took 67 s),
@@ -156,7 +164,8 @@ with a cgroup memory peak of 1.47 GB under a 6 GiB cap. `.lake` takes 79 MB and 
 - `Census.lean`: the theorem census.
 - `scripts/`: `acir2lean.py` (extractor), `witness_check.py` (Python solver agreement
   and witness tries), `gen_nv.py` (non-vacuity modules), `perturb_check.py` (mutated
-  witnesses), `replay.py` (the stages above).
+  witnesses), `bytecode_check.py` (bytecode against print), `replay.py` (the stages
+  above).
 - `inputs/`: the prints, artifacts and witnesses, with `PROVENANCE.md`.
 - `expected.json`: the expected results. It is the reviewed output of the first run.
 
@@ -172,7 +181,8 @@ hashes. Deposit now uses the
 same split, `noncomputable` data form as the other two; its 30 opcode chunks are the
 same text as the archived `Data.lean`. New here: `Deposit/Solved.lean` (now
 `noncomputable`), `Deposit/Controls.lean`, `Neg/DepositBound127.lean`, `Census.lean`,
-`scripts/replay.py` and `check.sh`. The comment in `Neg/TransferNoRange.lean` now
+`scripts/replay.py`, `scripts/bytecode_check.py` and `check.sh`. The comment in
+`Neg/TransferNoRange.lean` now
 describes a failed proof attempt, after that review.
 
 The inputs derive from pocs-private sources, and the witnesses from its private

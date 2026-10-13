@@ -1,4 +1,72 @@
 {
+ "bytecode_check": {
+  "deposit": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 6098,
+    "same": 1480
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 7662,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  },
+  "transfer": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 18716,
+    "same": 4561
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 23543,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  },
+  "withdraw": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 9135,
+    "same": 2243
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 11508,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  }
+ },
  "extraction": {
   "deposit": {
    "abi_layout_matches_print": true,
@@ -292,9 +360,10 @@
   "lakefile.toml": "980b683100326e2144414fc3e248e7d6db2f811522239f7e826167cd374ee589",
   "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
   "scripts/acir2lean.py": "575b7a088a3a2f88c33025d3922d9eb6a99d64deac88d3c0e032f45773e60a5d",
+  "scripts/bytecode_check.py": "c25544adadb7281b5bfdbe4c688892bd6e095ed4bbc1dd8bec5f4d3f015f6fb3",
   "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
   "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
-  "scripts/replay.py": "22c3e522bc2416097345977fe3286b0667fba41f1d9aba18ce17bfe7a1f5ca11",
+  "scripts/replay.py": "afbc2daac3f47a83304b9c1239ac0de7a1f0019a4387c5992c0a9d2e81fd43b5",
   "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
  },
  "theorems": {

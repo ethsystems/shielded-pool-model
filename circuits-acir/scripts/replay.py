@@ -5,8 +5,8 @@ usage: replay.py check              run every stage; exit 0 only if build/observ
        replay.py self-test          run the must-fail fixtures against copies of a passing tree
        replay.py compare-census F   compare census lines in F with expected.json (comparator only)
 
-Stages of `check`: tool pins, source inventory, input artifacts, regeneration of the Lean
-data, Python witness controls, forbidden-token scan, sequential Lean builds, theorem census
+Stages of `check`: tool pins, source inventory, input artifacts, bytecode-to-print
+comparison, regeneration of the Lean data, Python witness controls, forbidden-token scan, sequential Lean builds, theorem census
 (statements, raw-type hashes and axioms of every theorem in an AcirLean module), negative
 controls, and an
 exact comparison with expected.json. Missing, duplicate and unexpected entries fail.
@@ -64,7 +64,7 @@ HEADLINE = [
     'AcirLean.Transfer.amount_ranges', 'AcirLean.Transfer.conservation',
     'AcirLean.Transfer.token_consistency', 'AcirLean.Transfer.satisfiable',
 ]
-SECTIONS = ['toolchain', 'source_files', 'inputs', 'generated_files', 'extraction',
+SECTIONS = ['toolchain', 'source_files', 'inputs', 'bytecode_check', 'generated_files', 'extraction',
             'witness_check', 'python_controls', 'theorems', 'negative_controls']
 GENERATED = re.compile(r'^AcirLean/(Deposit|Withdraw|Transfer)/(Data\.lean|Data\.lean\.json|'
                        r'Data/Part\d+\.lean|WitnessData\.lean|NV/G\d+\.lean|NonVacuity\.lean)$')
@@ -173,6 +173,25 @@ def stage_inputs(obs):
         }
     obs['inputs'] = res
     log('inputs: decompressed and hashed ' + ', '.join(f'{c} func0 {v["func0_sha256"][:12]}' for c, v in res.items()))
+
+
+def stage_bytecode(obs, failures):
+    res = {}
+    d = os.path.join(BUILD, 'inputs')
+    for c in CIRCUITS:
+        rc, text = run(['python3', 'scripts/bytecode_check.py', f'{d}/{c}.acir.txt', f'{d}/{c}.json'],
+                       out=os.path.join(BUILD, f'{c}-bytecode-check.json'), check=False)
+        try:
+            res[c] = json.loads(text)
+        except ValueError:
+            res[c] = {'error': text[-400:]}
+        if rc != 0:
+            diffs = res[c].get('first_differences') or [res[c].get('error', text[-400:])]
+            failures.extend(f'BYTECODE MISMATCH {c}: {x}' for x in diffs)
+    obs['bytecode_check'] = res
+    if any(l.startswith('BYTECODE MISMATCH') for l in failures):
+        raise Fatal('the print differs from the artifact bytecode; nothing was regenerated or built')
+    log('bytecode: ' + ', '.join(f'{c} {v["opcodes"]} opcodes match the print' for c, v in res.items()))
 
 
 def generated_files():
@@ -392,6 +411,7 @@ def check():
         stage_inputs(obs)
         if obs['inputs'] != exp.get('inputs'):
             raise Fatal('input artifacts differ from expected.json; nothing was regenerated or built')
+        stage_bytecode(obs, failures)
         stage_regen(obs)
         stage_scan(failures)
         stage_build(timings)
@@ -415,7 +435,8 @@ def check():
     print('Headline statements (kernel-checked; axioms from the census):')
     for name in HEADLINE:
         print(f'  {name} : {th[name]["type"]}  [{", ".join(th[name]["axioms"])}]')
-    print(f'REPLAY CHECK PASS: {len(obs["inputs"])} circuits, {len(th)} theorems with pinned statements '
+    print(f'REPLAY CHECK PASS: {len(obs["inputs"])} circuits (each print matches its bytecode), '
+          f'{len(th)} theorems with pinned statements '
           f'and standard axioms only, {len(obs["negative_controls"])} negative Lean controls failed as '
           f'expected, {len(obs["python_controls"])} Python witness controls matched, '
           f'{time.time() - t_start:.0f} s')
@@ -491,6 +512,37 @@ def fx_skip_kernel(root):
     repin(root, 'AcirLean/Transfer/Rules.lean')
 
 
+def repin_print(root, c):
+    """Update every pinned hash of the print of circuit `c`, so that only the bytecode
+    comparison can catch the change."""
+    raw = lzma.decompress(open(os.path.join(root, 'inputs', f'{c}.acir.txt.xz'), 'rb').read())
+    p = os.path.join(root, 'expected.json')
+    e = json.load(open(p))
+    e['inputs'][c]['print_sha256'] = hashlib.sha256(raw).hexdigest()
+    e['inputs'][c]['func0_sha256'] = hashlib.sha256(func0_section(raw.decode())).hexdigest()
+    json.dump(e, open(p, 'w'), indent=1, ensure_ascii=False)
+    repin(root, f'inputs/{c}.acir.txt.xz')
+
+
+def edit_print(root, c, k, line, new):
+    p = os.path.join(root, 'inputs', f'{c}.acir.txt.xz')
+    lines = lzma.decompress(open(p, 'rb').read()).decode().split('\n')
+    f0 = lines.index('func 0') + 4
+    if lines[f0 + k] != line:
+        raise SystemExit(f'self-test fixture cannot find {c} opcode {k}')
+    lines[f0 + k:f0 + k + 1] = [new] if new is not None else []
+    open(p, 'wb').write(lzma.compress('\n'.join(lines).encode(), preset=9))
+    repin_print(root, c)
+
+
+def fx_print_changed(root):
+    edit_print(root, 'withdraw', 362, 'BLACKBOX::RANGE input: w2, bits: 128', 'BLACKBOX::RANGE input: w2, bits: 127')
+
+
+def fx_print_dropped(root):
+    edit_print(root, 'deposit', 23, 'BLACKBOX::RANGE input: w2, bits: 128', None)
+
+
 def fx_sorry(root):
     edit(root, 'AcirLean/Transfer/Rules.lean', '  ⟨rfl, rfl, rfl, rfl⟩\n\nend AcirLean.Transfer',
          '  sorry\n\nend AcirLean.Transfer')
@@ -526,6 +578,12 @@ FIXTURES = [
     ('negative-control-wrong-reason', fx_neg_wrong_reason, [r'^MISMATCH negative_controls: Neg/TransferTokenSwap\.lean: ']),
     ('kernel-check-skipped', fx_skip_kernel, [r"^FORBIDDEN TOKEN 'skipKernelTC' at AcirLean/Transfer/Rules\.lean:"],
      {'rebless': ['AcirLean.Transfer.token_swap_mem'], 'only': True}),
+    ('print-differs-from-bytecode', fx_print_changed,
+     [r"^BYTECODE MISMATCH withdraw: opcode 362: bytecode \('range', 2, 128\), print \('range', 2, 127\)$",
+      r'^FATAL the print differs from the artifact bytecode']),
+    ('print-drops-an-opcode', fx_print_dropped,
+     [r'^BYTECODE MISMATCH deposit: opcode count: bytecode 7662, print 7661$',
+      r'^FATAL the print differs from the artifact bytecode']),
 ]
 
 
@@ -582,7 +640,7 @@ def self_test():
             out = p.stdout.decode(errors='replace')
             fails = [l for l in out.split('\n') if re.match(r'^(MISSING|UNEXPECTED|MISMATCH|DUPLICATE|FATAL|'
                                                             r'FORBIDDEN|NON-STANDARD|AXIOM|OPAQUE|NEGATIVE|PYTHON|'
-                                                            r'ELIDED)', l)]
+                                                            r'ELIDED|BYTECODE)', l)]
             if fx is None:
                 ok = p.returncode == 0 and not fails
             else:
