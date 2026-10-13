@@ -1,0 +1,1382 @@
+{
+ "toolchain": {
+  "lean-toolchain": "leanprover/lean4:v4.33.1",
+  "lake_reports_lean_4_33_1": true,
+  "python_ge_3_10": true
+ },
+ "source_files": {
+  "Census.lean": "cc4db21076674a5e9e514d79adb3a1e1207e8dc131d3f546a9334cc302916fc7",
+  "check.sh": "2e8cdc2503c3c6c5b16ece859f85c1cff1abc763a2f131668928d5e3240f4161",
+  "inputs/PROVENANCE.md": "17c98f7b1f3fbe76e950d2123a87bde00a04d9a4400fb626f7f0896509ac677a",
+  "lake-manifest.json": "84f48cfa5e9cfecaac04a65ff48f6c6ea86df9f4a3ec4ea1b877f99768c3380d",
+  "lakefile.toml": "c1fa4b7a3ef67c58c1c183218b7b6dadd9c5ff49a282248cfbaa9437f9f0f53b",
+  "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+  "scripts/check_vectors.py": "986bbe01bc4ac07c839ee3e67694930e6249efa3ae4a26053f0d5a56a5a50b37",
+  "scripts/common.py": "55a4b171c92f119d17fd72d9ff8d66cfc150162f60d131865935a444120ee58b",
+  "scripts/gen_lean.py": "47353189c766199e9c33c4d2c6b0827412489b6fecefabe5fbb165f154289943",
+  "scripts/gen_sol.py": "0c971cdbb428ab4402f52aff4795b3018492cc75de772727952941ae1fe516a3",
+  "scripts/replay.py": "fcc2fee449110c11f31b0b01e07fb1f62dac0023ca8baabf5ca9cbaa45c347a5"
+ },
+ "inputs": {
+  "inputs/PoseidonT3.sol": "08a7493be37838166954af6c77d583d797cc17d37673196498fc70cbf557831c",
+  "inputs/noir/LICENSE": "4458503dd48e88c4e0b945fb252a08b93c40ec757309b8ffa7c594dfa1e35104",
+  "inputs/noir/bn254.nr": "4800b851b4b0e2c71cd6456efb021be865e4fde040c6e63797b6f157c042653a",
+  "inputs/noir/bn254/consts.nr": "0e1ce6ec6ed2ebbab52739ab07a2ab7a9cfb9b479cb012527f5e08447677dfd2",
+  "inputs/noir/bn254/perm.nr": "1daf55657af0418deb717b74cd45a1a4e9ac9d59678335cf0e677ed8a682be23",
+  "inputs/noir/mod.nr": "d0b044a17c0d7c26470137c17b7a43c172051da8ea74e56797323f3cc07a5a84",
+  "inputs/sol_params.json": "cbca794b53c67844b9ab3cd21203f6720e291b6c8639cece18ff37b3aa01f2b8",
+  "inputs/vectors/inputs.json": "ab284c7668a2ba195000a4c8eb9ca709d74dc61f27c60fa613025b1f490f0bcd",
+  "inputs/vectors/sol_outputs.txt": "8acc9017447ec7f85e804858d1ccbce78723119fae4688f905a8e32fa844152f"
+ },
+ "generated_files": {
+  "HashAgreement/Base.lean": "3bf647d49d21be56223fd59572a8ef441af85676998b49ae109de0c92f4989f4",
+  "HashAgreement/Sol.lean": "c29d1204db20e5a675002d78439ab09b40659edfd279c891f9645137695e4d78",
+  "HashAgreement/Full.lean": "2dccd3cf6e236e4e0a5389c2afcfda664f2de28c1629ba33b9869d2527262ac6",
+  "HashAgreement/RoundsD.lean": "5d82ef8dc2223c863ea842c04d3cafb7aa34a85b1e7fa470d44e3db42824e8af",
+  "HashAgreement/Controls.lean": "81405a1fbf0e4abce7dd5b76bab3940b41b5186f0347d4a1b9aaa4792226d747",
+  "Neg/RoundsNeg.lean": "aad30fb011437049cf622772eda76b4dad7c3658bca4faca07bf5775ad4449c6",
+  "test/Vectors.lean": "73c59c4b143676fbb55d5ee45fd40025db298e8ce0570c90f9423ef8b3a6e4df",
+  "blocks.sha256": "179c3716b312fd56a24e7cc09a262c2951c3164876bed06679a700103ae63480"
+ },
+ "python_vectors": {
+  "monolithic": 300,
+  "segmented": 300,
+  "plain": 300,
+  "noir": 300
+ },
+ "theorems": {
+  "HashAgreement.L_65": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.L 65 x = x",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.L_aff": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, 4 ≤ j → j ≤ 60 → ∀ (x : HashAgreement.St), HashAgreement.L j x = HashAgreement.aff (HashAgreement.Tw j) (HashAgreement.vw j) x",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.L_full": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, j ≤ 3 ∨ 61 ≤ j ∧ j ≤ 64 → ∀ (x : HashAgreement.St), HashAgreement.L j x = x + HashAgreement.plainC j",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.aff_I3": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (c y : HashAgreement.St), HashAgreement.aff HashAgreement.I3 c y = y + c",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.full_step": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (x c c' C : HashAgreement.St) (Mn M : HashAgreement.M3), Mn = M → HashAgreement.vm C M = c' → HashAgreement.applyMatrix Mn (HashAgreement.addC (HashAgreement.sigma (x + c)) C) = HashAgreement.pmix M (HashAgreement.sboxAll (x + c)) + c'",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.last_step": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (x c : HashAgreement.St) (Mn M : HashAgreement.M3), Mn = M → HashAgreement.applyMatrix Mn (HashAgreement.sigma (x + c)) = HashAgreement.pmix M (HashAgreement.sboxAll (x + c))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirHash2_eq_plainHash2": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (a b : HashAgreement.K), HashAgreement.noirHash2 a b = HashAgreement.plainHash2 a b",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirPermute_eq_fold": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (s : HashAgreement.St), HashAgreement.noirPermute s = List.foldl (fun s j => HashAgreement.noirRound j s) (HashAgreement.L 0 s) (List.range 65)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirPermute_eq_plainPerm": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (s : HashAgreement.St), HashAgreement.noirPermute s = HashAgreement.plainPerm s",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirRound_first": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, j < 3 → ∀ (s : HashAgreement.St), HashAgreement.noirRound j s = HashAgreement.applyMatrix HashAgreement.noirM (HashAgreement.addC (HashAgreement.sigma s) (HashAgreement.rc3 (3 * (j + 1))))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirRound_last": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (s : HashAgreement.St), HashAgreement.noirRound 64 s = HashAgreement.applyMatrix HashAgreement.noirM (HashAgreement.sigma s)",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirRound_partial": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, 4 ≤ j → j < 61 → ∀ (s : HashAgreement.St), HashAgreement.noirRound j s = HashAgreement.partialStep s (j - 4)",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirRound_second": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, 61 ≤ j → j < 64 → ∀ (s : HashAgreement.St), HashAgreement.noirRound j s = HashAgreement.applyMatrix HashAgreement.noirM (HashAgreement.addC (HashAgreement.sigma s) (HashAgreement.rc3 (72 + 3 * (j - 61))))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.noirRound_three": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (s : HashAgreement.St), HashAgreement.noirRound 3 s = HashAgreement.applyMatrix HashAgreement.noirP (HashAgreement.addC (HashAgreement.sigma s) (HashAgreement.rc3 12))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.partial_step": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (x c v v' : HashAgreement.St) (k s0 s1 s2 s3 s4 : HashAgreement.K) (T T' M : HashAgreement.M3), T.a00 = 1 ∧ T.a01 = 0 ∧ T.a02 = 0 ∧ T.a10 = 0 ∧ T.a20 = 0 → v.1 = c.1 → HashAgreement.mm T { a00 := s0, a01 := s3, a02 := s4, a10 := s1, a11 := 1, a12 := 0, a20 := s2, a21 := 0, a22 := 1 } = HashAgreement.mm M T' → v' = HashAgreement.vm (k, v.2.1 - (HashAgreement.vm c T).2.1, v.2.2 - (HashAgreement.vm c T).2.2) { a00 := s0, a01 := s3, a02 := s4, a10 := s1, a11 := 1, a12 := 0, a20 := s2, a21 := 0, a22 := 1 } → HashAgreement.partialBody k s0 s1 s2 s3 s4 (HashAgreement.aff T v x) = HashAgreement.aff T' v' (HashAgreement.pmix M (HashAgreement.sbox0 (x + c)))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.perm_eq_of_rounds": {
+   "module": "HashAgreement.Base",
+   "type": "(∀ j < 65, ∀ (x : HashAgreement.St), HashAgreement.noirRound j (HashAgreement.L j x) = HashAgreement.L (j + 1) (HashAgreement.plainRound j x)) → ∀ (s : HashAgreement.St), HashAgreement.noirPermute s = HashAgreement.plainPerm s",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.plainRound_full": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, j < 4 ∨ 61 ≤ j → ∀ (x : HashAgreement.St), HashAgreement.plainRound j x = HashAgreement.pmix HashAgreement.plainM (HashAgreement.sboxAll (x + HashAgreement.plainC j))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.plainRound_partial": {
+   "module": "HashAgreement.Base",
+   "type": "∀ {j : ℕ}, 4 ≤ j → j < 61 → ∀ (x : HashAgreement.St), HashAgreement.plainRound j x = HashAgreement.pmix HashAgreement.plainM (HashAgreement.sbox0 (x + HashAgreement.plainC j))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.pre_step": {
+   "module": "HashAgreement.Base",
+   "type": "∀ (x c C v' : HashAgreement.St) (P M T' : HashAgreement.M3), P = HashAgreement.mm M T' → v' = HashAgreement.vm C P → HashAgreement.applyMatrix P (HashAgreement.addC (HashAgreement.sigma (x + c)) C) = HashAgreement.aff T' v' (HashAgreement.pmix M (HashAgreement.sboxAll (x + c)))",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round0": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 0 (HashAgreement.L 0 x) = HashAgreement.L 1 (HashAgreement.plainRound 0 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round1": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 1 (HashAgreement.L 1 x) = HashAgreement.L 2 (HashAgreement.plainRound 1 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round10": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 10 (HashAgreement.L 10 x) = HashAgreement.L 11 (HashAgreement.plainRound 10 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round11": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 11 (HashAgreement.L 11 x) = HashAgreement.L 12 (HashAgreement.plainRound 11 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round12": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 12 (HashAgreement.L 12 x) = HashAgreement.L 13 (HashAgreement.plainRound 12 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round13": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 13 (HashAgreement.L 13 x) = HashAgreement.L 14 (HashAgreement.plainRound 13 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round14": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 14 (HashAgreement.L 14 x) = HashAgreement.L 15 (HashAgreement.plainRound 14 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round15": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 15 (HashAgreement.L 15 x) = HashAgreement.L 16 (HashAgreement.plainRound 15 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round16": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 16 (HashAgreement.L 16 x) = HashAgreement.L 17 (HashAgreement.plainRound 16 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round17": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 17 (HashAgreement.L 17 x) = HashAgreement.L 18 (HashAgreement.plainRound 17 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round18": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 18 (HashAgreement.L 18 x) = HashAgreement.L 19 (HashAgreement.plainRound 18 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round19": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 19 (HashAgreement.L 19 x) = HashAgreement.L 20 (HashAgreement.plainRound 19 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round2": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 2 (HashAgreement.L 2 x) = HashAgreement.L 3 (HashAgreement.plainRound 2 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round20": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 20 (HashAgreement.L 20 x) = HashAgreement.L 21 (HashAgreement.plainRound 20 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round21": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 21 (HashAgreement.L 21 x) = HashAgreement.L 22 (HashAgreement.plainRound 21 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round22": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 22 (HashAgreement.L 22 x) = HashAgreement.L 23 (HashAgreement.plainRound 22 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round23": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 23 (HashAgreement.L 23 x) = HashAgreement.L 24 (HashAgreement.plainRound 23 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round24": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 24 (HashAgreement.L 24 x) = HashAgreement.L 25 (HashAgreement.plainRound 24 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round25": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 25 (HashAgreement.L 25 x) = HashAgreement.L 26 (HashAgreement.plainRound 25 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round26": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 26 (HashAgreement.L 26 x) = HashAgreement.L 27 (HashAgreement.plainRound 26 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round27": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 27 (HashAgreement.L 27 x) = HashAgreement.L 28 (HashAgreement.plainRound 27 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round28": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 28 (HashAgreement.L 28 x) = HashAgreement.L 29 (HashAgreement.plainRound 28 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round29": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 29 (HashAgreement.L 29 x) = HashAgreement.L 30 (HashAgreement.plainRound 29 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round3": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 3 (HashAgreement.L 3 x) = HashAgreement.L 4 (HashAgreement.plainRound 3 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round30": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 30 (HashAgreement.L 30 x) = HashAgreement.L 31 (HashAgreement.plainRound 30 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round31": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 31 (HashAgreement.L 31 x) = HashAgreement.L 32 (HashAgreement.plainRound 31 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round32": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 32 (HashAgreement.L 32 x) = HashAgreement.L 33 (HashAgreement.plainRound 32 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round33": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 33 (HashAgreement.L 33 x) = HashAgreement.L 34 (HashAgreement.plainRound 33 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round34": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 34 (HashAgreement.L 34 x) = HashAgreement.L 35 (HashAgreement.plainRound 34 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round35": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 35 (HashAgreement.L 35 x) = HashAgreement.L 36 (HashAgreement.plainRound 35 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round36": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 36 (HashAgreement.L 36 x) = HashAgreement.L 37 (HashAgreement.plainRound 36 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round37": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 37 (HashAgreement.L 37 x) = HashAgreement.L 38 (HashAgreement.plainRound 37 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round38": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 38 (HashAgreement.L 38 x) = HashAgreement.L 39 (HashAgreement.plainRound 38 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round39": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 39 (HashAgreement.L 39 x) = HashAgreement.L 40 (HashAgreement.plainRound 39 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round3D": {
+   "module": "HashAgreement.RoundsD",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 3 (HashAgreement.L 3 x) = HashAgreement.L 4 (HashAgreement.plainRound 3 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round4": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 4 (HashAgreement.L 4 x) = HashAgreement.L 5 (HashAgreement.plainRound 4 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round40": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 40 (HashAgreement.L 40 x) = HashAgreement.L 41 (HashAgreement.plainRound 40 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round41": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 41 (HashAgreement.L 41 x) = HashAgreement.L 42 (HashAgreement.plainRound 41 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round42": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 42 (HashAgreement.L 42 x) = HashAgreement.L 43 (HashAgreement.plainRound 42 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round43": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 43 (HashAgreement.L 43 x) = HashAgreement.L 44 (HashAgreement.plainRound 43 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round44": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 44 (HashAgreement.L 44 x) = HashAgreement.L 45 (HashAgreement.plainRound 44 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round45": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 45 (HashAgreement.L 45 x) = HashAgreement.L 46 (HashAgreement.plainRound 45 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round46": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 46 (HashAgreement.L 46 x) = HashAgreement.L 47 (HashAgreement.plainRound 46 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round47": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 47 (HashAgreement.L 47 x) = HashAgreement.L 48 (HashAgreement.plainRound 47 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round48": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 48 (HashAgreement.L 48 x) = HashAgreement.L 49 (HashAgreement.plainRound 48 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round49": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 49 (HashAgreement.L 49 x) = HashAgreement.L 50 (HashAgreement.plainRound 49 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round4D": {
+   "module": "HashAgreement.RoundsD",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 4 (HashAgreement.L 4 x) = HashAgreement.L 5 (HashAgreement.plainRound 4 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round4_wrong_false": {
+   "module": "HashAgreement.Controls",
+   "type": "¬∀ (x : HashAgreement.St), HashAgreement.partialBody (HashAgreement.rc 15) (HashAgreement.sp 5) (HashAgreement.sp 6) (HashAgreement.sp 7) (HashAgreement.sp 8) (HashAgreement.sp 9) (HashAgreement.L 4 x) = HashAgreement.L 5 (HashAgreement.plainRound 4 x)",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round5": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 5 (HashAgreement.L 5 x) = HashAgreement.L 6 (HashAgreement.plainRound 5 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round50": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 50 (HashAgreement.L 50 x) = HashAgreement.L 51 (HashAgreement.plainRound 50 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round51": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 51 (HashAgreement.L 51 x) = HashAgreement.L 52 (HashAgreement.plainRound 51 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round52": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 52 (HashAgreement.L 52 x) = HashAgreement.L 53 (HashAgreement.plainRound 52 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round53": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 53 (HashAgreement.L 53 x) = HashAgreement.L 54 (HashAgreement.plainRound 53 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round54": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 54 (HashAgreement.L 54 x) = HashAgreement.L 55 (HashAgreement.plainRound 54 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round55": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 55 (HashAgreement.L 55 x) = HashAgreement.L 56 (HashAgreement.plainRound 55 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round56": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 56 (HashAgreement.L 56 x) = HashAgreement.L 57 (HashAgreement.plainRound 56 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round57": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 57 (HashAgreement.L 57 x) = HashAgreement.L 58 (HashAgreement.plainRound 57 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round58": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 58 (HashAgreement.L 58 x) = HashAgreement.L 59 (HashAgreement.plainRound 58 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round59": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 59 (HashAgreement.L 59 x) = HashAgreement.L 60 (HashAgreement.plainRound 59 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round6": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 6 (HashAgreement.L 6 x) = HashAgreement.L 7 (HashAgreement.plainRound 6 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round60": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 60 (HashAgreement.L 60 x) = HashAgreement.L 61 (HashAgreement.plainRound 60 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round60D": {
+   "module": "HashAgreement.RoundsD",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 60 (HashAgreement.L 60 x) = HashAgreement.L 61 (HashAgreement.plainRound 60 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round61": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 61 (HashAgreement.L 61 x) = HashAgreement.L 62 (HashAgreement.plainRound 61 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round62": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 62 (HashAgreement.L 62 x) = HashAgreement.L 63 (HashAgreement.plainRound 62 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round63": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 63 (HashAgreement.L 63 x) = HashAgreement.L 64 (HashAgreement.plainRound 63 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round64": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 64 (HashAgreement.L 64 x) = HashAgreement.L 65 (HashAgreement.plainRound 64 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round7": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 7 (HashAgreement.L 7 x) = HashAgreement.L 8 (HashAgreement.plainRound 7 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round8": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 8 (HashAgreement.L 8 x) = HashAgreement.L 9 (HashAgreement.plainRound 8 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.round9": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.noirRound 9 (HashAgreement.L 9 x) = HashAgreement.L 10 (HashAgreement.plainRound 9 x)",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solHashSeg_eq_noirHash2": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (a b : HashAgreement.K), HashAgreement.solHashSeg a b = HashAgreement.noirHash2 a b",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solHashSeg_eq_plainHash2": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (a b : HashAgreement.K), HashAgreement.solHashSeg a b = HashAgreement.plainHash2 a b",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solLast_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solLast (x + HashAgreement.plainC 64) = (HashAgreement.plainRound 64 x).1",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR0_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (a b : HashAgreement.K), HashAgreement.solR0 a b = HashAgreement.plainRound 0 (0, a, b) + HashAgreement.plainC 1",
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR10_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR10 (x + HashAgreement.plainC 10) = HashAgreement.plainRound 10 x + HashAgreement.plainC 11",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR11_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR11 (x + HashAgreement.plainC 11) = HashAgreement.plainRound 11 x + HashAgreement.plainC 12",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR12_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR12 (x + HashAgreement.plainC 12) = HashAgreement.plainRound 12 x + HashAgreement.plainC 13",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR13_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR13 (x + HashAgreement.plainC 13) = HashAgreement.plainRound 13 x + HashAgreement.plainC 14",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR14_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR14 (x + HashAgreement.plainC 14) = HashAgreement.plainRound 14 x + HashAgreement.plainC 15",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR15_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR15 (x + HashAgreement.plainC 15) = HashAgreement.plainRound 15 x + HashAgreement.plainC 16",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR16_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR16 (x + HashAgreement.plainC 16) = HashAgreement.plainRound 16 x + HashAgreement.plainC 17",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR17_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR17 (x + HashAgreement.plainC 17) = HashAgreement.plainRound 17 x + HashAgreement.plainC 18",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR18_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR18 (x + HashAgreement.plainC 18) = HashAgreement.plainRound 18 x + HashAgreement.plainC 19",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR19_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR19 (x + HashAgreement.plainC 19) = HashAgreement.plainRound 19 x + HashAgreement.plainC 20",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR1_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR1 (x + HashAgreement.plainC 1) = HashAgreement.plainRound 1 x + HashAgreement.plainC 2",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR20_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR20 (x + HashAgreement.plainC 20) = HashAgreement.plainRound 20 x + HashAgreement.plainC 21",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR21_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR21 (x + HashAgreement.plainC 21) = HashAgreement.plainRound 21 x + HashAgreement.plainC 22",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR22_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR22 (x + HashAgreement.plainC 22) = HashAgreement.plainRound 22 x + HashAgreement.plainC 23",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR23_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR23 (x + HashAgreement.plainC 23) = HashAgreement.plainRound 23 x + HashAgreement.plainC 24",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR24_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR24 (x + HashAgreement.plainC 24) = HashAgreement.plainRound 24 x + HashAgreement.plainC 25",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR25_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR25 (x + HashAgreement.plainC 25) = HashAgreement.plainRound 25 x + HashAgreement.plainC 26",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR26_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR26 (x + HashAgreement.plainC 26) = HashAgreement.plainRound 26 x + HashAgreement.plainC 27",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR27_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR27 (x + HashAgreement.plainC 27) = HashAgreement.plainRound 27 x + HashAgreement.plainC 28",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR28_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR28 (x + HashAgreement.plainC 28) = HashAgreement.plainRound 28 x + HashAgreement.plainC 29",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR29_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR29 (x + HashAgreement.plainC 29) = HashAgreement.plainRound 29 x + HashAgreement.plainC 30",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR2_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR2 (x + HashAgreement.plainC 2) = HashAgreement.plainRound 2 x + HashAgreement.plainC 3",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR30_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR30 (x + HashAgreement.plainC 30) = HashAgreement.plainRound 30 x + HashAgreement.plainC 31",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR31_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR31 (x + HashAgreement.plainC 31) = HashAgreement.plainRound 31 x + HashAgreement.plainC 32",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR32_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR32 (x + HashAgreement.plainC 32) = HashAgreement.plainRound 32 x + HashAgreement.plainC 33",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR33_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR33 (x + HashAgreement.plainC 33) = HashAgreement.plainRound 33 x + HashAgreement.plainC 34",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR34_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR34 (x + HashAgreement.plainC 34) = HashAgreement.plainRound 34 x + HashAgreement.plainC 35",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR35_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR35 (x + HashAgreement.plainC 35) = HashAgreement.plainRound 35 x + HashAgreement.plainC 36",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR36_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR36 (x + HashAgreement.plainC 36) = HashAgreement.plainRound 36 x + HashAgreement.plainC 37",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR37_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR37 (x + HashAgreement.plainC 37) = HashAgreement.plainRound 37 x + HashAgreement.plainC 38",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR38_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR38 (x + HashAgreement.plainC 38) = HashAgreement.plainRound 38 x + HashAgreement.plainC 39",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR39_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR39 (x + HashAgreement.plainC 39) = HashAgreement.plainRound 39 x + HashAgreement.plainC 40",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR3_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR3 (x + HashAgreement.plainC 3) = HashAgreement.plainRound 3 x + HashAgreement.plainC 4",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR40_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR40 (x + HashAgreement.plainC 40) = HashAgreement.plainRound 40 x + HashAgreement.plainC 41",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR41_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR41 (x + HashAgreement.plainC 41) = HashAgreement.plainRound 41 x + HashAgreement.plainC 42",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR42_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR42 (x + HashAgreement.plainC 42) = HashAgreement.plainRound 42 x + HashAgreement.plainC 43",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR43_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR43 (x + HashAgreement.plainC 43) = HashAgreement.plainRound 43 x + HashAgreement.plainC 44",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR44_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR44 (x + HashAgreement.plainC 44) = HashAgreement.plainRound 44 x + HashAgreement.plainC 45",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR45_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR45 (x + HashAgreement.plainC 45) = HashAgreement.plainRound 45 x + HashAgreement.plainC 46",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR46_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR46 (x + HashAgreement.plainC 46) = HashAgreement.plainRound 46 x + HashAgreement.plainC 47",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR47_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR47 (x + HashAgreement.plainC 47) = HashAgreement.plainRound 47 x + HashAgreement.plainC 48",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR48_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR48 (x + HashAgreement.plainC 48) = HashAgreement.plainRound 48 x + HashAgreement.plainC 49",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR49_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR49 (x + HashAgreement.plainC 49) = HashAgreement.plainRound 49 x + HashAgreement.plainC 50",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR4_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR4 (x + HashAgreement.plainC 4) = HashAgreement.plainRound 4 x + HashAgreement.plainC 5",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR50_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR50 (x + HashAgreement.plainC 50) = HashAgreement.plainRound 50 x + HashAgreement.plainC 51",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR51_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR51 (x + HashAgreement.plainC 51) = HashAgreement.plainRound 51 x + HashAgreement.plainC 52",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR52_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR52 (x + HashAgreement.plainC 52) = HashAgreement.plainRound 52 x + HashAgreement.plainC 53",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR53_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR53 (x + HashAgreement.plainC 53) = HashAgreement.plainRound 53 x + HashAgreement.plainC 54",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR54_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR54 (x + HashAgreement.plainC 54) = HashAgreement.plainRound 54 x + HashAgreement.plainC 55",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR55_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR55 (x + HashAgreement.plainC 55) = HashAgreement.plainRound 55 x + HashAgreement.plainC 56",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR56_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR56 (x + HashAgreement.plainC 56) = HashAgreement.plainRound 56 x + HashAgreement.plainC 57",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR57_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR57 (x + HashAgreement.plainC 57) = HashAgreement.plainRound 57 x + HashAgreement.plainC 58",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR58_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR58 (x + HashAgreement.plainC 58) = HashAgreement.plainRound 58 x + HashAgreement.plainC 59",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR59_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR59 (x + HashAgreement.plainC 59) = HashAgreement.plainRound 59 x + HashAgreement.plainC 60",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR5_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR5 (x + HashAgreement.plainC 5) = HashAgreement.plainRound 5 x + HashAgreement.plainC 6",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR60_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR60 (x + HashAgreement.plainC 60) = HashAgreement.plainRound 60 x + HashAgreement.plainC 61",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR61_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR61 (x + HashAgreement.plainC 61) = HashAgreement.plainRound 61 x + HashAgreement.plainC 62",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR62_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR62 (x + HashAgreement.plainC 62) = HashAgreement.plainRound 62 x + HashAgreement.plainC 63",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR63_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR63 (x + HashAgreement.plainC 63) = HashAgreement.plainRound 63 x + HashAgreement.plainC 64",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR6_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR6 (x + HashAgreement.plainC 6) = HashAgreement.plainRound 6 x + HashAgreement.plainC 7",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR7_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR7 (x + HashAgreement.plainC 7) = HashAgreement.plainRound 7 x + HashAgreement.plainC 8",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR8_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR8 (x + HashAgreement.plainC 8) = HashAgreement.plainRound 8 x + HashAgreement.plainC 9",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "HashAgreement.solR9_eq": {
+   "module": "HashAgreement.Full",
+   "type": "∀ (x : HashAgreement.St), HashAgreement.solR9 (x + HashAgreement.plainC 9) = HashAgreement.plainRound 9 x + HashAgreement.plainC 10",
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ]
+  }
+ },
+ "negative_control": {
+  "compiled": false,
+  "errors": [
+   {
+    "line": 28,
+    "col": 48,
+    "message": "Tactic `decide` proved that the proposition"
+   },
+   {
+    "line": 28,
+    "col": 68,
+    "message": "Tactic `decide` proved that the proposition"
+   }
+  ]
+ },
+ "lean_vectors": "(300, 300, 300, 300)"
+}
