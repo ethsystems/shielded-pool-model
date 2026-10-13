@@ -272,7 +272,7 @@
   "AcirLean/Withdraw/Controls.lean": "9d61de895fe05fa78b860d7c9051e37b601d433ee840c1b48cfb94383cdfcc86",
   "AcirLean/Withdraw/Solved.lean": "f2a70def09a198a85212617ebdd1b5d710ec65df5abcaf54d31f20c56b823daa",
   "AcirLean/Witness.lean": "aaf9fc18074ea50bdb045c850e7b795b58956c4a54f3140f4dd5d43a3005b108",
-  "Census.lean": "1cab0aedf20d3828076df131cee5c3cdca05e24248d3d859817f22e468925fb2",
+  "Census.lean": "e871ad9ee051f5838ba0cf7fd3eee4fc31f92e3cb39ffdc714495385d548742b",
   "Neg/DepositBound127.lean": "5a738b39ddd591f5d8aa3079e490c205d693a286c4003e1c95f22e4603fb15b5",
   "Neg/TransferNoRange.lean": "e0883543675e1165a47c8e232c1623e5a73f760df68af0953e3d7e4f12c0a346",
   "Neg/TransferTokenSwap.lean": "421e7266eeb27a99ba23697b9f4612f583f585110e425a7678fc822675247cf8",
@@ -294,7 +294,7 @@
   "scripts/acir2lean.py": "575b7a088a3a2f88c33025d3922d9eb6a99d64deac88d3c0e032f45773e60a5d",
   "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
   "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
-  "scripts/replay.py": "3ad8461aacfdd8809ca32d0d9e2486004e6f0cd30680d55c7e41886b91dca6b7",
+  "scripts/replay.py": "ca77f7e1fdd143dc6a8c8720b5485f5a9a12fc7705d526e1335ac3fc9a5e8a91",
   "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
  },
  "theorems": {

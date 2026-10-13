@@ -93,7 +93,9 @@ the included inputs and compares every result with `expected.json`. In order, it
    `expected.json`: five mutations must break the rule opcode they target, and setting
    the unconstrained deposit `payload_hash` (w5) must break nothing;
 6. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
-   `unsafe` and `opaque` in every Lean file of the package;
+   `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
+   kernel check) in every Lean file of the package, `Census.lean` included, and in
+   `lakefile.toml`;
 7. builds every module, one at a time;
 8. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its exact statement
    and its axioms (`Lean.collectAxioms`, as `#print axioms`); any axiom outside
@@ -111,7 +113,10 @@ cover that case.
 `--self-test` copies the built package and plants one change per copy. Each change must
 make `check.sh` fail for its intended reason: a removed theorem, an added theorem, a
 weakened statement, an altered input artifact, a rogue axiom, a `sorry`, a negative
-control that compiles, and a negative control that fails with a different error. A
+control that compiles, a negative control that fails with a different error, and a false
+theorem whose kernel check is turned off with `set_option debug.skipKernelTC true in`. That
+last fixture also re-blesses the census entries of that theorem and of its auxiliary
+lemma into its copy of `expected.json`, and every failure must then come from the scan. A
 duplicated census entry is tested on the comparator alone. The unchanged copy must pass.
 To show that the deeper check catches each change, the fixtures also update the file
 hash in their copy of `expected.json`.

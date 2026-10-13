@@ -28,7 +28,11 @@ TOOLCHAIN = 'leanprover/lean4:v4.33.1'
 # The standard-axiom allowlist. It lives here, not in expected.json, so that a re-blessed
 # expected.json cannot widen it.
 ALLOWED_AXIOMS = {'propext', 'Quot.sound', 'Classical.choice'}
-FORBIDDEN = re.compile(r'\b(sorry|admit|native_decide|axiom|extern|implemented_by|unsafe|opaque)\b')
+FORBIDDEN = re.compile(r'\b(sorry|admit|native_decide|axiom|extern|implemented_by|unsafe|opaque|'
+                       r'skipKernelTC)\b')
+# The scan reads every Lean file of the package and the Lake configuration (which could pass
+# options to every module).
+SCANNED = re.compile(r'(\.lean|^lakefile\.toml)$')
 CIRCUITS = {
     'deposit': {'ns': 'Deposit', 'parts': 2, 'values': '2', 'rules': ['Amount'],
                 'nv': '(solved 2).val = 500'},
@@ -246,14 +250,14 @@ def stage_regen(obs):
 def stage_scan(failures):
     n = 0
     for rel in walk_files():
-        if not rel.endswith('.lean') or not (rel.startswith('AcirLean/') or rel.startswith('Neg/')):
+        if not SCANNED.search(rel):
             continue
         n += 1
         for k, line in enumerate(open(os.path.join(PKG, rel), encoding='utf-8'), 1):
             m = FORBIDDEN.search(line)
             if m:
                 failures.append(f'FORBIDDEN TOKEN {m.group(1)!r} at {rel}:{k}')
-    log(f'scan: {n} Lean files scanned for forbidden tokens')
+    log(f'scan: {n} files (every Lean file and lakefile.toml) scanned for forbidden tokens')
 
 
 def build_steps():
@@ -305,7 +309,8 @@ def parse_census(text, failures):
                 failures.append(f'NON-STANDARD AXIOM {bad} in {r["name"]}')
         else:
             extra.append(r)
-            failures.append(f'{r["kind"].upper()} DECLARED {r["name"]} in {r["module"]}')
+            kind = {'axiomInfo': 'AXIOM', 'opaqueInfo': 'OPAQUE'}.get(r['kind'], r['kind'].upper())
+            failures.append(f'{kind} DECLARED {r["name"]} in {r["module"]}')
     return thms
 
 
@@ -471,6 +476,16 @@ def fx_rogue_axiom(root):
     repin(root, 'AcirLean/Deposit/Amount.lean')
 
 
+def fx_skip_kernel(root):
+    # A false membership claim (opcode 23542 is `ASSERT w17 = w7`): only the kernel rejects
+    # it (Neg/TransferTokenSwap.lean), and the option turns the kernel check off.
+    edit(root, 'AcirLean/Transfer/Rules.lean', 'end AcirLean.Transfer',
+         'set_option debug.skipKernelTC true in\n'
+         'theorem token_swap_mem : Opcode.assertZero (some 17) ⟨[], [(1, 18)], 0⟩ ∈ circuit.opcodes :=\n'
+         '  List.mem_of_getElem? (l := opcodes) (i := 23542) (by decide +kernel)\n\nend AcirLean.Transfer')
+    repin(root, 'AcirLean/Transfer/Rules.lean')
+
+
 def fx_sorry(root):
     edit(root, 'AcirLean/Transfer/Rules.lean', '  ⟨rfl, rfl, rfl, rfl⟩\n\nend AcirLean.Transfer',
          '  sorry\n\nend AcirLean.Transfer')
@@ -487,6 +502,11 @@ def fx_neg_wrong_reason(root):
     repin(root, 'Neg/TransferTokenSwap.lean')
 
 
+# (name, fixture, required failure lines, options). Options: `rebless` copies the census
+# entries of the named theorems and their auxiliary lemmas (`decide +kernel` adds one) from
+# the first run's observed.json into expected.json and runs the check again (an author
+# re-blessing expected.json); `only` requires that every failure line matches one of the
+# required patterns.
 FIXTURES = [
     ('baseline-unchanged-copy', None, None),
     ('missing-theorem', fx_missing, [r'^MISSING theorems: AcirLean\.Transfer\.token_names$']),
@@ -499,6 +519,8 @@ FIXTURES = [
                                r"^NON-STANDARD AXIOM \['sorryAx'\] in AcirLean\.Transfer\.token_names$"]),
     ('negative-control-compiles', fx_neg_compiles, [r'^NEGATIVE CONTROL Neg/WithdrawBound127\.lean COMPILED$']),
     ('negative-control-wrong-reason', fx_neg_wrong_reason, [r'^MISMATCH negative_controls: Neg/TransferTokenSwap\.lean: ']),
+    ('kernel-check-skipped', fx_skip_kernel, [r"^FORBIDDEN TOKEN 'skipKernelTC' at AcirLean/Transfer/Rules\.lean:"],
+     {'rebless': ['AcirLean.Transfer.token_swap_mem'], 'only': True}),
 ]
 
 
@@ -522,7 +544,8 @@ def self_test():
     tmp = os.path.join(BUILD, 'selftest')
     shutil.rmtree(tmp, ignore_errors=True)
     try:
-        for name, fx, want in FIXTURES:
+        for name, fx, want, *opt in FIXTURES:
+            opt = opt[0] if opt else {}
             root = os.path.join(tmp, name)
             os.makedirs(os.path.join(root, 'build'))
             for e in os.listdir(PKG):
@@ -540,6 +563,17 @@ def self_test():
             t0 = time.time()
             p = subprocess.run(['python3', 'scripts/replay.py', 'check'], cwd=root,
                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            reblessed = {}
+            if opt.get('rebless'):
+                ob = json.load(open(os.path.join(root, 'build', 'observed.json')))
+                ep = os.path.join(root, 'expected.json')
+                e = json.load(open(ep))
+                for t, v in ob.get('theorems', {}).items():
+                    if any(t == r or t.startswith(r + '.') for r in opt['rebless']):
+                        e['theorems'][t] = reblessed[t] = v
+                json.dump(e, open(ep, 'w'), indent=1, ensure_ascii=False)
+                p = subprocess.run(['python3', 'scripts/replay.py', 'check'], cwd=root,
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             out = p.stdout.decode(errors='replace')
             fails = [l for l in out.split('\n') if re.match(r'^(MISSING|UNEXPECTED|MISMATCH|DUPLICATE|FATAL|'
                                                             r'FORBIDDEN|NON-STANDARD|AXIOM|OPAQUE|NEGATIVE|PYTHON)', l)]
@@ -547,8 +581,10 @@ def self_test():
                 ok = p.returncode == 0 and not fails
             else:
                 ok = p.returncode != 0 and all(any(re.search(w, l) for l in fails) for w in want)
+                if opt.get('only'):
+                    ok = ok and all(any(re.search(w, l) for w in want) for l in fails)
             results.append({'fixture': name, 'ok': ok, 'rc': p.returncode, 'wall_s': round(time.time() - t0, 1),
-                            'required': want, 'failures': fails})
+                            'required': want, 'failures': fails, **({'reblessed': reblessed} if reblessed else {})})
             with open(os.path.join(BUILD, f'selftest-{name}.log'), 'w') as fh:
                 fh.write(out)
             msg = f'self-test {name}: rc {p.returncode}, {"as intended" if ok else "WRONG"} ({time.time() - t0:.0f} s)'
