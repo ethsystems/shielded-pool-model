@@ -476,8 +476,8 @@ def fx_rogue_axiom(root):
          '{ name := `AcirLean.Deposit.rogue, levelParams := [], type := mkConst ``False, isUnsafe := false })\n\n'
          'rogue_decl\n')
     edit(root, 'AcirLean/Deposit/Amount.lean',
-         'circuit.publicParams[2]? = some 2 ∧ publicNames[2]? = some "amount" :=\n  ⟨rfl, rfl⟩',
-         'circuit.publicParams[2]? = some 2 ∧ publicNames[2]? = some "amount" :=\n  AcirLean.Deposit.rogue.elim')
+         'circuit.publicParams[2]? = some 2 ∧ paramNames[2]? = some "amount" :=\n  ⟨rfl, rfl⟩',
+         'circuit.publicParams[2]? = some 2 ∧ paramNames[2]? = some "amount" :=\n  AcirLean.Deposit.rogue.elim')
     repin(root, 'AcirLean/Deposit/Amount.lean')
 
 

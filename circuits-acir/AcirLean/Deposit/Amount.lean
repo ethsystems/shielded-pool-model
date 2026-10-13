@@ -20,10 +20,10 @@ theorem amount_lt_two_pow_128 (w : Assignment) (h : circuit.Satisfied w) :
     (w 2).val < 2 ^ 128 :=
   Circuit.range_of_mem h range_amount_mem
 
-/-- Witness 2 is the third public parameter, and the third public ABI parameter is
-    `amount`. -/
+/-- Witness 2 is the third public parameter, and its flattened ABI name is `amount`
+    (`paramNames`, the list that the extractor checks against the ABI sizes). -/
 theorem amount_is_public_input_2 :
-    circuit.publicParams[2]? = some 2 ∧ publicNames[2]? = some "amount" :=
+    circuit.publicParams[2]? = some 2 ∧ paramNames[2]? = some "amount" :=
   ⟨rfl, rfl⟩
 
 end AcirLean.Deposit

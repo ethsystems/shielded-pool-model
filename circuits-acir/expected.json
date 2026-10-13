@@ -260,7 +260,7 @@
   }
  },
  "source_files": {
-  "AcirLean/Deposit/Amount.lean": "25a0a1814f016fe672c4e8a042912b9c34a6c7386118f5861190d1d0e87d39b8",
+  "AcirLean/Deposit/Amount.lean": "a514c457969050f63ac2bdda92d60582ffe3d470abaecca2e31383f3c6baa444",
   "AcirLean/Deposit/Controls.lean": "6b037fabfc8417ed264252c28f563257f22857da2a21fdd214e10df17c542b19",
   "AcirLean/Deposit/Solved.lean": "4c534f8bfbf93380676c39dc19131a854417f8786ad0488df47d80edbabd6085",
   "AcirLean/Linear.lean": "e28389d51a337baf13e2fb1a6dc708a61f872b8f978ebbe9aea30d1c78be21df",
@@ -268,7 +268,7 @@
   "AcirLean/Transfer/Controls.lean": "5c29b58d15eeb9c96e4432a25e9c5e0802aaf9a2857290c040e11e3c93dc6056",
   "AcirLean/Transfer/Rules.lean": "08dc420b67532f6a20a6fb9673f53f40abb78648032813463e99de54837411ae",
   "AcirLean/Transfer/Solved.lean": "d8d3933c427b50af5cd3121e52c7f5d94c0fc34a7f8d29a7efc64e64a6b911b8",
-  "AcirLean/Withdraw/Amount.lean": "018f5bc6abfd166037e5864763bc2aec6f2576bc8589583565bc22ffe17a2c6b",
+  "AcirLean/Withdraw/Amount.lean": "34242b0619600b5c799ade4113b6a20b484a037a31e0e9ac995b7dd967d141a0",
   "AcirLean/Withdraw/Controls.lean": "69bdb3138892dca9c71a912984ac65a3846dec6c6c98849bd7d085d9f3933e68",
   "AcirLean/Withdraw/Solved.lean": "f2a70def09a198a85212617ebdd1b5d710ec65df5abcaf54d31f20c56b823daa",
   "AcirLean/Witness.lean": "aaf9fc18074ea50bdb045c850e7b795b58956c4a54f3140f4dd5d43a3005b108",
@@ -294,7 +294,7 @@
   "scripts/acir2lean.py": "575b7a088a3a2f88c33025d3922d9eb6a99d64deac88d3c0e032f45773e60a5d",
   "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
   "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
-  "scripts/replay.py": "628de754649cbd17524f5cf4abb086e2b36df3b7e8e132f19e97b17f885a605f",
+  "scripts/replay.py": "22c3e522bc2416097345977fe3286b0667fba41f1d9aba18ce17bfe7a1f5ca11",
   "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
  },
  "theorems": {
@@ -352,8 +352,8 @@
     "propext"
    ],
    "module": "AcirLean.Deposit.Amount",
-   "type": "AcirLean.Deposit.circuit.publicParams[2]? = some 2 ∧ AcirLean.Deposit.publicNames[2]? = some \"amount\"",
-   "type_sha256": "fe1fdb662e679974c20a7f1639b3bc449980da17c8f588932225bf04daace7fa"
+   "type": "AcirLean.Deposit.circuit.publicParams[2]? = some 2 ∧ AcirLean.Deposit.paramNames[2]? = some \"amount\"",
+   "type_sha256": "9736d14d1eecf047ef89f4522265c6ed5414041daa749adc1e3af819530406cf"
   },
   "AcirLean.Deposit.amount_lt_two_pow_128": {
    "axioms": [
@@ -3088,8 +3088,8 @@
     "propext"
    ],
    "module": "AcirLean.Withdraw.Amount",
-   "type": "AcirLean.Withdraw.circuit.publicParams[2]? = some 2 ∧ AcirLean.Withdraw.publicNames[2]? = some \"amount\"",
-   "type_sha256": "1ca69c3ef015543ce6ce74f1d20512547b580c07849216f8610e772c18ea9d34"
+   "type": "AcirLean.Withdraw.circuit.publicParams[2]? = some 2 ∧ AcirLean.Withdraw.paramNames[2]? = some \"amount\"",
+   "type_sha256": "43bd542e00cb290a619b019e51c0a81ae22c106c4595ba9ceb9c13c48a8f5d5f"
   },
   "AcirLean.Withdraw.amount_lt_two_pow_128": {
    "axioms": [
