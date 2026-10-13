@@ -43,7 +43,8 @@ gate test.
 - The root-window bug in the contract is not a claim of this repo (part 7).
   The five root-window theorems (CLAIMS.md rows 16 to 20) state what
   the model's window contains and that an honest owner can withdraw
-  against any window root; the model's token set never changes
+  against any window root that covers the note (premises in CLAIMS.md
+  row 19); the model's token set never changes
   (simplification 10), and the contract blocks withdrawals of a removed
   token, against spec 4.4 (266). They do not prove exact retention of
   100 roots or anything about the contract (zero and repeated roots are

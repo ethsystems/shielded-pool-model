@@ -6,8 +6,8 @@ import LeanShieldedPool.Pool.Tx
 The historical-root window holds only operation boundaries, the root
 after each operation's final insertion enters it, and no root between a
 transfer's two inserts is in it (Section 4.4). An honest owner can
-withdraw against any root in the window, and so against the current
-root. No cryptographic hypotheses.
+withdraw a minted note against any window root that covers it, and so
+against the current root. No cryptographic hypotheses.
 -/
 
 namespace LeanShieldedPool
