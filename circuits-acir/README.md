@@ -105,10 +105,12 @@ the included inputs and compares every result with `expected.json`. In order, it
 10. compares everything with `expected.json`. A missing, duplicate or unexpected
     theorem, control, input or file fails, as does any changed statement or axiom list.
 
-The census reads printed output of Lean code that imports the package. Code that runs
-during elaboration could change that output, so the census is a check against mistakes,
-not against a hostile package; the source scan and the review of the hand-written files
-cover that case.
+The source scan and the census are checks against mistakes, not against a hostile
+package. Code that runs during elaboration (an `elab` command, a direct `addDecl`, an
+option set by code) can add declarations, skip the kernel or change what the census
+prints, and the scan matches none of these: the rogue-axiom fixture of the self-test gets
+through the scan, and only the census catches it. The pinned file hashes and the review of
+the hand-written files cover a hostile package.
 
 `--self-test` copies the built package and plants one change per copy. Each change must
 make `check.sh` fail for its intended reason: a removed theorem, an added theorem, a
