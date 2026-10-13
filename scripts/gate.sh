@@ -24,8 +24,10 @@ export PATH="$HOME/.elan/bin:$PATH"
 LOG="$WORK/build.log"
 if ! lake build >"$LOG" 2>&1; then echo "GATE FAIL: build"; tail -30 "$LOG"; exit 1; fi
 if grep -Eq "declaration uses .sorry.|sorryAx" "$LOG"; then echo "GATE FAIL: sorry"; exit 1; fi
-# explicit denies (kernel census also catches these via axioms)
-if grep -rnE --include="*.lean" "native_decide" LeanShieldedPool statements controls 2>/dev/null; then echo "GATE FAIL: native_decide"; exit 1; fi
+# explicit denies (the census also catches these via axioms, but only for
+# inventory names): native_decide, its synonyms `decide +native` and
+# `(native := true)`, and the native-evaluation axioms used directly
+if grep -rnE --include="*.lean" "native_decide|\+native|native[[:space:]]*:=|ofReduce(Bool|Nat)" LeanShieldedPool statements controls 2>/dev/null; then echo "GATE FAIL: native_decide"; exit 1; fi
 # bare simp rots silently as Mathlib evolves; require simp only [...] in accepted files
 if grep -rnE --include="*.lean" "(^|[^_[:alnum:]])simp($| [^o])" LeanShieldedPool statements 2>/dev/null | grep -v "simp only"; then echo "GATE FAIL: bare simp (use simp only [...])"; exit 1; fi
 # every declared axiom must be listed in AXIOMS.md (grep belt; kernel census is the suspenders)

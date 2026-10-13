@@ -37,6 +37,9 @@ fixture missing-theorem "GATE FAIL: inventory did not elaborate" \
   'printf "ghost_thm :: Nat\n" >> statements/INVENTORY.md'
 fixture native-decide "GATE FAIL: native_decide" \
   'printf "\ntheorem fx_nd : (2:Nat) + 2 = 4 := by native_decide\n" >> LeanShieldedPool/Proofs/TierA.lean'
+# `decide +native` is a synonym of native_decide; in a control no census sees its axiom
+fixture control-decide-native "GATE FAIL: native_decide" \
+  'printf -- "theorem fx_dn : (2:Nat) + 2 = 4 := by decide +native\n" > controls/refute_fixture.lean'
 fixture bare-simp "GATE FAIL: bare simp" \
   'printf "\ntheorem fx_s : (3:Nat) = 3 := by simp\n" >> LeanShieldedPool/Proofs/TierA.lean'
 fixture broken-neg-control "GATE FAIL: negative control built" \
