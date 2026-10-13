@@ -3,9 +3,9 @@ import LeanShieldedPool.Pool.Tx
 /-!
 # Root-window statements (issue #2)
 
-The historical-root window holds only operation boundaries (Section 4.4),
-and an honest owner can withdraw against the current root. No
-cryptographic hypotheses.
+The historical-root window holds only operation boundaries (Section 4.4).
+An honest owner can withdraw against any root in the window, and so
+against the current root. No cryptographic hypotheses.
 -/
 
 namespace LeanShieldedPool
@@ -24,13 +24,34 @@ def windowBoundary (P : PrimSpec) : Prop :=
         pre ++ [tx] <+: txs ∧ Run sup pre st₀ ∧ Step st₀ tx st₁ ∧
         s = st₁.leaves.length
 
-/-- **Honest withdrawal** (issue #2, liveness). The owner of a note that
-the pool minted (`n ∈ st.minted`, the ghost note list behind the tree),
-with a fresh nullifier, a nonzero amount and enough pool balance, has an
-accepted withdrawal against the current root
-(`st.leaves.length`), and the pool pays out exactly the amount. The note's
-`u128` range, the window membership of the current root and the
-commitment's membership at that root are derived, not assumed. -/
+/-- **Honest withdrawal at a window root** (issue #2, liveness; Section
+4.4, "accept proofs against any root in the window"). For any root `s`
+in the window, the owner of a note that the pool minted before that root
+(`n ∈ st.minted.take s`, the ghost note list behind the tree), with a
+fresh nullifier, a nonzero amount and enough pool balance, has an
+accepted withdrawal against `s`, and the pool pays out exactly the
+amount. The commitment's membership at `s` and the note's `u128` range
+are derived, not assumed. -/
+def honestWithdrawWindow (P : PrimSpec) : Prop :=
+  ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
+    Run sup txs st →
+    ∀ (k : P.SpendKey) (n : Note P) (r : P.Address) (s : Nat),
+      s ∈ st.window → n ∈ st.minted.take s →
+      n.ownedBy k → st.fresh (n.nf k) →
+      n.amount ≠ 0 → n.amount ≤ st.balance n.token →
+      ∃ st' : St P,
+        Step st (.withdraw ⟨k, n, r, s⟩) st' ∧
+        Run sup (txs ++ [.withdraw ⟨k, n, r, s⟩]) st' ∧
+        st'.balance n.token + n.amount = st.balance n.token
+
+/-- **Honest withdrawal at the current root** (issue #2, liveness). The
+owner of a note that the pool minted (`n ∈ st.minted`, the ghost note
+list behind the tree), with a fresh nullifier, a nonzero amount and
+enough pool balance, has an accepted withdrawal against the current root
+(`st.leaves.length`), and the pool pays out exactly the amount. The
+note's `u128` range, the window membership of the current root and the
+commitment's membership at that root are derived, not assumed. The
+special case of `honestWithdrawWindow` at the newest window entry. -/
 def honestWithdraw (P : PrimSpec) : Prop :=
   ∀ (sup : P.Token → Prop) (txs : List (Tx P)) (st : St P),
     Run sup txs st →

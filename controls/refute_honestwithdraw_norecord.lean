@@ -1,10 +1,15 @@
 -- Refutation control for `honestWithdraw_proof`. This file MUST BUILD.
--- The deposit post-state does NOT record its root (a missing
--- `_recordRoot`). Every guard and every other post-state is the real one.
--- After one 5-unit deposit the window is still [0], so the honest owner's
--- withdrawal against the current root (1 leaf) has no accepted step. The
--- final theorem proves the explicit negation of the frozen Prop, restated
--- over the mutated model's runs.
+-- The deposit post-state does NOT push its root into the window. Every
+-- guard and every other post-state is the real one. After one 5-unit
+-- deposit the window is still [0], so the honest owner's withdrawal
+-- against the current root (1 leaf) has no accepted step. In the model
+-- the current root is accepted only through the window, so the missing
+-- push blocks it. The contract would still accept that withdrawal:
+-- `isKnownRoot` accepts the current root before it reads the window
+-- (ShieldedPool.sol:314 at pocs-private a04b8b3). This control checks the
+-- model's push, not the contract. `refute_honestwithdraw_currentroot.lean`
+-- checks old roots. The final theorem proves the explicit negation of the
+-- frozen Prop, restated over the mutated model's runs.
 import LeanShieldedPool.Proofs.TierB
 
 namespace LeanShieldedPool
