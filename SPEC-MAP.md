@@ -31,8 +31,11 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 | `St.minted` (ghost) / `St.leaves` | commitment tree: append-only, positional insertion order | 5.2 (312), 4.2 step 6 (234) |
 | `St.window`, `St.pushWindow` | bounded historical-root window; only the root after the final insertion of an operation enters it | 4.4 (260-263) |
 | `St.rootInWindow` | contract accepts proofs against any root in the window | 4.4 (260-261) |
-| `windowBoundary_proof` | every window entry is 0 or the leaf count after a nonempty accepted prefix of the same history; no between-insert root enters the window | 4.4 (260-263) |
-| `honestWithdraw_proof` | an honest owner's withdrawal at the current root is accepted (premises in CLAIMS.md row 17), with exact payout on the pool field; window and tree membership derived | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) |
+| `windowBoundary_proof` | every window entry is 0 or the leaf count after a nonempty accepted prefix of the same history (the half "intermediate roots do not" enter) | 4.4 (260-263) |
+| `windowHead_proof` | the newest window entry is the current leaf count (the half "the root after the final insertion enters") | 4.4 (263) |
+| `noMidTransferRoot_proof` | the leaf count between a transfer's two inserts is not in the window | 4.4 (263) |
+| `honestWithdrawWindow_proof` | an honest owner's withdrawal against any window root that covers the note is accepted (premises in CLAIMS.md row 19), with exact payout on the pool field; tree membership and range derived | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) |
+| `honestWithdraw_proof` | the same at the current root; window membership also derived | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) |
 | `St.inTreeAt` | "member of the tree at the public commitment root" | 5.3 (350, 366) |
 | `St.nullifiers`, `St.fresh` | nullifier set, append-only; nullifier unspent | 5.2 (313-314), 4.2 step 5 (233), 4.3 step 4 |
 | `St.balance` | ERC-20 held by the pool per token | 4.1 step 6, 4.3 step 5 |
@@ -158,7 +161,11 @@ the model.
     step changes it. Token removal that must not block existing transfers and
     withdrawals (4.4, 266) is therefore modelled only by the fact that
     transfer and withdraw guards never read `supported`. Verifier mutability
-    and owner powers (6.1) are out.
+    and owner powers (6.1) are out. The contract at pocs-private a04b8b3
+    does not meet 266: `withdraw` reverts with `UnsupportedToken` for a
+    removed token (`ShieldedPool.sol:254`), so the withdrawal liveness of
+    CLAIMS.md rows 19 and 20 does not carry over to the contract after a
+    removal.
 11. **Ballast is the second input only.** The model follows 4.2 (208) and
     the reference circuit: input 0 is always membership-checked, and only
     input 1 may skip membership when its amount is zero

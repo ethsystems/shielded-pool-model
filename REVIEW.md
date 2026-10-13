@@ -41,10 +41,13 @@ gate test.
 - The research repo's toy and smoke theorems are not here, except the
   toy instances inside the k-anonymity extension file.
 - The root-window bug in the contract is not a claim of this repo (part 7).
-  The root-window theorems (`windowBoundary`, `honestWithdraw`) state
-  what the model's window contains and that an honest owner can
-  withdraw (premises in CLAIMS.md row 17); they do not prove exact retention of 100 roots or anything
-  about the contract (zero and repeated roots are pocs-private#15).
+  The five root-window theorems (CLAIMS.md rows 16 to 20) state what
+  the model's window contains and that an honest owner can withdraw
+  against any window root; the model's token set never changes
+  (simplification 10), and the contract blocks withdrawals of a removed
+  token, against spec 4.4 (266). They do not prove exact retention of
+  100 roots or anything about the contract (zero and repeated roots are
+  pocs-private#15).
 - The spec reading is human and still open (part 5).
 
 ## 3. How to check
@@ -65,10 +68,13 @@ fixtures, on Linux with btrfs, no memory cap, `LEAN_NUM_THREADS=2`.
 Without cheap file copies, set `GATE_WORK` to a directory on APFS,
 btrfs or XFS.
 
-The gate builds a fresh clone of HEAD. It rejects `sorry`, `native_decide`
-and unlisted axioms, in the controls too. It checks the exact type and
-axioms of the 59 inventory names, runs the controls, and checks the pins last.
-`gate_test.sh` plants 22 cheats; each must make the gate fail.
+The gate builds a fresh clone of HEAD. It rejects `sorry`, unlisted
+axioms, and `native_decide` and its synonyms such as `decide +native`.
+In the controls it rejects a `sorry` in the build output, any declared
+axiom, and the same `native_decide` text; it runs no axiom census on
+control theorems. It checks the exact type and axioms of the 65
+inventory names, runs the controls, and checks the pins last.
+`gate_test.sh` plants 23 cheats; each must make the gate fail.
 
 ## 4. Trust base
 
@@ -125,7 +131,7 @@ and `Statements/L5.lean`. Check these points:
 
 ## 6. What the theorems do not say
 
-The fifteen core theorems and the two root-window results say nothing
+The fifteen core theorems and the five root-window results say nothing
 about the verifier, concrete Merkle implementations, encoded amounts,
 deployed caller and authorization behavior, re-entrancy, overflow,
 governance, privacy, or deployed code (the extension's symbolic observer
