@@ -351,7 +351,7 @@
   "inputs/SHA256SUMS": "566e0bc22ac7ba604612f2473d6a53acfa1a86301fa05c8aed241618952a88fa",
   "inputs/TOOLS.txt": "508dccc5e46baf22b54644071632d4da29c6efcb712de8c01f90a15784a8a995",
   "lake-manifest.json": "d5f5c483a5dd7780a5c350da2361cd8dccc39bad3ee36a2f2669b0b42ebe7b70",
-  "lakefile.toml": "980b683100326e2144414fc3e248e7d6db2f811522239f7e826167cd374ee589",
+  "lakefile.toml": "940d200bb64a86e45723b08fd34781e083b25e63beff258799a09a990d1eb6ed",
   "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
   "scripts/acir2lean.py": "6be014fd9313d71017dc184ff9581fbb80bce68ec655c1928e084a34686d502d",
   "scripts/bytecode_check.py": "c25544adadb7281b5bfdbe4c688892bd6e095ed4bbc1dd8bec5f4d3f015f6fb3",
