@@ -1,0 +1,2 @@
+nargo/github.com/noir-lang/poseidon/v0.3.0 head=0880c371e88e583d39515fd3f877538657ac41eb tag=v0.3.0 dirty_lines=0
+nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2 head=ff3070116b446ca02ad233b9ad466677d127e64e tag=binary-merkle-root-v0.0.2 dirty_lines=0

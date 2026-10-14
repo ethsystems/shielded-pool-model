@@ -1,0 +1,25 @@
+{
+ "deposit": {
+  "acir_sha256": "99c4441519ea669517e0ce8acfe7757fc893b2bf9d5c8d1fac5832367adb407a",
+  "vk_sha256": "33283de4ed89a073fceace99a7fe6d1eab8461ba37bda4aed15c8ae7195badc1",
+  "vk_hash": "0x21cba1cbaf0dfc979b5978d694f7c2bedf98ef8012139a33e3218132e642230d",
+  "sol_sha256": "f0157867373f50a2057313c5243e808258b508f182cba91421bbd4d26d21aeed"
+ },
+ "transfer": {
+  "acir_sha256": "86a9c4510e63458b98f8669ca762784b473b3d38bc19a50918eb0d5158d970e6",
+  "vk_sha256": "882a4909a39ee01a488f65ed8292d6528ef0bd005ee2a375922ca4423352eeef",
+  "vk_hash": "0x0ff59d91add8bc788eec2e2900e4ec1a9a726bb135c268842be11ab45a5eeb4d",
+  "sol_sha256": "33ee420f3ac09993c09e7cef00fa564fc8fa56c1b71eee0ffa92e791c7b2f895"
+ },
+ "withdraw": {
+  "acir_sha256": "41962d00fd794386340c9fad533f6136fc7b595ebe6e55ea3b58ea037ebea232",
+  "vk_sha256": "c6caeba4b7aa34e1ab5dad33a60cee4d1fd1a0e46d446cbffc5ec431db935744",
+  "vk_hash": "0x0c9e8ed785da4796fe241839bab23899dd7a4dc2723faa4db3b9fbd9e6183cfc",
+  "sol_sha256": "2e769a992a63eea8ee150144703db3e2b3109250d95ffff66db4b1384edfc3d2"
+ },
+ "control_withdraw_127": {
+  "acir_sha256": "1035c402704cb8edcbd1978c5b74c25d8f77feebdb420a7d8c5296ffe394f863",
+  "vk_hash": "0x0a3cf56265e25fcaed72b09cc23ba158c6b03576d9058b6aefdc0983d5fee3f3",
+  "gen_sol_sha256": "237b71864ed130b91afa37121b0b6e15cd59073981bd8aafb35686307a66df24"
+ }
+}
