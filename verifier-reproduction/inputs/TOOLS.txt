@@ -1,0 +1,18 @@
+# Pins that check.sh reads (key-value lines): the pocs source commit, the tools and the CRS.
+# It fails closed on another commit or another tool version.
+pocs_repo https://github.com/ethsystems/pocs
+pocs_commit a04b8b38969dfc2ee64de47edee7e396454204a8
+pocs_dir pocs/private-payment/shielded-pool
+nargo_version 1.0.0-beta.21
+nargo_git 89a0f0faf3a5f1273c8ac4843b7877882437e277
+nargo_sha256 0852cd5631ac5ca25f744f25c931e3cff16351d9bcdbfb03cebb48a4494a0fe3
+nargo_release https://github.com/noir-lang/noir/releases/tag/v1.0.0-beta.21
+nargo_asset nargo-x86_64-unknown-linux-gnu.tar.gz sha256=ed7b06fb52728ea6964379405cf47c4dfcb22659a055411967cbb421dad4f5f4
+bb_version 5.0.0-nightly.20260324
+bb_sha256 d7621dfb151f55c23fb04bf274f366a6a1e0516b85a3cf0ae9165a9952509793
+bb_release https://github.com/AztecProtocol/aztec-packages/releases/tag/v5.0.0-nightly.20260324
+bb_asset barretenberg-amd64-linux.tar.gz sha256=7875a7a82c23288461bdaf09bdf053a1b0bbb0066b1e2b3bc7fb8ca07518e174
+crs_sha256 3718ffbed583d8a279ccb2545196d5618e3fd97512b65aa051d2ebd0f57fb999
+crs_bytes 8388608
+crs_url http://crs.aztec-cdn.foundation/g1.dat
+crs_url_alt http://crs.aztec-labs.com/g1.dat
