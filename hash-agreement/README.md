@@ -192,8 +192,9 @@ cd hash-agreement
 ./check.sh      # expect the last line: REPLAY CHECK PASS: 155 theorems, ...
 ```
 
-Use `check.sh` rather than a bare `lake build`: the check rebuilds from scratch, regenerates
-the Lean files and compares everything with `expected.json`. In order, it:
+A bare `lake build` builds the five `HashAgreement` modules, several at a time, and checks
+nothing else. `check.sh` rebuilds from scratch, regenerates the Lean files and compares
+everything with `expected.json`. In order, it:
 
 1. checks the Lean and Python versions;
 2. hashes every tracked file except README.md, expected.json and .gitignore, the inputs
