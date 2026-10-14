@@ -219,8 +219,7 @@ def main():
             if abs(op[4]) >= P:
                 die("constant out of range")
     # ABI layout: flattened parameter sizes, in ABI order, give witness indices 0..n-1.
-    art_bytes = open(art_path, 'rb').read()
-    art = json.loads(art_bytes)
+    art = json.load(open(art_path))
 
     def size(t):
         k = t['kind']
@@ -342,7 +341,8 @@ def main():
     meta = {
         'print_sha256_full': hashlib.sha256(raw).hexdigest(),
         'func0_sha256': hashlib.sha256(func0_text).hexdigest(),
-        'artifact_sha256': hashlib.sha256(art_bytes).hexdigest(),
+        # The ABI, not the whole artifact: the artifact carries build paths in file_map.
+        'abi_sha256': hashlib.sha256(json.dumps(art['abi'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
         'bytecode_sha256': hashlib.sha256(art['bytecode'].encode()).hexdigest(),
         'noir_version': art.get('noir_version'),
         'counts': counts,

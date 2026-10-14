@@ -70,7 +70,7 @@
  "extraction": {
   "deposit": {
    "abi_layout_matches_print": true,
-   "artifact_sha256": "c14f69a0123f6095a7f645bfe20f0f999eb8b455bfd809d9e6bb90719c44da38",
+   "abi_sha256": "2eca0103bb9f7ef1b1d235e4346b0f5d96698bab84a7b2f86e91e2f01ae323aa",
    "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
    "chunk": 256,
    "chunks": 30,
@@ -89,7 +89,7 @@
   },
   "transfer": {
    "abi_layout_matches_print": true,
-   "artifact_sha256": "4d337288ee4c8ec800e66372b72036623353d9eb9cc3725bfb901bec605d5098",
+   "abi_sha256": "adbc83d9dd1d4a998914a4a84141ea445a917b17d9dcf681d7086ed96eae6996",
    "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
    "chunk": 256,
    "chunks": 92,
@@ -108,7 +108,7 @@
   },
   "withdraw": {
    "abi_layout_matches_print": true,
-   "artifact_sha256": "e798d4c6f7028b9172de2dd472f693d9ed539bfedaa0b465e3c616a077d6448e",
+   "abi_sha256": "2c2b7d5898217e4289c0596b02d3aba8b35e41a37d76933bdfad07c48276b203",
    "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
    "chunk": 256,
    "chunks": 45,
@@ -128,7 +128,7 @@
  },
  "generated_files": {
   "AcirLean/Deposit/Data.lean": "1e39095c567360e029ac6d8c028c83f61c4c421077809fda5b212ea1ffe7556b",
-  "AcirLean/Deposit/Data.lean.json": "a8003568a6099217d79f074c38ff250c715ae0bffc0243ffca5e9d00ec75a8d9",
+  "AcirLean/Deposit/Data.lean.json": "17f093197e2313aa48816b414e5a0334ea343cd21a7f17a9f0bc1a280dfca9c4",
   "AcirLean/Deposit/Data/Part0.lean": "adbce2e95d521d921b660c24c15ec2371a812bb7ddad5f4d64ef5598fa5568e8",
   "AcirLean/Deposit/Data/Part1.lean": "89c29ae237e870ca579e91b5d067002429d588595853eb0d6b6c18296b0ca1c1",
   "AcirLean/Deposit/NV/G0.lean": "90814419895be5e3fc6baff5daccbdd52b4738aeca43ce618e82a30b088ecf22",
@@ -142,7 +142,7 @@
   "AcirLean/Deposit/NonVacuity.lean": "df66ba33cab8940b4faaeb25a6f16b3d580a13bc211a0e9a5ecc773d90ef6902",
   "AcirLean/Deposit/WitnessData.lean": "b1d4923c555b7107110a544b6f2fe45e08025fe6a425c1faa3531a06889a355b",
   "AcirLean/Transfer/Data.lean": "4023daba74d66a62b855cb26c89a31e298632c4a6c6d055ac8a6c9dc1fbbe3d3",
-  "AcirLean/Transfer/Data.lean.json": "0ef3740dfd7a1ce404d8a3484c78ab3879cc14012a13ee01f350b2e05223eb8c",
+  "AcirLean/Transfer/Data.lean.json": "bf5131a511a2408c58d8299ba0897833f771d82d442e36493d1994bf82d8e564",
   "AcirLean/Transfer/Data/Part0.lean": "e6661b4ecc6dd990b35c30714b98c7ba5f3b96210ddca76852a28dbce8cf492a",
   "AcirLean/Transfer/Data/Part1.lean": "bc528e87886409c40253b751a99f7f97e5ae7f131ab4209b21556384498eb564",
   "AcirLean/Transfer/Data/Part2.lean": "ce825cde9faa54ce88614600e8f835f1202036136b225ee6b30012e570f66296",
@@ -175,7 +175,7 @@
   "AcirLean/Transfer/NonVacuity.lean": "8cd54235336a706c568c3b21cf29b402f17bb8668dc1de76d331d09b80beea73",
   "AcirLean/Transfer/WitnessData.lean": "f0f48ed6bfff5bc9e37e5a7a98f372b29fdc163474eb11d4e1eee360b65ba4a1",
   "AcirLean/Withdraw/Data.lean": "dbd58fee24576081288857dd143200a790981c40aeeb3d38fa6f78d148003321",
-  "AcirLean/Withdraw/Data.lean.json": "bbeec64873c391e713803a28d57a21a2fbdea45d7854a8bb78214457f1afb3e5",
+  "AcirLean/Withdraw/Data.lean.json": "8da92a187090ea282a2385454c78b6aeee4ed1570e7093ae32740481da2170c4",
   "AcirLean/Withdraw/Data/Part0.lean": "f202d685493db573ae9cad947728165e70f90a656ea81bc4cacdbe3ca782547e",
   "AcirLean/Withdraw/Data/Part1.lean": "3d332597fc6f343ca7ec250807aa7809399bb622ed2f0225d026114aec9be9d8",
   "AcirLean/Withdraw/Data/Part2.lean": "5ceb4dacfa72dfa8f0426c82bcac56f3301a74ef592d53f2d1c22eeb861a9937",
@@ -196,7 +196,7 @@
  },
  "inputs": {
   "deposit": {
-   "artifact_sha256": "c14f69a0123f6095a7f645bfe20f0f999eb8b455bfd809d9e6bb90719c44da38",
+   "abi_sha256": "2eca0103bb9f7ef1b1d235e4346b0f5d96698bab84a7b2f86e91e2f01ae323aa",
    "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
    "func0_sha256": "e09ceed51dbc595dfda5a274623261301663c553d344d89c3f0dae2f3693f78a",
    "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
@@ -204,7 +204,7 @@
    "witness_sha256": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b"
   },
   "transfer": {
-   "artifact_sha256": "4d337288ee4c8ec800e66372b72036623353d9eb9cc3725bfb901bec605d5098",
+   "abi_sha256": "adbc83d9dd1d4a998914a4a84141ea445a917b17d9dcf681d7086ed96eae6996",
    "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
    "func0_sha256": "dc747fb033334d70f691a3fbaef07ffd97b894b88714449aa9d42de759f91d5e",
    "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
@@ -212,7 +212,7 @@
    "witness_sha256": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b"
   },
   "withdraw": {
-   "artifact_sha256": "e798d4c6f7028b9172de2dd472f693d9ed539bfedaa0b465e3c616a077d6448e",
+   "abi_sha256": "2c2b7d5898217e4289c0596b02d3aba8b35e41a37d76933bdfad07c48276b203",
    "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
    "func0_sha256": "c68939b13f52dde72917c7e07880ff1c95cfbcbe2519d2f2c7340246b7ec1a3c",
    "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
@@ -345,25 +345,19 @@
   "Neg/TransferNoRange.lean": "e0883543675e1165a47c8e232c1623e5a73f760df68af0953e3d7e4f12c0a346",
   "Neg/TransferTokenSwap.lean": "421e7266eeb27a99ba23697b9f4612f583f585110e425a7678fc822675247cf8",
   "Neg/WithdrawBound127.lean": "6f09f5b14f8ed39cbbf590d131f08c5e0309832dba0d983c40dae89bb384cbe1",
-  "check.sh": "ddaa7271c3f0586d9de16700ee816d1188223bd694808247820018c092703423",
+  "check.sh": "e30a39c84d6d2717c4b169c7a45cacb4ce2d2557ecaa5e766ebfccbf5ed0cc2c",
+  "inputs/DEPS.txt": "9fc64c4a8488d9b024f5dbb1d8f39b9e4e8f5f4e5c676d511159040dc26fc4af",
   "inputs/PROVENANCE.md": "a2666c9fe472e9cc86d185128ffc064bff6aede38081470db63a02585ccc6591",
-  "inputs/deposit-witness.gz": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b",
-  "inputs/deposit.acir.txt.xz": "3c9a98863b4deaa11709ed6070ee29bcb8a76e7db2ec28f23c7a59007319aa02",
-  "inputs/deposit.json.xz": "20c16e22f2c13bfbeceb8ede33a154bd06eefef8e8dc4f675849322e266d468b",
-  "inputs/transfer-witness.gz": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b",
-  "inputs/transfer.acir.txt.xz": "64d34ca7e8feeb894416fc8a60b8663e9ad4ed5a29baf1b947769d960948578f",
-  "inputs/transfer.json.xz": "75abfedb17f4ac07e639e1c3a04e3c98c2b85c28073da198ea70f54cf87ad3ff",
-  "inputs/withdraw-witness.gz": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c",
-  "inputs/withdraw.acir.txt.xz": "044abf72835adeb91868963bac1f9c15efa0f820b2f170c64078a7357125357d",
-  "inputs/withdraw.json.xz": "06058c7e98a610f86794aefafa79c85d02c53a68e4025b8893c1b6260e7add79",
+  "inputs/SHA256SUMS": "566e0bc22ac7ba604612f2473d6a53acfa1a86301fa05c8aed241618952a88fa",
+  "inputs/TOOLS.txt": "508dccc5e46baf22b54644071632d4da29c6efcb712de8c01f90a15784a8a995",
   "lake-manifest.json": "d5f5c483a5dd7780a5c350da2361cd8dccc39bad3ee36a2f2669b0b42ebe7b70",
   "lakefile.toml": "980b683100326e2144414fc3e248e7d6db2f811522239f7e826167cd374ee589",
   "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
-  "scripts/acir2lean.py": "575b7a088a3a2f88c33025d3922d9eb6a99d64deac88d3c0e032f45773e60a5d",
+  "scripts/acir2lean.py": "6be014fd9313d71017dc184ff9581fbb80bce68ec655c1928e084a34686d502d",
   "scripts/bytecode_check.py": "c25544adadb7281b5bfdbe4c688892bd6e095ed4bbc1dd8bec5f4d3f015f6fb3",
   "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
   "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
-  "scripts/replay.py": "f2b19fb91364dfb0e0addd612cf6b8752147ba326072f6481d3b481555c2706d",
+  "scripts/replay.py": "fe2975e7b3e56e7e39a9cff76411ccdf354442d2e39e931a57f8f9247fec7cdd",
   "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
  },
  "theorems": {

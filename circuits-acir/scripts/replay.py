@@ -5,8 +5,9 @@ usage: replay.py check              run every stage; exit 0 only if build/observ
        replay.py self-test          run the must-fail fixtures against copies of a passing tree
        replay.py compare-census F   compare census lines in F with expected.json (comparator only)
 
-Stages of `check`: tool pins, source inventory, input artifacts, bytecode-to-print
-comparison, regeneration of the Lean data, Python witness controls, forbidden-token scan, sequential Lean builds, theorem census
+`check` reads the artifacts, prints and witnesses that ../check.sh rebuilt into build/inputs/
+from the pinned pocs commit. Stages of `check`: tool pins, source inventory, rebuilt inputs
+against their pinned hashes, bytecode-to-print comparison, regeneration of the Lean data, Python witness controls, forbidden-token scan, sequential Lean builds, theorem census
 (statements, raw-type hashes and axioms of every theorem in an AcirLean module), negative
 controls, and an
 exact comparison with expected.json. Missing, duplicate and unexpected entries fail.
@@ -14,7 +15,6 @@ exact comparison with expected.json. Missing, duplicate and unexpected entries f
 import glob
 import hashlib
 import json
-import lzma
 import os
 import re
 import resource
@@ -25,6 +25,7 @@ import time
 
 PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD = os.path.join(PKG, 'build')
+INPUTS = os.path.join(BUILD, 'inputs')
 TOOLCHAIN = 'leanprover/lean4:v4.33.1'
 # The standard-axiom allowlist. It lives here, not in expected.json, so that a re-blessed
 # expected.json cannot widen it.
@@ -113,7 +114,7 @@ def walk_files():
     out = []
     for root, dirs, files in os.walk(PKG):
         rel_root = os.path.relpath(root, PKG)
-        dirs[:] = [d for d in dirs if d != '__pycache__' and not (rel_root == '.' and d in ('.lake', 'build'))]
+        dirs[:] = [d for d in dirs if d != '__pycache__' and not (rel_root == '.' and d in ('.lake', 'build', 'pocs', '.deps'))]
         for f in files:
             rel = os.path.normpath(os.path.join(rel_root, f))
             out.append(rel)
@@ -151,33 +152,30 @@ def func0_section(text):
 
 
 def stage_inputs(obs):
-    d = os.path.join(BUILD, 'inputs')
-    os.makedirs(d, exist_ok=True)
     res = {}
     for c in CIRCUITS:
-        raw_print = lzma.decompress(open(os.path.join(PKG, 'inputs', f'{c}.acir.txt.xz'), 'rb').read())
-        raw_art = lzma.decompress(open(os.path.join(PKG, 'inputs', f'{c}.json.xz'), 'rb').read())
-        for name, data in ((f'{c}.acir.txt', raw_print), (f'{c}.json', raw_art)):
-            p = os.path.join(d, name)
-            if not (os.path.exists(p) and sha(p) == hashlib.sha256(data).hexdigest()):
-                with open(p, 'wb') as f:
-                    f.write(data)
-        art = json.loads(raw_art)
+        paths = [os.path.join(INPUTS, f) for f in (f'{c}.acir.txt', f'{c}.json', f'{c}-witness.gz')]
+        missing = [os.path.relpath(p, PKG) for p in paths if not os.path.exists(p)]
+        if missing:
+            raise Fatal(f'no rebuilt outputs {missing}; run ./check.sh, which rebuilds them from pocs')
+        raw_print = open(paths[0], 'rb').read()
+        art = json.load(open(paths[1]))
+        # The ABI and the bytecode, not the whole artifact: the artifact carries build paths.
         res[c] = {
             'print_sha256': hashlib.sha256(raw_print).hexdigest(),
             'func0_sha256': hashlib.sha256(func0_section(raw_print.decode())).hexdigest(),
-            'artifact_sha256': hashlib.sha256(raw_art).hexdigest(),
+            'abi_sha256': hashlib.sha256(json.dumps(art['abi'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
             'bytecode_sha256': hashlib.sha256(art['bytecode'].encode()).hexdigest(),
             'noir_version': art.get('noir_version'),
-            'witness_sha256': sha(os.path.join(PKG, 'inputs', f'{c}-witness.gz')),
+            'witness_sha256': sha(paths[2]),
         }
     obs['inputs'] = res
-    log('inputs: decompressed and hashed ' + ', '.join(f'{c} func0 {v["func0_sha256"][:12]}' for c, v in res.items()))
+    log('inputs: hashed the rebuilt outputs ' + ', '.join(f'{c} func0 {v["func0_sha256"][:12]}' for c, v in res.items()))
 
 
 def stage_bytecode(obs, failures):
     res = {}
-    d = os.path.join(BUILD, 'inputs')
+    d = INPUTS
     for c in CIRCUITS:
         rc, text = run(['python3', 'scripts/bytecode_check.py', f'{d}/{c}.acir.txt', f'{d}/{c}.json'],
                        out=os.path.join(BUILD, f'{c}-bytecode-check.json'), check=False)
@@ -204,8 +202,8 @@ def regen_key():
                 'scripts/perturb_check.py', 'scripts/replay.py']:
         h.update(sha(os.path.join(PKG, rel)).encode())
     for c in CIRCUITS:
-        for f in (f'{c}.acir.txt.xz', f'{c}.json.xz', f'{c}-witness.gz'):
-            h.update(sha(os.path.join(PKG, 'inputs', f)).encode())
+        for f in (f'{c}.acir.txt', f'{c}.json', f'{c}-witness.gz'):
+            h.update(sha(os.path.join(INPUTS, f)).encode())
     return h.hexdigest()
 
 
@@ -221,7 +219,7 @@ def stage_regen(obs):
     for rel in generated_files():
         os.remove(os.path.join(PKG, rel))
     ext, wc, pc = {}, {}, {}
-    inp = os.path.join(BUILD, 'inputs')
+    inp = INPUTS
     for c, cfg in CIRCUITS.items():
         ns = cfg['ns']
         t0 = time.time()
@@ -229,12 +227,12 @@ def stage_regen(obs):
         run(['python3', 'scripts/acir2lean.py', f'{inp}/{c}.acir.txt', f'{inp}/{c}.json', data, ns,
              '--parts', str(cfg['parts'])], out=os.path.join(BUILD, f'{c}-extract.json'))
         m = json.load(open(os.path.join(PKG, data + '.json')))
-        ext[c] = {k: m[k] for k in ('func0_sha256', 'bytecode_sha256', 'artifact_sha256', 'noir_version',
+        ext[c] = {k: m[k] for k in ('func0_sha256', 'bytecode_sha256', 'abi_sha256', 'noir_version',
                                     'counts', 'opcodes', 'chunk', 'chunks', 'parts', 'reprint_mismatches',
                                     'abi_layout_matches_print', 'max_witness')}
         ext[c]['ranges'] = len(m['ranges'])
         p = subprocess.run(['python3', 'scripts/witness_check.py', f'{inp}/{c}.acir.txt', f'{inp}/{c}.json',
-                            f'inputs/{c}-witness.gz', '--lean', f'AcirLean/{ns}/WitnessData.lean', ns,
+                            f'{inp}/{c}-witness.gz', '--lean', f'AcirLean/{ns}/WitnessData.lean', ns,
                             '--values', cfg['values']], cwd=PKG, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.stdout.decode(), p.stderr.decode()
         with open(os.path.join(BUILD, f'{c}-witness-check.txt'), 'w') as f:
@@ -252,7 +250,7 @@ def stage_regen(obs):
         log(f'regen: {c} data ({ext[c]["opcodes"]} opcodes, {ext[c]["parts"]} parts), witness trie, '
             f'NV modules ({time.time() - t0:.0f} s)')
     for c, i, v, must in PYTHON_CONTROLS:
-        cmd = ['python3', 'scripts/perturb_check.py', f'{inp}/{c}.acir.txt', f'inputs/{c}-witness.gz', str(i), str(v)]
+        cmd = ['python3', 'scripts/perturb_check.py', f'{inp}/{c}.acir.txt', f'{inp}/{c}-witness.gz', str(i), str(v)]
         if must is not None:
             cmd.append(str(must))
         rc, text = run(cmd, check=False)
@@ -481,15 +479,14 @@ def fx_weakened(root):
 
 
 def fx_input(root):
-    p = os.path.join(root, 'inputs', 'withdraw.acir.txt.xz')
-    s = lzma.decompress(open(p, 'rb').read()).decode()
-    lines = s.split('\n')
+    # A rebuilt print that differs from its pinned hash.
+    p = os.path.join(root, 'build', 'inputs', 'withdraw.acir.txt')
+    lines = open(p).read().split('\n')
     k = lines.index('func 0') + 4 + 362
     if lines[k] != 'BLACKBOX::RANGE input: w2, bits: 128':
         raise SystemExit('self-test fixture cannot find withdraw opcode 362')
     lines[k] = 'BLACKBOX::RANGE input: w2, bits: 129'
-    open(p, 'wb').write(lzma.compress('\n'.join(lines).encode(), preset=9))
-    repin(root, 'inputs/withdraw.acir.txt.xz')
+    open(p, 'w').write('\n'.join(lines))
 
 
 def fx_rogue_axiom(root):
@@ -517,23 +514,22 @@ def fx_skip_kernel(root):
 def repin_print(root, c):
     """Update every pinned hash of the print of circuit `c`, so that only the bytecode
     comparison can catch the change."""
-    raw = lzma.decompress(open(os.path.join(root, 'inputs', f'{c}.acir.txt.xz'), 'rb').read())
+    raw = open(os.path.join(root, 'build', 'inputs', f'{c}.acir.txt'), 'rb').read()
     p = os.path.join(root, 'expected.json')
     e = json.load(open(p))
     e['inputs'][c]['print_sha256'] = hashlib.sha256(raw).hexdigest()
     e['inputs'][c]['func0_sha256'] = hashlib.sha256(func0_section(raw.decode())).hexdigest()
     json.dump(e, open(p, 'w'), indent=1, ensure_ascii=False)
-    repin(root, f'inputs/{c}.acir.txt.xz')
 
 
 def edit_print(root, c, k, line, new):
-    p = os.path.join(root, 'inputs', f'{c}.acir.txt.xz')
-    lines = lzma.decompress(open(p, 'rb').read()).decode().split('\n')
+    p = os.path.join(root, 'build', 'inputs', f'{c}.acir.txt')
+    lines = open(p).read().split('\n')
     f0 = lines.index('func 0') + 4
     if lines[f0 + k] != line:
         raise SystemExit(f'self-test fixture cannot find {c} opcode {k}')
     lines[f0 + k:f0 + k + 1] = [new] if new is not None else []
-    open(p, 'wb').write(lzma.compress('\n'.join(lines).encode(), preset=9))
+    open(p, 'w').write('\n'.join(lines))
     repin_print(root, c)
 
 
@@ -571,7 +567,7 @@ FIXTURES = [
     ('missing-theorem', fx_missing, [r'^MISSING theorems: AcirLean\.Transfer\.token_names$']),
     ('unexpected-theorem', fx_unexpected, [r'^UNEXPECTED theorems: AcirLean\.Transfer\.extra_fact$']),
     ('weakened-statement', fx_weakened, [r'^MISMATCH theorems: AcirLean\.Deposit\.amount_lt_two_pow_128: .*2 \^ 128.*2 \^ 129']),
-    ('altered-input-artifact', fx_input, [r'^MISMATCH inputs: withdraw: ', r'^FATAL input artifacts differ']),
+    ('rebuilt-print-differs-from-pin', fx_input, [r'^MISMATCH inputs: withdraw: ', r'^FATAL input artifacts differ']),
     ('rogue-axiom', fx_rogue_axiom, [r'^AXIOM DECLARED AcirLean\.Deposit\.rogue in AcirLean\.Deposit\.Amount$',
                                      r"^NON-STANDARD AXIOM \['AcirLean\.Deposit\.rogue'\] in AcirLean\.Deposit\.amount_is_public_input_2$"]),
     ('sorry-proof', fx_sorry, [r"^FORBIDDEN TOKEN 'sorry' at AcirLean/Transfer/Rules\.lean:",
@@ -614,10 +610,10 @@ def self_test():
             root = os.path.join(tmp, name)
             os.makedirs(os.path.join(root, 'build'))
             for e in os.listdir(PKG):
-                if e != 'build':
+                if e not in ('build', 'pocs', '.deps'):
                     subprocess.run(['cp', '-a', '--reflink=auto', os.path.join(PKG, e), root], check=True)
             for e in os.listdir(BUILD):
-                if e != 'selftest':
+                if e not in ('selftest', 'rebuild'):
                     subprocess.run(['cp', '-a', '--reflink=auto', os.path.join(BUILD, e), os.path.join(root, 'build')],
                                    check=True)
             for p in ('PASS', 'observed.json'):

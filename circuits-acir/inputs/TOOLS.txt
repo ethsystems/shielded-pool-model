@@ -1,0 +1,12 @@
+# Pins that check.sh reads (key-value lines): the pocs source commit and the two tools.
+# It fails closed on another commit or another tool version.
+pocs_repo https://github.com/ethsystems/pocs
+pocs_commit a04b8b38969dfc2ee64de47edee7e396454204a8
+pocs_dir pocs/private-payment/shielded-pool
+nargo_version 1.0.0-beta.21
+nargo_git 89a0f0faf3a5f1273c8ac4843b7877882437e277
+nargo_sha256 0852cd5631ac5ca25f744f25c931e3cff16351d9bcdbfb03cebb48a4494a0fe3
+noir_inspector_version 1.0.0-beta.21
+noir_inspector_sha256 1928b997c6ec2f9d9461d60bc9481b47e599d6b338905d804aceb9510d832d84
+noir_release https://github.com/noir-lang/noir/releases/tag/v1.0.0-beta.21
+noir_asset noir-x86_64-unknown-linux-gnu.tar.gz sha256=80c0343f9906d7fc0396c66da5891760b03ecfc9afc3c9bedd0fb4d38a58209e

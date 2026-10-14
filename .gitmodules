@@ -1,3 +1,6 @@
 [submodule "verifier-reproduction/pocs"]
 	path = verifier-reproduction/pocs
 	url = https://github.com/ethsystems/pocs
+[submodule "circuits-acir/pocs"]
+	path = circuits-acir/pocs
+	url = https://github.com/ethsystems/pocs
