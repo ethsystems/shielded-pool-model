@@ -103,7 +103,7 @@ def I3 : M3 := ⟨1, 0, 0, 0, 1, 0, 0, 0, 1⟩
 def plain_block(C, M):
     return f"""-- PLAIN: textbook Poseidon, t = 3, RF = 8, RP = 57, x^5.
 -- Constants and M from inputs/sol_params.json (the hash-differential extraction from
--- inputs/PoseidonT3.sol, see inputs/PROVENANCE.md), 195 constants, canonical sha256
+-- PoseidonT3.sol, see inputs/PROVENANCE.md), 195 constants, canonical sha256
 -- {c.PLAIN_RC_SHA}. The Solidity round lemmas re-check every value against the Yul literals.
 def plainCL : List K :=
   {klist(C)}
@@ -133,10 +133,10 @@ def plainHash2 (a b : K) : K := (plainPerm (0, a, b)).1
 
 
 def noir_block(rc, mds, pre, sp):
-    return f"""-- NOIR: noir-lang/poseidon v0.3.0 (0880c371), tables parsed from inputs/noir/bn254/consts.nr
+    return f"""-- NOIR: noir-lang/poseidon v0.3.0 (0880c371), tables parsed from src/poseidon/bn254/consts.nr
 -- x5_3_config() (sha256 {c.NOIR_SHA['bn254/consts.nr']}); control transcribed by hand
--- from inputs/noir/mod.nr permute (lines 49-110), apply_matrix (113-123), sigma (156-165),
--- and inputs/noir/bn254.nr hash_internal (14-23) / hash_2 (33-35). Field = ZMod F; pow_32(alpha)
+-- from src/poseidon/mod.nr permute (lines 49-110), apply_matrix (113-123), sigma (156-165),
+-- and src/poseidon/bn254.nr hash_internal (14-23) / hash_2 (33-35). Field = ZMod F; pow_32(alpha)
 -- with alpha() = 5 is read as ^ 5; std::as_witness has no value effect.
 def noirRCL : List K :=
   {klist(rc)}

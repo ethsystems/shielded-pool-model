@@ -9,8 +9,9 @@ reference, the Noir library's optimized permutation, and the Solidity library's 
 cut into rounds. The transcriptions are the trusted part; the Lean kernel checks the rest,
 all 65 rounds, with the three standard axioms only. The package is separate from the model
 in the parent directory: its own Lake project (Lean 4.33.1 and Mathlib, the same pins as
-the root), its own `check.sh` with an expected theorem census, inputs and generators
-committed with hashes, and no import of any model module. The root gate does not build
+the root), its own `check.sh` with an expected theorem census, its pins, data and
+generators committed with hashes, the two upstream libraries fetched at their pins, and no
+import of any model module. The root gate does not build
 it. Nothing here changes the claim in the parent README.
 
 ## The claim
@@ -140,8 +141,10 @@ different files and are the same numbers.
   constants and `M` from `PoseidonT3.sol`. The Solidity round lemmas re-check every value
   against the Yul literals; the static `add` bound is not re-checked.
 - The cut `solHash = solHashSeg` (open item 2).
-- The review of the hand-written files: the generators, `Census.lean` and
-  `scripts/replay.py`. The source scan and the census are checks against mistakes, not
+- The pins in `inputs/SOURCES.txt` and the file hashes in `scripts/common.py`, which
+  decide what upstream text the generators read (`scripts/sources.py`).
+- The review of the hand-written files: the generators, `scripts/sources.py`,
+  `Census.lean` and `scripts/replay.py`. The source scan and the census are checks against mistakes, not
   against a hostile package. Code that runs during elaboration (an `elab` command, a direct
   `addDecl`, an option set by code) can add declarations, skip the kernel or change what
   the census prints, and the scan matches none of these. The byte comparison of the
@@ -150,15 +153,23 @@ different files and are the same numbers.
 
 ## Inputs
 
-`inputs/PROVENANCE.md` gives each file's origin. The hashes:
+`inputs/PROVENANCE.md` gives each file's origin. The two libraries are not in the repo:
+`scripts/sources.py` fetches them at the pins in `inputs/SOURCES.txt` and writes the five
+files below to `build/sources/`. The Noir tag must resolve to the pinned commit, and the
+soldeer zip must match the checksum that the pool's `soldeer.lock` pins at pocs `a04b8b3`.
+
+| Fetched file | From | sha256 |
+|---|---|---|
+| `PoseidonT3.sol` | poseidon-solidity 0.0.5, soldeer zip `c622cf4f...` | 08a7493be37838166954af6c77d583d797cc17d37673196498fc70cbf557831c |
+| `noir/bn254/consts.nr` | noir-lang/poseidon v0.3.0 `0880c371`, `src/poseidon/` | 0e1ce6ec6ed2ebbab52739ab07a2ab7a9cfb9b479cb012527f5e08447677dfd2 |
+| `noir/mod.nr` | same | d0b044a17c0d7c26470137c17b7a43c172051da8ea74e56797323f3cc07a5a84 |
+| `noir/bn254.nr` | same | 4800b851b4b0e2c71cd6456efb021be865e4fde040c6e63797b6f157c042653a |
+| `noir/bn254/perm.nr` | same | 1daf55657af0418deb717b74cd45a1a4e9ac9d59678335cf0e677ed8a682be23 |
+
+The package's own data, committed:
 
 | File | sha256 |
 |---|---|
-| `inputs/PoseidonT3.sol` | 08a7493be37838166954af6c77d583d797cc17d37673196498fc70cbf557831c |
-| `inputs/noir/bn254/consts.nr` | 0e1ce6ec6ed2ebbab52739ab07a2ab7a9cfb9b479cb012527f5e08447677dfd2 |
-| `inputs/noir/mod.nr` | d0b044a17c0d7c26470137c17b7a43c172051da8ea74e56797323f3cc07a5a84 |
-| `inputs/noir/bn254.nr` | 4800b851b4b0e2c71cd6456efb021be865e4fde040c6e63797b6f157c042653a |
-| `inputs/noir/bn254/perm.nr` | 1daf55657af0418deb717b74cd45a1a4e9ac9d59678335cf0e677ed8a682be23 |
 | `inputs/sol_params.json` | cbca794b53c67844b9ab3cd21203f6720e291b6c8639cece18ff37b3aa01f2b8 |
 | `inputs/vectors/inputs.json` | ab284c7668a2ba195000a4c8eb9ca709d74dc61f27c60fa613025b1f490f0bcd |
 | `inputs/vectors/sol_outputs.txt` | 8acc9017447ec7f85e804858d1ccbce78723119fae4688f905a8e32fa844152f |
@@ -185,7 +196,11 @@ project (about 7.5 GB). The package pins the same Mathlib commit as the root. On
 run `check.sh` copies the root's `.lake/packages` into `hash-agreement/.lake/packages`,
 trying a macOS clone (`cp -Rc`), then a Linux reflink (`cp --reflink=auto`), then a plain
 copy of about 7 GB; the reflink took 5 s on btrfs. Without a root build it runs
-`lake exe cache get`, which needs the network.
+`lake exe cache get`, which needs the network. The first run also fetches the two
+libraries (GitHub and the soldeer S3 bucket, about 2 s here) into `DEPS_CACHE` (default
+`hash-agreement/.deps`); later runs read the cache and need no network. The cache has the
+layout of `verifier-reproduction`'s, so one `DEPS_CACHE` set for both packages holds one
+clone of noir-lang/poseidon.
 
 ```
 cd hash-agreement
@@ -199,24 +214,26 @@ everything with `expected.json`. In order, it:
 1. checks the Lean and Python versions;
 2. hashes every tracked file except README.md, expected.json and .gitignore, the inputs
    separately from the scripts and docs;
-3. regenerates the eight generated files (`HashAgreement/*.lean`, `Neg/RoundsNeg.lean`,
+3. fetches the two libraries at their pins (`scripts/sources.py`, above), or reads them
+   from the cache, and checks the commit, the zip checksum and every file hash;
+4. regenerates the eight generated files (`HashAgreement/*.lean`, `Neg/RoundsNeg.lean`,
    `test/Vectors.lean`, `blocks.sha256`) with `scripts/gen_lean.py` into a temporary
    directory and requires byte equality with the committed ones;
-4. runs the Python vector replay;
-5. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
+5. runs the Python vector replay;
+6. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
    `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
    kernel check) in every Lean file of the package, `Census.lean` included, and in
    `lakefile.toml`;
-6. provides the Mathlib dependencies as described above;
-7. removes `.lake/build` and builds the five modules one at a time, timing each and
+7. provides the Mathlib dependencies as described above;
+8. removes `.lake/build` and builds the five modules one at a time, timing each and
    reading its peak RSS, and rejects a reported `sorry`;
-8. runs `Census.lean`: for every theorem in a `HashAgreement.*` module, its exact
+9. runs `Census.lean`: for every theorem in a `HashAgreement.*` module, its exact
    statement and its axioms (`Lean.collectAxioms`, as `#print axioms`); any axiom outside
    `propext`, `Quot.sound` and `Classical.choice` on any theorem, auxiliary lemmas included,
    and any declared axiom or opaque constant, fails;
-9. compiles `Neg/RoundsNeg.lean`, which must fail as the Controls section says;
-10. runs `test/Vectors.lean`;
-11. compares everything with `expected.json`. A missing, duplicate or unexpected declared
+10. compiles `Neg/RoundsNeg.lean`, which must fail as the Controls section says;
+11. runs `test/Vectors.lean`;
+12. compares everything with `expected.json`. A missing, duplicate or unexpected declared
     theorem, input or file fails, as does any changed statement or axiom list. The
     auxiliary lemmas are checked for axioms only; their names and count are not pinned.
 
@@ -254,10 +271,12 @@ The run of 2026-10-13 that produced `expected.json`; each run writes its own num
   segment lemmas, the Solidity theorems.
 - `HashAgreement/RoundsD.lean`, `HashAgreement/Controls.lean`, `Neg/RoundsNeg.lean`,
   `test/Vectors.lean`: see Controls.
-- `scripts/common.py`, `gen_sol.py`, `gen_lean.py`, `check_vectors.py`, `replay.py`;
+- `scripts/common.py`, `sources.py`, `gen_sol.py`, `gen_lean.py`, `check_vectors.py`,
+  `replay.py`;
   `check.sh`; `Census.lean`; `expected.json`; `blocks.sha256` (the sha256 of each
   generated block).
-- `inputs/`: the pinned inputs and `PROVENANCE.md`.
+- `inputs/`: `SOURCES.txt` (the pins of the two libraries), the package data
+  (`sol_params.json`, `vectors/`) and `PROVENANCE.md`.
 
 The generated files are committed so that the proof can be read without running Python;
 `check.sh` regenerates them and fails on any difference.
@@ -275,8 +294,9 @@ cites this README or `inputs/PROVENANCE.md`, the per-theorem `set_option profile
 `#print axioms` and `#eval` lines are gone (the census and `test/Vectors.lean` replace
 them), and two linter options are added. The blocks `CORE` and `UNFOLD` are byte-identical
 to the research `blocks.sha256`; the other blocks differ by comment lines only. The
-generators are the research generators with the input paths moved under `inputs/`. New
-here: `Census.lean`, `scripts/replay.py`, `check.sh`, `expected.json`, the module split in
+generators are the research generators with the input paths changed: the package data
+under `inputs/`, the two libraries fetched at their pins into `build/sources/`. New
+here: `Census.lean`, `scripts/sources.py`, `scripts/replay.py`, `check.sh`, `expected.json`, the module split in
 `gen_lean.py`, and `test/Vectors.lean`, which replaces the research's five-vector `#eval`
 and its Python replay log with a 300-vector run of the Lean definitions. Nothing is
 written back to the research repo.

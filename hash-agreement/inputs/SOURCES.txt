@@ -1,0 +1,7 @@
+noir_url https://github.com/noir-lang/poseidon
+noir_tag v0.3.0
+noir_commit 0880c371e88e583d39515fd3f877538657ac41eb
+noir_dir src/poseidon
+soldeer_url https://soldeer-revisions.s3.amazonaws.com/poseidon-solidity/0_0_5_04-07-2024_06:57:44_contracts.zip
+soldeer_checksum c622cf4f348014da6947d3ddeba267317f1ca3701466f92e0be64a7726c3b31c
+soldeer_member /PoseidonT3.sol
