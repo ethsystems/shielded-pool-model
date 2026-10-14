@@ -3,12 +3,13 @@
 
 usage: replay.py check     run every stage; exit 0 only if build/observed.json equals expected.json
 
-Stages: tool pins, source inventory, input hashes, regeneration of the Lean files from the
-inputs (byte-for-byte against the committed ones), the Python vector replay, the forbidden-
-token scan, Mathlib dependencies, a fresh sequential build of the five modules (timed, with
-peak RSS), the theorem census (statement and axioms of every declared theorem; standard
-axioms only, auxiliary lemmas included), the negative control (must fail at the two recorded
-kernel checks), the Lean vector test, and an exact comparison with expected.json. Missing,
+Stages: tool pins, source inventory, input hashes, the upstream sources at their pins
+(scripts/sources.py), regeneration of the Lean files from the inputs (byte-for-byte against the
+committed ones), the Python vector replay, the forbidden-token scan, Mathlib dependencies, a
+fresh sequential build of the five modules (timed, with peak RSS), the theorem census
+(statement and axioms of every declared theorem; standard axioms only, auxiliary lemmas
+included), the negative control (must fail at the two recorded kernel checks), the Lean vector
+test, and an exact comparison with expected.json. Missing,
 duplicate and unexpected entries fail.
 """
 import glob
@@ -128,6 +129,14 @@ def stage_inputs(obs):
            if rel.startswith('inputs/') and not rel.endswith('.md')}
     obs['inputs'] = inp
     log(f'inputs: {len(inp)} files hashed')
+
+
+def stage_sources():
+    rc, text, _, _ = run(['python3', 'scripts/sources.py'], check=False)
+    if rc != 0:
+        raise Fatal(f'SOURCES FAILED (rc {rc}):\n{text[-2000:]}')
+    for line in text.strip().split('\n'):
+        log(line)
 
 
 def stage_regen(obs):
@@ -330,6 +339,7 @@ def check():
         stage_tools(obs)
         stage_inventory(obs)
         stage_inputs(obs)
+        stage_sources()
         stage_regen(obs)
         stage_python_vectors(obs)
         stage_scan(failures)

@@ -1,10 +1,12 @@
 """Shared inputs for the hash-agreement generators.
 
-Every input lives under inputs/ and is sha256-checked on each load (inputs/PROVENANCE.md):
-- Noir tables: noir-lang/poseidon v0.3.0 `inputs/noir/bn254/consts.nr`, `x5_3_config()`,
+Every input is sha256-checked on each load (inputs/PROVENANCE.md). The two upstream libraries
+are not in the repo: scripts/sources.py fetches them at the pins in inputs/SOURCES.txt and
+writes them to build/sources/.
+- Noir tables: noir-lang/poseidon v0.3.0 `src/poseidon/bn254/consts.nr`, `x5_3_config()`,
   parsed here directly.
 - Plain constants and MDS: `inputs/sol_params.json`, the hash-differential extraction from
-  `inputs/PoseidonT3.sol` (trusted, reused; the Solidity round lemmas re-check every value
+  `PoseidonT3.sol` (trusted, reused; the Solidity round lemmas re-check every value
   against the Yul literals).
 - Test vectors: `inputs/vectors/inputs.json` (300 pairs) and `sol_outputs.txt` (the EVM
   outputs of `PoseidonT3.hash` on them).
@@ -19,14 +21,15 @@ F = 2188824287183927522224640574525727508854836440041603434369820418657580849561
 
 PKG = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 INPUTS = os.path.join(PKG, "inputs")
-NOIR_DIR = os.path.join(INPUTS, "noir")
+SOURCES = os.path.join(PKG, "build", "sources")
+NOIR_DIR = os.path.join(SOURCES, "noir")
 NOIR_SHA = {
     "mod.nr": "d0b044a17c0d7c26470137c17b7a43c172051da8ea74e56797323f3cc07a5a84",
     "bn254.nr": "4800b851b4b0e2c71cd6456efb021be865e4fde040c6e63797b6f157c042653a",
     "bn254/perm.nr": "1daf55657af0418deb717b74cd45a1a4e9ac9d59678335cf0e677ed8a682be23",
     "bn254/consts.nr": "0e1ce6ec6ed2ebbab52739ab07a2ab7a9cfb9b479cb012527f5e08447677dfd2",
 }
-SOL_PATH = os.path.join(INPUTS, "PoseidonT3.sol")
+SOL_PATH = os.path.join(SOURCES, "PoseidonT3.sol")
 SOL_SHA = "08a7493be37838166954af6c77d583d797cc17d37673196498fc70cbf557831c"
 PARAMS_PATH = os.path.join(INPUTS, "sol_params.json")
 PARAMS_SHA = "cbca794b53c67844b9ab3cd21203f6720e291b6c8639cece18ff37b3aa01f2b8"
@@ -47,6 +50,8 @@ def sha256_file(path):
 
 
 def check_sources():
+    if not os.path.isdir(SOURCES):
+        raise SystemExit("build/sources/ is missing: run python3 scripts/sources.py (or ./check.sh) first")
     for rel, want in NOIR_SHA.items():
         got = sha256_file(os.path.join(NOIR_DIR, rel))
         assert got == want, f"noir/{rel}: sha256 {got} != {want}"
@@ -142,7 +147,7 @@ def plain_perm(C, M, s):
 
 
 def noir_round(rc, mds, pre, sp, j, s):
-    """Round j of noir `permute` (inputs/noir/mod.nr:49-110), cut as in README 'The round cut'."""
+    """Round j of noir `permute` (noir-lang/poseidon src/poseidon/mod.nr:49-110), cut as in README 'The round cut'."""
     sig = lambda v: [x * ((x * x) * (x * x)) % F for x in v]
     if j < 3:
         s = sig(s)
