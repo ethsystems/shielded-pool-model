@@ -10,7 +10,7 @@ Prints one JSON line per theorem declared in a `HashAgreement.*` module: its nam
 statement (pretty-printed type) and the axioms it depends on (`Lean.collectAxioms`, the
 function behind `#print axioms`). Prints one JSON line per other constant kind that adds
 trust (an `axiomInfo` or an `opaqueInfo` in a `HashAgreement.*` module). `check.sh` compares
-the output with `expected.json` and the standard-axiom allowlist.
+the output with `expected.json` and the allowlist of standard axioms.
 -/
 
 open Lean Elab Command Meta
@@ -34,7 +34,7 @@ open Lean Elab Command Meta
       IO.println (Json.compress (Json.mkObj [("kind", "theorem"), ("name", n), ("module", m),
         ("type", ty), ("axioms", toJson axs)]))
     | .axiomInfo _ =>
-      IO.println (Json.compress (Json.mkObj [("kind", "axiom"), ("name", n), ("module", m)]))
+      IO.println (Json.compress (Json.mkObj [("kind", "axiomInfo"), ("name", n), ("module", m)]))
     | .opaqueInfo _ =>
-      IO.println (Json.compress (Json.mkObj [("kind", "opaque"), ("name", n), ("module", m)]))
+      IO.println (Json.compress (Json.mkObj [("kind", "opaqueInfo"), ("name", n), ("module", m)]))
     | _ => pure ()

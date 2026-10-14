@@ -28,7 +28,11 @@ TOOLCHAIN = 'leanprover/lean4:v4.33.1'
 # The standard-axiom allowlist. It lives here, not in expected.json, so that a re-blessed
 # expected.json cannot widen it.
 ALLOWED_AXIOMS = {'propext', 'Quot.sound', 'Classical.choice'}
-FORBIDDEN = re.compile(r'\b(sorry|admit|native_decide|axiom|extern|implemented_by|unsafe|opaque)\b')
+FORBIDDEN = re.compile(r'\b(sorry|admit|native_decide|axiom|extern|implemented_by|unsafe|opaque|'
+                       r'skipKernelTC)\b')
+# The scan reads every Lean file of the package and the Lake configuration (which could pass
+# options to every module).
+SCANNED = re.compile(r'(\.lean|^lakefile\.toml)$')
 MODULES = ['Base', 'Sol', 'RoundsD', 'Controls', 'Full']
 GENERATED = ['HashAgreement/Base.lean', 'HashAgreement/Sol.lean', 'HashAgreement/Full.lean',
              'HashAgreement/RoundsD.lean', 'HashAgreement/Controls.lean', 'Neg/RoundsNeg.lean',
@@ -159,14 +163,14 @@ def stage_python_vectors(obs):
 def stage_scan(failures):
     n = 0
     for rel in walk_files():
-        if not rel.endswith('.lean') or rel == 'Census.lean':
+        if not SCANNED.search(rel):
             continue
         n += 1
         for k, line in enumerate(open(os.path.join(PKG, rel), encoding='utf-8'), 1):
             m = FORBIDDEN.search(line)
             if m:
                 failures.append(f'FORBIDDEN TOKEN {m.group(1)!r} at {rel}:{k}')
-    log(f'scan: {n} Lean files scanned for forbidden tokens')
+    log(f'scan: {n} files (every Lean file and lakefile.toml) scanned for forbidden tokens')
 
 
 def mathlib_rev(manifest):
@@ -232,7 +236,8 @@ def stage_census(obs, failures, timing):
             continue
         r = json.loads(line)
         if r['kind'] != 'theorem':
-            failures.append(f'{r["kind"].upper()} DECLARED {r["name"]} in {r["module"]}')
+            kind = {'axiomInfo': 'AXIOM', 'opaqueInfo': 'OPAQUE'}.get(r['kind'], r['kind'].upper())
+            failures.append(f'{kind} DECLARED {r["name"]} in {r["module"]}')
             continue
         extra = sorted(set(r['axioms']) - ALLOWED_AXIOMS)
         if extra:
