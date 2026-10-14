@@ -126,8 +126,9 @@ Already in the repo, outside the gate:
   segmented Solidity transcriptions of Poseidon2 (the two-input
   Poseidon, x^5, t = 3) agree as
   functions over the BN254 scalar field, all 65 rounds, library
-  sources copied in and pinned by sha256. Separate package, own check
-  and trust base; the gate does not build it.
+  sources fetched at a pinned commit and checksum, not copied in.
+  Separate package, own check and trust base; the gate does not build
+  it.
 
 ## Names
 
