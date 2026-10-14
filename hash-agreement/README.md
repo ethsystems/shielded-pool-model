@@ -140,10 +140,13 @@ different files and are the same numbers.
   constants and `M` from `PoseidonT3.sol`. The Solidity round lemmas re-check every value
   against the Yul literals; the static `add` bound is not re-checked.
 - The cut `solHash = solHashSeg` (open item 2).
-- `Census.lean` reads printed output of Lean code that imports the package. Code that runs
-  during elaboration could change that output, so the census is a check against mistakes,
-  not against a hostile package; the source scan and the review of the hand-written files
-  cover that case.
+- The review of the hand-written files: the generators, `Census.lean` and
+  `scripts/replay.py`. The source scan and the census are checks against mistakes, not
+  against a hostile package. Code that runs during elaboration (an `elab` command, a direct
+  `addDecl`, an option set by code) can add declarations, skip the kernel or change what
+  the census prints, and the scan matches none of these. The byte comparison of the
+  generated files with the generator output, the pinned file hashes and that review cover
+  a hostile package.
 
 ## Inputs
 
