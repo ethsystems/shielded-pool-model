@@ -294,15 +294,6 @@ theorems still cannot see the contract's code.
   statement and control files. It runs no axiom census on control
   theorems.
 
-## Extension outside the gate: hash agreement
-
-One separate package, [hash-agreement/](hash-agreement/README.md), with its
-own check and trust base. It does not change the nine rows above.
-
-| Package | Lean names | English | What it narrows | Hypothesis |
-|---|---|---|---|---|
-| `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
-
 REVIEW.md part 6 lists what the theorems do not say.
 
 ## Extension: symbolic k-anonymity
@@ -409,3 +400,12 @@ protected owner is also inside the note ciphertext that the sender
 encrypts to the recipient's viewing key (spec 2 line 230), so a real
 bridge needs key privacy of that encryption as well. This file does not
 model that encryption.
+
+## Extension outside the gate: hash agreement
+
+One separate package, [hash-agreement/](hash-agreement/README.md), with its
+own check and trust base. It changes no claim above.
+
+| Package | Lean names | English | What it narrows | Hypothesis |
+|---|---|---|---|---|
+| `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
