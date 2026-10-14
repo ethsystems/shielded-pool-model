@@ -113,17 +113,20 @@ shrinks to what survives. Findings go in issues here; Oskar answers each.
 ## What comes next
 
 Follow-up pull requests bring in other work one claim unit at a time,
-each behind the same gate (except the package below): the claim 1 rule
+each behind the same gate (except the packages below): the claim 1 rule
 table as a status page, and the privacy games once their build cost is
 decided. The epoch extension is included here; its source is the PoC
-extension spec, not spec 2. The implementation links stay in the research
-repo as claim records with re-check commands, because their inputs are
-private. The repo is private; no license yet.
+extension spec, not spec 2. Implementation links whose inputs are public
+come here as separate packages (below); the others stay in the research
+repo as claim records with re-check commands. The repo is private; no
+license yet.
 
 ## Separate packages
 
 Packages outside the gate, each with its own check and a row in CLAIMS.md
-under "Separate packages":
+under "Separate packages". This repo is not a copy of the implementation: a
+package reads the code it checks from that code's own repository at a
+pinned commit.
 
 - [hash-agreement/](hash-agreement/README.md): the Noir, plain and
   segmented Solidity transcriptions of Poseidon2 (the two-input
@@ -132,6 +135,12 @@ under "Separate packages":
   sources fetched at a pinned commit and checksum, not copied in.
   Separate package, own check and trust base; the gate does not build
   it.
+- [verifier-reproduction/](verifier-reproduction/README.md): rebuilds the
+  three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (the
+  submodule `verifier-reproduction/pocs`) from the committed circuits with
+  pinned nargo and bb, and compares the bytes and the key hashes. A build
+  reproduction, not a theorem; it says nothing about soundness or deployed
+  code.
 
 ## Names
 
