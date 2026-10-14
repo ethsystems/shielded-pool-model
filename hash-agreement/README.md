@@ -155,8 +155,9 @@ different files and are the same numbers.
 
 `inputs/PROVENANCE.md` gives each file's origin. The two libraries are not in the repo:
 `scripts/sources.py` fetches them at the pins in `inputs/SOURCES.txt` and writes the five
-files below to `build/sources/`. The Noir tag must resolve to the pinned commit, and the
-soldeer zip must match the checksum that the pool's `soldeer.lock` pins at pocs `a04b8b3`.
+files below to `build/sources/`. A fresh clone must resolve the Noir tag to the pinned
+commit (a cached clone is used by commit, without asking upstream), and the soldeer zip must
+match the checksum that the pool's `soldeer.lock` pins at pocs `a04b8b3`.
 
 | Fetched file | From | sha256 |
 |---|---|---|

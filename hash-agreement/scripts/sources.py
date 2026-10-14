@@ -4,8 +4,9 @@
 usage: sources.py     write build/sources/ from the pins in inputs/SOURCES.txt
 
 - Noir: noir-lang/poseidon at the pinned tag. A shallow clone of the tag (as nargo makes it) is
-  kept in DEPS_CACHE/<commit>; the tag must resolve to the pinned commit, so a moved tag fails.
-  The four files are read as git blobs at that commit, never from a checkout.
+  kept in DEPS_CACHE/<commit>. A fresh clone must resolve the tag to the pinned commit, so a moved
+  tag fails; a run that finds the commit in the cache does not ask upstream again. The four files
+  are read as git blobs at that commit, never from a checkout.
 - Solidity: the soldeer archive of poseidon-solidity 0.0.5, the URL and checksum that the pool's
   soldeer.lock pins at pocs a04b8b3. The zip is kept in DEPS_CACHE/soldeer/<checksum>.zip after
   its sha256 matches the checksum; one member is read from it.
