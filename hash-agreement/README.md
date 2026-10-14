@@ -200,7 +200,9 @@ the Lean files and compares everything with `expected.json`. In order, it:
    directory and requires byte equality with the committed ones;
 4. runs the Python vector replay;
 5. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
-   `unsafe` and `opaque` in every Lean file except `Census.lean`;
+   `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
+   kernel check) in every Lean file of the package, `Census.lean` included, and in
+   `lakefile.toml`;
 6. provides the Mathlib dependencies as described above;
 7. removes `.lake/build` and builds the five modules one at a time, timing each and
    reading its peak RSS, and rejects a reported `sorry`;
