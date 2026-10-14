@@ -135,7 +135,7 @@ def plainHash2 (a b : K) : K := (plainPerm (0, a, b)).1
 def noir_block(rc, mds, pre, sp):
     return f"""-- NOIR: noir-lang/poseidon v0.3.0 (0880c371), tables parsed from inputs/noir/bn254/consts.nr
 -- x5_3_config() (sha256 {c.NOIR_SHA['bn254/consts.nr']}); control transcribed by hand
--- from inputs/noir/mod.nr permute (lines 49-110), apply_matrix (113-123), sigma (154-163),
+-- from inputs/noir/mod.nr permute (lines 49-110), apply_matrix (113-123), sigma (156-165),
 -- and inputs/noir/bn254.nr hash_internal (14-23) / hash_2 (33-35). Field = ZMod F; pow_32(alpha)
 -- with alpha() = 5 is read as ^ 5; std::as_witness has no value effect.
 def noirRCL : List K :=
