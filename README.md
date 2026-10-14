@@ -113,21 +113,21 @@ shrinks to what survives. Findings go in issues here; Oskar answers each.
 ## What comes next
 
 Follow-up pull requests bring in other work one claim unit at a time,
-each behind the same gate: the claim 1 rule table as a status page, and
-the privacy games once their build cost is decided. The epoch extension
-is included here; its source is the PoC extension spec, not spec 2. The
-implementation links stay in the research repo as claim records with
-re-check commands, because their inputs are private. The repo is
-private; no license yet.
+each behind the same gate (except the package below): the claim 1 rule
+table as a status page, and the privacy games once their build cost is
+decided. The epoch extension is included here; its source is the PoC
+extension spec, not spec 2. The implementation links stay in the research
+repo as claim records with re-check commands, because their inputs are
+private. The repo is private; no license yet.
 
 Already in the repo, outside the gate:
 
 - [hash-agreement/](hash-agreement/README.md): the Noir, plain and
   segmented Solidity transcriptions of Poseidon2 (the two-input
   Poseidon, x^5, t = 3) agree as
-  functions over the BN254 scalar field, all 65 rounds, inputs pinned
-  and carried. Separate package, own check and trust base; the gate
-  does not build it.
+  functions over the BN254 scalar field, all 65 rounds, library
+  sources copied in and pinned by sha256. Separate package, own check
+  and trust base; the gate does not build it.
 
 ## Names
 
