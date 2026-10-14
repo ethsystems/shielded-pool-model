@@ -170,8 +170,9 @@ to 127 bits in a new pocs commit, with the pin and `inputs/SHA256SUMS` moved to 
 only the comparison of the rebuilt outputs with `expected.json` can catch it (it must
 report withdraw and nothing else).
 
-Then it copies the built package and plants one change per copy. Each change must
-make `check.sh` fail for its intended reason: a removed theorem, an added theorem, a
+Then it copies the built package, with the rebuilt outputs, and plants one change per
+copy. These copies run the replay stage alone (`scripts/replay.py check`, which does not
+rebuild), and each change must make it fail for its intended reason: a removed theorem, an added theorem, a
 weakened statement, a rebuilt print that differs from its pin, a rogue axiom, a `sorry`, a negative
 control that compiles, a negative control that fails with a different error, a print that
 differs from the bytecode in one opcode, a print that drops an opcode (both with the print
