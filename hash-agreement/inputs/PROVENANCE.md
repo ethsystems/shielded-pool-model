@@ -54,7 +54,7 @@ inputs are the same at that tip.
 - **sol_params.json.** Output of the hash-differential record's `extract_sol.py` on
   `PoseidonT3.sol` (2026-10-02). That extractor parses every Yul statement, rebuilds the
   round structure, recovers `C[0][0]` from the folded first-round literals `M[0][j] * C00^5`
-  by a fifth root mod p, and bounds every `add` statically below 3.998 p, so no EVM `add`
+  by a fifth root mod p, and bounds every `add` statically below 3.999 p, so no EVM `add`
   wraps for any input. The file is trusted and reused here; the Lean lemmas `solR0_eq` ..
   `solR63_eq` and `solLast_eq` would not hold if a constant or MDS entry differed from the
   Yul literals, so the proof re-checks its content against `PoseidonT3.sol`. The static

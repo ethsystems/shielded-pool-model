@@ -11,7 +11,7 @@ Accepted constructs only (anything else raises):
 Expressions: mulmod(a,b,F) -> (a * b); add(a,b) -> (a + b); mod(e,F) -> e;
 mload(0x80) -> a; mload(0xa0) -> b; decimal/hex literals; Mij names.
 The field reading of `add` assumes no uint256 wrap. The hash-differential record bounds
-every `add` statically below 3.998 p (inputs/PROVENANCE.md); nothing here proves it.
+every `add` statically below 3.999 p (inputs/PROVENANCE.md); nothing here proves it.
 
 The second half cuts the same statement list into 65 segments at the 64 mix blocks
 (`segment`, `lean_seg_block`). No statement changes; only the cut points and the

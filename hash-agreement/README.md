@@ -59,7 +59,7 @@ The package does not say "Noir equals Solidity". It is not a security claim. Ope
    `alpha() = 5` read as `^ 5`; `std::as_witness` read as no value effect). The Solidity
    side is translated from the Yul text by `scripts/gen_sol.py`, a translator specialized to
    this file: `mulmod(a, b, F)` is field multiplication, `add` is field addition (the
-   hash-differential record bounds every `add` below 3.998 p, so no `uint256` wrap; this
+   hash-differential record bounds every `add` below 3.999 p, so no `uint256` wrap; this
    package does not re-check that bound), `mod(e, F)` is dropped. Nothing proves that either
    transcription matches what the Noir compiler or the EVM executes.
 2. **The monolithic-to-segmented Solidity cut.** `Sol.lean` carries both the one-term
