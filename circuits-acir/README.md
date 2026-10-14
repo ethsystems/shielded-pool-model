@@ -4,7 +4,9 @@ This package proves range and linear rules over the compiled constraints of the 
 shielded-pool Noir circuits. Its input is what the compiler emitted, not the Noir source:
 the ACIR printed by `noir-inspector` for the beta.21 artifacts of the circuits committed
 at `a04b8b3` of ethsystems/pocs (public; ethsystems/pocs-private has the same commit). A
-Python extractor turns each print into Lean data, a small semantics gives it meaning, and
+`check.sh` rebuilds the artifacts, prints and witnesses from a pocs submodule with pinned
+tools and checks them against pinned hashes; the package commits the pins, not the
+outputs. A Python extractor turns each print into Lean data, a small semantics gives it meaning, and
 the Lean kernel checks the theorems. The package is separate from the model in the parent
 directory: it has its own lakefile, uses the same toolchain (Lean 4.33.1, core only, no
 Mathlib), and imports no model module. Nothing here changes the claim in the parent
@@ -89,49 +91,67 @@ checks use kernel reduction (`decide +kernel`), never `native_decide`.
 
 ## Re-check
 
-Install Python 3.10 or later, bash, elan and `leanprover/lean4:v4.33.1` before running the check.
-The package has no Lake dependencies. Replay uses included inputs and the installed toolchain.
+Install Python 3.10 or later, bash, git, elan and `leanprover/lean4:v4.33.1`, and nargo and
+noir-inspector 1.0.0-beta.21 (both in the release asset named in `inputs/TOOLS.txt`), before
+running the check. The package has no Lake dependencies.
 
 ```
+git submodule update --init circuits-acir/pocs
 cd circuits-acir
 ./check.sh               # expect the last line: REPLAY CHECK PASS: 3 circuits, ...
 ./check.sh --self-test   # expect the last line: SELF-TEST PASS: ...
 ```
 
-Use `check.sh` rather than a bare `lake build`: the library has no root module, and
-building many data modules at once needs more memory than building them one at a time.
+Set `NARGO` and `NOIR_INSPECTOR` to the binaries if they are not on `PATH`. The first run
+needs the network to clone the two Noir libraries into `.deps/`; later runs use that cache
+and need no network.
 
-`check.sh` is a replay check, not the proof: it re-runs the extractor and the kernel on
-the included inputs and compares every result with `expected.json`. In order, it:
+A bare `lake build` builds the `AcirLean` modules, several at a time, once `check.sh` has
+generated the data modules, and checks nothing else. It needs more memory than `check.sh`,
+which builds one module at a time.
 
-1. checks the Lean and Python versions;
-2. hashes every tracked file except README.md, expected.json and .gitignore;
-3. decompresses `inputs/` and checks the print, `func 0`, artifact, bytecode and witness
-   hashes (a mismatch stops the check before anything is built);
-4. decodes each artifact's `bytecode` and compares it with the print, opcode by opcode
+`check.sh` is a rebuild and replay check, not the proof: it rebuilds the compiler outputs,
+re-runs the extractor and the kernel on them and compares every result with
+`expected.json`. In order, it:
+
+1. checks the version and the sha256 of nargo and noir-inspector against
+   `inputs/TOOLS.txt`;
+2. checks that `pocs/` is at the pinned commit, reads the 12 files of
+   `inputs/SHA256SUMS` from that commit as git blobs and checks their hashes;
+3. places the two Noir libraries of `inputs/DEPS.txt` where nargo looks for them (cloned
+   once by tag into `.deps/`, with a commit check), so nargo fetches nothing;
+4. runs `nargo compile`, `nargo execute` with the committed `Prover.toml` and
+   `noir-inspector print-acir` for each circuit, into `build/inputs/` (not tracked);
+5. checks the Lean and Python versions;
+6. hashes every file of the package except README.md, expected.json, .gitignore, the
+   `pocs/` checkout and the caches;
+7. hashes the rebuilt outputs and compares the print, `func 0`, ABI, bytecode,
+   `noir_version` and witness hashes with `expected.json` (a mismatch stops the check
+   before anything is built);
+8. decodes each artifact's `bytecode` and compares it with the print, opcode by opcode
    (`scripts/bytecode_check.py`, described above); a difference stops the check before
    anything is built;
-5. regenerates the Lean data, the witness tries and the non-vacuity modules with the
+9. regenerates the Lean data, the witness tries and the non-vacuity modules with the
    scripts in `scripts/`, then hashes them; the generated files are not tracked;
-6. runs seven mutated-witness checks in Python and compares the failing opcodes with
+10. runs seven mutated-witness checks in Python and compares the failing opcodes with
    `expected.json`: five mutations must break the rule opcode they target; setting the
    deposit `amount` (w2) to 501 has no required opcode and breaks exactly opcodes 356 and
    357, two ASSERTs over w2; and setting the unconstrained deposit `payload_hash` (w5) must
    break nothing;
-7. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
+11. rejects `sorry`, `admit`, `native_decide`, `axiom`, `extern`, `implemented_by`,
    `unsafe`, `opaque` and `skipKernelTC` (the option `debug.skipKernelTC` turns off the
    kernel check) in every Lean file of the package, `Census.lean` included, and in
    `lakefile.toml`;
-8. builds every module, one at a time;
-9. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement, printed
+12. builds every module, one at a time;
+13. runs `Census.lean`: for every theorem in an `AcirLean.*` module, its statement, printed
    with no elision (`pp.deepTerms`, `pp.proofs`, `pp.maxSteps` raised to 10^8; a `⋯` in a
    statement fails), the SHA-256 of a raw form of its type (every node of the expression,
    with a tag per constructor, names component by component and strings quoted; a syntax
    value in metadata fails), and its axioms (`Lean.collectAxioms`, as `#print axioms`);
    any axiom outside `propext`, `Quot.sound` and `Classical.choice`, and any declared
    axiom or opaque constant, fails;
-10. compiles each `Neg/*.lean` file, which must fail with the expected first error;
-11. compares everything with `expected.json`. A missing, duplicate or unexpected
+14. compiles each `Neg/*.lean` file, which must fail with the expected first error;
+15. compares everything with `expected.json`. A missing, duplicate or unexpected
     theorem, control, input or file fails, as does any changed statement, raw-type hash or
     axiom list.
 
@@ -142,9 +162,17 @@ prints, and the scan matches none of these: the rogue-axiom fixture of the self-
 through the scan, and only the census catches it. The pinned file hashes and the review of
 the hand-written files cover a hostile package.
 
-`--self-test` copies the built package and plants one change per copy. Each change must
+`--self-test` first checks the rebuild stages on four copies of the package, each with its
+own clone of `pocs/`. Each must fail for its intended reason: `pocs/` at another commit (the
+source stage), nargo or noir-inspector with one byte appended, so the version matches and
+the sha256 does not (the tool stage, before any build), and the withdraw circuit narrowed
+to 127 bits in a new pocs commit, with the pin and `inputs/SHA256SUMS` moved to it, so that
+only the comparison of the rebuilt outputs with `expected.json` can catch it (it must
+report withdraw and nothing else).
+
+Then it copies the built package and plants one change per copy. Each change must
 make `check.sh` fail for its intended reason: a removed theorem, an added theorem, a
-weakened statement, an altered input artifact, a rogue axiom, a `sorry`, a negative
+weakened statement, a rebuilt print that differs from its pin, a rogue axiom, a `sorry`, a negative
 control that compiles, a negative control that fails with a different error, a print that
 differs from the bytecode in one opcode, a print that drops an opcode (both with the print
 hashes repinned), and a false theorem whose kernel check is turned off with
@@ -152,12 +180,14 @@ hashes repinned), and a false theorem whose kernel check is turned off with
 theorem and of its auxiliary lemma into its copy of `expected.json`, and every failure
 must then come from the scan. A duplicated census entry is tested on the comparator alone.
 The unchanged copy must pass. To show that the deeper check catches each change, the
-fixtures also update the file hash in their copy of `expected.json`.
+fixtures that edit a pinned file also update its hash in their copy of `expected.json`.
 
 Cost on a Linux laptop (xps26, btrfs), one build at a time, `LEAN_NUM_THREADS=2`:
 the first full run built 75 modules in 1,101 s of wall time (the slowest module took 67 s),
 with a cgroup memory peak of 1.47 GB under a 6 GiB cap. `.lake` takes 79 MB and `build/`
-28 MB. A re-run on a built tree takes seconds; the self-test took 131 s.
+28 MB. A re-run on a built tree takes seconds. The rebuild of the three circuits takes
+about 10 s; `.deps/` takes 4 MB and the pocs submodule 4 MB. On 2026-10-15 the
+self-test took about 4 minutes, while another Lean job ran on the same machine.
 
 ## Files
 
@@ -173,7 +203,8 @@ with a cgroup memory peak of 1.47 GB under a 6 GiB cap. `.lake` takes 79 MB and 
   and witness tries), `gen_nv.py` (non-vacuity modules), `perturb_check.py` (mutated
   witnesses), `bytecode_check.py` (bytecode against print), `replay.py` (the stages
   above).
-- `inputs/`: the prints, artifacts and witnesses, with `PROVENANCE.md`.
+- `inputs/`: the pins (`TOOLS.txt`, `SHA256SUMS`, `DEPS.txt`) and `PROVENANCE.md`.
+- `pocs/`: git submodule of ethsystems/pocs at the pinned commit.
 - `expected.json`: the expected results. It is the reviewed output of the first run.
 
 ## Where it comes from
@@ -192,6 +223,8 @@ same text as the archived `Data.lean`. New here: `Deposit/Solved.lean` (now
 `Neg/TransferNoRange.lean` now
 describes a failed proof attempt, after that review.
 
-The inputs derive from the circuit sources at `a04b8b3`, and the witnesses from the
-`Prover.toml` fixtures committed there; that commit is public in ethsystems/pocs. Keep
+`check.sh` rebuilds the inputs from the circuit sources at `a04b8b3`, and the witnesses
+from the `Prover.toml` fixtures committed there; that commit is public in ethsystems/pocs.
+Until 2026-10-15 the package committed the nine outputs; the rebuild reproduces them
+(`inputs/PROVENANCE.md`). Keep
 this package private with the rest of the repo; review it again before any public release.

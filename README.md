@@ -146,9 +146,11 @@ checksum.
 
 `circuits-acir/` is a separate Lean package with its own check. It
 proves amount bounds, transfer conservation and token equality over the
-compiled ACIR constraints of the three PoC circuits at
-ethsystems/pocs-private `a04b8b3`, and it carries its private-derived
-inputs with it. It imports no model module, and the model gate does not
+compiled ACIR constraints of the three PoC circuits at ethsystems/pocs
+`a04b8b3`. Its check rebuilds the compiled circuits from that commit (the
+submodule `circuits-acir/pocs`) with pinned nargo and noir-inspector and
+compares them with pinned hashes; it commits the pins, not the build
+outputs. It imports no model module, and the model gate does not
 build it, so it adds nothing to the claim of this repo.
 `circuits-acir/README.md` states what it trusts; `circuits-acir/check.sh`
 replays it.
