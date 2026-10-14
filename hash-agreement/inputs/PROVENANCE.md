@@ -24,14 +24,15 @@ records are cited, not re-run.
 
 - **Noir.** `sources.py` makes the clone that nargo makes for the pool circuits
   (`git clone --depth 1 --branch v0.3.0`) and requires that the tag resolves to commit
-  `0880c371e88e583d39515fd3f877538657ac41eb`; a moved tag fails. It reads the four files
+  `0880c371e88e583d39515fd3f877538657ac41eb`, so a moved tag fails on a fresh clone; a run
+  that finds the commit in the cache does not ask upstream again. It reads the four files
   as git blobs at that commit, never from a checkout, and checks each sha256. The clone is
   kept at `DEPS_CACHE/<commit>`, the layout that `verifier-reproduction` uses, so one
   `DEPS_CACHE` set for both packages holds one clone. The library is Apache-2.0 (its
   `LICENSE` at that commit).
 - **Solidity.** The soldeer archive that the pool's `soldeer.lock` pins at pocs
   `a04b8b38969dfc2ee64de47edee7e396454204a8`
-  (`private-payment/shielded-pool/soldeer.lock`, entry `poseidon-solidity` 0.0.5). The URL
+  (`pocs/private-payment/shielded-pool/soldeer.lock`, entry `poseidon-solidity` 0.0.5). The URL
   and the checksum in `SOURCES.txt` equal that entry. Soldeer's `checksum` is the sha256 of
   the zip, and `sources.py` checks it before it reads the member; the entry's `integrity`
   field is not checked here. The member's sha256 is then
