@@ -115,6 +115,8 @@ PY
   ! grep -q "^MISMATCH inputs: \(deposit\|transfer\)\|^[A-Z]* source_files" <<<"$LAST_OUT" \
     || { echo "SELF-TEST FAIL: circuit-127 failed for another reason too"; echo "$LAST_OUT" | tail -20; exit 1; }
   echo "SELF-TEST ok: rebuild stages, $n copies, ${SECONDS}s"
+  # The replay self-test below runs through exec, which skips the EXIT trap.
+  rm -rf "$T"; trap - EXIT
 fi
 [ -z "${1:-}" ] || [ "$1" = --self-test ] || { echo "usage: ./check.sh [--self-test]" >&2; exit 2; }
 
