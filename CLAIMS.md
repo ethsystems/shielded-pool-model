@@ -402,9 +402,17 @@ model that encryption.
 
 ## Separate packages
 
-One package outside the gate, [hash-agreement/](hash-agreement/README.md), with its
-own check and trust base. It changes no claim above.
+Two packages outside the gate, [hash-agreement/](hash-agreement/README.md)
+and [verifier-reproduction/](verifier-reproduction/README.md), each with its
+own check and trust base. Neither changes a claim above. Each package
+README states its claim, its trust base and what stays open.
 
 | Package | Lean names | English | What it narrows | Hypothesis |
 |---|---|---|---|---|
 | `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
+
+`verifier-reproduction/` is a build reproduction, not a Lean theorem:
+
+| Package | Claim | Checked by | Not claimed |
+|---|---|---|---|
+| `verifier-reproduction/` | The three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (public; pocs-private has the same commit) are bb's output for the three committed circuits, byte for byte, and bb's key hash for each equals the committed `VK_HASH` (nargo 1.0.0-beta.21, bb 5.0.0-nightly.20260324). | `verifier-reproduction/check.sh`: a rebuild from the pocs submodule at `a04b8b3` and a byte comparison, 9 s | Proof-system soundness (A2), deployed bytecode identity (the deploy check), the pool contract, compiler and bb faithfulness (A4), and the transfer circuit after pocs-private #16 (2026-10-08). It never says "the verifier is correct". |
