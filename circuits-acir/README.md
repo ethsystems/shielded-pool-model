@@ -122,6 +122,7 @@ re-runs the extractor and the kernel on them and compares every result with
    once by tag into `.deps/`, with a commit check), so nargo fetches nothing;
 4. runs `nargo compile`, `nargo execute` with the committed `Prover.toml` and
    `noir-inspector print-acir` for each circuit, into `build/inputs/` (not tracked);
+   nargo runs with `GIT_ALLOW_PROTOCOL=none`, so a fetch by nargo fails the build;
 5. checks the Lean and Python versions;
 6. hashes every file of the package except README.md, expected.json, .gitignore, the
    `pocs/` checkout and the caches;

@@ -162,7 +162,8 @@ echo "inputs: $nfiles files match inputs/SHA256SUMS"
 
 # --- 4. Noir dependencies --------------------------------------------------------
 # The same shallow clone of the tag that nargo makes, kept in DEPS_CACHE by commit, then
-# unpacked where nargo looks for it (HOME/nargo/...), so nargo itself fetches nothing.
+# unpacked where nargo looks for it (HOME/nargo/...), so nargo itself fetches nothing. The
+# build below also runs nargo with GIT_ALLOW_PROTOCOL=none, so any fetch fails the build.
 [ -r inputs/DEPS.txt ] || fail deps "cannot read inputs/DEPS.txt"
 while read -r path head tag _; do
   head="${head#head=}"; tag="${tag#tag=}"; url="https://$(dirname "${path#nargo/}")"; repo="$DEPS_CACHE/$head"
@@ -200,9 +201,9 @@ done
 # replay.py compares their hashes with expected.json before it uses them.
 for c in "${CIRCUITS[@]}"; do
   log="$WORK/$c.log"
-  (cd "$WORK/pool" && HOME="$WORK/home" "$NARGO" compile --package "$c") > "$log" 2>&1 \
+  (cd "$WORK/pool" && HOME="$WORK/home" GIT_ALLOW_PROTOCOL=none "$NARGO" compile --package "$c") > "$log" 2>&1 \
     || { tail -20 "$log"; fail build "nargo compile --package $c (see $log)"; }
-  (cd "$WORK/pool" && HOME="$WORK/home" "$NARGO" execute --package "$c" "$c-witness") >> "$log" 2>&1 \
+  (cd "$WORK/pool" && HOME="$WORK/home" GIT_ALLOW_PROTOCOL=none "$NARGO" execute --package "$c" "$c-witness") >> "$log" 2>&1 \
     || { tail -20 "$log"; fail build "nargo execute --package $c (see $log)"; }
   "$NOIR_INSPECTOR" print-acir "$WORK/pool/target/$c.json" > "$OUT/$c.acir.txt" 2>> "$log" \
     || { tail -20 "$log"; fail build "noir-inspector print-acir $c (see $log)"; }

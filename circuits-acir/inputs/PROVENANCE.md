@@ -24,7 +24,8 @@ the pins, not the outputs. The outputs go to `build/inputs/` and are not tracked
 - Witness inputs: the committed `Prover.toml` of each circuit at that commit.
 - Noir libraries: poseidon v0.3.0 (git 0880c371), binary-merkle-root v0.0.2 (git ff307011).
   `check.sh` clones each tag once into `.deps/`, checks its commit and places it where nargo
-  looks, so nargo fetches nothing.
+  looks, so nargo fetches nothing. nargo runs with `GIT_ALLOW_PROTOCOL=none`, so a fetch
+  by nargo fails the build.
 - Later changes: after the pin, ethsystems/pocs-private pull request 16 (`748884e`, merged
   2026-10-08) changed `circuits/transfer/src/main.nr` and
   `contracts/src/verifiers/TransferVerifier.sol`. The package stays at `a04b8b3`; the newer
