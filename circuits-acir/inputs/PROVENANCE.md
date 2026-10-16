@@ -67,8 +67,8 @@ rebuilt artifacts.
 
 ## History
 
-Until 2026-10-15 the package committed these nine outputs, compressed (4.2 MB), and
-replayed them without a rebuild. They came from a build in the research repo
+Earlier drafts of this package (pull request 6, until 2026-10-15) committed these nine
+outputs, compressed (4.2 MB), and replayed them without a rebuild. They came from a build in the research repo
 (oskarth/lean-shielded-pool at commit `fa5526e`), in two reviewed archives, one for
 deposit and one for withdraw and transfer. A rebuild from the pocs submodule with the
 pinned tools reproduced all nine: the print, `func 0`, bytecode, ABI, `noir_version` and
