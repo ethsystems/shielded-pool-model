@@ -159,7 +159,13 @@ A private exploratory repo (lean-shielded-pool) uses the same model.
 It links the model to the Rust client
 (Aeneas, Verus), the Noir circuits (Lampe, ACIR) and the Solidity
 contract (Halmos, Lean over Yul), and it has privacy games. Each link is
-partial, bounded or conditional, and this repo claims none of them. A
+partial, bounded or conditional, and this repo claims none of them.
+Separately from those links, Verus proofs of the client's prover input
+encoders and public-input array builders live on branch `verus/base` of
+ethsystems/pocs-private
+([crate README](https://github.com/ethsystems/pocs-private/blob/verus/base/pocs/private-payment/shielded-pool/crates/public-inputs/README.md));
+they prove the byte encoding of the `Prover.toml` inputs and the
+public-input array layout only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
 share found one conformance bug in the contract, fixed in
 https://github.com/ethsystems/pocs-private/pull/12. This gate does not

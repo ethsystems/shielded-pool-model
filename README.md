@@ -54,8 +54,11 @@ must satisfy for the model to describe it.
 Work in progress lives in a private research repo,
 oskarth/lean-shielded-pool. Implementation links whose inputs are public
 come here as separate packages (below); the others stay in the research
-repo as claim records with re-check commands. What is claimed here is
-exactly what the units below state.
+repo as claim records with re-check commands. Verus proofs of the
+shielded-pool client's prover input encoders and public-input array
+builders live on branch [`verus/base`](https://github.com/ethsystems/pocs-private/tree/verus/base) of ethsystems/pocs-private,
+off master on purpose; they are not linked to this model. What is
+claimed here is exactly what the units below state.
 
 ## Where it comes from
 
