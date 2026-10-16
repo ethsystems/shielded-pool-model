@@ -199,7 +199,7 @@ trying a macOS clone (`cp -Rc`), then a Linux reflink (`cp --reflink=auto`), the
 copy of about 7 GB; the reflink took 5 s on btrfs. Without a root build it runs
 `lake exe cache get`, which needs the network. The first run also fetches the two
 libraries (GitHub and the soldeer S3 bucket, about 2 s here) into `DEPS_CACHE` (default
-`hash-agreement/.deps`); later runs read the cache and need no network. The cache has the
+`hash-agreement/.deps`; a relative path is taken from the caller's directory); later runs read the cache and need no network. The cache has the
 layout of `verifier-reproduction`'s, so one `DEPS_CACHE` set for both packages holds one
 clone of noir-lang/poseidon.
 
