@@ -120,7 +120,10 @@ extension spec, not spec 2. The implementation links stay in the research
 repo as claim records with re-check commands, because their inputs are
 private. The repo is private; no license yet.
 
-Already in the repo, outside the gate:
+## Separate packages
+
+Packages outside the gate, each with its own check and a row in CLAIMS.md
+under "Separate packages":
 
 - [hash-agreement/](hash-agreement/README.md): the Noir, plain and
   segmented Solidity transcriptions of Poseidon2 (the two-input
