@@ -214,6 +214,5 @@ a cross-family reviewer (PASS-WITH-CORRECTIONS). Its claim table (`CLAIM1.md`, r
 S3) records the result as "Proved (exact rebuild)" with the same limits as above.
 The research check also matched the 28 key points in each `.sol` to their slots in
 the binary key; the byte comparison here subsumes that. `expected.json` carries the
-research values, and `check.sh` is a rewrite of the research scripts to the shape
-of `circuits-acir/`, with the self-test in place of the research run's planted
-controls.
+research values, and `check.sh` is a rewrite of the research scripts, with the
+self-test in place of the research run's planted controls.
