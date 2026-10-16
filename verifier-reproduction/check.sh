@@ -225,10 +225,10 @@ if [ -f "$src" ] && [ "$(stat -c %s "$src" 2>/dev/null || stat -f %z "$src")" -g
   crs_from="prefix of $src"
 else
   [ "${CRS_FETCH:-1}" = 1 ] || fail crs "no CRS of $crs_bytes bytes at $src and CRS_FETCH=0"
+  crs_from="no download succeeded"
   for u in "$(pin crs_url)" "$(pin crs_url_alt)"; do
-    curl -sSL --fail -r "0-$((crs_bytes - 1))" -o "$WORK/crs/bn254_g1.dat" "$u" && break
+    curl -sSL --fail -r "0-$((crs_bytes - 1))" -o "$WORK/crs/bn254_g1.dat" "$u" && { crs_from="fetched from $u"; break; }
   done
-  crs_from="fetched from $u"
 fi
 [ -f "$WORK/crs/bn254_g1.dat" ] && [ "$(sha "$WORK/crs/bn254_g1.dat")" = "$crs_sha" ] \
   || fail crs "CRS ($crs_from) is not the pinned $crs_bytes-byte prefix (sha256 $crs_sha)"
