@@ -30,13 +30,13 @@ if grep -Eq "declaration uses .sorry.|sorryAx" "$LOG"; then echo "GATE FAIL: sor
 if grep -rnE --include="*.lean" "native_decide|\+native|native[[:space:]]*:=|ofReduce(Bool|Nat)" LeanShieldedPool statements controls 2>/dev/null; then echo "GATE FAIL: native_decide"; exit 1; fi
 # bare simp rots silently as Mathlib evolves; require simp only [...] in accepted files
 if grep -rnE --include="*.lean" "(^|[^_[:alnum:]])simp($| [^o])" LeanShieldedPool statements 2>/dev/null | grep -v "simp only"; then echo "GATE FAIL: bare simp (use simp only [...])"; exit 1; fi
-# every declared axiom must be listed in AXIOMS.md (grep belt; kernel census is the suspenders)
+# every declared axiom must be listed in AXIOMS.md by its full name (grep belt; kernel census is the suspenders)
 while read -r f line; do
   case "$f" in controls/*) echo "GATE FAIL: axiom declared in control $f"; exit 1;; esac
-  ax=$(echo "$line" | sed -n 's/.*axiom \([A-Za-z0-9_.'"'"']*\).*/\1/p')
-  [ -n "$ax" ] || continue
-  grep -q "^- $ax" AXIOMS.md || { echo "GATE FAIL: axiom '$ax' in $f not listed in AXIOMS.md"; exit 1; }
-done < <(grep -rnE "^[[:space:]]*(private[[:space:]]+|protected[[:space:]]+)*axiom[[:space:]]" LeanShieldedPool statements controls 2>/dev/null | sed 's/:/ /')
+  ax=$(echo "$line" | sed -nE 's/^[0-9]+:[[:space:]]*((private|protected)[[:space:]]+)*axiom[[:space:]]+([^[:space:]:({]+).*/\3/p')
+  [ -n "$ax" ] || { echo "GATE FAIL: axiom declaration in $f not parsed: $line"; exit 1; }
+  awk -v a="$ax" '$1 == "-" && $2 == a { f = 1 } END { exit !f }' AXIOMS.md || { echo "GATE FAIL: axiom '$ax' in $f not listed in AXIOMS.md"; exit 1; }
+done < <(grep -rnE "^[[:space:]]*(private[[:space:]]+|protected[[:space:]]+)*axiom([[:space:]]|$)" LeanShieldedPool statements controls 2>/dev/null | sed 's/:/ /')
 python3 scripts/mk_check.py statements/INVENTORY.md > "$WORK/CheckInventory.lean"
 if ! lake env lean "$WORK/CheckInventory.lean" > "$WORK/axioms.out" 2>&1; then
   echo "GATE FAIL: inventory did not elaborate"; cat "$WORK/axioms.out"; exit 1

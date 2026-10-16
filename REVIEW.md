@@ -1,11 +1,20 @@
 # Review guide
 
 Find where the claim is wrong, too strong or unclear. This is not an
-audit.
+audit. Start with Track A (part 5): does the model say what the spec
+says?
 
 ## 1. What is claimed
 
-> In a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision 4d4dce1), the protocol rules imply that no note spends twice and that value is conserved per token, from an empty pool over every accepted history, under one hypothesis: among the notes and keys that appear in that history, no two distinct notes with `u128` amounts share a commitment and no two distinct spending keys derive the same public key. Machine-checked with the three standard Lean axioms only. Whether the model says what the spec says is a human reading, still open.
+> The model covers spec 2/SHIELDED-POOL, sections 4 to 6, at revision
+> 4d4dce1. In the model, the protocol rules imply two guarantees: no
+> note spends twice, and value is conserved per token. Both hold from
+> an empty pool, over every accepted history. One hypothesis is
+> assumed, about the notes and keys that appear in that history. No
+> two distinct notes with `u128` amounts share a commitment. No two
+> distinct spending keys derive the same public key.
+> Machine-checked with the three standard Lean axioms only. Whether
+> the model says what the spec says is a human reading, still open.
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -26,7 +35,10 @@ gate test.
 
 ## 2. What is not claimed
 
-- No implementation is verified (client, circuits, contract).
+- No implementation is verified (client, circuits, contract). The
+  separate packages (README, "Separate packages") check selected facts
+  about circuits, hash code and verifier builds; they are outside
+  Track A and change no claim here.
 - No deployed-privacy claim. The symbolic k-anonymity extension
   (`LeanShieldedPool/Extensions/`, CLAIMS.md "Extension") proves
   properties of a symbolic observer relation; no real cryptographic
@@ -53,29 +65,28 @@ gate test.
 
 ## 3. How to check
 
-```
-curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
-# Check out the revision under review before continuing.
-lake exe cache get          # setup: about 30 minutes (estimate), .lake about 7.5 GB
-bash scripts/gate.sh        # expect: GATE PASS (<commit>); 52 s measured
-bash scripts/gate_test.sh   # expect: GATE_TEST PASS; 663 s measured
-```
+Setup and the gate command are in [README.md](README.md), "Re-check".
+The gate builds a fresh clone of committed HEAD, so an uncommitted tree
+is not a gate result. It rejects `sorry`, unlisted axioms, and
+`native_decide` and its synonyms such as `decide +native`. In the
+controls it rejects a `sorry` in the build output, any declared axiom,
+and the same `native_decide` text; it runs no axiom census on control
+theorems. It checks the exact type and axioms of the 65 inventory
+names, runs the controls, and checks the pins last.
 
-The gate tests committed HEAD, so an uncommitted tree is not a gate
-result. The 52 s gate time is one fresh clone of this branch with a
-copied `.lake` cache; the 663 s fixture time is one run of the 23
-fixtures, on Linux with btrfs, no memory cap, `LEAN_NUM_THREADS=2`.
-Without cheap file copies, set `GATE_WORK` to a directory on APFS,
-btrfs or XFS.
+The gate has its own test:
 
-The gate builds a fresh clone of HEAD. It rejects `sorry`, unlisted
-axioms, and `native_decide` and its synonyms such as `decide +native`.
-In the controls it rejects a `sorry` in the build output, any declared
-axiom, and the same `native_decide` text; it runs no axiom census on
-control theorems. It checks the exact type and axioms of the 65
-inventory names, runs the controls, and checks the pins last.
-`gate_test.sh` plants 23 cheats; each must make the gate fail.
+    bash scripts/gate_test.sh   # expect: GATE_TEST PASS
+
+`gate_test.sh` plants 26 cheats; each must make the gate fail with the
+right marker. The last one is a bad candidate commit gated through
+`GATE_REF` while the checked-out HEAD is clean. The test shows that the
+gate fails closed on those cheats; it is not a proof that the gate
+catches every cheat.
+
+On a Linux laptop with btrfs, no memory cap and `LEAN_NUM_THREADS=2`,
+the gate takes about a minute (one fresh clone with a copied `.lake`
+cache) and `gate_test.sh` about 21 minutes for the 26 cheats.
 
 ## 4. Trust base
 
@@ -111,8 +122,9 @@ Questions:
   right hypothesis, or too strong?
 - Two spec clauses disagree. 4.2 pads the second input. 5.3 lets any
   zero-amount input skip membership. The model now follows 4.2 and the
-  reference circuit (simplification 11), and a spec change is proposed
-  that makes 5.3 say the same. Is 4.2 the rule you intend?
+  reference circuit (simplification 11), and spec main says the same
+  since specs-private#40 merged on 2026-10-06; this repo still cites
+  4d4dce1. Is 4.2 the rule you intend?
 
 For L5, read the extension clauses in SPEC-MAP.md, then `Pool/Epoch.lean`
 and `Statements/L5.lean`. Check these points:
@@ -132,7 +144,7 @@ and `Statements/L5.lean`. Check these points:
 
 ## 6. What the theorems do not say
 
-The fifteen core theorems and the five root-window results say nothing
+The fifteen claimed theorems and the five root-window results say nothing
 about the verifier, concrete Merkle implementations, encoded amounts,
 deployed caller and authorization behavior, re-entrancy, overflow,
 governance, privacy, or deployed code (the extension's symbolic observer
@@ -147,7 +159,13 @@ A private exploratory repo (lean-shielded-pool) uses the same model.
 It links the model to the Rust client
 (Aeneas, Verus), the Noir circuits (Lampe, ACIR) and the Solidity
 contract (Halmos, Lean over Yul), and it has privacy games. Each link is
-partial, bounded or conditional, and this repo claims none of them. A
+partial, bounded or conditional, and this repo claims none of them.
+Separately from those links, Verus proofs of the client's prover input
+encoders and public-input array builders live on branch `verus/base` of
+ethsystems/pocs-private
+([crate README](https://github.com/ethsystems/pocs-private/blob/verus/base/pocs/private-payment/shielded-pool/crates/public-inputs/README.md));
+they prove the byte encoding of the `Prover.toml` inputs and the
+public-input array layout only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
 share found one conformance bug in the contract, fixed in
 https://github.com/ethsystems/pocs-private/pull/12. This gate does not

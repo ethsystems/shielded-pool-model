@@ -1,6 +1,6 @@
 # Claims
 
-The fifteen core theorems (nine base, six epoch) and five root-window
+The fifteen claimed theorems (nine base, six epoch) and five root-window
 results, each with its Lean name, English, spec clause and hypothesis.
 The statement files `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
 `L4B.lean`, `L5.lean` and `Window.lean` are the source of truth. The
@@ -79,10 +79,13 @@ is a reading argument here, not a proved lemma. Rows 11 and 12 require
 no collision hypothesis. None of these results uses `EpochDistinct`.
 
 The epoch model follows the repinned base: its transfer guard requires
-membership for the first input, as the base guard does. No L5 statement
-text differs from the research-repo source, but the model admits fewer
-histories than the pre-repin export did, and row 14 targets the revised
-base `CryptoHyp`.
+membership for the first input, as the base guard does. The L5
+statements of rows 10 to 14 come from the research-repo source at
+`fa5526e`. Review here changed four of them: the consumption statement
+of row 10, the immutability premise of row 11, the binding clause of
+row 13 and the refinement statement of row 14. Row 12 keeps its source
+text. Row 15 was added here. The model admits fewer histories than the
+pre-repin export did, and row 14 targets the revised base `CryptoHyp`.
 
 Row 14 also states the implication from the base `noDoubleSpend`
 proposition to the epoch consumption claim (over `Tx.valueConsumes`, a
