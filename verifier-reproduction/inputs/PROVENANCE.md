@@ -43,9 +43,9 @@ the three circuit `Nargo.toml` files name them (by git URL and tag). `DEPS.txt`
 records both commits; it is byte-identical to the research record. The check
 clones each tag the way nargo does (`git clone --depth 1 --branch <tag>`) and fails
 if the fresh clone is at another commit; a commit already in `.deps/` is used
-without asking upstream. It unpacks the pinned commit where nargo looks for it. The trees it unpacks are equal, file for file, to the tarball that
-the first version of this package carried, taken from the research run's nargo
-cache (checked 2026-10-14).
+without asking upstream. It unpacks the pinned commit where nargo looks for it.
+The trees it unpacks are equal, file for file, to the research run's nargo cache
+(checked 2026-10-14).
 
 ## Pins written for this package
 
@@ -55,9 +55,9 @@ cache (checked 2026-10-14).
   assets and CRS URLs added. The asset digests are GitHub's own release digests,
   read on 2026-10-13; the research log records that unpacking those two assets
   gives binaries with the pinned sha256.
-- `SHA256SUMS`: the sha256 of the 13 pool files. Unlike the first version of this
-  package, it no longer pins `TOOLS.txt` and `DEPS.txt`: they are the pin files
-  themselves, reviewed in the diff like `expected.json`.
+- `SHA256SUMS`: the sha256 of the 13 pool files. It does not pin `TOOLS.txt` and
+  `DEPS.txt`: they are the pin files themselves, reviewed in the diff like
+  `expected.json`.
 
 ## Pinned but not committed
 
