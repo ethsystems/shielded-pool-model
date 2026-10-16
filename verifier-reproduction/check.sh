@@ -184,7 +184,8 @@ echo "inputs: $nfiles files match inputs/SHA256SUMS"
 
 # --- 4. Noir dependencies --------------------------------------------------------
 # The same shallow clone of the tag that nargo makes, kept in DEPS_CACHE by commit, then
-# unpacked where nargo looks for it (HOME/nargo/...), so nargo itself fetches nothing.
+# unpacked where nargo looks for it (HOME/nargo/...). nargo runs with GIT_ALLOW_PROTOCOL=none
+# below, so a fetch by nargo itself fails the build.
 [ -r inputs/DEPS.txt ] || fail deps "cannot read inputs/DEPS.txt"
 while read -r path head tag _; do
   head="${head#head=}"; tag="${tag#tag=}"; url="https://$(dirname "${path#nargo/}")"; repo="$DEPS_CACHE/$head"
@@ -239,7 +240,7 @@ echo "crs: $crs_bytes bytes, sha256 $crs_sha ($crs_from)"
 for c in "${CIRCUITS[@]}"; do
   C="$(cap "$c")"; out="$WORK/$c"; mkdir -p "$out"
   committed="$WORK/pool/contracts/src/verifiers/${C}Verifier.sol"
-  (cd "$WORK/pool" && HOME="$WORK/home" "$NARGO" compile --package "$c") > "$out/nargo.log" 2>&1 \
+  (cd "$WORK/pool" && HOME="$WORK/home" GIT_ALLOW_PROTOCOL=none "$NARGO" compile --package "$c") > "$out/nargo.log" 2>&1 \
     || { tail -20 "$out/nargo.log"; fail build "nargo compile --package $c (see $out/nargo.log)"; }
   acir="$(python3 -c 'import base64,gzip,hashlib,json,sys; print(hashlib.sha256(gzip.decompress(base64.b64decode(json.load(open(sys.argv[1]))["bytecode"]))).hexdigest())' "$WORK/pool/target/$c.json")"
   "$BB" write_vk -b "$WORK/pool/target/$c.json" -o "$out/vk" -t evm -c "$WORK/crs" > "$out/bb.log" 2>&1 \
