@@ -86,7 +86,7 @@ catches every cheat.
 
 On a Linux laptop with btrfs, no memory cap and `LEAN_NUM_THREADS=2`,
 the gate takes about a minute (one fresh clone with a copied `.lake`
-cache) and `gate_test.sh` 11 to 15 minutes for the 23 cheats.
+cache) and `gate_test.sh` 11 to 18 minutes for the 23 cheats.
 
 ## 4. Trust base
 

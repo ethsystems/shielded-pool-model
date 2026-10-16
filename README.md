@@ -33,9 +33,9 @@ commits to (simplification 2), and the verifier and circuit constrain
 exactly what the guards state (simplification 1). Neither is a theorem
 hypothesis; both are obligations on the implementation. The model makes
 16 simplifications, for example a list for the Merkle tree, `Nat`
-amounts and opaque hashes; [SPEC-MAP.md](SPEC-MAP.md) lists them and
-maps each definition to its spec line. A nullifier collision can lock a
-note; locked value counts as live.
+amounts, opaque hashes and atomic steps; [SPEC-MAP.md](SPEC-MAP.md)
+lists them and maps each definition to its spec line. A nullifier
+collision can lock a note; locked value counts as live.
 
 ## Scope
 
@@ -43,8 +43,8 @@ Two kinds of units live here: machine-checked model claims and scoped
 implementation evidence with pinned inputs. A unit moves in once its
 claim is stable and its check is self-contained. No unit verifies
 deployed code: nothing about the verifier in production, the on-chain
-Merkle tree, callers, re-entrancy, arithmetic of the deployed
-contract, governance, or privacy of the real system. The separate
+Merkle tree, field encodings, callers, re-entrancy, arithmetic of the
+deployed contract, governance, or privacy of the real system. The separate
 packages check selected facts about circuits, hash code and verifier
 builds, not deployed execution; no end-to-end implementation proof is
 claimed anywhere in this repo. A model theorem cannot see an
@@ -100,7 +100,8 @@ The core is the spec-2 review unit:
   [CLAIMS.md](CLAIMS.md), read everything except the epoch,
   root-window, k-anonymity and separate-package sections; the shared
   hypothesis, assumption and control sections are core. In
-  [SPEC-MAP.md](SPEC-MAP.md), stop before "L5: epoch extension".
+  [SPEC-MAP.md](SPEC-MAP.md), skip the window rows (`St.window` to
+  `honestWithdraw_proof`) and stop before "L5: epoch extension".
 
 Core reading order: this README, then CLAIMS.md, SPEC-MAP.md, the
 model, the statements, the proofs, the controls, `scripts/gate.sh`.
@@ -117,7 +118,7 @@ k-anonymity extension are supporting material, not further claims
   one-way refinement of rollover-free runs to the base pool, and
   spendability after rollover); no epoch conservation, no
   verification of recursive proofs or concrete nullifier trees, not a
-  spec-2 claim. Files:
+  spec-2 claim; SPEC-MAP.md lists its other limits. Files:
   `Pool/Epoch.lean`, `Statements/L5.lean`, `Proofs/Epoch.lean`,
   `Proofs/EpochBase.lean`, the `_l5` controls, the L5 sections of
   [CLAIMS.md](CLAIMS.md), [SPEC-MAP.md](SPEC-MAP.md) and the
@@ -180,8 +181,7 @@ checksum.
 
 ## Re-check
 
-You need git, bash, python3 (3.10 or later) and about 8 GB of free
-disk.
+You need git, bash, python3 and about 8 GB of free disk.
 
     curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
     git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
