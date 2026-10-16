@@ -21,7 +21,7 @@ BB="$(rel "${BB:-$(command -v bb || true)}")"
 export NARGO BB
 cd "$(dirname "$0")"
 PKG="$(pwd)"
-WORK="$(rel "${WORK:-$PKG/work}")"
+WORK="$PKG/work"
 POCS="$(rel "${POCS:-$PKG/pocs}")"
 DEPS_CACHE="$(rel "${DEPS_CACHE:-$PKG/.deps}")"
 CRS_DIR="$(rel "${CRS_DIR:-$HOME/.bb-crs}")"
@@ -57,7 +57,7 @@ if [ "${1:-}" = "--self-test" ]; then
     { git clone -q --shared --no-checkout "$POCS" "$c/pocs" && git -C "$c/pocs" checkout -q --detach "$(pin pocs_commit)"; } \
       || { echo "SELF-TEST FAIL: could not clone pocs for $name"; exit 1; }
     (cd "$c" && "$@") || { echo "SELF-TEST FAIL: could not set up $name"; exit 1; }
-    local out; out="$(cd "$c" && WORK="$c/work" POCS="$c/pocs" bash ./check.sh 2>&1)"; local rc=$?
+    local out; out="$(cd "$c" && POCS="$c/pocs" bash ./check.sh 2>&1)"; local rc=$?
     if [ "$stage" = PASS ]; then
       [ $rc -eq 0 ] && grep -q '^CHECK PASS' <<<"$out" || { echo "SELF-TEST FAIL: $name should pass"; echo "$out" | tail -20; exit 1; }
       echo "SELF-TEST ok: $name passes"

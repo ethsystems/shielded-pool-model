@@ -140,8 +140,8 @@ cd verifier-reproduction
 ```
 
 Without `NARGO` and `BB` the script takes `nargo` and `bb` from `PATH`. Relative
-paths in `NARGO`, `BB`, `POCS`, `DEPS_CACHE`, `CRS_DIR` and `WORK` are taken from the
-caller's directory. In order,
+paths in `NARGO`, `BB`, `POCS`, `DEPS_CACHE` and `CRS_DIR` are taken from the
+caller's directory. The work directory is always `work/` in this package. In order,
 `check.sh`:
 
 1. checks that nargo and bb exist, report the pinned versions (nargo also the pinned
