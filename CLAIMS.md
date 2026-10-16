@@ -402,14 +402,16 @@ model that encryption.
 
 ## Separate packages
 
-Two packages outside the gate, [hash-agreement/](hash-agreement/README.md)
-and [verifier-reproduction/](verifier-reproduction/README.md), each with its
-own check and trust base. Neither changes a claim above. Each package
+Three packages outside the gate, [hash-agreement/](hash-agreement/README.md),
+[circuits-acir/](circuits-acir/README.md) and
+[verifier-reproduction/](verifier-reproduction/README.md), each with its own
+check and trust base. None of them changes a claim above. Each package
 README states its claim, its trust base and what stays open.
 
 | Package | Lean names | English | What it narrows | Hypothesis |
 |---|---|---|---|---|
 | `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
+| `circuits-acir/` | `AcirLean.Deposit.amount_lt_two_pow_128`, `AcirLean.Withdraw.amount_lt_two_pow_128`, `AcirLean.Transfer.amount_ranges`, `AcirLean.Transfer.conservation`, `AcirLean.Transfer.token_consistency`, and `satisfiable` for each circuit | Every assignment that satisfies the compiled ACIR constraints (AssertZero and RANGE) of the deposit, withdraw and transfer circuits at ethsystems/pocs `a04b8b3` keeps each amount below 2^128; in transfer, the two input amounts sum to the two output amounts over the naturals, with no u128 wrap, and the four token fields are equal. Each circuit has a kernel-checked satisfying witness. Standard axioms only. | No simplification of the model. Evidence for the circuit side of three guard conjuncts that the proofs consume: the `U128` range, the transfer sum equation and token consistency. Not the contract's checks, Brillig execution, the extractor or the ABI allocation, compiler or prover soundness, or the deployed verifier (its README). The pin predates pocs-private #16, which changed the transfer circuit. | none |
 
 `verifier-reproduction/` is a build reproduction, not a Lean theorem:
 

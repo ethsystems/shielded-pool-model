@@ -135,25 +135,20 @@ checksum.
   sources fetched at a pinned commit and checksum, not copied in.
   Separate package, own check and trust base; the gate does not build
   it.
+- [circuits-acir/](circuits-acir/README.md): over the compiled ACIR
+  constraints of the three PoC circuits at ethsystems/pocs `a04b8b3`,
+  the deposit, withdraw and transfer amounts are below 2^128, transfer
+  conserves value with no u128 wrap, and its four token fields are
+  equal. The check rebuilds the circuits from the submodule
+  `circuits-acir/pocs` with pinned nargo and noir-inspector and compares
+  them with pinned hashes. Separate package, own check and trust base;
+  the gate does not build it.
 - [verifier-reproduction/](verifier-reproduction/README.md): rebuilds the
   three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (the
   submodule `verifier-reproduction/pocs`) from the committed circuits with
   pinned nargo and bb, and compares the bytes and the key hashes. A build
   reproduction, not a theorem; it says nothing about soundness or deployed
   code.
-
-## The compiled-circuit package
-
-`circuits-acir/` is a separate Lean package with its own check. It
-proves amount bounds, transfer conservation and token equality over the
-compiled ACIR constraints of the three PoC circuits at ethsystems/pocs
-`a04b8b3`. Its check rebuilds the compiled circuits from that commit (the
-submodule `circuits-acir/pocs`) with pinned nargo and noir-inspector and
-compares them with pinned hashes; it commits the pins, not the build
-outputs. It imports no model module, and the model gate does not
-build it, so it adds nothing to the claim of this repo.
-`circuits-acir/README.md` states what it trusts; `circuits-acir/check.sh`
-replays it.
 
 ## Names
 
