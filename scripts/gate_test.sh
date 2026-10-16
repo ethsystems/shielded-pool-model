@@ -29,6 +29,12 @@ fixture sorry "GATE FAIL: sorry" \
   'printf "\ntheorem fx_sorry : 2 = 2 := by sorry\n" >> LeanShieldedPool/Proofs/TierA.lean'
 fixture rogue-axiom "GATE FAIL: axiom" \
   'printf "\naxiom fx_cheat : False\n" >> LeanShieldedPool/Proofs/TierA.lean'
+fixture axiom-name-prefix "GATE FAIL: axiom 'prope'" \
+  'printf "\naxiom prope : False\n" >> LeanShieldedPool/Proofs/TierA.lean'
+fixture axiom-two-spaces "GATE FAIL: axiom 'fx_spaced'" \
+  'printf "\naxiom  fx_spaced : False\n" >> LeanShieldedPool/Proofs/TierA.lean'
+fixture axiom-trailing-name "GATE FAIL: axiom 'fx_trailing'" \
+  'printf "\naxiom fx_trailing : False -- axiom propext\n" >> LeanShieldedPool/Proofs/TierA.lean'
 fixture statement-edit "GATE FAIL: census" \
   'python3 -c "
 p=open(\"statements/INVENTORY.md\").read()

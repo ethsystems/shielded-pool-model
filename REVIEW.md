@@ -78,7 +78,7 @@ The gate has its own test:
 
     bash scripts/gate_test.sh   # expect: GATE_TEST PASS
 
-`gate_test.sh` plants 23 cheats; each must make the gate fail with the
+`gate_test.sh` plants 26 cheats; each must make the gate fail with the
 right marker. The last one is a bad candidate commit gated through
 `GATE_REF` while the checked-out HEAD is clean. The test shows that the
 gate fails closed on those cheats; it is not a proof that the gate
