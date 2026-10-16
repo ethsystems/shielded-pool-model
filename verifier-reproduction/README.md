@@ -75,7 +75,8 @@ files are the build of these circuits with these tools".
   fails. The clones stay in `.deps/` (or `DEPS_CACHE`), keyed by commit; a commit
   already there is used without asking upstream. The check places each tree where
   nargo looks for it and stops if a pinned `Nargo.toml` names a git dependency that
-  `inputs/DEPS.txt` does not pin, so nargo itself fetches nothing.
+  `inputs/DEPS.txt` does not pin. nargo runs with `GIT_ALLOW_PROTOCOL=none`, so if
+  nargo tries to fetch anything itself, git refuses and the build fails.
 - bash, git, python3 (for the ACIR hash, `expected.json` and the self-test edits), GNU
   coreutils (`sha256sum`, `od`), diffutils (`cmp`, `diff`), findutils (`xargs`, in
   the self-test), grep, sed, tar, and curl
@@ -163,7 +164,8 @@ caller's directory. The work directory is always `work/` in this package. In ord
    `work/results.txt`.
 
 The build needs no network once the submodule, `.deps/` and the CRS are on the
-machine. Network use is not blocked, only unneeded.
+machine. Only nargo's git fetches are blocked; the clones and the CRS download in
+steps 4 and 5 use the network when their files are not on the machine.
 
 `--self-test` copies `check.sh`, `expected.json` and `inputs/` eight times, gives
 each copy its own clone of `pocs/` at the pin, plants seven changes, and runs the
