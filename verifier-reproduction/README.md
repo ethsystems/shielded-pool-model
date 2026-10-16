@@ -26,16 +26,15 @@ changes). Everything below is open, and the package claims none of it.
   `TransferVerifier.sol` after `a04b8b3`. The package stays at the pin. Moving it
   is a submodule bump plus new pins (`inputs/TOOLS.txt`, `inputs/SHA256SUMS`,
   `expected.json`) once that commit is public; it is not covered here.
-- Proof-system soundness (assumption A2 of the research ledger). Whether a proof the
-  verifier accepts implies a satisfying witness is the cryptographic floor. The check
-  says nothing about it.
+- Proof-system soundness. Whether a proof the verifier accepts implies a satisfying
+  witness is the cryptographic floor. The check says nothing about it.
 - Deployed bytecode identity. Whether any deployed contract is compiled from these
-  sources is the deploy check (hand-off 5 of 6), not this package. `VK_HASH` is an
+  sources needs a check of the deployed bytecode, not this package. `VK_HASH` is an
   internal immutable with no getter, so an on-chain check must compare runtime
   bytecode; nothing here does.
 - The pool contract. Nothing about `ShieldedPool.sol`, how it orders or passes the
   public inputs, or which verifier address it calls.
-- Compiler and translator faithfulness (A4). The check compares bb's output with bb's
+- Compiler and translator faithfulness. The check compares bb's output with bb's
   earlier output. It does not check that the ACIR nargo emits means what the Noir
   source says, nor that bb's key and verifier are a correct UltraHonk verifier for
   that ACIR.
