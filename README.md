@@ -1,8 +1,8 @@
 # shielded-pool-model
 
 Stable, reviewable claim units about the shielded pool, one unit at a
-time. Each unit states a fixed claim and re-checks it with one
-command. The core unit is a small Lean 4 model of spec
+time. Each unit states a fixed claim or supporting result and
+re-checks it with one command. The core unit is a small Lean 4 model of spec
 2/SHIELDED-POOL (`specs/2/README.md` in ethsystems/specs-private, at
 revision 4d4dce1). At that revision, spec section 6.2 marks "no double
 spend" and "value conservation" as "tested". This repo holds the
@@ -57,8 +57,8 @@ come here as separate packages (below); the others stay in the research
 repo as claim records with re-check commands. Verus proofs of the
 shielded-pool client's prover input encoders and public-input array
 builders live on branch [`verus/base`](https://github.com/ethsystems/pocs-private/tree/verus/base) of ethsystems/pocs-private,
-off master on purpose; they are not linked to this model. What is
-claimed here is exactly what the units below state.
+off master on purpose; they are not linked to this model. Nothing is
+claimed here beyond what the units below state.
 
 ## Where it comes from
 

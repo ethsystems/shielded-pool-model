@@ -144,7 +144,7 @@ and `Statements/L5.lean`. Check these points:
 
 ## 6. What the theorems do not say
 
-The fifteen core theorems and the five root-window results say nothing
+The fifteen claimed theorems and the five root-window results say nothing
 about the verifier, concrete Merkle implementations, encoded amounts,
 deployed caller and authorization behavior, re-entrancy, overflow,
 governance, privacy, or deployed code (the extension's symbolic observer
