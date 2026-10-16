@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build reproduction check for verifier-reproduction (see README.md). Needs bash, git,
 # python3, sha256sum, curl (only when no pinned CRS is on this machine), the pocs
-# submodule (git submodule update --init verifier-reproduction/pocs), and the two pinned
+# submodule (git -C verifier-reproduction submodule update --init pocs), and the two pinned
 # tools from inputs/TOOLS.txt.
 #   ./check.sh              rebuild the three verifiers and compare them with the committed files
 #   ./check.sh --self-test  plant seven changes, each of which must make the check fail for its
@@ -166,9 +166,9 @@ echo "tools: nargo $(pin nargo_version) ($NARGO), bb $(pin bb_version) ($BB)${UN
 # The pool files are read from the pinned pocs commit, as raw git blobs, never from the
 # working tree, so an uncommitted edit in pocs/ cannot reach the build.
 commit="$(pin pocs_commit)"; dir="$(pin pocs_dir)"
-[ -e "$POCS/.git" ] || fail source "no pocs checkout at $POCS (run: git submodule update --init verifier-reproduction/pocs)"
+[ -e "$POCS/.git" ] || fail source "no pocs checkout at $POCS (run: git -C $PKG submodule update --init pocs)"
 head="$(git -C "$POCS" rev-parse HEAD 2>/dev/null)"
-[ "$head" = "$commit" ] || fail source "pocs is checked out at '$head', pinned $commit (run: git submodule update verifier-reproduction/pocs)"
+[ "$head" = "$commit" ] || fail source "pocs is checked out at '$head', pinned $commit (run: git -C $PKG submodule update pocs)"
 rm -rf "$WORK"; mkdir -p "$WORK/crs" "$WORK/home"
 nfiles=0
 while read -r f; do
