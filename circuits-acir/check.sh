@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Replay check for circuits-acir (see README.md). Needs bash, git, python3 (3.10 or later),
-# sha256sum, elan, the pocs submodule (git submodule update --init circuits-acir/pocs) and the
-# two pinned tools from inputs/TOOLS.txt; lake picks the toolchain from lean-toolchain. Run
-# builds one at a time; set LEAN_NUM_THREADS to change the Lean thread count (default 2).
+# sha256sum, elan, the pocs submodule (from the repo root: git submodule update --init
+# circuits-acir/pocs) and the two pinned tools from inputs/TOOLS.txt; lake picks the toolchain
+# from lean-toolchain. Run builds one at a time; set LEAN_NUM_THREADS to change the Lean thread
+# count (default 2).
 #   ./check.sh              rebuild the three circuits from the pinned pocs commit, then replay
 #                           every theorem, control and census against expected.json
 #   ./check.sh --self-test  check that each must-fail fixture fails for its intended reason
