@@ -144,9 +144,9 @@ echo "tools: nargo and noir-inspector $(pin nargo_version) ($NARGO, $NOIR_INSPEC
 # The circuit files are read from the pinned pocs commit, as raw git blobs, never from the
 # working tree, so an uncommitted edit in pocs/ cannot reach the build.
 commit="$(pin pocs_commit)"; dir="$(pin pocs_dir)"
-[ -e "$POCS/.git" ] || fail source "no pocs checkout at $POCS (run: git submodule update --init circuits-acir/pocs)"
+[ -e "$POCS/.git" ] || fail source "no pocs checkout at $POCS (run: git -C $PKG submodule update --init pocs)"
 head="$(git -C "$POCS" rev-parse HEAD 2>/dev/null)"
-[ "$head" = "$commit" ] || fail source "pocs is checked out at '$head', pinned $commit (run: git submodule update circuits-acir/pocs)"
+[ "$head" = "$commit" ] || fail source "pocs is checked out at '$head', pinned $commit (run: git -C $PKG submodule update pocs)"
 rm -rf "$WORK" "$OUT"; mkdir -p "$WORK/home" "$OUT"
 nfiles=0
 while read -r f; do
