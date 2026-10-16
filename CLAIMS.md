@@ -6,8 +6,7 @@ The statement files `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
 `L4B.lean`, `L5.lean` and `Window.lean` are the source of truth. The
 gate checks the type of each name against `statements/INVENTORY.md`.
 These fifteen are the repo's claim; the root-window results and the
-gated extension at the end of this file are supporting material, not
-further claims.
+gated k-anonymity extension are supporting material, not further claims.
 
 ## How to read a row
 
@@ -401,9 +400,9 @@ encrypts to the recipient's viewing key (spec 2 line 230), so a real
 bridge needs key privacy of that encryption as well. This file does not
 model that encryption.
 
-## Extension outside the gate: hash agreement
+## Separate packages
 
-One separate package, [hash-agreement/](hash-agreement/README.md), with its
+One package outside the gate, [hash-agreement/](hash-agreement/README.md), with its
 own check and trust base. It changes no claim above.
 
 | Package | Lean names | English | What it narrows | Hypothesis |
