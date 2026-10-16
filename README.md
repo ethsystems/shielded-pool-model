@@ -135,6 +135,14 @@ checksum.
   sources fetched at a pinned commit and checksum, not copied in.
   Separate package, own check and trust base; the gate does not build
   it.
+- [circuits-acir/](circuits-acir/README.md): over the compiled ACIR
+  constraints of the three PoC circuits at ethsystems/pocs `a04b8b3`,
+  the deposit, withdraw and transfer amounts are below 2^128, transfer
+  conserves value with no u128 wrap, and its four token fields are
+  equal. The check rebuilds the circuits from the submodule
+  `circuits-acir/pocs` with pinned nargo and noir-inspector and compares
+  them with pinned hashes. Separate package, own check and trust base;
+  the gate does not build it.
 - [verifier-reproduction/](verifier-reproduction/README.md): rebuilds the
   three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (the
   submodule `verifier-reproduction/pocs`) from the committed circuits with

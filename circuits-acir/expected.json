@@ -1,0 +1,4250 @@
+{
+ "bytecode_check": {
+  "deposit": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 6098,
+    "same": 1480
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 7662,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  },
+  "transfer": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 18716,
+    "same": 4561
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 23543,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  },
+  "withdraw": {
+   "acir_functions": 1,
+   "assert_sign": {
+    "negated": 9135,
+    "same": 2243
+   },
+   "brillig_functions": 2,
+   "counts": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "differences": 0,
+   "first_differences": [],
+   "format_byte": 3,
+   "opcodes": 11508,
+   "params_match": {
+    "private": true,
+    "public": true,
+    "return": true
+   }
+  }
+ },
+ "extraction": {
+  "deposit": {
+   "abi_layout_matches_print": true,
+   "abi_sha256": "2eca0103bb9f7ef1b1d235e4346b0f5d96698bab84a7b2f86e91e2f01ae323aa",
+   "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
+   "chunk": 256,
+   "chunks": 30,
+   "counts": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "func0_sha256": "e09ceed51dbc595dfda5a274623261301663c553d344d89c3f0dae2f3693f78a",
+   "max_witness": 28269,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 7662,
+   "parts": 2,
+   "ranges": 63,
+   "reprint_mismatches": 0
+  },
+  "transfer": {
+   "abi_layout_matches_print": true,
+   "abi_sha256": "adbc83d9dd1d4a998914a4a84141ea445a917b17d9dcf681d7086ed96eae6996",
+   "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
+   "chunk": 256,
+   "chunks": 92,
+   "counts": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "func0_sha256": "dc747fb033334d70f691a3fbaef07ffd97b894b88714449aa9d42de759f91d5e",
+   "max_witness": 88158,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 23543,
+   "parts": 5,
+   "ranges": 199,
+   "reprint_mismatches": 0
+  },
+  "withdraw": {
+   "abi_layout_matches_print": true,
+   "abi_sha256": "2c2b7d5898217e4289c0596b02d3aba8b35e41a37d76933bdfad07c48276b203",
+   "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
+   "chunk": 256,
+   "chunks": 45,
+   "counts": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "func0_sha256": "c68939b13f52dde72917c7e07880ff1c95cfbcbe2519d2f2c7340246b7ec1a3c",
+   "max_witness": 42752,
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "opcodes": 11508,
+   "parts": 3,
+   "ranges": 97,
+   "reprint_mismatches": 0
+  }
+ },
+ "generated_files": {
+  "AcirLean/Deposit/Data.lean": "1e39095c567360e029ac6d8c028c83f61c4c421077809fda5b212ea1ffe7556b",
+  "AcirLean/Deposit/Data.lean.json": "17f093197e2313aa48816b414e5a0334ea343cd21a7f17a9f0bc1a280dfca9c4",
+  "AcirLean/Deposit/Data/Part0.lean": "adbce2e95d521d921b660c24c15ec2371a812bb7ddad5f4d64ef5598fa5568e8",
+  "AcirLean/Deposit/Data/Part1.lean": "89c29ae237e870ca579e91b5d067002429d588595853eb0d6b6c18296b0ca1c1",
+  "AcirLean/Deposit/NV/G0.lean": "90814419895be5e3fc6baff5daccbdd52b4738aeca43ce618e82a30b088ecf22",
+  "AcirLean/Deposit/NV/G1.lean": "ffc8f65300c0aa93c2627943aa94f3470bff7167186a67ac7cc5e50260219780",
+  "AcirLean/Deposit/NV/G2.lean": "1785458d463a98fc94d800767ce7c2d2b87d4efbcbdadbddfcc4af423ec78d08",
+  "AcirLean/Deposit/NV/G3.lean": "651afe47131d9edc86feee7f9d9fc016db4e7f0fd73a1547afc3b28b0666d9ae",
+  "AcirLean/Deposit/NV/G4.lean": "31b81ffc02945548ffb2c61101cbf12aeffcc0c72be1d09e0f31fdf54d913f7c",
+  "AcirLean/Deposit/NV/G5.lean": "fea766685d80acd77c08616267e0119040869bc9146e7e26c7108977940be715",
+  "AcirLean/Deposit/NV/G6.lean": "86824a8cc2f39869e229d24630cca5dace70c8bf1309f4500f6b04fb985c0d5e",
+  "AcirLean/Deposit/NV/G7.lean": "b7ae0f74ea359eed5879fdd8f1878aacce29db3e72f8327388f0dd4a6efc01b1",
+  "AcirLean/Deposit/NonVacuity.lean": "df66ba33cab8940b4faaeb25a6f16b3d580a13bc211a0e9a5ecc773d90ef6902",
+  "AcirLean/Deposit/WitnessData.lean": "b1d4923c555b7107110a544b6f2fe45e08025fe6a425c1faa3531a06889a355b",
+  "AcirLean/Transfer/Data.lean": "4023daba74d66a62b855cb26c89a31e298632c4a6c6d055ac8a6c9dc1fbbe3d3",
+  "AcirLean/Transfer/Data.lean.json": "bf5131a511a2408c58d8299ba0897833f771d82d442e36493d1994bf82d8e564",
+  "AcirLean/Transfer/Data/Part0.lean": "e6661b4ecc6dd990b35c30714b98c7ba5f3b96210ddca76852a28dbce8cf492a",
+  "AcirLean/Transfer/Data/Part1.lean": "bc528e87886409c40253b751a99f7f97e5ae7f131ab4209b21556384498eb564",
+  "AcirLean/Transfer/Data/Part2.lean": "ce825cde9faa54ce88614600e8f835f1202036136b225ee6b30012e570f66296",
+  "AcirLean/Transfer/Data/Part3.lean": "29aed750625d176a9e4c5603ffd5e581204dcadc44b2fd097d5778d2bf329029",
+  "AcirLean/Transfer/Data/Part4.lean": "2bc659c0bd4c49ff6a93795af7e21fde80e83bfc5b3879fc85857f0997190419",
+  "AcirLean/Transfer/NV/G0.lean": "ea9f81143d8daa852d01916c70c6967bad7055c7eb6520f3c23a1c372336e81d",
+  "AcirLean/Transfer/NV/G1.lean": "d14c3a0dfabf09873be8184579743f7c7a27bf9fdb2825a94beae63b6856c108",
+  "AcirLean/Transfer/NV/G10.lean": "b17199d7e96b213035470189d786a49def097c6913371eef3ac3856c39fe7086",
+  "AcirLean/Transfer/NV/G11.lean": "4b62e0275e9e544fb8754c77f01e8978c35999d4a087af8eb8bb7a3cb384d402",
+  "AcirLean/Transfer/NV/G12.lean": "261a3a245b6d95e619e242463a31b3925935fa842d8d69fd4b148760fec1f547",
+  "AcirLean/Transfer/NV/G13.lean": "fe5d9d6e2f51002ad34bd15414db1bce1943e7ee32435fd36eedef0ef7052442",
+  "AcirLean/Transfer/NV/G14.lean": "1cb79a5b8d58996a297ae66a22b00ef6b131db0dc6608250cb7f9bdad9952577",
+  "AcirLean/Transfer/NV/G15.lean": "86ed025d1e3839a12e344b1f62f292ebc734eeab09d7c0ee009287538ebe9256",
+  "AcirLean/Transfer/NV/G16.lean": "aed9b943c2a42331ecd487f3f3b36eb3dbe08c199cf5dd70356f62e7485aef01",
+  "AcirLean/Transfer/NV/G17.lean": "89ef037e32326a6bb3d6701603f25d0ba3dbf14760fdad1bb3e7801c045b6281",
+  "AcirLean/Transfer/NV/G18.lean": "661aea0226f0e5044266275386c8c1efc45a815e85a302c2d5e56c849a757d49",
+  "AcirLean/Transfer/NV/G19.lean": "5b69da1a21c35a0a3ce2364c568bd2cb366bfd516e47811ac26d020e62c064fc",
+  "AcirLean/Transfer/NV/G2.lean": "c79a6e93520b8b66eea5c7661642dd512fcd8e77c11d80b51b0b4b50efd3dfa7",
+  "AcirLean/Transfer/NV/G20.lean": "d741d656d4dae9ab3cd0d4906c5350bccf64b5cb10668c29ad52024799c43356",
+  "AcirLean/Transfer/NV/G21.lean": "1308d3add967651987d92a78aa4e751e3e0f8f0b413078ae0540798431b8f246",
+  "AcirLean/Transfer/NV/G22.lean": "8dbd40028bc68475abd938757bde427a0a1e56722aedd94be71bef736d1e4252",
+  "AcirLean/Transfer/NV/G23.lean": "06c6613b143933d1b4e94ac79b4cd62a7901d95c399fa5dfb8382566ae1716b5",
+  "AcirLean/Transfer/NV/G3.lean": "3bd7457711e775b0877431c93afaeb21367f1d65b8ce0f03865b65e0f0be4524",
+  "AcirLean/Transfer/NV/G4.lean": "03dc5aaa7e0f6ad79af2afa81bc5b03cf61a03930441b8d513cd3b68c7e2fb7d",
+  "AcirLean/Transfer/NV/G5.lean": "7c06eeea8c8a6e301d49f1aeeef2966bafa19bd3b8faf9e4fb08bc4ab3832ac1",
+  "AcirLean/Transfer/NV/G6.lean": "c8fcbd8d6042b65ec7e3e5ffcb1e3b656ba62fd2aaee9cf871173d8aa66675db",
+  "AcirLean/Transfer/NV/G7.lean": "ca3c95bc5e07e16c8ae903a6b6890d112b89348aae154a53b0863c7c2ff90595",
+  "AcirLean/Transfer/NV/G8.lean": "7b048eff9787d404ba4e7d2100edfea055a2fde7c738408c30adddf63cc73d30",
+  "AcirLean/Transfer/NV/G9.lean": "b48e532d013a20da88c861350e2282d94c8a259ac4466004fb0defea4b264d3c",
+  "AcirLean/Transfer/NonVacuity.lean": "8cd54235336a706c568c3b21cf29b402f17bb8668dc1de76d331d09b80beea73",
+  "AcirLean/Transfer/WitnessData.lean": "f0f48ed6bfff5bc9e37e5a7a98f372b29fdc163474eb11d4e1eee360b65ba4a1",
+  "AcirLean/Withdraw/Data.lean": "dbd58fee24576081288857dd143200a790981c40aeeb3d38fa6f78d148003321",
+  "AcirLean/Withdraw/Data.lean.json": "8da92a187090ea282a2385454c78b6aeee4ed1570e7093ae32740481da2170c4",
+  "AcirLean/Withdraw/Data/Part0.lean": "f202d685493db573ae9cad947728165e70f90a656ea81bc4cacdbe3ca782547e",
+  "AcirLean/Withdraw/Data/Part1.lean": "3d332597fc6f343ca7ec250807aa7809399bb622ed2f0225d026114aec9be9d8",
+  "AcirLean/Withdraw/Data/Part2.lean": "5ceb4dacfa72dfa8f0426c82bcac56f3301a74ef592d53f2d1c22eeb861a9937",
+  "AcirLean/Withdraw/NV/G0.lean": "7e4b02387ae41185f3901c04f9c689cf3c4224429cc92c044d22ef183bcd87d8",
+  "AcirLean/Withdraw/NV/G1.lean": "e346d98805f13f9b05228d5edf6037e2c436b8fc993a84c50f6f09a7fb6f4219",
+  "AcirLean/Withdraw/NV/G10.lean": "268ca9be05d27d4e158bbce1ec32c4baf1e778cddb38d692125afe67277abb25",
+  "AcirLean/Withdraw/NV/G11.lean": "96013a8a1dafa3829d5215fc9555944514c330c7431e33307cdd18e15c2c4634",
+  "AcirLean/Withdraw/NV/G2.lean": "14aebd89efb16696e0aad25f64c7c12affaee7c274eb7e73811e9cdbb168b8d7",
+  "AcirLean/Withdraw/NV/G3.lean": "4398cfd2ba1d70ae1ff731a619a45f947c730e680e51d5d4b25da908f532b1ee",
+  "AcirLean/Withdraw/NV/G4.lean": "04b0d3b3281aa25b4180844a1976641cfd5020cd71d16a30f065f965be7aa7a2",
+  "AcirLean/Withdraw/NV/G5.lean": "113de5e5bd5a3c763ccaecbefd3802f9eb5238a8814c3a470fcc18c6c6f4b440",
+  "AcirLean/Withdraw/NV/G6.lean": "1073a6d811e80dd22aa733d055226bf56f36e793ae8b8de10a6f46446f6b5ce7",
+  "AcirLean/Withdraw/NV/G7.lean": "b7a40be6bb653f1c326fe01e4170acc4a238868a28b823db3177fa8e052e79d7",
+  "AcirLean/Withdraw/NV/G8.lean": "d0580aa4a32563791fb8570f6cbc11930acf6cb15a7eee9eee952489ed84594c",
+  "AcirLean/Withdraw/NV/G9.lean": "5a3e62e15f6f08d5ac9a473f41506d29717b0329af2043e410753722c114bd95",
+  "AcirLean/Withdraw/NonVacuity.lean": "3630c14d8480c8950ab399e56412a78cd0820d181fd65f216064df4e30619cc2",
+  "AcirLean/Withdraw/WitnessData.lean": "e1d6ea6b8f0d542e792b209db00d309c1a6edf864302907c52487f2c77c186cd"
+ },
+ "inputs": {
+  "deposit": {
+   "abi_sha256": "2eca0103bb9f7ef1b1d235e4346b0f5d96698bab84a7b2f86e91e2f01ae323aa",
+   "bytecode_sha256": "86270f6e10ce9bbd051acb38624448cbf3fc3f689c8d28ff87c592f55ea14c58",
+   "func0_sha256": "e09ceed51dbc595dfda5a274623261301663c553d344d89c3f0dae2f3693f78a",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "a7b217947d30e7f5816efce1b9230790a907ddadfa76a339a647d457e69e9b4c",
+   "witness_sha256": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b"
+  },
+  "transfer": {
+   "abi_sha256": "adbc83d9dd1d4a998914a4a84141ea445a917b17d9dcf681d7086ed96eae6996",
+   "bytecode_sha256": "8fcaf08feb8f5583f604a6987050bd56f5a505eb64961a6b4c96ea86bf22beb9",
+   "func0_sha256": "dc747fb033334d70f691a3fbaef07ffd97b894b88714449aa9d42de759f91d5e",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "e2704cb56c12875712bcc428517eafe385298da51f5547e5422dd3ecac9564c9",
+   "witness_sha256": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b"
+  },
+  "withdraw": {
+   "abi_sha256": "2c2b7d5898217e4289c0596b02d3aba8b35e41a37d76933bdfad07c48276b203",
+   "bytecode_sha256": "19bf23cb31cf42560a69f9b0a2c20cceb16fbf0c86173375cea2c9e6412c3dc0",
+   "func0_sha256": "c68939b13f52dde72917c7e07880ff1c95cfbcbe2519d2f2c7340246b7ec1a3c",
+   "noir_version": "1.0.0-beta.21+89a0f0faf3a5f1273c8ac4843b7877882437e277",
+   "print_sha256": "25510cf0c6cc6b8b8eb4168385d067cc31e2fbb1c47ae8f1386747009204aaf9",
+   "witness_sha256": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c"
+  }
+ },
+ "negative_controls": {
+  "Neg/DepositBound127.lean": {
+   "compiled": false,
+   "first_error": "Neg/DepositBound127.lean:7:76: error: Tactic `decide` proved that the proposition"
+  },
+  "Neg/TransferNoRange.lean": {
+   "compiled": false,
+   "first_error": "Neg/TransferNoRange.lean:14:2: error: omega could not prove the goal:"
+  },
+  "Neg/TransferTokenSwap.lean": {
+   "compiled": false,
+   "first_error": "Neg/TransferTokenSwap.lean:6:55: error: (kernel) application type mismatch"
+  },
+  "Neg/WithdrawBound127.lean": {
+   "compiled": false,
+   "first_error": "Neg/WithdrawBound127.lean:7:77: error: Tactic `decide` proved that the proposition"
+  }
+ },
+ "python_controls": {
+  "deposit w2=340282366920938463463374607431768211456": {
+   "failing_assert": 2,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    23,
+    356,
+    357
+   ],
+   "mutation": "w2=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23
+  },
+  "deposit w2=501": {
+   "failing_assert": 2,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    356,
+    357
+   ],
+   "mutation": "w2=501",
+   "rc": 0,
+   "required_fails": null,
+   "required_opcode": null
+  },
+  "deposit w5=7": {
+   "failing_assert": 0,
+   "failing_range": 0,
+   "first_failing_opcodes": [],
+   "mutation": "w5=7",
+   "rc": 0,
+   "required_fails": null,
+   "required_opcode": null
+  },
+  "transfer w17=435537695816263162368054109405345813312609277317": {
+   "failing_assert": 3,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    23143,
+    23144,
+    23542
+   ],
+   "mutation": "w17=435537695816263162368054109405345813312609277317",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23542
+  },
+  "transfer w18=340282366920938463463374607431768211456": {
+   "failing_assert": 3,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    3,
+    23146,
+    23147,
+    23537
+   ],
+   "mutation": "w18=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 3
+  },
+  "transfer w8=1001": {
+   "failing_assert": 3,
+   "failing_range": 0,
+   "first_failing_opcodes": [
+    402,
+    403,
+    23535
+   ],
+   "mutation": "w8=1001",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 23535
+  },
+  "withdraw w2=340282366920938463463374607431768211456": {
+   "failing_assert": 2,
+   "failing_range": 1,
+   "first_failing_opcodes": [
+    362,
+    366,
+    367
+   ],
+   "mutation": "w2=340282366920938463463374607431768211456",
+   "rc": 0,
+   "required_fails": true,
+   "required_opcode": 362
+  }
+ },
+ "source_files": {
+  "AcirLean/Deposit/Amount.lean": "a514c457969050f63ac2bdda92d60582ffe3d470abaecca2e31383f3c6baa444",
+  "AcirLean/Deposit/Controls.lean": "6b037fabfc8417ed264252c28f563257f22857da2a21fdd214e10df17c542b19",
+  "AcirLean/Deposit/Solved.lean": "4c534f8bfbf93380676c39dc19131a854417f8786ad0488df47d80edbabd6085",
+  "AcirLean/Linear.lean": "e28389d51a337baf13e2fb1a6dc708a61f872b8f978ebbe9aea30d1c78be21df",
+  "AcirLean/Semantics.lean": "8ae4ca3a8579af8b2409d1e93dcedb1707d02357636a95ba6b986bde7bce2765",
+  "AcirLean/Transfer/Controls.lean": "5c29b58d15eeb9c96e4432a25e9c5e0802aaf9a2857290c040e11e3c93dc6056",
+  "AcirLean/Transfer/Rules.lean": "08dc420b67532f6a20a6fb9673f53f40abb78648032813463e99de54837411ae",
+  "AcirLean/Transfer/Solved.lean": "d8d3933c427b50af5cd3121e52c7f5d94c0fc34a7f8d29a7efc64e64a6b911b8",
+  "AcirLean/Withdraw/Amount.lean": "34242b0619600b5c799ade4113b6a20b484a037a31e0e9ac995b7dd967d141a0",
+  "AcirLean/Withdraw/Controls.lean": "69bdb3138892dca9c71a912984ac65a3846dec6c6c98849bd7d085d9f3933e68",
+  "AcirLean/Withdraw/Solved.lean": "f2a70def09a198a85212617ebdd1b5d710ec65df5abcaf54d31f20c56b823daa",
+  "AcirLean/Witness.lean": "aaf9fc18074ea50bdb045c850e7b795b58956c4a54f3140f4dd5d43a3005b108",
+  "Census.lean": "ddf9d7b84b217a415565ac9ec4a4dfe35c590d973899644d9c4a73df99abc96a",
+  "Neg/DepositBound127.lean": "5a738b39ddd591f5d8aa3079e490c205d693a286c4003e1c95f22e4603fb15b5",
+  "Neg/TransferNoRange.lean": "e0883543675e1165a47c8e232c1623e5a73f760df68af0953e3d7e4f12c0a346",
+  "Neg/TransferTokenSwap.lean": "421e7266eeb27a99ba23697b9f4612f583f585110e425a7678fc822675247cf8",
+  "Neg/WithdrawBound127.lean": "6f09f5b14f8ed39cbbf590d131f08c5e0309832dba0d983c40dae89bb384cbe1",
+  "check.sh": "e27fb87a1ea42d479ba4b8f72eb7a43b638a42c8785bced5bd5427e978635a35",
+  "inputs/DEPS.txt": "9fc64c4a8488d9b024f5dbb1d8f39b9e4e8f5f4e5c676d511159040dc26fc4af",
+  "inputs/PROVENANCE.md": "1ef981afe4cc4a161884ae52da885fffd9853dc1b1be6394fe337b5de20e1327",
+  "inputs/SHA256SUMS": "566e0bc22ac7ba604612f2473d6a53acfa1a86301fa05c8aed241618952a88fa",
+  "inputs/TOOLS.txt": "508dccc5e46baf22b54644071632d4da29c6efcb712de8c01f90a15784a8a995",
+  "lake-manifest.json": "d5f5c483a5dd7780a5c350da2361cd8dccc39bad3ee36a2f2669b0b42ebe7b70",
+  "lakefile.toml": "940d200bb64a86e45723b08fd34781e083b25e63beff258799a09a990d1eb6ed",
+  "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+  "scripts/acir2lean.py": "6be014fd9313d71017dc184ff9581fbb80bce68ec655c1928e084a34686d502d",
+  "scripts/bytecode_check.py": "c25544adadb7281b5bfdbe4c688892bd6e095ed4bbc1dd8bec5f4d3f015f6fb3",
+  "scripts/gen_nv.py": "73a9d876547a71003d7aca631ac0b43ff15e83f47faefbd6d9bdef14b687859f",
+  "scripts/perturb_check.py": "23a6d5a8fcf2ff6069ac708faa16fde56f21a570623af19d7aa63c45fecfc8f3",
+  "scripts/replay.py": "fe2975e7b3e56e7e39a9cff76411ccdf354442d2e39e931a57f8f9247fec7cdd",
+  "scripts/witness_check.py": "eb8b61e0de19408629cc292727a777c18db28f8924bf047e6b66439d91cdcdea"
+ },
+ "theorems": {
+  "AcirLean.Circuit.holds_of_mem": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, c.Satisfied w → ∀ {op : AcirLean.Opcode}, op ∈ c.opcodes → op.Holds w",
+   "type_sha256": "c5fb552220566a1d4e22020e0de30d0148a83bf05cb556084e6cd96bb22b9aa5"
+  },
+  "AcirLean.Circuit.mk.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {privateParams publicParams returnValues : List Nat} {opcodes : List AcirLean.Opcode} {privateParams_1 publicParams_1 returnValues_1 : List Nat} {opcodes_1 : List AcirLean.Opcode}, { privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = { privateParams := privateParams_1, publicParams := publicParams_1, returnValues := returnValues_1, opcodes := opcodes_1 } → privateParams = privateParams_1 ∧ publicParams = publicParams_1 ∧ returnValues = returnValues_1 ∧ opcodes = opcodes_1",
+   "type_sha256": "35b987118da098da97fe3125388f0a1b1b2941726d674d1ceb8fcedaff2cc36a"
+  },
+  "AcirLean.Circuit.mk.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (privateParams publicParams returnValues : List Nat) (opcodes : List AcirLean.Opcode) (privateParams_1 publicParams_1 returnValues_1 : List Nat) (opcodes_1 : List AcirLean.Opcode), ({ privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = { privateParams := privateParams_1, publicParams := publicParams_1, returnValues := returnValues_1, opcodes := opcodes_1 }) = (privateParams = privateParams_1 ∧ publicParams = publicParams_1 ∧ returnValues = returnValues_1 ∧ opcodes = opcodes_1)",
+   "type_sha256": "5600a7a7712f1d768e1e0958d734c00131deee9e33436e088802ba13505c3560"
+  },
+  "AcirLean.Circuit.mk.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (privateParams publicParams returnValues : List Nat) (opcodes : List AcirLean.Opcode), sizeOf { privateParams := privateParams, publicParams := publicParams, returnValues := returnValues, opcodes := opcodes } = 1 + sizeOf privateParams + sizeOf publicParams + sizeOf returnValues + sizeOf opcodes",
+   "type_sha256": "e7e1fc44ab1ae6c422abbd93471885a9c13960010da958c017166e855dc6129a"
+  },
+  "AcirLean.Circuit.range_of_mem": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, c.Satisfied w → ∀ {i bits : Nat}, AcirLean.Opcode.range i bits ∈ c.opcodes → ↑(w i) < 2 ^ bits",
+   "type_sha256": "5741382c989663e82e789df7e7a39cfb0c0f9af23d65075c18a40eba66352741"
+  },
+  "AcirLean.Circuit.satisfied_of_all": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {c : AcirLean.Circuit} {w : AcirLean.Assignment}, (c.opcodes.all fun op => op.check w) = true → c.Satisfied w",
+   "type_sha256": "51815624c0afde5b2499f3e4334222bcfd0705013eb861b45a6fa73c17b189d7"
+  },
+  "AcirLean.Deposit.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true",
+   "type_sha256": "9912b5f388c207f7a93781edd942edba0de57b36cce8650535ea09a1fb314201"
+  },
+  "AcirLean.Deposit.amount_is_public_input_2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "AcirLean.Deposit.circuit.publicParams[2]? = some 2 ∧ AcirLean.Deposit.paramNames[2]? = some \"amount\"",
+   "type_sha256": "ddac3a24e572449ffe8046fca5d6b80e2668632040b4b99d1c3e41488ec5f7c9"
+  },
+  "AcirLean.Deposit.amount_lt_two_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Deposit.circuit.Satisfied w → ↑(w 2) < 2 ^ 128",
+   "type_sha256": "dc9bd69cf91bd6387a5e9f94774c5d13b6b7343620fa7906e042ffac2af7f205"
+  },
+  "AcirLean.Deposit.control_bound_500_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Deposit.circuit.Satisfied w → ↑(w 2) < 500",
+   "type_sha256": "622250459912cbd889a81376bb0186953cfc3e720de9c74e3dae5c1e1c4becfd"
+  },
+  "AcirLean.Deposit.control_chunk0_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128))) = false",
+   "type_sha256": "f2143b899f6d98d24782368614c46a8d0676ec2db03340f9924b1dd227d218f9"
+  },
+  "AcirLean.Deposit.control_chunk0_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128))) = false",
+   "type_sha256": "f2143b899f6d98d24782368614c46a8d0676ec2db03340f9924b1dd227d218f9"
+  },
+  "AcirLean.Deposit.control_range_alone_allows_2_pow_127": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "21fc661eb33d8d7e2f05d70865d15a33cf0ae364115f8a45dca2c5a81f68269a"
+  },
+  "AcirLean.Deposit.control_range_alone_allows_2_pow_127._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "21fc661eb33d8d7e2f05d70865d15a33cf0ae364115f8a45dca2c5a81f68269a"
+  },
+  "AcirLean.Deposit.control_range_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128)) = false",
+   "type_sha256": "da44af48e768b37c666e690fc063dce237a65944fee41c4aa78073adb59c71ce"
+  },
+  "AcirLean.Deposit.control_range_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Deposit.solved 2 (2 ^ 128)) = false",
+   "type_sha256": "da44af48e768b37c666e690fc063dce237a65944fee41c4aa78073adb59c71ce"
+  },
+  "AcirLean.Deposit.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "fa0d9dd963d022855bef002910fb0e586ad1cf533f131102ab1dd76da63f013e"
+  },
+  "AcirLean.Deposit.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk0.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "fa0d9dd963d022855bef002910fb0e586ad1cf533f131102ab1dd76da63f013e"
+  },
+  "AcirLean.Deposit.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk1.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b7a6d3f479c3731777970afea4b1b878f5deeeef5657360c347aa344675428f9"
+  },
+  "AcirLean.Deposit.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk1.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b7a6d3f479c3731777970afea4b1b878f5deeeef5657360c347aa344675428f9"
+  },
+  "AcirLean.Deposit.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk10.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "5af73a46e6808763537ca86968b1bf851a9acd3f82e1cb2565be1ab2b1b0c1eb"
+  },
+  "AcirLean.Deposit.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk10.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "5af73a46e6808763537ca86968b1bf851a9acd3f82e1cb2565be1ab2b1b0c1eb"
+  },
+  "AcirLean.Deposit.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk11.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b3b15e0bfc5a5cc2e36677d36db396cb243963de44a9a2e1d58fa457bdc56277"
+  },
+  "AcirLean.Deposit.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk11.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b3b15e0bfc5a5cc2e36677d36db396cb243963de44a9a2e1d58fa457bdc56277"
+  },
+  "AcirLean.Deposit.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk12.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "73c92babd72bcc1863d2b0630fcadde68ef520511d7a554bd903397d692bd438"
+  },
+  "AcirLean.Deposit.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk12.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "73c92babd72bcc1863d2b0630fcadde68ef520511d7a554bd903397d692bd438"
+  },
+  "AcirLean.Deposit.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk13.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "9d009fc741783849ca636c5b63b28f02cc1b3bbe272f581240c7e584f1ccc18a"
+  },
+  "AcirLean.Deposit.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk13.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "9d009fc741783849ca636c5b63b28f02cc1b3bbe272f581240c7e584f1ccc18a"
+  },
+  "AcirLean.Deposit.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk14.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "12f9e1e99585701a398d0cfc46a7da386f3a1ca3a782818a3e0ce1daefae979d"
+  },
+  "AcirLean.Deposit.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G3",
+   "type": "(AcirLean.Deposit.chunk14.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "12f9e1e99585701a398d0cfc46a7da386f3a1ca3a782818a3e0ce1daefae979d"
+  },
+  "AcirLean.Deposit.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk15.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "a3f4546e81877ab960f10129d75ac9ba9c142f5983dc2744e3b4a1305ea45abf"
+  },
+  "AcirLean.Deposit.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk15.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "a3f4546e81877ab960f10129d75ac9ba9c142f5983dc2744e3b4a1305ea45abf"
+  },
+  "AcirLean.Deposit.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk16.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "bf42ddafdc95fb71c4f1a322588d375da1889623e40d08360d0f7b92c91eda42"
+  },
+  "AcirLean.Deposit.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk16.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "bf42ddafdc95fb71c4f1a322588d375da1889623e40d08360d0f7b92c91eda42"
+  },
+  "AcirLean.Deposit.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk17.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "2b6722949b966c74ec620fd152293904ffb95b84426b4d742a1e96d9eaa365f6"
+  },
+  "AcirLean.Deposit.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk17.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "2b6722949b966c74ec620fd152293904ffb95b84426b4d742a1e96d9eaa365f6"
+  },
+  "AcirLean.Deposit.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk18.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "4a486790584d2ca395f97461d5f0a3590b1f17e493566908214eac35a17cd8a3"
+  },
+  "AcirLean.Deposit.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G4",
+   "type": "(AcirLean.Deposit.chunk18.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "4a486790584d2ca395f97461d5f0a3590b1f17e493566908214eac35a17cd8a3"
+  },
+  "AcirLean.Deposit.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk19.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b9dda13ae3c073323cbaba00f45ac0fac003dd983b619fe869d86bbe41f772ad"
+  },
+  "AcirLean.Deposit.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk19.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "b9dda13ae3c073323cbaba00f45ac0fac003dd983b619fe869d86bbe41f772ad"
+  },
+  "AcirLean.Deposit.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk2.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "779f813746d31d714c66ad375033b9304836f3968dc0a2bf8f329579af65501a"
+  },
+  "AcirLean.Deposit.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk2.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "779f813746d31d714c66ad375033b9304836f3968dc0a2bf8f329579af65501a"
+  },
+  "AcirLean.Deposit.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk20.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "03dbfda46ad0fcfc1b014ef5ab98fe9fac0387decc8e03d9f2031f8c64ac7c65"
+  },
+  "AcirLean.Deposit.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk20.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "03dbfda46ad0fcfc1b014ef5ab98fe9fac0387decc8e03d9f2031f8c64ac7c65"
+  },
+  "AcirLean.Deposit.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk21.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "0728c6b85f426bc5dc4b46a5627b13ed46b008685db82099e3fbeba8c27628a9"
+  },
+  "AcirLean.Deposit.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk21.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "0728c6b85f426bc5dc4b46a5627b13ed46b008685db82099e3fbeba8c27628a9"
+  },
+  "AcirLean.Deposit.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk22.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "1f64b187de63e95e123b99df7866b5ef8689db0f524c9904573dcc312bfe3b97"
+  },
+  "AcirLean.Deposit.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G5",
+   "type": "(AcirLean.Deposit.chunk22.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "1f64b187de63e95e123b99df7866b5ef8689db0f524c9904573dcc312bfe3b97"
+  },
+  "AcirLean.Deposit.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk23.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "d9aa474981059d02b793ae5ee7dfbcb3f3c18cec93c15166a06a0a08a5130334"
+  },
+  "AcirLean.Deposit.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk23.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "d9aa474981059d02b793ae5ee7dfbcb3f3c18cec93c15166a06a0a08a5130334"
+  },
+  "AcirLean.Deposit.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk24.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "0aee8de7b527b274a2811cc27d5e590fa5010b007232690299cfd3354f8309e5"
+  },
+  "AcirLean.Deposit.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk24.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "0aee8de7b527b274a2811cc27d5e590fa5010b007232690299cfd3354f8309e5"
+  },
+  "AcirLean.Deposit.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk25.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "de88ba7d22bfb6ecb9b6fed528b2f647be0d96be4655fb45675240bf088298eb"
+  },
+  "AcirLean.Deposit.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk25.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "de88ba7d22bfb6ecb9b6fed528b2f647be0d96be4655fb45675240bf088298eb"
+  },
+  "AcirLean.Deposit.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk26.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "22a592ba8b4ff1e8d9035cb3967f73e6c7b7b21e54eae608c4754c090e38ef5f"
+  },
+  "AcirLean.Deposit.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G6",
+   "type": "(AcirLean.Deposit.chunk26.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "22a592ba8b4ff1e8d9035cb3967f73e6c7b7b21e54eae608c4754c090e38ef5f"
+  },
+  "AcirLean.Deposit.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk27.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "4e4d60d783d1c9f046128292642cdc1cf3f825bef0b9f36112185d51f3fd28fe"
+  },
+  "AcirLean.Deposit.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk27.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "4e4d60d783d1c9f046128292642cdc1cf3f825bef0b9f36112185d51f3fd28fe"
+  },
+  "AcirLean.Deposit.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk28.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "af610b56caecbc29abf369dc164647389326fa28e0a8ace8c5eaf217bbbe61c5"
+  },
+  "AcirLean.Deposit.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk28.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "af610b56caecbc29abf369dc164647389326fa28e0a8ace8c5eaf217bbbe61c5"
+  },
+  "AcirLean.Deposit.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk29.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "63be3996321d157cfb81f2a54c5d22f6e40fa0103c391f20b944830a8bc12340"
+  },
+  "AcirLean.Deposit.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G7",
+   "type": "(AcirLean.Deposit.chunk29.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "63be3996321d157cfb81f2a54c5d22f6e40fa0103c391f20b944830a8bc12340"
+  },
+  "AcirLean.Deposit.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk3.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "65db572dc0e8e3fabed63cf9193995127e6461c101d3eb398b7b5d9f7b5360fe"
+  },
+  "AcirLean.Deposit.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G0",
+   "type": "(AcirLean.Deposit.chunk3.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "65db572dc0e8e3fabed63cf9193995127e6461c101d3eb398b7b5d9f7b5360fe"
+  },
+  "AcirLean.Deposit.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk4.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "d3d3a9e161ad432d23e3a64e56b0f6ccb25554424c272cf8f68524fbde22c7f7"
+  },
+  "AcirLean.Deposit.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk4.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "d3d3a9e161ad432d23e3a64e56b0f6ccb25554424c272cf8f68524fbde22c7f7"
+  },
+  "AcirLean.Deposit.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk5.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "2dab9fdbabf2170892197853458ec744e34cc2e78aa842a3af6dfe25cfe20854"
+  },
+  "AcirLean.Deposit.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk5.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "2dab9fdbabf2170892197853458ec744e34cc2e78aa842a3af6dfe25cfe20854"
+  },
+  "AcirLean.Deposit.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk6.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "5a1589cad13b3fc0731a9c42f392f4c3b27dc1806800eda55380c54a98e2ff9d"
+  },
+  "AcirLean.Deposit.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk6.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "5a1589cad13b3fc0731a9c42f392f4c3b27dc1806800eda55380c54a98e2ff9d"
+  },
+  "AcirLean.Deposit.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk7.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "629b6aea16776ffd34d72a6f748e3c150c046f871a292f2957c2795785eca311"
+  },
+  "AcirLean.Deposit.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G1",
+   "type": "(AcirLean.Deposit.chunk7.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "629b6aea16776ffd34d72a6f748e3c150c046f871a292f2957c2795785eca311"
+  },
+  "AcirLean.Deposit.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk8.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "09080cfc0ea68f953760e282aca36628cc49c938a4c673a0ea1d0db544a310c4"
+  },
+  "AcirLean.Deposit.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk8.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "09080cfc0ea68f953760e282aca36628cc49c938a4c673a0ea1d0db544a310c4"
+  },
+  "AcirLean.Deposit.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk9.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "20973b0fb6c6c1974e4d9f5e51469160f74799bfa2d82cf906d3f97de1f51cd6"
+  },
+  "AcirLean.Deposit.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NV.G2",
+   "type": "(AcirLean.Deposit.chunk9.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "20973b0fb6c6c1974e4d9f5e51469160f74799bfa2d82cf906d3f97de1f51cd6"
+  },
+  "AcirLean.Deposit.range_amount_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.Amount",
+   "type": "AcirLean.Opcode.range 2 128 ∈ AcirLean.Deposit.circuit.opcodes",
+   "type_sha256": "e21f4599aa9aa22a83d72a3dcc6cb6430fdd3712a1a2136916e7498e8d3bbe5b"
+  },
+  "AcirLean.Deposit.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "∃ w, AcirLean.Deposit.circuit.Satisfied w",
+   "type_sha256": "800b2de41da863fafd81757eb18dd23ad77a9d1cbc83e247792ad9dd7b729d28"
+  },
+  "AcirLean.Deposit.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "(AcirLean.Deposit.circuit.opcodes.all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "fd540fb46a3eef0fb7004c58a64232dd82978e7e52cfdf918ec96ff51094b883"
+  },
+  "AcirLean.Deposit.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "((AcirLean.Deposit.chunk0 ++ (AcirLean.Deposit.chunk1 ++ (AcirLean.Deposit.chunk2 ++ (AcirLean.Deposit.chunk3 ++ (AcirLean.Deposit.chunk4 ++ (AcirLean.Deposit.chunk5 ++ (AcirLean.Deposit.chunk6 ++ (AcirLean.Deposit.chunk7 ++ (AcirLean.Deposit.chunk8 ++ (AcirLean.Deposit.chunk9 ++ (AcirLean.Deposit.chunk10 ++ (AcirLean.Deposit.chunk11 ++ (AcirLean.Deposit.chunk12 ++ (AcirLean.Deposit.chunk13 ++ (AcirLean.Deposit.chunk14 ++ (AcirLean.Deposit.chunk15 ++ (AcirLean.Deposit.chunk16 ++ (AcirLean.Deposit.chunk17 ++ (AcirLean.Deposit.chunk18 ++ (AcirLean.Deposit.chunk19 ++ (AcirLean.Deposit.chunk20 ++ (AcirLean.Deposit.chunk21 ++ (AcirLean.Deposit.chunk22 ++ (AcirLean.Deposit.chunk23 ++ (AcirLean.Deposit.chunk24 ++ (AcirLean.Deposit.chunk25 ++ (AcirLean.Deposit.chunk26 ++ (AcirLean.Deposit.chunk27 ++ (AcirLean.Deposit.chunk28 ++ AcirLean.Deposit.chunk29))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Deposit.solved) = true",
+   "type_sha256": "5aaedfa269e590d11762847fd80bce8cdf46026da277520578c3158a3b5aafc7"
+  },
+  "AcirLean.Deposit.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "AcirLean.Deposit.circuit.Satisfied AcirLean.Deposit.solved",
+   "type_sha256": "37ef156212819d76bfaf623e6b3ed64b20b48af6f135a076487c0b7113e0df1a"
+  },
+  "AcirLean.Deposit.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "↑(AcirLean.Deposit.solved 2) = 500",
+   "type_sha256": "cadd943477311b553e4b10643f5abcb1848ab2bc2a2712f731967e03d2f0af27"
+  },
+  "AcirLean.Deposit.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Deposit.NonVacuity",
+   "type": "↑(AcirLean.Deposit.solved 2) = 500",
+   "type_sha256": "cadd943477311b553e4b10643f5abcb1848ab2bc2a2712f731967e03d2f0af27"
+  },
+  "AcirLean.Expr.eval.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (e : AcirLean.Expr) (w : AcirLean.Assignment), e.eval w = List.foldl (fun acc t => acc + t.fst * ↑↑(w t.snd.fst) * ↑↑(w t.snd.snd)) 0 e.mul + List.foldl (fun acc t => acc + t.fst * ↑↑(w t.snd)) 0 e.lin + e.const",
+   "type_sha256": "633d513338d3fb20c4d2084a551cd883fd745a0c9a6fd9cf1da67f45fd8ee631"
+  },
+  "AcirLean.Expr.mk.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {mul : List (Int × Nat × Nat)} {lin : List (Int × Nat)} {const : Int} {mul_1 : List (Int × Nat × Nat)} {lin_1 : List (Int × Nat)} {const_1 : Int}, { mul := mul, lin := lin, const := const } = { mul := mul_1, lin := lin_1, const := const_1 } → mul = mul_1 ∧ lin = lin_1 ∧ const = const_1",
+   "type_sha256": "7b4082f397ceb49bc8111a8fd4d33504804a7a155527adba3a1406adb7583be5"
+  },
+  "AcirLean.Expr.mk.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (mul : List (Int × Nat × Nat)) (lin : List (Int × Nat)) (const : Int) (mul_1 : List (Int × Nat × Nat)) (lin_1 : List (Int × Nat)) (const_1 : Int), ({ mul := mul, lin := lin, const := const } = { mul := mul_1, lin := lin_1, const := const_1 }) = (mul = mul_1 ∧ lin = lin_1 ∧ const = const_1)",
+   "type_sha256": "0ace2f362d6d814a0f497b4b081767226835a2cfd193caf7659f21aa020f7e89"
+  },
+  "AcirLean.Expr.mk.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (mul : List (Int × Nat × Nat)) (lin : List (Int × Nat)) (const : Int), sizeOf { mul := mul, lin := lin, const := const } = 1 + sizeOf mul + sizeOf lin + sizeOf const",
+   "type_sha256": "2b49aba73f22f9ee2d81abc8e834ab603d357139d493153315a0f690cb2ca825"
+  },
+  "AcirLean.Opcode.Holds.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (lhs : Option Nat) (rhs : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs).Holds x = ((AcirLean.lhsVal lhs x - rhs.eval x) % ↑AcirLean.P = 0)",
+   "type_sha256": "50886428fcb083dfc598b92d598625b5b20c5dd26272ff58bc74fcde7fab7ec2"
+  },
+  "AcirLean.Opcode.Holds.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (i bits : Nat), (AcirLean.Opcode.range i bits).Holds x = (↑(x i) < 2 ^ bits)",
+   "type_sha256": "4c56d2e20254ade87830cc081e6e3c946c2beff091220805255fed9add911564"
+  },
+  "AcirLean.Opcode.Holds.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (func : Nat) (outputs : List Nat), (AcirLean.Opcode.brilligCall func outputs).Holds x = True",
+   "type_sha256": "f7bee19f655beff685e81e26de233691866a560d5cc12fbec55b7c2c3c3a486f"
+  },
+  "AcirLean.Opcode.assertZero.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {lhs : Option Nat} {rhs : AcirLean.Expr} {lhs_1 : Option Nat} {rhs_1 : AcirLean.Expr}, AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.assertZero lhs_1 rhs_1 → lhs = lhs_1 ∧ rhs = rhs_1",
+   "type_sha256": "3dd7ea28163f41a3b89c736c19b60883a06cf32f0dbda0fe5170852e152d9887"
+  },
+  "AcirLean.Opcode.assertZero.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (lhs_1 : Option Nat) (rhs_1 : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.assertZero lhs_1 rhs_1) = (lhs = lhs_1 ∧ rhs = rhs_1)",
+   "type_sha256": "98e416f6644a6b7b3de302b055b5b6922497b5273bfed9f89556d7f928b0f1ff"
+  },
+  "AcirLean.Opcode.assertZero.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr), sizeOf (AcirLean.Opcode.assertZero lhs rhs) = 1 + sizeOf lhs + sizeOf rhs",
+   "type_sha256": "da92ec0114d124a7b2914b29ddd9a8d3fc25d41b159ced5ca11f94747681dc8f"
+  },
+  "AcirLean.Opcode.brilligCall.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {func : Nat} {outputs : List Nat} {func_1 : Nat} {outputs_1 : List Nat}, AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.brilligCall func_1 outputs_1 → func = func_1 ∧ outputs = outputs_1",
+   "type_sha256": "a2e3327e39bb9b2f30cea8fc088218432b3846e2729e701a5106ec4c97338832"
+  },
+  "AcirLean.Opcode.brilligCall.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (func_1 : Nat) (outputs_1 : List Nat), (AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.brilligCall func_1 outputs_1) = (func = func_1 ∧ outputs = outputs_1)",
+   "type_sha256": "092d599552e4857663073972917580c3c883eb713268904046556e98809ce31d"
+  },
+  "AcirLean.Opcode.brilligCall.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat), sizeOf (AcirLean.Opcode.brilligCall func outputs) = 1 + sizeOf func + sizeOf outputs",
+   "type_sha256": "f5418c8161175a3805637d1393442bd9af346057537d0e642bb8ae4af4acf0ec"
+  },
+  "AcirLean.Opcode.check.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (lhs : Option Nat) (rhs : AcirLean.Expr), (AcirLean.Opcode.assertZero lhs rhs).check x = decide ((AcirLean.lhsVal lhs x - rhs.eval x) % ↑AcirLean.P = 0)",
+   "type_sha256": "017992d03532d1f900f8f0e1e403321b345b421be71c1dacaa553f6e23411cd4"
+  },
+  "AcirLean.Opcode.check.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (i bits : Nat), (AcirLean.Opcode.range i bits).check x = decide (↑(x i) < 2 ^ bits)",
+   "type_sha256": "3788a5375b8a9c4c6f2741efc9266dfeee1402bb5c8cc12daea744a25a8e4619"
+  },
+  "AcirLean.Opcode.check.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (x : AcirLean.Assignment) (func : Nat) (outputs : List Nat), (AcirLean.Opcode.brilligCall func outputs).check x = true",
+   "type_sha256": "856f050809831e39ca1c5630d5ad75a34bf2ef0a79b961e613fb0f85db5eccdb"
+  },
+  "AcirLean.Opcode.check_iff": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (op : AcirLean.Opcode) (w : AcirLean.Assignment), op.check w = true ↔ op.Holds w",
+   "type_sha256": "8431115545663ca0f4c1fae7caed5e59188b8a34df538e9d905225d425440746"
+  },
+  "AcirLean.Opcode.holds_add": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i j : Nat}, (AcirLean.Opcode.assertZero (some k) { mul := [], lin := [(1, i), (1, j)], const := 0 }).Holds w → ↑(w i) + ↑(w j) < AcirLean.P → ↑(w k) = ↑(w i) + ↑(w j)",
+   "type_sha256": "91b0e6d8a77d39c3c760e5d53447f7d9233ee57a685bc98b756403577958910c"
+  },
+  "AcirLean.Opcode.holds_add._proof_1_5": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i j : Nat}, (↑↑(w k) - (0 + (0 + 1 * ↑↑(w i) + 1 * ↑↑(w j)) + 0)) % 21888242871839275222246405745257275088548364400416034343698204186575808495617 = 0 → ↑(w k) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ↑(w i) + ↑(w j) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ¬↑(w k) = ↑(w i) + ↑(w j) → False",
+   "type_sha256": "8de98c39f130cb7093f531e6735fa084ba90bac3930855eb9181485778ae109f"
+  },
+  "AcirLean.Opcode.holds_copy": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i : Nat}, (AcirLean.Opcode.assertZero (some k) { mul := [], lin := [(1, i)], const := 0 }).Holds w → w k = w i",
+   "type_sha256": "5da390e3ab986eae9905b52f3b7506d5df43f27e0e4e09bb63e0ac20e979b3e6"
+  },
+  "AcirLean.Opcode.holds_copy._proof_1_5": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Linear",
+   "type": "∀ {w : AcirLean.Assignment} {k i : Nat}, (↑↑(w k) - (0 + (0 + 1 * ↑↑(w i)) + 0)) % 21888242871839275222246405745257275088548364400416034343698204186575808495617 = 0 → ↑(w k) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ↑(w i) < 21888242871839275222246405745257275088548364400416034343698204186575808495617 → ¬↑(w k) = ↑(w i) → False",
+   "type_sha256": "cc195732065f06f0e0223710e7fbf197d97ade627f3fc619e1bd9209cfcf97b3"
+  },
+  "AcirLean.Opcode.range.inj": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ {input bits input_1 bits_1 : Nat}, AcirLean.Opcode.range input bits = AcirLean.Opcode.range input_1 bits_1 → input = input_1 ∧ bits = bits_1",
+   "type_sha256": "330d437666249ceac5f999e2b7908d8a63c7947352c5aa47e57d7d157c7df924"
+  },
+  "AcirLean.Opcode.range.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits input_1 bits_1 : Nat), (AcirLean.Opcode.range input bits = AcirLean.Opcode.range input_1 bits_1) = (input = input_1 ∧ bits = bits_1)",
+   "type_sha256": "e1525859bff57d4a4262eeaed6ff96deebd82a0fd564402f4e929e3323ec85de"
+  },
+  "AcirLean.Opcode.range.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits : Nat), sizeOf (AcirLean.Opcode.range input bits) = 1 + sizeOf input + sizeOf bits",
+   "type_sha256": "f823a214052b425dd84d64e9eb77a15f1d525a4aac8593e28992af387abb84f1"
+  },
+  "AcirLean.P_int": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "↑AcirLean.P = 21888242871839275222246405745257275088548364400416034343698204186575808495617",
+   "type_sha256": "b0f6fb3d614717077d90c0e474ae590d3559d5dcfdef17c4ad33d02e34be7f52"
+  },
+  "AcirLean.P_pos": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "0 < AcirLean.P",
+   "type_sha256": "91540d1612682649d2ec304e76566fba69683be6e8d31e7f635e06fcca13982f"
+  },
+  "AcirLean.Transfer.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true",
+   "type_sha256": "9912b5f388c207f7a93781edd942edba0de57b36cce8650535ea09a1fb314201"
+  },
+  "AcirLean.Transfer.amount_names": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.paramNames[8]? = some \"amount_in_0\" ∧ AcirLean.Transfer.paramNames[11]? = some \"amount_in_1\" ∧ AcirLean.Transfer.paramNames[14]? = some \"amount_out_0\" ∧ AcirLean.Transfer.paramNames[18]? = some \"amount_out_1\"",
+   "type_sha256": "21aa91a8f6051744dd5e3e79423e7b754aa2ec6eb2a1b0b0f39f7f29416e7874"
+  },
+  "AcirLean.Transfer.amount_ranges": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) < 2 ^ 128 ∧ ↑(w 11) < 2 ^ 128 ∧ ↑(w 14) < 2 ^ 128 ∧ ↑(w 18) < 2 ^ 128",
+   "type_sha256": "bfc2fc6ba83899309acf3a60cd87616b6a4fc7644ef74730a72159c3b86cfb06"
+  },
+  "AcirLean.Transfer.conservation": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) + ↑(w 11) = ↑(w 14) + ↑(w 18) ∧ ↑(w 8) + ↑(w 11) < 2 ^ 128",
+   "type_sha256": "86d79e70efbc624947661050b4aaba86074512d1509baa3f46a49f14fda33275"
+  },
+  "AcirLean.Transfer.conservation._proof_1_1": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 8) < 2 ^ 128 → ↑(w 11) < 2 ^ 128 → 2 ^ 128 + 2 ^ 128 < AcirLean.P → ¬↑(w 8) + ↑(w 11) < AcirLean.P → False",
+   "type_sha256": "13e6220d7c4a8dc68db4427fd79382cd33555a9b8a8c65461a2bc7d409e3805c"
+  },
+  "AcirLean.Transfer.conservation._proof_1_2": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 14) < 2 ^ 128 → ↑(w 18) < 2 ^ 128 → 2 ^ 128 + 2 ^ 128 < AcirLean.P → ¬↑(w 14) + ↑(w 18) < AcirLean.P → False",
+   "type_sha256": "a56e3e8706a87eb4efa97a2733a78bc6210f2a79e7729771fc632a117576ebdb"
+  },
+  "AcirLean.Transfer.conservation._proof_1_3": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 17906) = ↑(w 8) + ↑(w 11) → ↑(w 17907) = ↑(w 14) + ↑(w 18) → ↑(w 17907) = ↑(w 17906) → ¬↑(w 8) + ↑(w 11) = ↑(w 14) + ↑(w 18) → False",
+   "type_sha256": "320a16ff359c16c582fbdbd387861bb0283df884b6291bd7c5d844d3aaf2990f"
+  },
+  "AcirLean.Transfer.conservation._proof_1_4": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), ↑(w 17906) < 2 ^ 128 → ↑(w 17906) = ↑(w 8) + ↑(w 11) → ↑(w 17907) = ↑(w 17906) → ¬↑(w 8) + ↑(w 11) < 2 ^ 128 → False",
+   "type_sha256": "16b0420cbd2faa2a185c0561eae191deb4d1cdabc0e8caadd40e9c18d0fb9811"
+  },
+  "AcirLean.Transfer.control_amount_bound_1000_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → ↑(w 8) < 1000",
+   "type_sha256": "c5e0717bba4647f8d9894649f964aa3e594a6d06b942e61066e57aa60e7c8ef2"
+  },
+  "AcirLean.Transfer.control_asserts_alone_allow_wrap": {
+   "axioms": [],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.range 8 128).check AcirLean.Transfer.wrapW = false ∧ ↑(AcirLean.Transfer.wrapW 8) + ↑(AcirLean.Transfer.wrapW 11) ≠ ↑(AcirLean.Transfer.wrapW 14) + ↑(AcirLean.Transfer.wrapW 18)",
+   "type_sha256": "767a252938cecd1c6c10bdbeeb8eb95bea1501e298133db1d75d7afd24e74ec3"
+  },
+  "AcirLean.Transfer.control_asserts_alone_allow_wrap._proof_1_1": {
+   "axioms": [],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 }).check AcirLean.Transfer.wrapW = true ∧ (AcirLean.Opcode.range 8 128).check AcirLean.Transfer.wrapW = false ∧ ↑(AcirLean.Transfer.wrapW 8) + ↑(AcirLean.Transfer.wrapW 11) ≠ ↑(AcirLean.Transfer.wrapW 14) + ↑(AcirLean.Transfer.wrapW 18)",
+   "type_sha256": "767a252938cecd1c6c10bdbeeb8eb95bea1501e298133db1d75d7afd24e74ec3"
+  },
+  "AcirLean.Transfer.control_chunk0_rejects_amount_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128))) = false",
+   "type_sha256": "b20a66928d0767946b3d71ab0f3d3c7d1098bdc41e99a99963360664950dc228"
+  },
+  "AcirLean.Transfer.control_chunk0_rejects_amount_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128))) = false",
+   "type_sha256": "b20a66928d0767946b3d71ab0f3d3c7d1098bdc41e99a99963360664950dc228"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_amount_in_0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 8 1001)) = false",
+   "type_sha256": "6e04c575395f7776b1e9e95e459ae6d996b8cc6c2dc4cd29367a57de8aab3c69"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_amount_in_0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 8 1001)) = false",
+   "type_sha256": "6e04c575395f7776b1e9e95e459ae6d996b8cc6c2dc4cd29367a57de8aab3c69"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_token_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317)) = false",
+   "type_sha256": "3c0fc931ca929ee08935f18b0c4082ea68999b441672ea1e22d2056691b0c30c"
+  },
+  "AcirLean.Transfer.control_chunk91_rejects_token_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317)) = false",
+   "type_sha256": "3c0fc931ca929ee08935f18b0c4082ea68999b441672ea1e22d2056691b0c30c"
+  },
+  "AcirLean.Transfer.control_range_rejects_amount_out_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.range 18 128).check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128)) = false",
+   "type_sha256": "b5cb7d3fbf361e8c79c2f8f6e8b9d16749fe55c291ee8045c82cb2e22c3937cc"
+  },
+  "AcirLean.Transfer.control_range_rejects_amount_out_1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.range 18 128).check (AcirLean.setW AcirLean.Transfer.solved 18 (2 ^ 128)) = false",
+   "type_sha256": "b5cb7d3fbf361e8c79c2f8f6e8b9d16749fe55c291ee8045c82cb2e22c3937cc"
+  },
+  "AcirLean.Transfer.control_sum_in_rejects": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 8 1001) = false",
+   "type_sha256": "9ade6d43a360bc532aadf1e555d1dd0bd8b5c6a4fd27da5b8241b85f8606666e"
+  },
+  "AcirLean.Transfer.control_sum_in_rejects._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 8 1001) = false",
+   "type_sha256": "9ade6d43a360bc532aadf1e555d1dd0bd8b5c6a4fd27da5b8241b85f8606666e"
+  },
+  "AcirLean.Transfer.control_token_rejects": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317) = false",
+   "type_sha256": "9d9d711c741c13da11ed9e5e9ec83e99d99c53592295ad467e46408eab2169eb"
+  },
+  "AcirLean.Transfer.control_token_rejects._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Controls",
+   "type": "(AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 }).check (AcirLean.setW AcirLean.Transfer.solved 17 435537695816263162368054109405345813312609277317) = false",
+   "type_sha256": "9d9d711c741c13da11ed9e5e9ec83e99d99c53592295ad467e46408eab2169eb"
+  },
+  "AcirLean.Transfer.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "da1500cd645d15c5fff9e388594b75872d1683ff375010cf21f1f934c369592d"
+  },
+  "AcirLean.Transfer.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk0.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "da1500cd645d15c5fff9e388594b75872d1683ff375010cf21f1f934c369592d"
+  },
+  "AcirLean.Transfer.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk1.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b973071382cc0a7cccfd907bf45e375f0f9db8fd83972c002bf168a03f454ed8"
+  },
+  "AcirLean.Transfer.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk1.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b973071382cc0a7cccfd907bf45e375f0f9db8fd83972c002bf168a03f454ed8"
+  },
+  "AcirLean.Transfer.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk10.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "c995271ff5b5928be34f008eca431a2d9ff066851c18b3cae21e98b8f128fead"
+  },
+  "AcirLean.Transfer.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk10.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "c995271ff5b5928be34f008eca431a2d9ff066851c18b3cae21e98b8f128fead"
+  },
+  "AcirLean.Transfer.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk11.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "276ebcb636aa202202ff747b030219c02b4a86e000322a0178bbfce7b93d5ca3"
+  },
+  "AcirLean.Transfer.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk11.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "276ebcb636aa202202ff747b030219c02b4a86e000322a0178bbfce7b93d5ca3"
+  },
+  "AcirLean.Transfer.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk12.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "88d12a03b8c6b046074fd2775d726ada9be8d221434b4c73498d15c83616eee3"
+  },
+  "AcirLean.Transfer.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk12.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "88d12a03b8c6b046074fd2775d726ada9be8d221434b4c73498d15c83616eee3"
+  },
+  "AcirLean.Transfer.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk13.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e9174092d3fbee5fc40882f93e51eb94c2f098f02610b8d9e64bd5fd060ae465"
+  },
+  "AcirLean.Transfer.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk13.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e9174092d3fbee5fc40882f93e51eb94c2f098f02610b8d9e64bd5fd060ae465"
+  },
+  "AcirLean.Transfer.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk14.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b6ee03b7f231c33aa0f91f9c643c6041dcedf5d90fc061de0b8ecf125934d065"
+  },
+  "AcirLean.Transfer.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk14.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b6ee03b7f231c33aa0f91f9c643c6041dcedf5d90fc061de0b8ecf125934d065"
+  },
+  "AcirLean.Transfer.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk15.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4936172fd5da0712d59f2ec70abb0fdf39c35f958fa6f91d8fc9c2f1c856d3fd"
+  },
+  "AcirLean.Transfer.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G3",
+   "type": "(AcirLean.Transfer.chunk15.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4936172fd5da0712d59f2ec70abb0fdf39c35f958fa6f91d8fc9c2f1c856d3fd"
+  },
+  "AcirLean.Transfer.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk16.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "39630630a714e0af6062de8a3b6af2908e5dbd2fddaaa50e1667cb21f9e27535"
+  },
+  "AcirLean.Transfer.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk16.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "39630630a714e0af6062de8a3b6af2908e5dbd2fddaaa50e1667cb21f9e27535"
+  },
+  "AcirLean.Transfer.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk17.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e6d2b34c05f4ec6a98ae2295dddbfd75bf5e16ba787690f091e576667ad3da3c"
+  },
+  "AcirLean.Transfer.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk17.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e6d2b34c05f4ec6a98ae2295dddbfd75bf5e16ba787690f091e576667ad3da3c"
+  },
+  "AcirLean.Transfer.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk18.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ed29a2a37f4e8221566b244bc3f4babfac36eb1790c291af53ade9e2d7b5e3f7"
+  },
+  "AcirLean.Transfer.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G4",
+   "type": "(AcirLean.Transfer.chunk18.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ed29a2a37f4e8221566b244bc3f4babfac36eb1790c291af53ade9e2d7b5e3f7"
+  },
+  "AcirLean.Transfer.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk19.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3ea0e159e09676de418157f0ca8e638cd4003233a42cc2ef5b7cea377936cc1e"
+  },
+  "AcirLean.Transfer.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk19.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3ea0e159e09676de418157f0ca8e638cd4003233a42cc2ef5b7cea377936cc1e"
+  },
+  "AcirLean.Transfer.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk2.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "85c4a3a920076c277037888acf023239421446df9e0785ee60a0b79db9f0a994"
+  },
+  "AcirLean.Transfer.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk2.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "85c4a3a920076c277037888acf023239421446df9e0785ee60a0b79db9f0a994"
+  },
+  "AcirLean.Transfer.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk20.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "33fa778c6028142d3d2d31c3f7b86a87769b8fadc4ec33c929304a23f4f5d305"
+  },
+  "AcirLean.Transfer.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk20.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "33fa778c6028142d3d2d31c3f7b86a87769b8fadc4ec33c929304a23f4f5d305"
+  },
+  "AcirLean.Transfer.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk21.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5c576dbb7dd3b99f7405631d94d3cc8a071602fa15bf8e7a67e9650c06ca496b"
+  },
+  "AcirLean.Transfer.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk21.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5c576dbb7dd3b99f7405631d94d3cc8a071602fa15bf8e7a67e9650c06ca496b"
+  },
+  "AcirLean.Transfer.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk22.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b7d667ca08417287598fc1cdf3ffdb4d615b119dbb82d4f18b69fe5ca8b006de"
+  },
+  "AcirLean.Transfer.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G5",
+   "type": "(AcirLean.Transfer.chunk22.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b7d667ca08417287598fc1cdf3ffdb4d615b119dbb82d4f18b69fe5ca8b006de"
+  },
+  "AcirLean.Transfer.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk23.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "a9b17f635b9d1a09dcc703a8d6338437ebbea4f02f68e07e835c0fa7d041b049"
+  },
+  "AcirLean.Transfer.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk23.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "a9b17f635b9d1a09dcc703a8d6338437ebbea4f02f68e07e835c0fa7d041b049"
+  },
+  "AcirLean.Transfer.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk24.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b2c0a85e61113fe8468f7d681ecfad1f30671a6d9bdea449622d527c39ce6c9e"
+  },
+  "AcirLean.Transfer.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk24.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b2c0a85e61113fe8468f7d681ecfad1f30671a6d9bdea449622d527c39ce6c9e"
+  },
+  "AcirLean.Transfer.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk25.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d565797d17f722a01203d0cf9df1f1194ca4650aa28324846e2446ae73f1c943"
+  },
+  "AcirLean.Transfer.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk25.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d565797d17f722a01203d0cf9df1f1194ca4650aa28324846e2446ae73f1c943"
+  },
+  "AcirLean.Transfer.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk26.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "cd8017b4ff58c4b848809033beb20c8d01395b5646f2d790e950b99237594cd3"
+  },
+  "AcirLean.Transfer.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G6",
+   "type": "(AcirLean.Transfer.chunk26.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "cd8017b4ff58c4b848809033beb20c8d01395b5646f2d790e950b99237594cd3"
+  },
+  "AcirLean.Transfer.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk27.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "07fcc224835600f377ffc8d57d30bf358fd1698b1eab1ebd3402ff1d5cc8a72c"
+  },
+  "AcirLean.Transfer.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk27.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "07fcc224835600f377ffc8d57d30bf358fd1698b1eab1ebd3402ff1d5cc8a72c"
+  },
+  "AcirLean.Transfer.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk28.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "c21a6afb9feae19850b71511d51bd8e7d009390699d5ecf9932be374850be3d2"
+  },
+  "AcirLean.Transfer.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk28.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "c21a6afb9feae19850b71511d51bd8e7d009390699d5ecf9932be374850be3d2"
+  },
+  "AcirLean.Transfer.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk29.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "424e8bca1674e8d748db974977bf427064d5235ebdd1a584d3aa5b314c6aecf7"
+  },
+  "AcirLean.Transfer.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk29.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "424e8bca1674e8d748db974977bf427064d5235ebdd1a584d3aa5b314c6aecf7"
+  },
+  "AcirLean.Transfer.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk3.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9467372fab30ec843329884715c232f58dce90ca5ec9bf6af3b97e7e795b597b"
+  },
+  "AcirLean.Transfer.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G0",
+   "type": "(AcirLean.Transfer.chunk3.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9467372fab30ec843329884715c232f58dce90ca5ec9bf6af3b97e7e795b597b"
+  },
+  "AcirLean.Transfer.nv_chunk30": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk30.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "0e5ab383c9a3923ebd1c8bb9984efd3c6ef4e6c4665519159fc2dbf06ba02a1a"
+  },
+  "AcirLean.Transfer.nv_chunk30._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G7",
+   "type": "(AcirLean.Transfer.chunk30.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "0e5ab383c9a3923ebd1c8bb9984efd3c6ef4e6c4665519159fc2dbf06ba02a1a"
+  },
+  "AcirLean.Transfer.nv_chunk31": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk31.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fd9a01d1ed74e3755813bf674fa2539f5e196d32f822fd602a56c3cd76c90b2f"
+  },
+  "AcirLean.Transfer.nv_chunk31._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk31.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fd9a01d1ed74e3755813bf674fa2539f5e196d32f822fd602a56c3cd76c90b2f"
+  },
+  "AcirLean.Transfer.nv_chunk32": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk32.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "27b99e8221a55545b52529c32a981fae38254d8a1d6d14a6c7610c06eecb3bb3"
+  },
+  "AcirLean.Transfer.nv_chunk32._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk32.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "27b99e8221a55545b52529c32a981fae38254d8a1d6d14a6c7610c06eecb3bb3"
+  },
+  "AcirLean.Transfer.nv_chunk33": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk33.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "508e4cbd4876177cccdf934e317cfef1f03d5cefcc89f7752067c812d96677b4"
+  },
+  "AcirLean.Transfer.nv_chunk33._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk33.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "508e4cbd4876177cccdf934e317cfef1f03d5cefcc89f7752067c812d96677b4"
+  },
+  "AcirLean.Transfer.nv_chunk34": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk34.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "431b59e1a456a791665d6d6797b8b6e237678973f751a3bd398350a7ec4d1b1f"
+  },
+  "AcirLean.Transfer.nv_chunk34._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G8",
+   "type": "(AcirLean.Transfer.chunk34.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "431b59e1a456a791665d6d6797b8b6e237678973f751a3bd398350a7ec4d1b1f"
+  },
+  "AcirLean.Transfer.nv_chunk35": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk35.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "f6bdddbb6c778d0ef7d03c8bef948c9a31576d17005f0cab34bdf8e4f7c95b4d"
+  },
+  "AcirLean.Transfer.nv_chunk35._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk35.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "f6bdddbb6c778d0ef7d03c8bef948c9a31576d17005f0cab34bdf8e4f7c95b4d"
+  },
+  "AcirLean.Transfer.nv_chunk36": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk36.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "55a128ff6d4df77039f73ae7a3a8987e31cb42ab897899511716bacb8a1079c2"
+  },
+  "AcirLean.Transfer.nv_chunk36._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk36.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "55a128ff6d4df77039f73ae7a3a8987e31cb42ab897899511716bacb8a1079c2"
+  },
+  "AcirLean.Transfer.nv_chunk37": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk37.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "407521325350b422eeb4a2dfce4ee40a8c3c473470a03f7511a3ae688f2a7790"
+  },
+  "AcirLean.Transfer.nv_chunk37._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G9",
+   "type": "(AcirLean.Transfer.chunk37.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "407521325350b422eeb4a2dfce4ee40a8c3c473470a03f7511a3ae688f2a7790"
+  },
+  "AcirLean.Transfer.nv_chunk38": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk38.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "81ea0b52d3f719dbf4936dfc269edde478721842d6b57316808b85c6920a535e"
+  },
+  "AcirLean.Transfer.nv_chunk38._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk38.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "81ea0b52d3f719dbf4936dfc269edde478721842d6b57316808b85c6920a535e"
+  },
+  "AcirLean.Transfer.nv_chunk39": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk39.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b5833f22c50682f4102c53a6a7a591d7dae8de98301ff2d5f6ed1fece706c8d3"
+  },
+  "AcirLean.Transfer.nv_chunk39._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk39.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b5833f22c50682f4102c53a6a7a591d7dae8de98301ff2d5f6ed1fece706c8d3"
+  },
+  "AcirLean.Transfer.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk4.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7192d88d55b9b17e34a7d35b9763cfdd0d9274a79b65849f174bdde304032a3f"
+  },
+  "AcirLean.Transfer.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk4.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7192d88d55b9b17e34a7d35b9763cfdd0d9274a79b65849f174bdde304032a3f"
+  },
+  "AcirLean.Transfer.nv_chunk40": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk40.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "70e2c59fc627abb741e77226f20a6f6fdfaa50f199cc221ed77bbd118eaa3206"
+  },
+  "AcirLean.Transfer.nv_chunk40._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk40.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "70e2c59fc627abb741e77226f20a6f6fdfaa50f199cc221ed77bbd118eaa3206"
+  },
+  "AcirLean.Transfer.nv_chunk41": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk41.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "6acf54b461c4f7a35262aecc07303618d52ee81db4096b471da8b95cbbb33bb6"
+  },
+  "AcirLean.Transfer.nv_chunk41._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G10",
+   "type": "(AcirLean.Transfer.chunk41.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "6acf54b461c4f7a35262aecc07303618d52ee81db4096b471da8b95cbbb33bb6"
+  },
+  "AcirLean.Transfer.nv_chunk42": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk42.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "708a3f5ce8b1a8573b2147e8a85004400392db82f6dd56492f0cb3168b040ac8"
+  },
+  "AcirLean.Transfer.nv_chunk42._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk42.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "708a3f5ce8b1a8573b2147e8a85004400392db82f6dd56492f0cb3168b040ac8"
+  },
+  "AcirLean.Transfer.nv_chunk43": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk43.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "48d26265c74af6208cf10478a4aee39ce159f9478d09524f42d8b9240e4040de"
+  },
+  "AcirLean.Transfer.nv_chunk43._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk43.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "48d26265c74af6208cf10478a4aee39ce159f9478d09524f42d8b9240e4040de"
+  },
+  "AcirLean.Transfer.nv_chunk44": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk44.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4fde10eaef242d39b5a931163d764401123ca7a5c40b1392b49c3f24979f0023"
+  },
+  "AcirLean.Transfer.nv_chunk44._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk44.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4fde10eaef242d39b5a931163d764401123ca7a5c40b1392b49c3f24979f0023"
+  },
+  "AcirLean.Transfer.nv_chunk45": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk45.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d8f117b42ff7c61b0a620be54a5ce71dcc981056e1b82976fe87ebbbc0ebb438"
+  },
+  "AcirLean.Transfer.nv_chunk45._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G11",
+   "type": "(AcirLean.Transfer.chunk45.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d8f117b42ff7c61b0a620be54a5ce71dcc981056e1b82976fe87ebbbc0ebb438"
+  },
+  "AcirLean.Transfer.nv_chunk46": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk46.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e8fd9b28a4acdba517ba6ad36a28f7ec69839964b1051a2930fb42671d7c716b"
+  },
+  "AcirLean.Transfer.nv_chunk46._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk46.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e8fd9b28a4acdba517ba6ad36a28f7ec69839964b1051a2930fb42671d7c716b"
+  },
+  "AcirLean.Transfer.nv_chunk47": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk47.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5832304813041f37bf9768353249fa23306537b4f82b0704fe46d6f1ca64891d"
+  },
+  "AcirLean.Transfer.nv_chunk47._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk47.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5832304813041f37bf9768353249fa23306537b4f82b0704fe46d6f1ca64891d"
+  },
+  "AcirLean.Transfer.nv_chunk48": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk48.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "654ee3d150a46fe6c8381f821de6eef748e408e8142efbeb7411d8e300ab5c18"
+  },
+  "AcirLean.Transfer.nv_chunk48._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk48.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "654ee3d150a46fe6c8381f821de6eef748e408e8142efbeb7411d8e300ab5c18"
+  },
+  "AcirLean.Transfer.nv_chunk49": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk49.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e9ea4a6c1b7c5f78bd92940b4f1970085b3899931fa95b7a28871e5e70388590"
+  },
+  "AcirLean.Transfer.nv_chunk49._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G12",
+   "type": "(AcirLean.Transfer.chunk49.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e9ea4a6c1b7c5f78bd92940b4f1970085b3899931fa95b7a28871e5e70388590"
+  },
+  "AcirLean.Transfer.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk5.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2a73be2248433065cc04fd51ad2d67bbff69b148ea2bcddef677b697f184766f"
+  },
+  "AcirLean.Transfer.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk5.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2a73be2248433065cc04fd51ad2d67bbff69b148ea2bcddef677b697f184766f"
+  },
+  "AcirLean.Transfer.nv_chunk50": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk50.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fbd07e1a4cb91752bbd71e76dd8539a5069f6b96503d78df4fa80ae553677abb"
+  },
+  "AcirLean.Transfer.nv_chunk50._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk50.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fbd07e1a4cb91752bbd71e76dd8539a5069f6b96503d78df4fa80ae553677abb"
+  },
+  "AcirLean.Transfer.nv_chunk51": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk51.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "415d394f1337d9c7a5aa2254bbb40d421cdb4d67ed9dafa983abd76b8ab19b2c"
+  },
+  "AcirLean.Transfer.nv_chunk51._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk51.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "415d394f1337d9c7a5aa2254bbb40d421cdb4d67ed9dafa983abd76b8ab19b2c"
+  },
+  "AcirLean.Transfer.nv_chunk52": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk52.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "57841543ce5096ca330263298215a5aa9c62ff285594c9b18d5957799aa29bbd"
+  },
+  "AcirLean.Transfer.nv_chunk52._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk52.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "57841543ce5096ca330263298215a5aa9c62ff285594c9b18d5957799aa29bbd"
+  },
+  "AcirLean.Transfer.nv_chunk53": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk53.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3b735e9b643bbd6e396ed2f1d12c75fde493ae90b9fc713f4a2e0bc9325c2089"
+  },
+  "AcirLean.Transfer.nv_chunk53._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G13",
+   "type": "(AcirLean.Transfer.chunk53.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3b735e9b643bbd6e396ed2f1d12c75fde493ae90b9fc713f4a2e0bc9325c2089"
+  },
+  "AcirLean.Transfer.nv_chunk54": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk54.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2ab55b26f66dcc87f9a9b9d238c1259228c37b5fdf9d2885745c6f441e6beb7b"
+  },
+  "AcirLean.Transfer.nv_chunk54._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk54.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2ab55b26f66dcc87f9a9b9d238c1259228c37b5fdf9d2885745c6f441e6beb7b"
+  },
+  "AcirLean.Transfer.nv_chunk55": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk55.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "96065332e80e0f284c43e64c6a556c2b227a0b8863fd7d59424a5ba0a81c321d"
+  },
+  "AcirLean.Transfer.nv_chunk55._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk55.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "96065332e80e0f284c43e64c6a556c2b227a0b8863fd7d59424a5ba0a81c321d"
+  },
+  "AcirLean.Transfer.nv_chunk56": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk56.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2e4c67b258f2c97b37042ac2713573950a76e1e3cb654c153b1b5f1a3262d72c"
+  },
+  "AcirLean.Transfer.nv_chunk56._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G14",
+   "type": "(AcirLean.Transfer.chunk56.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "2e4c67b258f2c97b37042ac2713573950a76e1e3cb654c153b1b5f1a3262d72c"
+  },
+  "AcirLean.Transfer.nv_chunk57": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk57.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "db586ef5cffa46f3d901888f6ee15b4ea6c153fa2d430805579a2b5051ee80ca"
+  },
+  "AcirLean.Transfer.nv_chunk57._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk57.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "db586ef5cffa46f3d901888f6ee15b4ea6c153fa2d430805579a2b5051ee80ca"
+  },
+  "AcirLean.Transfer.nv_chunk58": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk58.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9a58c61ee809614f7437335f002b243b7cd7f4029045bd22c012fd04d7f1d338"
+  },
+  "AcirLean.Transfer.nv_chunk58._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk58.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9a58c61ee809614f7437335f002b243b7cd7f4029045bd22c012fd04d7f1d338"
+  },
+  "AcirLean.Transfer.nv_chunk59": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk59.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ddc9f80e94d669104aea916b114df6b1e78b861e58f39fe40df9d488ba250d6f"
+  },
+  "AcirLean.Transfer.nv_chunk59._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk59.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ddc9f80e94d669104aea916b114df6b1e78b861e58f39fe40df9d488ba250d6f"
+  },
+  "AcirLean.Transfer.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk6.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "90f21d8cdb2b5f504cde364b04184f9ada02580d330b04a78fd04735f9e0bb93"
+  },
+  "AcirLean.Transfer.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk6.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "90f21d8cdb2b5f504cde364b04184f9ada02580d330b04a78fd04735f9e0bb93"
+  },
+  "AcirLean.Transfer.nv_chunk60": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk60.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "948911f13ef9c004bcbcfdf8ff2949c0c53e50f224cabd241404da7d5495f971"
+  },
+  "AcirLean.Transfer.nv_chunk60._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G15",
+   "type": "(AcirLean.Transfer.chunk60.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "948911f13ef9c004bcbcfdf8ff2949c0c53e50f224cabd241404da7d5495f971"
+  },
+  "AcirLean.Transfer.nv_chunk61": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk61.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "982c1000989acb9760683fb10d309ae278e11fd5a0366af82796e1f237e24f09"
+  },
+  "AcirLean.Transfer.nv_chunk61._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk61.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "982c1000989acb9760683fb10d309ae278e11fd5a0366af82796e1f237e24f09"
+  },
+  "AcirLean.Transfer.nv_chunk62": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk62.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "398f649e6664b3681137ef626aa38d7846fa97b40ecac5c2be29f4653e4e6750"
+  },
+  "AcirLean.Transfer.nv_chunk62._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk62.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "398f649e6664b3681137ef626aa38d7846fa97b40ecac5c2be29f4653e4e6750"
+  },
+  "AcirLean.Transfer.nv_chunk63": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk63.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ab2a2d5cda18d8b5e212e3d5bb7dd7d11728abaa7ec5dea47a4170901f33ffd0"
+  },
+  "AcirLean.Transfer.nv_chunk63._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk63.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ab2a2d5cda18d8b5e212e3d5bb7dd7d11728abaa7ec5dea47a4170901f33ffd0"
+  },
+  "AcirLean.Transfer.nv_chunk64": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk64.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d5eb4995a93b538d049a94a2b8f4e0dfa00bd4cecc4fbe6a45290a94928312f6"
+  },
+  "AcirLean.Transfer.nv_chunk64._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G16",
+   "type": "(AcirLean.Transfer.chunk64.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "d5eb4995a93b538d049a94a2b8f4e0dfa00bd4cecc4fbe6a45290a94928312f6"
+  },
+  "AcirLean.Transfer.nv_chunk65": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk65.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "495f651d66b06dc3ec5583f232a2ada8653800f07c7eebb8b925a1fe188ac56c"
+  },
+  "AcirLean.Transfer.nv_chunk65._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk65.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "495f651d66b06dc3ec5583f232a2ada8653800f07c7eebb8b925a1fe188ac56c"
+  },
+  "AcirLean.Transfer.nv_chunk66": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk66.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9614e1a46431e5ffff1b5230835fc7639406ca9743b364890bc59efcac90b2a0"
+  },
+  "AcirLean.Transfer.nv_chunk66._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk66.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9614e1a46431e5ffff1b5230835fc7639406ca9743b364890bc59efcac90b2a0"
+  },
+  "AcirLean.Transfer.nv_chunk67": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk67.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "337bc984d392d475210cf17c74abdfa1efae6b5565917447ad20b0cc8123b7d9"
+  },
+  "AcirLean.Transfer.nv_chunk67._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk67.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "337bc984d392d475210cf17c74abdfa1efae6b5565917447ad20b0cc8123b7d9"
+  },
+  "AcirLean.Transfer.nv_chunk68": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk68.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "68da176b26c54e5ba459028424ad4449b42efaf22fa2992e2b9bd5538bb429ae"
+  },
+  "AcirLean.Transfer.nv_chunk68._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G17",
+   "type": "(AcirLean.Transfer.chunk68.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "68da176b26c54e5ba459028424ad4449b42efaf22fa2992e2b9bd5538bb429ae"
+  },
+  "AcirLean.Transfer.nv_chunk69": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk69.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b7a019526c6fc968b0de7de2ff2108c60bdd7c35df8bca55c2fa41117689cb0f"
+  },
+  "AcirLean.Transfer.nv_chunk69._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk69.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "b7a019526c6fc968b0de7de2ff2108c60bdd7c35df8bca55c2fa41117689cb0f"
+  },
+  "AcirLean.Transfer.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk7.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5e9c4105a3f298c7770551ace1623b633aa62c8cabb38a510ecbb30de75b8a46"
+  },
+  "AcirLean.Transfer.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G1",
+   "type": "(AcirLean.Transfer.chunk7.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5e9c4105a3f298c7770551ace1623b633aa62c8cabb38a510ecbb30de75b8a46"
+  },
+  "AcirLean.Transfer.nv_chunk70": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk70.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "88eaaac3cf6758970426048dc63977784676dcf726444215e74a5bd1ddd21ebb"
+  },
+  "AcirLean.Transfer.nv_chunk70._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk70.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "88eaaac3cf6758970426048dc63977784676dcf726444215e74a5bd1ddd21ebb"
+  },
+  "AcirLean.Transfer.nv_chunk71": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk71.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ff68e9cb76c8fa5052aeb5ee732af271bc78ffedaef096e27855720a101dc275"
+  },
+  "AcirLean.Transfer.nv_chunk71._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk71.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ff68e9cb76c8fa5052aeb5ee732af271bc78ffedaef096e27855720a101dc275"
+  },
+  "AcirLean.Transfer.nv_chunk72": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk72.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ab1ea24f83638898165029a069a0edb157aef0b618a1f0809f8e98ec59792254"
+  },
+  "AcirLean.Transfer.nv_chunk72._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G18",
+   "type": "(AcirLean.Transfer.chunk72.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ab1ea24f83638898165029a069a0edb157aef0b618a1f0809f8e98ec59792254"
+  },
+  "AcirLean.Transfer.nv_chunk73": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk73.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "a9a03948a9a369f0ea2fe26104f3c37507c8be7a6b9f5d3b9f3c94297d8f7bbb"
+  },
+  "AcirLean.Transfer.nv_chunk73._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk73.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "a9a03948a9a369f0ea2fe26104f3c37507c8be7a6b9f5d3b9f3c94297d8f7bbb"
+  },
+  "AcirLean.Transfer.nv_chunk74": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk74.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "86c9c168b4553385e5e7c3fcca95c5d7496959ebcd9f71c05a2e40b61ec6d51a"
+  },
+  "AcirLean.Transfer.nv_chunk74._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk74.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "86c9c168b4553385e5e7c3fcca95c5d7496959ebcd9f71c05a2e40b61ec6d51a"
+  },
+  "AcirLean.Transfer.nv_chunk75": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk75.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "41c9efba4095a1fef133fbaec566963ad52a76984a9a574ab61826885eab1052"
+  },
+  "AcirLean.Transfer.nv_chunk75._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G19",
+   "type": "(AcirLean.Transfer.chunk75.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "41c9efba4095a1fef133fbaec566963ad52a76984a9a574ab61826885eab1052"
+  },
+  "AcirLean.Transfer.nv_chunk76": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk76.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "753f1aad36204bc165a5b2ce599adb1d1fbdb745f616b3be2cf4dec452939369"
+  },
+  "AcirLean.Transfer.nv_chunk76._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk76.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "753f1aad36204bc165a5b2ce599adb1d1fbdb745f616b3be2cf4dec452939369"
+  },
+  "AcirLean.Transfer.nv_chunk77": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk77.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3b4a24f37f0578d5671f3791bd4e9d4c94c7f9c590ceefa5abf57f7dc5be112b"
+  },
+  "AcirLean.Transfer.nv_chunk77._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk77.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "3b4a24f37f0578d5671f3791bd4e9d4c94c7f9c590ceefa5abf57f7dc5be112b"
+  },
+  "AcirLean.Transfer.nv_chunk78": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk78.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "01aa97a14d950617f2da00b1ab7e9d65b8ea94007d549e563e29f69f77305ef0"
+  },
+  "AcirLean.Transfer.nv_chunk78._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk78.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "01aa97a14d950617f2da00b1ab7e9d65b8ea94007d549e563e29f69f77305ef0"
+  },
+  "AcirLean.Transfer.nv_chunk79": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk79.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9f3f90b77ca58fb4b16a168c05da1568328401c5ee2e65c3beb5b9831bf7a492"
+  },
+  "AcirLean.Transfer.nv_chunk79._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G20",
+   "type": "(AcirLean.Transfer.chunk79.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "9f3f90b77ca58fb4b16a168c05da1568328401c5ee2e65c3beb5b9831bf7a492"
+  },
+  "AcirLean.Transfer.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk8.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fa8371a741e20f425c38007bda0e51343af83f1fcf5255fca3bd198a18622643"
+  },
+  "AcirLean.Transfer.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk8.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "fa8371a741e20f425c38007bda0e51343af83f1fcf5255fca3bd198a18622643"
+  },
+  "AcirLean.Transfer.nv_chunk80": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk80.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4829ce7e66ed0cd194736c358bdf314c692a5370cb12178a85fcfc524a5874bf"
+  },
+  "AcirLean.Transfer.nv_chunk80._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk80.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4829ce7e66ed0cd194736c358bdf314c692a5370cb12178a85fcfc524a5874bf"
+  },
+  "AcirLean.Transfer.nv_chunk81": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk81.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "8ba7207ec2dcdf065f15ffaf29a9f09f5e92c0f9e391e522c81bf8f1f151d55b"
+  },
+  "AcirLean.Transfer.nv_chunk81._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk81.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "8ba7207ec2dcdf065f15ffaf29a9f09f5e92c0f9e391e522c81bf8f1f151d55b"
+  },
+  "AcirLean.Transfer.nv_chunk82": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk82.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "034947528c4548e096a0b12876497644821236b349522d37c2393cf5e4795557"
+  },
+  "AcirLean.Transfer.nv_chunk82._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk82.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "034947528c4548e096a0b12876497644821236b349522d37c2393cf5e4795557"
+  },
+  "AcirLean.Transfer.nv_chunk83": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk83.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "43c5a90ffb51be347ab0841bd1db604fa4be5c7beee479254f90674c9270d055"
+  },
+  "AcirLean.Transfer.nv_chunk83._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G21",
+   "type": "(AcirLean.Transfer.chunk83.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "43c5a90ffb51be347ab0841bd1db604fa4be5c7beee479254f90674c9270d055"
+  },
+  "AcirLean.Transfer.nv_chunk84": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk84.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e1466af4b0bf545cc314b225c03b2a68cacc461f11d5fd3e7d5ce253a8bafe07"
+  },
+  "AcirLean.Transfer.nv_chunk84._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk84.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "e1466af4b0bf545cc314b225c03b2a68cacc461f11d5fd3e7d5ce253a8bafe07"
+  },
+  "AcirLean.Transfer.nv_chunk85": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk85.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7ec03ca2002ae7a830dd83fbe7ccd4aa700251c1584dd5bad5dda714ce49f005"
+  },
+  "AcirLean.Transfer.nv_chunk85._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk85.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7ec03ca2002ae7a830dd83fbe7ccd4aa700251c1584dd5bad5dda714ce49f005"
+  },
+  "AcirLean.Transfer.nv_chunk86": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk86.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "8d88e46c0b18de04176631256b362b31f9f9055c2cb0c81072cab37965f1366b"
+  },
+  "AcirLean.Transfer.nv_chunk86._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk86.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "8d88e46c0b18de04176631256b362b31f9f9055c2cb0c81072cab37965f1366b"
+  },
+  "AcirLean.Transfer.nv_chunk87": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk87.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "f217de5f60bdb6c53cfd14e5584dff308bc9139d76374a885fe1dd31a0589623"
+  },
+  "AcirLean.Transfer.nv_chunk87._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G22",
+   "type": "(AcirLean.Transfer.chunk87.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "f217de5f60bdb6c53cfd14e5584dff308bc9139d76374a885fe1dd31a0589623"
+  },
+  "AcirLean.Transfer.nv_chunk88": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk88.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5cd1418fb7c266bed2ababdd11bcc4495843c797d3d291f90ac5fdb50f1eebea"
+  },
+  "AcirLean.Transfer.nv_chunk88._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk88.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "5cd1418fb7c266bed2ababdd11bcc4495843c797d3d291f90ac5fdb50f1eebea"
+  },
+  "AcirLean.Transfer.nv_chunk89": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk89.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7a6eaa63d895c77f44320c2f87cb96194697adeefdd2060cced3323e51fe8510"
+  },
+  "AcirLean.Transfer.nv_chunk89._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk89.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "7a6eaa63d895c77f44320c2f87cb96194697adeefdd2060cced3323e51fe8510"
+  },
+  "AcirLean.Transfer.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk9.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4481c66d5c969dfa308fb26231aea8bfda09141aed02157d00d6249d7a9e1a8f"
+  },
+  "AcirLean.Transfer.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G2",
+   "type": "(AcirLean.Transfer.chunk9.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "4481c66d5c969dfa308fb26231aea8bfda09141aed02157d00d6249d7a9e1a8f"
+  },
+  "AcirLean.Transfer.nv_chunk90": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk90.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "43668f1d9b9f887284751cd1b4c9e99bbeda79bb3a8c05f0ae93d24f4a0caec8"
+  },
+  "AcirLean.Transfer.nv_chunk90._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk90.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "43668f1d9b9f887284751cd1b4c9e99bbeda79bb3a8c05f0ae93d24f4a0caec8"
+  },
+  "AcirLean.Transfer.nv_chunk91": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "df2adc869b8af7787c712e53d1a877e86f008d759b79bec8d2614a01df1af7c6"
+  },
+  "AcirLean.Transfer.nv_chunk91._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NV.G23",
+   "type": "(AcirLean.Transfer.chunk91.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "df2adc869b8af7787c712e53d1a877e86f008d759b79bec8d2614a01df1af7c6"
+  },
+  "AcirLean.Transfer.range_amount_in_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 8 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "79586b2dbeb1587af2491e9bf958809d965b349ee846cd179226a2d2e0ecba53"
+  },
+  "AcirLean.Transfer.range_amount_in_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 11 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "5d9d79d1e0cbe28f6de54dc46f01b1e45a6f8cbebab6f7e4478c8fa3376fadef"
+  },
+  "AcirLean.Transfer.range_amount_out_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 14 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "d67ae4bf466f3f68dd1f196c496f3be76d691c25c7c55067057f358a1925580b"
+  },
+  "AcirLean.Transfer.range_amount_out_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 18 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "d4ca6cb1364dd248dbdedd8bd0cff22e6f8375050771fb0a5bfa411debb236e0"
+  },
+  "AcirLean.Transfer.range_sum_in_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 17906 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "65b8e46c82f2f51628ddbdb43af09adf114935039d5acf4cb1b6c23fbf98d0f7"
+  },
+  "AcirLean.Transfer.range_sum_in_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23536]? = some (AcirLean.Opcode.range 17906 128)",
+   "type_sha256": "3f2b285da30567b57ecd0dc03f837de4e7bad84da6c4020cc4dabb414d268b12"
+  },
+  "AcirLean.Transfer.range_sum_out_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.range 17907 128 ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "7da23d60f51f18e012ad8bac15117c10fa2fe2e68385b61a74710e1c360cc09a"
+  },
+  "AcirLean.Transfer.range_sum_out_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23538]? = some (AcirLean.Opcode.range 17907 128)",
+   "type_sha256": "ec7c0672255ee526aa36e1373597480e0a0b52d9109a839b82a037b8a734625c"
+  },
+  "AcirLean.Transfer.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "∃ w, AcirLean.Transfer.circuit.Satisfied w",
+   "type_sha256": "51c13bd03c3288d14afaf9902f814c0ec06475a9ae5cda431b6bc9eb89dacd60"
+  },
+  "AcirLean.Transfer.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "(AcirLean.Transfer.circuit.opcodes.all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "ed9eb3c97ae3fa8424881ba1bc239faf8b2dc634123567cfdd592fb1c7bce177"
+  },
+  "AcirLean.Transfer.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "((AcirLean.Transfer.chunk0 ++ (AcirLean.Transfer.chunk1 ++ (AcirLean.Transfer.chunk2 ++ (AcirLean.Transfer.chunk3 ++ (AcirLean.Transfer.chunk4 ++ (AcirLean.Transfer.chunk5 ++ (AcirLean.Transfer.chunk6 ++ (AcirLean.Transfer.chunk7 ++ (AcirLean.Transfer.chunk8 ++ (AcirLean.Transfer.chunk9 ++ (AcirLean.Transfer.chunk10 ++ (AcirLean.Transfer.chunk11 ++ (AcirLean.Transfer.chunk12 ++ (AcirLean.Transfer.chunk13 ++ (AcirLean.Transfer.chunk14 ++ (AcirLean.Transfer.chunk15 ++ (AcirLean.Transfer.chunk16 ++ (AcirLean.Transfer.chunk17 ++ (AcirLean.Transfer.chunk18 ++ (AcirLean.Transfer.chunk19 ++ (AcirLean.Transfer.chunk20 ++ (AcirLean.Transfer.chunk21 ++ (AcirLean.Transfer.chunk22 ++ (AcirLean.Transfer.chunk23 ++ (AcirLean.Transfer.chunk24 ++ (AcirLean.Transfer.chunk25 ++ (AcirLean.Transfer.chunk26 ++ (AcirLean.Transfer.chunk27 ++ (AcirLean.Transfer.chunk28 ++ (AcirLean.Transfer.chunk29 ++ (AcirLean.Transfer.chunk30 ++ (AcirLean.Transfer.chunk31 ++ (AcirLean.Transfer.chunk32 ++ (AcirLean.Transfer.chunk33 ++ (AcirLean.Transfer.chunk34 ++ (AcirLean.Transfer.chunk35 ++ (AcirLean.Transfer.chunk36 ++ (AcirLean.Transfer.chunk37 ++ (AcirLean.Transfer.chunk38 ++ (AcirLean.Transfer.chunk39 ++ (AcirLean.Transfer.chunk40 ++ (AcirLean.Transfer.chunk41 ++ (AcirLean.Transfer.chunk42 ++ (AcirLean.Transfer.chunk43 ++ (AcirLean.Transfer.chunk44 ++ (AcirLean.Transfer.chunk45 ++ (AcirLean.Transfer.chunk46 ++ (AcirLean.Transfer.chunk47 ++ (AcirLean.Transfer.chunk48 ++ (AcirLean.Transfer.chunk49 ++ (AcirLean.Transfer.chunk50 ++ (AcirLean.Transfer.chunk51 ++ (AcirLean.Transfer.chunk52 ++ (AcirLean.Transfer.chunk53 ++ (AcirLean.Transfer.chunk54 ++ (AcirLean.Transfer.chunk55 ++ (AcirLean.Transfer.chunk56 ++ (AcirLean.Transfer.chunk57 ++ (AcirLean.Transfer.chunk58 ++ (AcirLean.Transfer.chunk59 ++ (AcirLean.Transfer.chunk60 ++ (AcirLean.Transfer.chunk61 ++ (AcirLean.Transfer.chunk62 ++ (AcirLean.Transfer.chunk63 ++ (AcirLean.Transfer.chunk64 ++ (AcirLean.Transfer.chunk65 ++ (AcirLean.Transfer.chunk66 ++ (AcirLean.Transfer.chunk67 ++ (AcirLean.Transfer.chunk68 ++ (AcirLean.Transfer.chunk69 ++ (AcirLean.Transfer.chunk70 ++ (AcirLean.Transfer.chunk71 ++ (AcirLean.Transfer.chunk72 ++ (AcirLean.Transfer.chunk73 ++ (AcirLean.Transfer.chunk74 ++ (AcirLean.Transfer.chunk75 ++ (AcirLean.Transfer.chunk76 ++ (AcirLean.Transfer.chunk77 ++ (AcirLean.Transfer.chunk78 ++ (AcirLean.Transfer.chunk79 ++ (AcirLean.Transfer.chunk80 ++ (AcirLean.Transfer.chunk81 ++ (AcirLean.Transfer.chunk82 ++ (AcirLean.Transfer.chunk83 ++ (AcirLean.Transfer.chunk84 ++ (AcirLean.Transfer.chunk85 ++ (AcirLean.Transfer.chunk86 ++ (AcirLean.Transfer.chunk87 ++ (AcirLean.Transfer.chunk88 ++ (AcirLean.Transfer.chunk89 ++ (AcirLean.Transfer.chunk90 ++ AcirLean.Transfer.chunk91))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Transfer.solved) = true",
+   "type_sha256": "8781f50ed6c24fadb888cff0768216743a27aad068887bc0a2f549dcb4825ff6"
+  },
+  "AcirLean.Transfer.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "AcirLean.Transfer.circuit.Satisfied AcirLean.Transfer.solved",
+   "type_sha256": "ef7a40242faaeb401d8cf0c2b5cbc7a9a3a13f4a1005486265e59ece109d13f3"
+  },
+  "AcirLean.Transfer.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "↑(AcirLean.Transfer.solved 8) = 1000 ∧ ↑(AcirLean.Transfer.solved 11) = 0 ∧ ↑(AcirLean.Transfer.solved 14) = 700 ∧ ↑(AcirLean.Transfer.solved 18) = 300 ∧ AcirLean.Transfer.solved 10 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 13 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 17 = AcirLean.Transfer.solved 7",
+   "type_sha256": "327271688bf5f15efdfd3d474ebc9dcda5c38bc4acf27715fcdce0b097df3771"
+  },
+  "AcirLean.Transfer.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.NonVacuity",
+   "type": "↑(AcirLean.Transfer.solved 8) = 1000 ∧ ↑(AcirLean.Transfer.solved 11) = 0 ∧ ↑(AcirLean.Transfer.solved 14) = 700 ∧ ↑(AcirLean.Transfer.solved 18) = 300 ∧ AcirLean.Transfer.solved 10 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 13 = AcirLean.Transfer.solved 7 ∧ AcirLean.Transfer.solved 17 = AcirLean.Transfer.solved 7",
+   "type_sha256": "327271688bf5f15efdfd3d474ebc9dcda5c38bc4acf27715fcdce0b097df3771"
+  },
+  "AcirLean.Transfer.sum_in_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "385b8755fceb091a2a0fc800b09bb534e2e7f33aa3de744d6d34456ad7b08cee"
+  },
+  "AcirLean.Transfer.sum_in_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23535]? = some (AcirLean.Opcode.assertZero (some 17906) { mul := [], lin := [(1, 8), (1, 11)], const := 0 })",
+   "type_sha256": "23639ad4f2115556de5ed403c5e749556904b4361f872a5ae6e39a7593adcbe8"
+  },
+  "AcirLean.Transfer.sum_out_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "3ffa3c45de7dd5a85f5b60d75b9cd5b8a0c8ad91aee05826d66390090b9745d0"
+  },
+  "AcirLean.Transfer.sum_out_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23537]? = some (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 14), (1, 18)], const := 0 })",
+   "type_sha256": "71f3a90194ef2329fc671fe8960d29b3b437119cac90c3d5db875caff2d4ba04"
+  },
+  "AcirLean.Transfer.sums_eq_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "ef6cfa76cfbfd9a3fd301aaac09766ed9fc9986e10ffcb94af06e79a734ae4af"
+  },
+  "AcirLean.Transfer.sums_eq_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23539]? = some (AcirLean.Opcode.assertZero (some 17907) { mul := [], lin := [(1, 17906)], const := 0 })",
+   "type_sha256": "4e332d49529614fafd39d422d3ba4b231c58d0df512b903ae47c61266df6f0ca"
+  },
+  "AcirLean.Transfer.token_consistency": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Transfer.circuit.Satisfied w → w 10 = w 7 ∧ w 13 = w 7 ∧ w 17 = w 7",
+   "type_sha256": "d5a940e2f57bdba289dc6eb0782ddceca6b7e31f8c9589856c749e7c825cade0"
+  },
+  "AcirLean.Transfer.token_in_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 10) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "e9ae912945a3d1ab4713ddee49d83248c41059238e34c836feefeab025357a81"
+  },
+  "AcirLean.Transfer.token_in_1_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23540]? = some (AcirLean.Opcode.assertZero (some 10) { mul := [], lin := [(1, 7)], const := 0 })",
+   "type_sha256": "430ad6b76425ffa0e9238ea62d8bc6b99e5a58f1fce715223b8801b1082da7ec"
+  },
+  "AcirLean.Transfer.token_names": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.paramNames[7]? = some \"token_in_0\" ∧ AcirLean.Transfer.paramNames[10]? = some \"token_in_1\" ∧ AcirLean.Transfer.paramNames[13]? = some \"token_out_0\" ∧ AcirLean.Transfer.paramNames[17]? = some \"token_out_1\"",
+   "type_sha256": "79fa3a045e064ed25d590035e9321508d6f9bdd5f0ad41f04d5b27bd61983dd8"
+  },
+  "AcirLean.Transfer.token_out_0_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 13) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "174a6c55ece8f92da3afd10ce289773580aaeecf0fae1fc8988e037ab1bd699d"
+  },
+  "AcirLean.Transfer.token_out_0_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23541]? = some (AcirLean.Opcode.assertZero (some 13) { mul := [], lin := [(1, 7)], const := 0 })",
+   "type_sha256": "153eeba527600d6531df33ac245eda7d389f87559c9f8881d2f9e0820c37cc66"
+  },
+  "AcirLean.Transfer.token_out_1_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 } ∈ AcirLean.Transfer.circuit.opcodes",
+   "type_sha256": "0bf3a4108351152e8c1a1d6fdea4edbb2c3221fcfd561bb1e63292d7c689d89e"
+  },
+  "AcirLean.Transfer.token_out_1_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Transfer.Rules",
+   "type": "AcirLean.Transfer.opcodes[23542]? = some (AcirLean.Opcode.assertZero (some 17) { mul := [], lin := [(1, 7)], const := 0 })",
+   "type_sha256": "ad2f8dd1ba5cbe72d0858933da11b82ddb5ad8b454ec7359f630123421c55390"
+  },
+  "AcirLean.Trie.brecOn.eq": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {motive : AcirLean.Trie → Sort u} (t : AcirLean.Trie) (F_1 : (t : AcirLean.Trie) → AcirLean.Trie.below t → motive t), AcirLean.Trie.brecOn t F_1 = F_1 t (AcirLean.Trie.brecOn.go t F_1).2",
+   "type_sha256": "f95d068ff9629c29391a03dbbc8954b41ee3c5d3bd35a3876fe4ff91d121e6e5"
+  },
+  "AcirLean.Trie.leaf.inj": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {v v_1 : Nat}, AcirLean.Trie.leaf v = AcirLean.Trie.leaf v_1 → v = v_1",
+   "type_sha256": "95a64c191a6f6953fb726b638facfccbbab11de604ac02451a3d8cc6b7cf027b"
+  },
+  "AcirLean.Trie.leaf.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (v v_1 : Nat), (AcirLean.Trie.leaf v = AcirLean.Trie.leaf v_1) = (v = v_1)",
+   "type_sha256": "b746dba787b825892f16ad0687dc74b58348c93a3c753613dd72ac8deef27c46"
+  },
+  "AcirLean.Trie.leaf.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ (v : Nat), sizeOf (AcirLean.Trie.leaf v) = 1 + sizeOf v",
+   "type_sha256": "f1beba7f788e9e67494b5301103819730868b7fbc1df22f96a6474100d05d897"
+  },
+  "AcirLean.Trie.node.inj": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ {l r l_1 r_1 : AcirLean.Trie}, l.node r = l_1.node r_1 → l = l_1 ∧ r = r_1",
+   "type_sha256": "36542466fd2a8ec9005551fa8bc7702d7011b5b12e9ff30b378d5ce832aea0b1"
+  },
+  "AcirLean.Trie.node.injEq": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (l r l_1 r_1 : AcirLean.Trie), (l.node r = l_1.node r_1) = (l = l_1 ∧ r = r_1)",
+   "type_sha256": "35fcee99e3489af627e916f179588abc9bfa5775a10ac358ad75d60b95028771"
+  },
+  "AcirLean.Trie.node.sizeOf_spec": {
+   "axioms": [],
+   "module": "AcirLean.Witness",
+   "type": "∀ (l r : AcirLean.Trie), sizeOf (l.node r) = 1 + sizeOf l + sizeOf r",
+   "type_sha256": "435462cad99b6901cdf9264ef0fd2e892f440d59c1764a1bbb9d42ddf44c1058"
+  },
+  "AcirLean.Trie.toAssignment._proof_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Witness",
+   "type": "∀ (t : AcirLean.Trie) (d i : Nat), t.get d i % AcirLean.P < AcirLean.P",
+   "type_sha256": "a20bb706bc47c9a3bcbf76ad900e1910554859508016297d63b0556ac7915c9c"
+  },
+  "AcirLean.Withdraw.all_app": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "∀ {l₁ l₂ : List AcirLean.Opcode} {p : AcirLean.Opcode → Bool}, l₁.all p = true → l₂.all p = true → (l₁ ++ l₂).all p = true",
+   "type_sha256": "9912b5f388c207f7a93781edd942edba0de57b36cce8650535ea09a1fb314201"
+  },
+  "AcirLean.Withdraw.amount_is_public_input_2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Withdraw.circuit.publicParams[2]? = some 2 ∧ AcirLean.Withdraw.paramNames[2]? = some \"amount\"",
+   "type_sha256": "a6652d5965199e205e61248b7698ca68e62b5fb2d768566a02df570efb6391d4"
+  },
+  "AcirLean.Withdraw.amount_lt_two_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "∀ (w : AcirLean.Assignment), AcirLean.Withdraw.circuit.Satisfied w → ↑(w 2) < 2 ^ 128",
+   "type_sha256": "346fb3f70c151428e01b2d65fbdc6ff23a3c4a8503de0d89d7b66b75480b7fd9"
+  },
+  "AcirLean.Withdraw.control_bound_700_false": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "¬∀ (w : AcirLean.Assignment), AcirLean.Withdraw.circuit.Satisfied w → ↑(w 2) < 700",
+   "type_sha256": "2f0c597fdf210f822d0a6545312dc082a0c9395969ad1c486f95281800735acb"
+  },
+  "AcirLean.Withdraw.control_chunk1_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128))) = false",
+   "type_sha256": "097943a6fb1033c9dd15187a2c038fa905f2fa7de93e254bc36b276ffbdfd63d"
+  },
+  "AcirLean.Withdraw.control_chunk1_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128))) = false",
+   "type_sha256": "097943a6fb1033c9dd15187a2c038fa905f2fa7de93e254bc36b276ffbdfd63d"
+  },
+  "AcirLean.Withdraw.control_range_alone_allows_2_pow_127": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "b6cda969132607f5b27b7759ff8229e96d9d9730a9d65940c71fe36bd1f8827c"
+  },
+  "AcirLean.Withdraw.control_range_alone_allows_2_pow_127._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 127)) = true",
+   "type_sha256": "b6cda969132607f5b27b7759ff8229e96d9d9730a9d65940c71fe36bd1f8827c"
+  },
+  "AcirLean.Withdraw.control_range_rejects_2_pow_128": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128)) = false",
+   "type_sha256": "2403f5ceddf358d9f31b462213d8a3116aa39d28265a1489681d58201bfe0bee"
+  },
+  "AcirLean.Withdraw.control_range_rejects_2_pow_128._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Controls",
+   "type": "(AcirLean.Opcode.range 2 128).check (AcirLean.setW AcirLean.Withdraw.solved 2 (2 ^ 128)) = false",
+   "type_sha256": "2403f5ceddf358d9f31b462213d8a3116aa39d28265a1489681d58201bfe0bee"
+  },
+  "AcirLean.Withdraw.nv_chunk0": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk0.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "9764d6a95350c195cdb170a42088a49e8214073dba42643cec6a86d23a7e4c83"
+  },
+  "AcirLean.Withdraw.nv_chunk0._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk0.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "9764d6a95350c195cdb170a42088a49e8214073dba42643cec6a86d23a7e4c83"
+  },
+  "AcirLean.Withdraw.nv_chunk1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4ddb316c7b43be1dc9a46b5abb0b90abc25a13ffa78706b61e8e546afc2dc511"
+  },
+  "AcirLean.Withdraw.nv_chunk1._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk1.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4ddb316c7b43be1dc9a46b5abb0b90abc25a13ffa78706b61e8e546afc2dc511"
+  },
+  "AcirLean.Withdraw.nv_chunk10": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk10.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "7b21b883537543d5adcf93bf2c1981c3382e974b6366d9002f7594db03d0d1a4"
+  },
+  "AcirLean.Withdraw.nv_chunk10._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk10.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "7b21b883537543d5adcf93bf2c1981c3382e974b6366d9002f7594db03d0d1a4"
+  },
+  "AcirLean.Withdraw.nv_chunk11": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk11.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "6a1b4bd1f795f7276af2dedeb49e31d878daa5334520e591b6f2ae818cbaba70"
+  },
+  "AcirLean.Withdraw.nv_chunk11._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk11.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "6a1b4bd1f795f7276af2dedeb49e31d878daa5334520e591b6f2ae818cbaba70"
+  },
+  "AcirLean.Withdraw.nv_chunk12": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk12.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "2c14baef8dd632c1988f1416252863526c7e8c19cf2f8a7017428650918f418f"
+  },
+  "AcirLean.Withdraw.nv_chunk12._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk12.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "2c14baef8dd632c1988f1416252863526c7e8c19cf2f8a7017428650918f418f"
+  },
+  "AcirLean.Withdraw.nv_chunk13": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk13.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ee909d4bd65b57f87c3f0ecd181bc57b57d6e9d6ab4a94233d0e048b24e43a1b"
+  },
+  "AcirLean.Withdraw.nv_chunk13._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk13.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ee909d4bd65b57f87c3f0ecd181bc57b57d6e9d6ab4a94233d0e048b24e43a1b"
+  },
+  "AcirLean.Withdraw.nv_chunk14": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk14.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c6bee1329ac3bebd7c69421d4e76e1a389dd845b1d989bfc1595716132cd9e59"
+  },
+  "AcirLean.Withdraw.nv_chunk14._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G3",
+   "type": "(AcirLean.Withdraw.chunk14.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c6bee1329ac3bebd7c69421d4e76e1a389dd845b1d989bfc1595716132cd9e59"
+  },
+  "AcirLean.Withdraw.nv_chunk15": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk15.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "9efae4e3b64f77907dccb502d8b6b1ed456268692895536cfa6250a868565c16"
+  },
+  "AcirLean.Withdraw.nv_chunk15._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk15.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "9efae4e3b64f77907dccb502d8b6b1ed456268692895536cfa6250a868565c16"
+  },
+  "AcirLean.Withdraw.nv_chunk16": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk16.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "95ede04098f89c0d6411041642033abd31b5f3a6b4a02639d0a04fc3b39ca03d"
+  },
+  "AcirLean.Withdraw.nv_chunk16._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk16.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "95ede04098f89c0d6411041642033abd31b5f3a6b4a02639d0a04fc3b39ca03d"
+  },
+  "AcirLean.Withdraw.nv_chunk17": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk17.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "da66f31da7b44c5fb5068e0571be44c99a7d56c0361419bed6802993d4637eb7"
+  },
+  "AcirLean.Withdraw.nv_chunk17._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk17.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "da66f31da7b44c5fb5068e0571be44c99a7d56c0361419bed6802993d4637eb7"
+  },
+  "AcirLean.Withdraw.nv_chunk18": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk18.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "cb735774cca8a7a654f8b538e20eb1c3bf85524c9ab4586682f9e448d063453c"
+  },
+  "AcirLean.Withdraw.nv_chunk18._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G4",
+   "type": "(AcirLean.Withdraw.chunk18.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "cb735774cca8a7a654f8b538e20eb1c3bf85524c9ab4586682f9e448d063453c"
+  },
+  "AcirLean.Withdraw.nv_chunk19": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk19.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "0f9bb22af649673547dc1a5ca5be625e78fffe215fa5820a70e55dfce6011f0d"
+  },
+  "AcirLean.Withdraw.nv_chunk19._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk19.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "0f9bb22af649673547dc1a5ca5be625e78fffe215fa5820a70e55dfce6011f0d"
+  },
+  "AcirLean.Withdraw.nv_chunk2": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk2.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ed303a8966c3c9d07ce36434d919775d8272d3bea374c94581cf82f3d2c5ab6d"
+  },
+  "AcirLean.Withdraw.nv_chunk2._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk2.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ed303a8966c3c9d07ce36434d919775d8272d3bea374c94581cf82f3d2c5ab6d"
+  },
+  "AcirLean.Withdraw.nv_chunk20": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk20.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "f6100afd613e66e86cb5490257ecd1f15af9cddb1f40dfa200e29e671c623f96"
+  },
+  "AcirLean.Withdraw.nv_chunk20._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk20.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "f6100afd613e66e86cb5490257ecd1f15af9cddb1f40dfa200e29e671c623f96"
+  },
+  "AcirLean.Withdraw.nv_chunk21": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk21.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "97586d2e71994b9ed536e37c96d14520d2310aba3f1b55735da6fd26772d781d"
+  },
+  "AcirLean.Withdraw.nv_chunk21._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk21.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "97586d2e71994b9ed536e37c96d14520d2310aba3f1b55735da6fd26772d781d"
+  },
+  "AcirLean.Withdraw.nv_chunk22": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk22.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "a0b5f518e849626fa3187b974c5babd459747ab4d004608078689fbcba8189e0"
+  },
+  "AcirLean.Withdraw.nv_chunk22._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G5",
+   "type": "(AcirLean.Withdraw.chunk22.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "a0b5f518e849626fa3187b974c5babd459747ab4d004608078689fbcba8189e0"
+  },
+  "AcirLean.Withdraw.nv_chunk23": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk23.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e6304e03300bc652d9909f209d80144daec9e50ca341833da5f49383ac9308e2"
+  },
+  "AcirLean.Withdraw.nv_chunk23._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk23.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e6304e03300bc652d9909f209d80144daec9e50ca341833da5f49383ac9308e2"
+  },
+  "AcirLean.Withdraw.nv_chunk24": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk24.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4248c2d1a470eaa7862bab5db0567b6af8a68c7cf092b2e3d780b5bd6e27385e"
+  },
+  "AcirLean.Withdraw.nv_chunk24._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk24.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4248c2d1a470eaa7862bab5db0567b6af8a68c7cf092b2e3d780b5bd6e27385e"
+  },
+  "AcirLean.Withdraw.nv_chunk25": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk25.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "bca4f1cfbb8979873972553c999d96588e39829f50e4849ef501e2807dfb3f38"
+  },
+  "AcirLean.Withdraw.nv_chunk25._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk25.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "bca4f1cfbb8979873972553c999d96588e39829f50e4849ef501e2807dfb3f38"
+  },
+  "AcirLean.Withdraw.nv_chunk26": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk26.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "686d08d6f75a1af3fa584fc1ac5c88829bed7d488687fe536e491a14d8e31932"
+  },
+  "AcirLean.Withdraw.nv_chunk26._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G6",
+   "type": "(AcirLean.Withdraw.chunk26.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "686d08d6f75a1af3fa584fc1ac5c88829bed7d488687fe536e491a14d8e31932"
+  },
+  "AcirLean.Withdraw.nv_chunk27": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk27.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c836b907d6d12dc233fb64c7e464fd308da90783ebcc017082f123f583b4bb68"
+  },
+  "AcirLean.Withdraw.nv_chunk27._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk27.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c836b907d6d12dc233fb64c7e464fd308da90783ebcc017082f123f583b4bb68"
+  },
+  "AcirLean.Withdraw.nv_chunk28": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk28.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ee5d6cd16bbf6712584db061700906a9a44ef5a0cb6b60433380fc2a589fdbd3"
+  },
+  "AcirLean.Withdraw.nv_chunk28._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk28.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ee5d6cd16bbf6712584db061700906a9a44ef5a0cb6b60433380fc2a589fdbd3"
+  },
+  "AcirLean.Withdraw.nv_chunk29": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk29.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "d715f398bbe8d8b9508868ec84dda4083ff8a3ab3d837cea8bed057172db866b"
+  },
+  "AcirLean.Withdraw.nv_chunk29._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G7",
+   "type": "(AcirLean.Withdraw.chunk29.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "d715f398bbe8d8b9508868ec84dda4083ff8a3ab3d837cea8bed057172db866b"
+  },
+  "AcirLean.Withdraw.nv_chunk3": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk3.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "1a281bfa7422c960122333294edaa2b3016d4674602868bc3981bb9599f569b1"
+  },
+  "AcirLean.Withdraw.nv_chunk3._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G0",
+   "type": "(AcirLean.Withdraw.chunk3.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "1a281bfa7422c960122333294edaa2b3016d4674602868bc3981bb9599f569b1"
+  },
+  "AcirLean.Withdraw.nv_chunk30": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk30.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "7c72d9e8d6796aecdbd2327bd4cf9fdc663c30d3fb81c5a39f7edc64920bb7ab"
+  },
+  "AcirLean.Withdraw.nv_chunk30._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk30.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "7c72d9e8d6796aecdbd2327bd4cf9fdc663c30d3fb81c5a39f7edc64920bb7ab"
+  },
+  "AcirLean.Withdraw.nv_chunk31": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk31.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4504c8248ce383d41aa06735c14a14110efd2fee2f7b89818c73379e61925503"
+  },
+  "AcirLean.Withdraw.nv_chunk31._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk31.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "4504c8248ce383d41aa06735c14a14110efd2fee2f7b89818c73379e61925503"
+  },
+  "AcirLean.Withdraw.nv_chunk32": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk32.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c1712677607f5053bed18c6cfe1a79ff67804cf079c47b5743df5750cb798083"
+  },
+  "AcirLean.Withdraw.nv_chunk32._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk32.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "c1712677607f5053bed18c6cfe1a79ff67804cf079c47b5743df5750cb798083"
+  },
+  "AcirLean.Withdraw.nv_chunk33": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk33.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "3829d998db21cf0e3fc7c6a7d4f4188f02521dce672163900b7d7ee88466cd3c"
+  },
+  "AcirLean.Withdraw.nv_chunk33._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G8",
+   "type": "(AcirLean.Withdraw.chunk33.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "3829d998db21cf0e3fc7c6a7d4f4188f02521dce672163900b7d7ee88466cd3c"
+  },
+  "AcirLean.Withdraw.nv_chunk34": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk34.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "07d2fe7d5ba65b9d45d6191d174a6c931f7e2d3a8a80dbe2200dbbe683a64681"
+  },
+  "AcirLean.Withdraw.nv_chunk34._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk34.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "07d2fe7d5ba65b9d45d6191d174a6c931f7e2d3a8a80dbe2200dbbe683a64681"
+  },
+  "AcirLean.Withdraw.nv_chunk35": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk35.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "cb8a0a66948977fa02aafa43ae34e7c17a0b93f1c7a57656703270305a5b063e"
+  },
+  "AcirLean.Withdraw.nv_chunk35._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk35.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "cb8a0a66948977fa02aafa43ae34e7c17a0b93f1c7a57656703270305a5b063e"
+  },
+  "AcirLean.Withdraw.nv_chunk36": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk36.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "934142569dd29d165eb87c0ab00223da4b3f799bef7cd28435c136d2ad77f6ff"
+  },
+  "AcirLean.Withdraw.nv_chunk36._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk36.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "934142569dd29d165eb87c0ab00223da4b3f799bef7cd28435c136d2ad77f6ff"
+  },
+  "AcirLean.Withdraw.nv_chunk37": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk37.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "89bf04f5b42833bce641e908966bb6fd49793bd04016b552980e71101796a4cb"
+  },
+  "AcirLean.Withdraw.nv_chunk37._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G9",
+   "type": "(AcirLean.Withdraw.chunk37.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "89bf04f5b42833bce641e908966bb6fd49793bd04016b552980e71101796a4cb"
+  },
+  "AcirLean.Withdraw.nv_chunk38": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk38.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "99a2e3f3c175aa25e21277bee7a342943825ec2a591287d71b103f14f08cc046"
+  },
+  "AcirLean.Withdraw.nv_chunk38._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk38.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "99a2e3f3c175aa25e21277bee7a342943825ec2a591287d71b103f14f08cc046"
+  },
+  "AcirLean.Withdraw.nv_chunk39": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk39.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "b3a05527ce7128abab7901e353070b81648b7bf0a849a1999b66a7d9df67c009"
+  },
+  "AcirLean.Withdraw.nv_chunk39._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk39.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "b3a05527ce7128abab7901e353070b81648b7bf0a849a1999b66a7d9df67c009"
+  },
+  "AcirLean.Withdraw.nv_chunk4": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk4.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "fa4a1c87dcc550b2fc410229b7c99afa6e43403363e35381f933f905b0c72f9c"
+  },
+  "AcirLean.Withdraw.nv_chunk4._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk4.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "fa4a1c87dcc550b2fc410229b7c99afa6e43403363e35381f933f905b0c72f9c"
+  },
+  "AcirLean.Withdraw.nv_chunk40": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk40.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "b44befd37485e0cd761fb2bc21c276820a8ee456d89d2455b01bbc32788d60c0"
+  },
+  "AcirLean.Withdraw.nv_chunk40._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk40.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "b44befd37485e0cd761fb2bc21c276820a8ee456d89d2455b01bbc32788d60c0"
+  },
+  "AcirLean.Withdraw.nv_chunk41": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk41.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "3bb46a9cdf301affa8e5e38b3487e171daaff213a64f81f431bdda5613e773cf"
+  },
+  "AcirLean.Withdraw.nv_chunk41._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G10",
+   "type": "(AcirLean.Withdraw.chunk41.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "3bb46a9cdf301affa8e5e38b3487e171daaff213a64f81f431bdda5613e773cf"
+  },
+  "AcirLean.Withdraw.nv_chunk42": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk42.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "427ec8e8f202d77f1258db92e3bcf5982944bab9d8791d1f83adbc5fe17e2dde"
+  },
+  "AcirLean.Withdraw.nv_chunk42._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk42.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "427ec8e8f202d77f1258db92e3bcf5982944bab9d8791d1f83adbc5fe17e2dde"
+  },
+  "AcirLean.Withdraw.nv_chunk43": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk43.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "443e6bce8b5265c450eb73dba4133744e0baf003ffcf5bd9fe88493a088be632"
+  },
+  "AcirLean.Withdraw.nv_chunk43._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk43.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "443e6bce8b5265c450eb73dba4133744e0baf003ffcf5bd9fe88493a088be632"
+  },
+  "AcirLean.Withdraw.nv_chunk44": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk44.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "841fb7d24b655366440601cfe56c542a16af5387bcb70e006cdc7ccc15fd7a4d"
+  },
+  "AcirLean.Withdraw.nv_chunk44._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G11",
+   "type": "(AcirLean.Withdraw.chunk44.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "841fb7d24b655366440601cfe56c542a16af5387bcb70e006cdc7ccc15fd7a4d"
+  },
+  "AcirLean.Withdraw.nv_chunk5": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk5.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e98bdd5e5989ee3feba7a41cb85780b24877c303f6fdecc77637d926d9159661"
+  },
+  "AcirLean.Withdraw.nv_chunk5._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk5.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e98bdd5e5989ee3feba7a41cb85780b24877c303f6fdecc77637d926d9159661"
+  },
+  "AcirLean.Withdraw.nv_chunk6": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk6.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "199103cff5667d26db58706a41566b1ee97523fb14c49bde968f3cf62b2b7205"
+  },
+  "AcirLean.Withdraw.nv_chunk6._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk6.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "199103cff5667d26db58706a41566b1ee97523fb14c49bde968f3cf62b2b7205"
+  },
+  "AcirLean.Withdraw.nv_chunk7": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk7.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ab46c50754390dfafcce3e2f1f3e93994511f1688d4a235f1606962a6ee9da69"
+  },
+  "AcirLean.Withdraw.nv_chunk7._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G1",
+   "type": "(AcirLean.Withdraw.chunk7.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ab46c50754390dfafcce3e2f1f3e93994511f1688d4a235f1606962a6ee9da69"
+  },
+  "AcirLean.Withdraw.nv_chunk8": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk8.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "a3814b7becfc05e6f07e968273b771e08324c79a12efff75a955bad88977a7c6"
+  },
+  "AcirLean.Withdraw.nv_chunk8._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk8.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "a3814b7becfc05e6f07e968273b771e08324c79a12efff75a955bad88977a7c6"
+  },
+  "AcirLean.Withdraw.nv_chunk9": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk9.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e1c198b724e5b0b8b102bfb68122d9e77f1998c3574282bc1eba6efec6346bcf"
+  },
+  "AcirLean.Withdraw.nv_chunk9._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NV.G2",
+   "type": "(AcirLean.Withdraw.chunk9.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "e1c198b724e5b0b8b102bfb68122d9e77f1998c3574282bc1eba6efec6346bcf"
+  },
+  "AcirLean.Withdraw.range_amount_mem": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Opcode.range 2 128 ∈ AcirLean.Withdraw.circuit.opcodes",
+   "type_sha256": "6dbc9cbebfcc25f189915ac3c86c7fca7d74b58da826b484eefdab6bf16f7f94"
+  },
+  "AcirLean.Withdraw.range_amount_mem._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.Amount",
+   "type": "AcirLean.Withdraw.opcodes[362]? = some (AcirLean.Opcode.range 2 128)",
+   "type_sha256": "b85178ebba35f643b6ae8efaccdcd5b00083c02426063249f8a62862dec05c0c"
+  },
+  "AcirLean.Withdraw.satisfiable": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "∃ w, AcirLean.Withdraw.circuit.Satisfied w",
+   "type_sha256": "b47294f1c23e4ecd248b4e944df7c41556c4a9648a829a1a458692882a6a374c"
+  },
+  "AcirLean.Withdraw.solved_checks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "(AcirLean.Withdraw.circuit.opcodes.all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "094c80e4f46d699d6b5f91ccb43ba1bd6908ab381d15b16905c732a2c11133e8"
+  },
+  "AcirLean.Withdraw.solved_checks_chunks": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "((AcirLean.Withdraw.chunk0 ++ (AcirLean.Withdraw.chunk1 ++ (AcirLean.Withdraw.chunk2 ++ (AcirLean.Withdraw.chunk3 ++ (AcirLean.Withdraw.chunk4 ++ (AcirLean.Withdraw.chunk5 ++ (AcirLean.Withdraw.chunk6 ++ (AcirLean.Withdraw.chunk7 ++ (AcirLean.Withdraw.chunk8 ++ (AcirLean.Withdraw.chunk9 ++ (AcirLean.Withdraw.chunk10 ++ (AcirLean.Withdraw.chunk11 ++ (AcirLean.Withdraw.chunk12 ++ (AcirLean.Withdraw.chunk13 ++ (AcirLean.Withdraw.chunk14 ++ (AcirLean.Withdraw.chunk15 ++ (AcirLean.Withdraw.chunk16 ++ (AcirLean.Withdraw.chunk17 ++ (AcirLean.Withdraw.chunk18 ++ (AcirLean.Withdraw.chunk19 ++ (AcirLean.Withdraw.chunk20 ++ (AcirLean.Withdraw.chunk21 ++ (AcirLean.Withdraw.chunk22 ++ (AcirLean.Withdraw.chunk23 ++ (AcirLean.Withdraw.chunk24 ++ (AcirLean.Withdraw.chunk25 ++ (AcirLean.Withdraw.chunk26 ++ (AcirLean.Withdraw.chunk27 ++ (AcirLean.Withdraw.chunk28 ++ (AcirLean.Withdraw.chunk29 ++ (AcirLean.Withdraw.chunk30 ++ (AcirLean.Withdraw.chunk31 ++ (AcirLean.Withdraw.chunk32 ++ (AcirLean.Withdraw.chunk33 ++ (AcirLean.Withdraw.chunk34 ++ (AcirLean.Withdraw.chunk35 ++ (AcirLean.Withdraw.chunk36 ++ (AcirLean.Withdraw.chunk37 ++ (AcirLean.Withdraw.chunk38 ++ (AcirLean.Withdraw.chunk39 ++ (AcirLean.Withdraw.chunk40 ++ (AcirLean.Withdraw.chunk41 ++ (AcirLean.Withdraw.chunk42 ++ (AcirLean.Withdraw.chunk43 ++ AcirLean.Withdraw.chunk44)))))))))))))))))))))))))))))))))))))))))))).all fun op => op.check AcirLean.Withdraw.solved) = true",
+   "type_sha256": "ce797a24b1108717ffe41d3a44111fe6a891d9c724ea15388b4039c84c3762e8"
+  },
+  "AcirLean.Withdraw.solved_satisfies": {
+   "axioms": [
+    "Quot.sound",
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "AcirLean.Withdraw.circuit.Satisfied AcirLean.Withdraw.solved",
+   "type_sha256": "c99af4753f3e3c8be9b040b37fd2ffd6a6b90bde6f42684bd53949a4f47020b7"
+  },
+  "AcirLean.Withdraw.solved_values": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "↑(AcirLean.Withdraw.solved 2) = 700",
+   "type_sha256": "bb6eead14fbc3c81cd0558a6d3658972dc34f31433616e51058e880f1d42da90"
+  },
+  "AcirLean.Withdraw.solved_values._proof_1_1": {
+   "axioms": [
+    "propext"
+   ],
+   "module": "AcirLean.Withdraw.NonVacuity",
+   "type": "↑(AcirLean.Withdraw.solved 2) = 700",
+   "type_sha256": "bb6eead14fbc3c81cd0558a6d3658972dc34f31433616e51058e880f1d42da90"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int), { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := a_1, const := a_2 }",
+   "type_sha256": "d2e6c35a2901469db907eb02093b2d0bfac812c182b1a36f5b02183dbc7a81a4"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 b : Int), ¬a_2 = b → { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := a_1, const := b } → False",
+   "type_sha256": "dc9204cc7655e857d789f236e96665ea6082b79615a4a5e2ba97cebea2df79f7"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int) (b : List (Int × Nat)) (b_1 : Int), ¬a_1 = b → { mul := a, lin := a_1, const := a_2 } = { mul := a, lin := b, const := b_1 } → False",
+   "type_sha256": "21675906a0ba2f3c80a8affcf8fb771a3d8f40d522b7ba18339d69b3550b452b"
+  },
+  "AcirLean.instDecidableEqExpr.decEq._proof_4": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : List (Int × Nat × Nat)) (a_1 : List (Int × Nat)) (a_2 : Int) (b : List (Int × Nat × Nat)) (b_1 : List (Int × Nat)) (b_2 : Int), ¬a = b → { mul := a, lin := a_1, const := a_2 } = { mul := b, lin := b_1, const := b_2 } → False",
+   "type_sha256": "e4529f0f0803dbcdb420bf1f0cbcde39ff70a3e926cc594ac72a68afae5f1119"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 : AcirLean.Expr), AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero a a_1",
+   "type_sha256": "9cbc37c09021b5b7f5ca556c3ae527d4899741edf8da99963e8801939717df48"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_10": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits func : Nat) (outputs : List Nat), AcirLean.Opcode.range input bits = AcirLean.Opcode.brilligCall func outputs → False",
+   "type_sha256": "ef47e31e25d62a9ad43f17925d0c4ff3a98052d57c75e7fab1a07b6125971921"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_11": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (lhs : Option Nat) (rhs : AcirLean.Expr), AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.assertZero lhs rhs → False",
+   "type_sha256": "432810e8f68c778c09ce0dfea73783b2895c450dfba2bef629ca5f519c272901"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_12": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (func : Nat) (outputs : List Nat) (input bits : Nat), AcirLean.Opcode.brilligCall func outputs = AcirLean.Opcode.range input bits → False",
+   "type_sha256": "e66ebddb3c19627047c4e317bc53e4274f3d4fc15595e59fa49dd57d30718080"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_13": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 : List Nat), AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall a a_1",
+   "type_sha256": "fb47148d642a1b75a5cd7e23f157a9ec33885f98ab0712cecb5813ff8bed74f5"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_14": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 b : List Nat), ¬a_1 = b → AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall a b → False",
+   "type_sha256": "80c2eaf6c0139634d8e8573dd64c7319b85a0011ff74457d38ff887d56884026"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_15": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Nat) (a_1 : List Nat) (b : Nat) (b_1 : List Nat), ¬a = b → AcirLean.Opcode.brilligCall a a_1 = AcirLean.Opcode.brilligCall b b_1 → False",
+   "type_sha256": "104946bc2a923ff5c9d121a1fc03836ede2e06fb1e94c7917db6ff5fc462e223"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 b : AcirLean.Expr), ¬a_1 = b → AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero a b → False",
+   "type_sha256": "a38f116110546436e2e0da31e32b65892ac4fc610d34e6bc178903ab372d5b41"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a : Option Nat) (a_1 : AcirLean.Expr) (b : Option Nat) (b_1 : AcirLean.Expr), ¬a = b → AcirLean.Opcode.assertZero a a_1 = AcirLean.Opcode.assertZero b b_1 → False",
+   "type_sha256": "a6999aa6eb8aa82ea951af51df395a62fef938bf75cd5c7b84ed618d4987584c"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_4": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (input bits : Nat), AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.range input bits → False",
+   "type_sha256": "2ba5e5c910a935a1050c8e5a4adfdc18eb5b1f9176380ba67f5f6437ec0cf5e6"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_5": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (lhs : Option Nat) (rhs : AcirLean.Expr) (func : Nat) (outputs : List Nat), AcirLean.Opcode.assertZero lhs rhs = AcirLean.Opcode.brilligCall func outputs → False",
+   "type_sha256": "b16d6e95959083c82f68f47dc721468288182a04f7f73bf1e7bc92673e7c7c77"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_6": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (input bits : Nat) (lhs : Option Nat) (rhs : AcirLean.Expr), AcirLean.Opcode.range input bits = AcirLean.Opcode.assertZero lhs rhs → False",
+   "type_sha256": "6cc9b043dc7fd57ade0d97106ed0422db220f9f003477ed949e5db4d18734313"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_7": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 : Nat), AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range a a_1",
+   "type_sha256": "9934f422efb6e3b5862709e43692b482567f6934d3911c7de689d47314942d7f"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_8": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 b : Nat), ¬a_1 = b → AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range a b → False",
+   "type_sha256": "5702af850ed7a8346faced99ef83e55168d646017e36aed9761412dd5ac33d0a"
+  },
+  "AcirLean.instDecidableEqOpcode.decEq._proof_9": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (a a_1 b b_1 : Nat), ¬a = b → AcirLean.Opcode.range a a_1 = AcirLean.Opcode.range b b_1 → False",
+   "type_sha256": "43a61048c690e46ff47799a6956dd5400635f46e60c2caf85d8306a675196a4e"
+  },
+  "AcirLean.lhsVal.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : AcirLean.Assignment) (k : Nat), AcirLean.lhsVal (some k) x = ↑↑(x k)",
+   "type_sha256": "4514e5066f4b686b33f5431e243d987b17e12367732155fcad77430c2d9bfa6a"
+  },
+  "AcirLean.lhsVal.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : AcirLean.Assignment), AcirLean.lhsVal none x = 0",
+   "type_sha256": "9f7226511c6a24cf01c446a56f94c31163507c6cad9b1de54dac1730ed1cc305"
+  },
+  "AcirLean.two_pow_128_add_lt_P": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "2 ^ 128 + 2 ^ 128 < AcirLean.P",
+   "type_sha256": "98e4e3f7053e21df15fd3771c066ca53e45496cec472fa8998871e8081d0910f"
+  },
+  "AcirLean.val_lt_P_lit": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (x : Fin AcirLean.P), ↑x < 21888242871839275222246405745257275088548364400416034343698204186575808495617",
+   "type_sha256": "183b2c90c23fd539f10863eb1872c6d4bcdeffc80427f063f8a342346944f6cc"
+  },
+  "_private.AcirLean.Linear.0.AcirLean.lhsVal.match_1.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (motive : Option Nat → AcirLean.Assignment → Sort u_1) (k : Nat) (w : AcirLean.Assignment) (h_1 : (k : Nat) → (w : AcirLean.Assignment) → motive (some k) w) (h_2 : (x : AcirLean.Assignment) → motive none x),\n  (match some k, w with\n    | some k, w => h_1 k w\n    | none, x => h_2 x) =\n    h_1 k w",
+   "type_sha256": "a73bb11b87aea1569529efb730032310cd76ed41db2d1b94b75e2db43cb8ba92"
+  },
+  "_private.AcirLean.Linear.0.AcirLean.lhsVal.match_1.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Linear",
+   "type": "∀ (motive : Option Nat → AcirLean.Assignment → Sort u_1) (x : AcirLean.Assignment) (h_1 : (k : Nat) → (w : AcirLean.Assignment) → motive (some k) w) (h_2 : (x : AcirLean.Assignment) → motive none x),\n  (match none, x with\n    | some k, w => h_1 k w\n    | none, x => h_2 x) =\n    h_2 x",
+   "type_sha256": "ac9218a74b2ba2a3dfb9414a9f3320244692d334d010c5b1fc61c731ea439c44"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_1": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (lhs : Option Nat) (rhs : AcirLean.Expr) (w : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.assertZero lhs rhs, w with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_1 lhs rhs w",
+   "type_sha256": "67df36f0183f045262fac64e55385800a5db88fa45f4fa5a8795db79ef4d5ba0"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_2": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (i bits : Nat) (w : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.range i bits, w with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_2 i bits w",
+   "type_sha256": "d2ae1da39325cd2dd1f58cb6058bd42a79a9ed1f6e83882f3c9af1f18dc3a465"
+  },
+  "_private.AcirLean.Semantics.0.AcirLean.Opcode.Holds.match_1.eq_3": {
+   "axioms": [],
+   "module": "AcirLean.Semantics",
+   "type": "∀ (motive : AcirLean.Opcode → AcirLean.Assignment → Sort u_1) (func : Nat) (outputs : List Nat) (x : AcirLean.Assignment) (h_1 : (lhs : Option Nat) → (rhs : AcirLean.Expr) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.assertZero lhs rhs) w) (h_2 : (i bits : Nat) → (w : AcirLean.Assignment) → motive (AcirLean.Opcode.range i bits) w) (h_3 : (func : Nat) → (outputs : List Nat) → (x : AcirLean.Assignment) → motive (AcirLean.Opcode.brilligCall func outputs) x),\n  (match AcirLean.Opcode.brilligCall func outputs, x with\n    | AcirLean.Opcode.assertZero lhs rhs, w => h_1 lhs rhs w\n    | AcirLean.Opcode.range i bits, w => h_2 i bits w\n    | AcirLean.Opcode.brilligCall func outputs, x => h_3 func outputs x) =\n    h_3 func outputs x",
+   "type_sha256": "a2606fa128e830ed8ec82ce1ab12ad18572aae57285e9c695916cc6439c93088"
+  }
+ },
+ "toolchain": {
+  "lake_reports_lean_4_33_1": true,
+  "lean-toolchain": "leanprover/lean4:v4.33.1",
+  "python_ge_3_10": true
+ },
+ "witness_check": {
+  "deposit": {
+   "checked": {
+    "assert": 7578,
+    "brillig": 21,
+    "range": 63
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 32768,
+   "missing_witness_refs": 0,
+   "trie_depth": 15,
+   "trie_nodes": 24913,
+   "values": {
+    "2": 500
+   },
+   "witness_sha256": "78c512b9d207404cb8dfcfc5a90dba56994017a0414a0e12aeffb8e6cc62c55b"
+  },
+  "transfer": {
+   "checked": {
+    "assert": 23277,
+    "brillig": 67,
+    "range": 199
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 131072,
+   "missing_witness_refs": 0,
+   "trie_depth": 17,
+   "trie_nodes": 76861,
+   "values": {
+    "10": 435537695816263162368054109405345813312609277316,
+    "11": 0,
+    "13": 435537695816263162368054109405345813312609277316,
+    "14": 700,
+    "17": 435537695816263162368054109405345813312609277316,
+    "17906": 1000,
+    "17907": 1000,
+    "18": 300,
+    "7": 435537695816263162368054109405345813312609277316,
+    "8": 1000
+   },
+   "witness_sha256": "2a877ff8f24250910272e8e66da6116e987db01d7919429f5e2498cb9485bf5b"
+  },
+  "withdraw": {
+   "checked": {
+    "assert": 11378,
+    "brillig": 33,
+    "range": 97
+   },
+   "failures": {
+    "assert": 0,
+    "range": 0
+   },
+   "lookups_checked": 65536,
+   "missing_witness_refs": 0,
+   "trie_depth": 16,
+   "trie_nodes": 37557,
+   "values": {
+    "2": 700
+   },
+   "witness_sha256": "5167715eec99bee7249236687c6842de95bdc633488a08dbfa808aa67cbf192c"
+  }
+ }
+}

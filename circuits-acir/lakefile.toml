@@ -1,0 +1,7 @@
+name = "circuits-acir"
+defaultTargets = ["AcirLean"]
+
+[[lean_lib]]
+name = "AcirLean"
+globs = ["AcirLean.+"]
+moreLeanArgs = ["-M3600"]
