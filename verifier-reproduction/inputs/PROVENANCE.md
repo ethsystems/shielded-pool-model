@@ -79,8 +79,8 @@ above. In particular it does not read:
   needed for a key.
 - `contracts/src/ShieldedPool.sol` and the rest of the Foundry project
   (`contracts/script/`, `interfaces/`, `mocks/`, `CompositeVerifier.sol`,
-  `deployments.toml`, `foundry.toml`): they belong to the deploy check, not to the
-  build reproduction.
+  `deployments.toml`, `foundry.toml`): they matter for a check of the deployed
+  contracts, not for the build reproduction.
 
 ## Earlier runs (research repo, cited)
 
