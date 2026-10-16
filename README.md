@@ -125,8 +125,8 @@ license yet.
 
 Packages outside the gate, each with its own check and a row in CLAIMS.md
 under "Separate packages". This repo is not a copy of the implementation: a
-package reads the code it checks from that code's own repository at a
-pinned commit.
+package fetches the code it checks from upstream, pinned by commit or by
+checksum.
 
 - [hash-agreement/](hash-agreement/README.md): the Noir, plain and
   segmented Solidity transcriptions of Poseidon2 (the two-input
