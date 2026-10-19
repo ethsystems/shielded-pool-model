@@ -11,8 +11,7 @@ Source: ethsystems/pocs (public, https://github.com/ethsystems/pocs), commit
 `pocs/private-payment/shielded-pool/`, as the git submodule `../pocs`. The commit
 is pinned twice: by the superproject's submodule entry, which `git submodule
 update` checks out, and by `pocs_commit` in `TOOLS.txt`, which `check.sh`
-requires. The private repo ethsystems/pocs-private has the same commit; the public
-master pointed at it on 2026-10-14.
+requires. The public master pointed at it on 2026-10-14.
 
 `check.sh` reads 13 files of that directory as git blobs of the pinned commit
 (`git cat-file blob <commit>:<path>`) and checks their sha256 against
@@ -23,11 +22,11 @@ committed verifiers, and `scripts/generate-verifiers.sh`. `git -C pocs ls-tree
 a04b8b3 <path>` gives each file's blob id.
 
 The three verifier files are identical at `edf1b60` (the commit that regenerated
-them) and at `a04b8b3`. After the pin, ethsystems/pocs-private pull request 16
-(`748884e`, merged 2026-10-08) changed `circuits/transfer/src/main.nr` and
+them) and at `a04b8b3`. After the pin, commit
+`748884e` (merged 2026-10-08) changed `circuits/transfer/src/main.nr` and
 `contracts/src/verifiers/TransferVerifier.sol` (the verifier's blob there is
-`2255c5084ffb0ad5a06f552d1d6f26a243a4b93b`). That commit is not in the public repo
-yet. The package stays at `a04b8b3`; the newer commit is not reproduced here.
+`2255c5084ffb0ad5a06f552d1d6f26a243a4b93b`). That commit is public (checked
+2026-10-19). The package stays at `a04b8b3`; the newer commit is not reproduced here.
 
 `generate-verifiers.sh` is the committed recipe. The check runs the same two bb
 commands (`write_vk -t evm`, `write_solidity_verifier -k`) into its own directory,
@@ -82,9 +81,9 @@ above. In particular it does not read:
   `deployments.toml`, `foundry.toml`): they matter for a check of the deployed
   contracts, not for the build reproduction.
 
-## Earlier runs (research repo, cited)
+## Earlier runs (private research repository, cited)
 
-oskarth/lean-shielded-pool, branch `dispatch/xo-fv-lean` at `1262a16`,
+Commit `1262a16`,
 `evidence/2026-09-30-followup/vk-reproduction/`: `LOG.md` (the worker log),
 `deliverable/scripts/` (the original `reproduce.sh` and `compare.py`),
 `run-evidence/first/` and `run-evidence/fresh/` (two passing runs, 78 and 75 checks),

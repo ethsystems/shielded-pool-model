@@ -243,7 +243,7 @@ timing section). `build/` holds the logs of the last run.
 
 ## Measured cost
 
-One Linux laptop (xps26, btrfs), `LEAN_NUM_THREADS=2`, Mathlib oleans already present,
+One Linux laptop (btrfs), `LEAN_NUM_THREADS=2`, Mathlib oleans already present,
 modules built one at a time:
 
 | Step | Wall | Peak RSS |
@@ -284,9 +284,8 @@ The generated files are committed so that the proof can be read without running 
 
 ## Where it comes from
 
-The proof is the night prototype `experiments/a9proto/` of the research repo
-(oskarth/lean-shielded-pool, branch `dispatch/xo-fv-lean`, last change to the directory at
-commit `487569f`), reported in `evidence/2026-10-07/a9proto/REPORT.md` and reviewed there
+The proof is the night prototype `experiments/a9proto/` of a private research repository
+(last change to the directory at commit `487569f`), reported in `evidence/2026-10-07/a9proto/REPORT.md` and reviewed there
 in four rounds. Research `Full.lean` has sha256
 `30350003ea44c7eaf34cee647c841a3277b264ceee602d1ef1b7d7124bd47172`. The proof text here is
 the same, with these changes: the namespace is `HashAgreement`, the one self-contained file

@@ -3,7 +3,7 @@
 This package proves range and linear rules over the compiled constraints of the three
 shielded-pool Noir circuits. Its input is what the compiler emitted, not the Noir source:
 the ACIR printed by `noir-inspector` for the beta.21 artifacts of the circuits committed
-at `a04b8b3` of ethsystems/pocs (public; ethsystems/pocs-private has the same commit). A
+at `a04b8b3` of ethsystems/pocs (public). A
 `check.sh` rebuilds the artifacts, prints and witnesses from a pocs submodule with pinned
 tools and checks them against pinned hashes; the package commits the pins, not the
 outputs. A Python extractor turns each print into Lean data, a small semantics gives it meaning, and
@@ -12,8 +12,8 @@ directory: it has its own lakefile, uses the same toolchain (Lean 4.33.1, core o
 Mathlib), and imports no model module. Nothing here changes the claim in the parent
 README.
 
-The pin is not the latest circuit. ethsystems/pocs-private pull request 16 (`748884e`,
-merged 2026-10-08) changed `circuits/transfer/src/main.nr` and `TransferVerifier.sol`
+The pin is not the latest circuit. Commit `748884e` of ethsystems/pocs (merged
+2026-10-08) changed `circuits/transfer/src/main.nr` and `TransferVerifier.sol`
 after `a04b8b3`. The package stays at the pin; the newer transfer circuit is not covered
 here.
 
@@ -184,7 +184,7 @@ must then come from the scan. A duplicated census entry is tested on the compara
 The unchanged copy must pass. To show that the deeper check catches each change, the
 fixtures that edit a pinned file also update its hash in their copy of `expected.json`.
 
-Cost on a Linux laptop (xps26, btrfs), one build at a time, `LEAN_NUM_THREADS=2`:
+Cost on a Linux laptop (btrfs), one build at a time, `LEAN_NUM_THREADS=2`:
 the first full run built 75 modules in 1,101 s of wall time (the slowest module took 67 s),
 with a cgroup memory peak of 1.47 GB under a 6 GiB cap. `.lake` takes 79 MB and `build/`
 28 MB. A re-run on a built tree takes seconds. The rebuild of the three circuits takes
@@ -212,7 +212,7 @@ self-test took about 4 minutes, while another Lean job ran on the same machine.
 ## Where it comes from
 
 The Lean files, the scripts and the data come from two reviewed archives
-in the research repo (oskarth/lean-shielded-pool at commit `fa5526e`), one
+in a private research repository (commit `fa5526e`), one
 for deposit and one for withdraw and transfer, each judged there by a
 cross-family reviewer. The withdraw and transfer proof logic is unchanged
 from the archived sources. Comment and documentation edits remove research

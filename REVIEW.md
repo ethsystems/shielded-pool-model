@@ -62,7 +62,7 @@ gate test.
   (simplification 10), and the contract blocks withdrawals of a removed
   token, against spec 4.4 (266). They do not prove exact retention of
   100 roots or anything about the contract (zero and repeated roots are
-  pocs-private#15).
+  an open issue in the private implementation repository).
 - The spec reading is human, not machine-checked (part 5).
 
 ## 3. How to check
@@ -129,7 +129,7 @@ and Merkle binding (simplifications 3, 6, 1 and 2; PR #1 review). The
 open for new readers; report as in part 8.
 
 1. Read spec 2 sections 4-6 at the model's revision:
-   `git -C <specs-private> show 4d4dce1:specs/2/README.md`. SPEC-MAP line
+   `git -C <specs> show 4d4dce1:specs/2/README.md` (ethsystems/specs). SPEC-MAP line
    numbers refer to it.
 2. Read SPEC-MAP.md. The 16 simplifications are modelling choices, not
    hypotheses.
@@ -147,7 +147,7 @@ Questions:
 - Two spec clauses disagree. 4.2 pads the second input. 5.3 lets any
   zero-amount input skip membership. The model now follows 4.2 and the
   reference circuit (simplification 11), and spec main says the same
-  since specs-private#40 merged on 2026-10-06; this repo still cites
+  since spec commit 6bd4ba1 (2026-10-06); this repo still cites
   4d4dce1. Is 4.2 the rule you intend?
 
 For L5, read the extension clauses in SPEC-MAP.md, then `Pool/Epoch.lean`
@@ -179,20 +179,17 @@ secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
-A private exploratory repo (lean-shielded-pool) uses the same model.
-It links the model to the Rust client
+A private research repository uses the same model. It links the model to the Rust client
 (Aeneas, Verus), the Noir circuits (Lampe, ACIR) and the Solidity
 contract (Halmos, Lean over Yul), and it has privacy games. Each link is
 partial, bounded or conditional, and this repo claims none of them.
 Separately from those links, Verus proofs of the client's prover input
-encoders and public-input array builders live on branch `verus/base` of
-ethsystems/pocs-private
-([crate README](https://github.com/ethsystems/pocs-private/blob/verus/base/pocs/private-payment/shielded-pool/crates/public-inputs/README.md));
-they prove the byte encoding of the `Prover.toml` inputs and the
+encoders and public-input array builders live on a separate branch of
+the private implementation repository; they prove the byte encoding of the `Prover.toml` inputs and the
 public-input array layout only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
-share found one conformance bug in the contract, fixed in
-https://github.com/ethsystems/pocs-private/pull/12. This gate does not
+share found one conformance bug in the contract, fixed in ethsystems/pocs
+commit a04b8b3. This gate does not
 reproduce that check.
 
 ## 8. How to report

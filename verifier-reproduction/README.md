@@ -1,7 +1,7 @@
 # verifier-reproduction: the committed Solidity verifiers rebuilt from the circuits
 
 The three Solidity verifier contracts committed at `a04b8b3` of ethsystems/pocs
-(public; ethsystems/pocs-private has the same commit) under
+(public) under
 `pocs/private-payment/shielded-pool/contracts/src/verifiers/` are
 the files that Barretenberg generates from the three Noir circuits committed at the
 same revision, byte for byte, and the verification-key hash that bb computes for
@@ -21,11 +21,11 @@ bb's output for exactly these circuits, so a change to a circuit, to a key, or t
 verifier file would show up as a byte difference (the self-test plants such
 changes). Everything below is open, and the package claims none of it.
 
-- The pin is not the latest circuit. ethsystems/pocs-private pull request 16
-  (`748884e`, merged 2026-10-08) changed `circuits/transfer/src/main.nr` and
+- The pin is not the latest circuit. Commit `748884e` of ethsystems/pocs
+  (merged 2026-10-08) changed `circuits/transfer/src/main.nr` and
   `TransferVerifier.sol` after `a04b8b3`. The package stays at the pin. Moving it
   is a submodule bump plus new pins (`inputs/TOOLS.txt`, `inputs/SHA256SUMS`,
-  `expected.json`) once that commit is public; it is not covered here.
+  `expected.json`); it is not covered here.
 - Proof-system soundness. Whether a proof the verifier accepts implies a satisfying
   witness is the cryptographic floor. The check says nothing about it.
 - Deployed bytecode identity. Whether any deployed contract is compiled from these
@@ -183,7 +183,7 @@ dependency gate; a bb that reports version 5.0.0 must fail at the version check
 before any build (run with `TOOLS_UNPINNED=1`, so the checksum check cannot be the
 reason). The unchanged copy must pass.
 
-Cost on a Linux laptop (xps26, 16 threads, btrfs), measured 2026-10-14:
+Cost on a Linux laptop (16 threads, btrfs), measured 2026-10-14:
 `git submodule update --init verifier-reproduction/pocs` 1.7 s and 3.7 MB;
 `check.sh` 9 s with the CRS from `~/.bb-crs` and the dependencies in `.deps/`,
 10 to 11 s when it clones the dependencies; `--self-test` 31 s. bb reports a peak
@@ -205,8 +205,7 @@ is tracked.
 
 ## Where it comes from
 
-The reproduction was first run in the research repo (oskarth/lean-shielded-pool,
-branch `dispatch/xo-fv-lean` at `1262a16`,
+The reproduction was first run in a private research repository (commit `1262a16`,
 `evidence/2026-09-30-followup/vk-reproduction/`) on 2026-09-30, twice: once with the
 committed `generate-verifiers.sh` unmodified and once step by step, with the same
 result, plus a fresh-copy rerun; an earlier run by another worker had been judged by

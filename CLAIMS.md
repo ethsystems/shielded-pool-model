@@ -15,7 +15,7 @@ it for every `P : PrimSpec` (the opaque hashes and field types), such as
 `noDoubleSpend_proof`. Each base Prop covers every accepted history:
 `Run sup txs st` says that the operations `txs` run from the empty pool
 and reach the state `st`. Spec clauses refer to spec 2 at 4d4dce1
-(`specs/2/README.md` in ethsystems/specs-private); numbers in brackets
+(`specs/2/README.md` in ethsystems/specs); numbers in brackets
 are its line numbers.
 
 ## The hypothesis
@@ -112,8 +112,8 @@ check for a ballast (`ShieldedPoolExt.sol:268-270`;
 the circuit: `TransferData.guard` requires `isBallast ∨ ChainFacts` for
 the second input (simplification 7), and row 10 counts value-bearing
 consumption only (`Tx.valueConsumes`). The deviation between the
-extension spec and the circuit is proposed as a one-paragraph spec exception in
-pocs-private PR #18; if the
+extension spec and the circuit became a one-paragraph spec exception on
+2026-10-13, after the extension spec file this repo pins; if the
 circuit changes to check ballast too, the guard can take the stronger
 form and row 10 can count ballast again.
 
@@ -155,8 +155,8 @@ nine-theorem claim. Spec clauses refer to spec 2 at 4d4dce1.
 | 19 | `honestWithdrawWindow_proof` | For any root in the window, the owner of a note that the pool minted before that root (the ghost `minted` list behind the tree), with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against that root, and the pool balance drops by exactly the amount. The commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none; token set frozen (simplification 10) |
 | 20 | `honestWithdraw_proof` | Row 19 at the current root: the owner of a note that the pool minted, with a fresh nullifier, a nonzero amount and enough pool balance, has an accepted withdrawal against the current root, and the pool balance drops by exactly the amount. Window membership of the current root (row 17), the commitment's membership at that root and the `u128` range are derived, not assumed. | 4.3 step 4 (255), 4.4 (260-261), 5.3 (365-369) | none; token set frozen (simplification 10) |
 
-Rows 16 and 18 are model evidence for the bug class of
-pocs-private#12: the control `controls/refute_window_intermediate.lean`
+Rows 16 and 18 are model evidence for the bug class that
+ethsystems/pocs commit a04b8b3 fixed: the control `controls/refute_window_intermediate.lean`
 makes the transfer also record its between-insert root and proves the
 negations of both; the weak bound "every entry is at most the leaf
 count" still holds on the same counterexample history, so the boundary
@@ -165,13 +165,13 @@ form is the one with content. The control
 push its root) proves the negations of rows 17 and 20. In the model the
 current root is accepted only through the window. The contract also
 accepts it directly (`isKnownRoot`, `ShieldedPool.sol:314` at
-pocs-private a04b8b3), so that control checks the model's push, not the
+ethsystems/pocs a04b8b3), so that control checks the model's push, not the
 contract. The control `controls/refute_honestwithdraw_currentroot.lean`
 (a withdraw guard that accepts only the current root, as a contract
 without the window lookup at `ShieldedPool.sol:315` would) proves the
 negation of row 19: it rejects a withdrawal against an older root that
 is still in the window. Rows 16 to 18 say nothing about zero or repeated
-hash roots (pocs-private#15), exact eviction, or the contract. Rows 19
+hash roots (an open issue in the private implementation repository), exact eviction, or the contract. Rows 19
 and 20 are model liveness: the model accepts the step and debits the
 pool's per-token field; there is no recipient balance and no ERC-20 in
 the model. The balance premise stays a premise. None of the five has a
@@ -180,7 +180,7 @@ positive control; the three refutation controls are their content check.
 **Token removal.** Rows 19 and 20 hold in a model whose supported-token
 set never changes and whose withdraw guard does not read it
 (simplification 10). Spec 2 says that removing a token must not block
-withdrawals of existing notes (4.4, 266). The contract at pocs-private
+withdrawals of existing notes (4.4, 266). The contract at ethsystems/pocs
 a04b8b3 does not meet this: `withdraw` reverts with `UnsupportedToken`
 when the token is no longer supported (`ShieldedPool.sol:254`). So the
 liveness of rows 19 and 20 does not carry over to the contract after the
@@ -242,7 +242,7 @@ and takes the window root as a premise, and row 20 discharges the
 window conjunct at the current root from row 17. None of this verifies
 concrete root-window code or machine arithmetic; root-window correctness
 of the contract and range enforcement are not among the claims. The
-root-window conformance bug fixed in pocs-private#12 is the bug class
+root-window conformance bug fixed in ethsystems/pocs a04b8b3 is the bug class
 that the control of rows 16 and 18 reproduces in the model; the
 theorems still cannot see the contract's code.
 
@@ -414,10 +414,10 @@ README states its claim, its trust base and what stays open.
 | Package | Lean names | English | What it narrows | Hypothesis |
 |---|---|---|---|---|
 | `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
-| `circuits-acir/` | `AcirLean.Deposit.amount_lt_two_pow_128`, `AcirLean.Withdraw.amount_lt_two_pow_128`, `AcirLean.Transfer.amount_ranges`, `AcirLean.Transfer.conservation`, `AcirLean.Transfer.token_consistency`, and `satisfiable` for each circuit | Every assignment that satisfies the compiled ACIR constraints (AssertZero and RANGE) of the deposit, withdraw and transfer circuits at ethsystems/pocs `a04b8b3` keeps each amount below 2^128; in transfer, the two input amounts sum to the two output amounts over the naturals, with no u128 wrap, and the four token fields are equal. Each circuit has a kernel-checked satisfying witness. Standard axioms only. | No simplification of the model. Evidence for the circuit side of three guard conjuncts that the proofs consume: the `U128` range, the transfer sum equation and token consistency. Not the contract's checks, Brillig execution, the extractor or the ABI allocation, compiler or prover soundness, or the deployed verifier (its README). The pin predates pocs-private #16, which changed the transfer circuit. | none |
+| `circuits-acir/` | `AcirLean.Deposit.amount_lt_two_pow_128`, `AcirLean.Withdraw.amount_lt_two_pow_128`, `AcirLean.Transfer.amount_ranges`, `AcirLean.Transfer.conservation`, `AcirLean.Transfer.token_consistency`, and `satisfiable` for each circuit | Every assignment that satisfies the compiled ACIR constraints (AssertZero and RANGE) of the deposit, withdraw and transfer circuits at ethsystems/pocs `a04b8b3` keeps each amount below 2^128; in transfer, the two input amounts sum to the two output amounts over the naturals, with no u128 wrap, and the four token fields are equal. Each circuit has a kernel-checked satisfying witness. Standard axioms only. | No simplification of the model. Evidence for the circuit side of three guard conjuncts that the proofs consume: the `U128` range, the transfer sum equation and token consistency. Not the contract's checks, Brillig execution, the extractor or the ABI allocation, compiler or prover soundness, or the deployed verifier (its README). The pin predates ethsystems/pocs `748884e`, which changed the transfer circuit. | none |
 
 `verifier-reproduction/` is a build reproduction, not a Lean theorem:
 
 | Package | Claim | Checked by | Not claimed |
 |---|---|---|---|
-| `verifier-reproduction/` | The three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (public; pocs-private has the same commit) are bb's output for the three committed circuits, byte for byte, and bb's key hash for each equals the committed `VK_HASH` (nargo 1.0.0-beta.21, bb 5.0.0-nightly.20260324). | `verifier-reproduction/check.sh`: a rebuild from the pocs submodule at `a04b8b3` and a byte comparison, 9 s | Proof-system soundness (that an accepted proof implies a satisfying witness), that a deployed contract is compiled from these sources, the pool contract, that nargo and bb translate the circuits faithfully, and the transfer circuit after pocs-private #16 (2026-10-08). It never says "the verifier is correct". |
+| `verifier-reproduction/` | The three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (public) are bb's output for the three committed circuits, byte for byte, and bb's key hash for each equals the committed `VK_HASH` (nargo 1.0.0-beta.21, bb 5.0.0-nightly.20260324). | `verifier-reproduction/check.sh`: a rebuild from the pocs submodule at `a04b8b3` and a byte comparison, 9 s | Proof-system soundness (that an accepted proof implies a satisfying witness), that a deployed contract is compiled from these sources, the pool contract, that nargo and bb translate the circuits faithfully, and the transfer circuit after ethsystems/pocs `748884e` (2026-10-08). It never says "the verifier is correct". |

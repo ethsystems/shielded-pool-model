@@ -3,7 +3,7 @@
 Stable, reviewable claim units about the shielded pool, one unit at a
 time. Each unit states a fixed claim or supporting result and
 re-checks it with one command. The core unit is a small Lean 4 model of spec
-2/SHIELDED-POOL (`specs/2/README.md` in ethsystems/specs-private, at
+2/SHIELDED-POOL (`specs/2/README.md` in ethsystems/specs, at
 revision 4d4dce1). At that revision, spec section 6.2 marks "no double
 spend" and "value conservation" as "tested". This repo holds the
 candidate for moving those two rows to "machine-checked (model)". The
@@ -52,19 +52,19 @@ claimed anywhere in this repo. A model theorem cannot see an
 implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what a deployment
 must satisfy for the model to describe it.
 
-Work in progress lives in a private research repo,
-oskarth/lean-shielded-pool. Implementation links whose inputs are public
-come here as separate packages (below); the others stay in the research
-repo as claim records with re-check commands. Verus proofs of the
-shielded-pool client's prover input encoders and public-input array
-builders live on branch [`verus/base`](https://github.com/ethsystems/pocs-private/tree/verus/base) of ethsystems/pocs-private,
-off master on purpose; they are not linked to this model. Nothing is
+Work in progress lives in a private research repository.
+Implementation links whose inputs are public come here as separate
+packages (below); the others stay in the research repository as claim
+records with re-check commands. Verus proofs of the shielded-pool
+client's prover input encoders and public-input array builders live on
+a separate branch of the private implementation repository, off master
+on purpose; they are not linked to this model. Nothing is
 claimed here beyond what the units below state.
 
 ## Where it comes from
 
-The model was written and proved in a private research repo,
-oskarth/lean-shielded-pool, in September 2026, and imported here with
+The model was written and proved in a private research repository in
+September 2026, and imported here with
 its file names: L3 is the core claim (`Statements/L3.lean`), L4 the
 accounting results, L4B authorization and events, L5 the epoch
 results. `Draft/NonVacuity.lean` is not a draft; it shows that each
@@ -73,8 +73,8 @@ repo at a later pin. The root-window files and the liveness control
 were written here. Many files changed here during review; the commit
 history records each change.
 
-AI agents from two model families wrote the proofs; Oskar read the
-statements against the spec.
+AI agents from two model families wrote the proofs; Oskar and a second
+reader read the statements against the spec (REVIEW.md, part 5).
 The gate checks mechanical conditions on the result. It does not
 by itself establish independence from malicious build or elaboration
 code: the axiom census reads printed output, and code imported during
