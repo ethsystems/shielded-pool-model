@@ -1,7 +1,7 @@
 # Clause map: base pool and epoch extension
 
-Base model status: the author has read its model and statements against
-spec 2. Track A in REVIEW.md is the second reading.
+Base model status: two human readings against spec 2 are done, the
+author's and a second reader's (REVIEW.md, part 5, Track A).
 
 Base source of truth: spec 2 at ethsystems/specs-private 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is

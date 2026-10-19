@@ -19,7 +19,8 @@ core is made to be read whole in an afternoon.
 > two distinct notes with `u128` amounts share a commitment. No two
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
-> the model says what the spec says is a human reading, still open.
+> the model says what the spec says is a human reading, not a
+> machine check; two readings are done (REVIEW.md, part 5).
 
 Nine theorems: nullifier uniqueness, no double spend and value
 conservation, plus six supporting results about the same model
@@ -205,8 +206,7 @@ Each gate run copies `.lake`; without cheap file copies, set
 
 ## Status
 
-The core proofs and gate are complete. The open question is human:
-does the model say what the spec says? [REVIEW.md](REVIEW.md) is the
-reviewer guide; findings go in issues here, and each gets an answer.
-
-The repo is private; no license yet.
+The core proofs and gate are complete. Two human readings of the
+model against the spec are done (REVIEW.md, part 5).
+[REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
+here, and each gets an answer.

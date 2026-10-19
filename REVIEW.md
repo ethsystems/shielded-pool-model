@@ -1,8 +1,9 @@
 # Review guide
 
 Find where the claim is wrong, too strong or unclear. This is not an
-audit. Start with Track A (part 5): does the model say what the spec
-says?
+audit. Track A (part 5) asks whether the model says what the spec
+says. It closed on 2026-10-19 with two readings; new readers are
+welcome.
 
 ## 1. What is claimed
 
@@ -14,7 +15,8 @@ says?
 > two distinct notes with `u128` amounts share a commitment. No two
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
-> the model says what the spec says is a human reading, still open.
+> the model says what the spec says is a human reading, not a
+> machine check; two readings are done (REVIEW.md, part 5).
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -61,7 +63,7 @@ gate test.
   token, against spec 4.4 (266). They do not prove exact retention of
   100 roots or anything about the contract (zero and repeated roots are
   pocs-private#15).
-- The spec reading is human and still open (part 5).
+- The spec reading is human, not machine-checked (part 5).
 
 ## 3. How to check
 
@@ -100,9 +102,31 @@ cache) and `gate_test.sh` about 21 minutes for the 26 cheats.
 
 ## 5. The hypothesis and the 16 simplifications (Track A)
 
-Does the model say what the spec says? No machine can check this. Oskar
-has read the statements against the spec. Track A is the second pair of
-eyes.
+Does the model say what the spec says? No machine can check this.
+Track A closed on 2026-10-19 with two human readings:
+
+- Oskar, the author, read the L3 statements, the guards and the
+  simplifications against spec 2 on 2026-09-30, from a one-page
+  summary. He recorded it as a high-level reading, not a full check.
+- The second reader reviewed PR #1 in 32 threads on 2026-10-01 and
+  approved it on 2026-10-02. The threads covered the guards in
+  `Pool/Tx.lean` (zero-value inputs, `Nat` amounts against field
+  wrap-around, the payout check), the state in `Pool/State.lean` (the
+  initial root, live value), the L3, L4 and L4B statements and
+  `CryptoHyp`, non-vacuity, the controls, `scripts/gate.sh`, the spec
+  line citations in SPEC-MAP.md and the two 6.2 rows. The same reader
+  reviewed the extensions: PR #5 (epochs, 11 threads) and PR #7
+  (k-anonymity, 12 threads) on 2026-10-06, PR #8 (root window, 5
+  threads) on 2026-10-13, all approved by 2026-10-14. Each thread in
+  these four PRs has an answer from the author.
+
+Neither reading is a proof, and Oskar's was not a full check. Two
+questions below have answers. The 6.2 question: yes, the rows may say
+"machine-checked (model)" if the level names what the model cannot
+show: field overflow, two encodings of one nullifier, circuit wiring
+and Merkle binding (simplifications 3, 6, 1 and 2; PR #1 review). The
+4.2 versus 5.3 question: the spec now follows 4.2. The questions stay
+open for new readers; report as in part 8.
 
 1. Read spec 2 sections 4-6 at the model's revision:
    `git -C <specs-private> show 4d4dce1:specs/2/README.md`. SPEC-MAP line
