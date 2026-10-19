@@ -7,7 +7,7 @@
  "source_files": {
   "Census.lean": "5eb28685800a2aa29c9aa6df15e10437b4fd538be14dbd78eae7ca9f3b0f5dcd",
   "check.sh": "8f25fd5c49bdb6a8ad2321a1991fdb38b57e652ec3035a5cf898b945d9e0c0a8",
-  "inputs/PROVENANCE.md": "863300eeace723ea5585d10c3993082d5a21eee6bf26a116d365c36498333c32",
+  "inputs/PROVENANCE.md": "885f3fd18df96fba90f5c969cbbe9501c51f99ac4393ea890255839d563784a6",
   "lake-manifest.json": "84f48cfa5e9cfecaac04a65ff48f6c6ea86df9f4a3ec4ea1b877f99768c3380d",
   "lakefile.toml": "fd4318d1c911bb51c3460a25e4162ae9de498322a45f43bdf759b6e960fd8d5e",
   "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",

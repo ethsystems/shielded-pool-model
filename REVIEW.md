@@ -52,8 +52,7 @@ gate test.
   chain check, as in the circuit (CLAIMS.md, "Ballast and the chain
   check").
 - No conservation or event replay result for arbitrary epoch runs.
-- The research repo's toy and smoke theorems are not here, except the
-  toy instances inside the k-anonymity extension file.
+- Toy and smoke theorems are not here, except the toy instances inside the k-anonymity extension file.
 - The root-window bug in the contract is not a claim of this repo (part 7).
   The five root-window theorems (CLAIMS.md rows 16 to 20) state what
   the model's window contains and that an honest owner can withdraw
@@ -179,12 +178,7 @@ secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
-A private research repository uses the same model. It links the model to the Rust client
-(Aeneas, Verus), the Noir circuits (Lampe, ACIR) and the Solidity
-contract (Halmos, Lean over Yul), and it has privacy games. Each link is
-partial, bounded or conditional, and this repo claims none of them.
-Separately from those links, Verus proofs of the client's prover input
-encoders and public-input array builders live on a separate branch of
+Verus proofs of the client's prover input encoders and public-input array builders live on a separate branch of
 the private implementation repository; they prove the byte encoding of the `Prover.toml` inputs and the
 public-input array layout only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model

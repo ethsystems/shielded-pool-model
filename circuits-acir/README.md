@@ -212,11 +212,10 @@ self-test took about 4 minutes, while another Lean job ran on the same machine.
 ## Where it comes from
 
 The Lean files, the scripts and the data come from two reviewed archives
-in a private research repository (commit `fa5526e`), one
-for deposit and one for withdraw and transfer, each judged there by a
-cross-family reviewer. The withdraw and transfer proof logic is unchanged
-from the archived sources. Comment and documentation edits remove research
-labels and correct references. Their regenerated data retain the archived
+of an earlier build, one for deposit and one for withdraw and transfer, each
+judged by a cross-family reviewer. The withdraw and transfer proof logic is
+unchanged from the archived sources. Comment and documentation edits remove
+internal labels and correct references. Their regenerated data retain the archived
 hashes. Deposit now uses the
 same split, `noncomputable` data form as the other two; its 30 opcode chunks are the
 same text as the archived `Data.lean`. New here: `Deposit/Solved.lean` (now
@@ -228,5 +227,4 @@ describes a failed proof attempt, after that review.
 `check.sh` rebuilds the inputs from the circuit sources at `a04b8b3`, and the witnesses
 from the `Prover.toml` fixtures committed there; that commit is public in ethsystems/pocs.
 Until 2026-10-15 the package committed the nine outputs; the rebuild reproduces them
-(`inputs/PROVENANCE.md`). Keep
-this package private with the rest of the repo; review it again before any public release.
+(`inputs/PROVENANCE.md`).

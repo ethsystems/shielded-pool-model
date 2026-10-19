@@ -39,7 +39,8 @@ changes). Everything below is open, and the package claims none of it.
   source says, nor that bb's key and verifier are a correct UltraHonk verifier for
   that ACIR.
 - The pinned tools. Stable bb 5.0.0 cannot decode these beta.21 artifacts (it stops
-  with "error converting into field Circuit::opcodes", recorded in the research run),
+  with "error converting into field Circuit::opcodes", measured once on 2026-09-30, not
+  reproduced here),
   so only the nightly reproduces the files. That is a pin, not a statement about
   either build's correctness.
 
@@ -193,8 +194,8 @@ is tracked.
 ## Files
 
 - `check.sh`: the check and the self-test.
-- `expected.json`: the expected hashes. It is the reviewed output of the research run,
-  and every run here reproduced every value.
+- `expected.json`: the expected hashes. It is the reviewed output of a first run on
+  2026-09-30, and every run here reproduced every value.
 - `pocs/`: the git submodule, ethsystems/pocs at `a04b8b3`.
 - `inputs/TOOLS.txt`: the pocs commit, the tool, CRS and release pins that
   `check.sh` reads.
@@ -205,13 +206,7 @@ is tracked.
 
 ## Where it comes from
 
-The reproduction was first run in a private research repository (commit `1262a16`,
-`evidence/2026-09-30-followup/vk-reproduction/`) on 2026-09-30, twice: once with the
-committed `generate-verifiers.sh` unmodified and once step by step, with the same
-result, plus a fresh-copy rerun; an earlier run by another worker had been judged by
-a cross-family reviewer (PASS-WITH-CORRECTIONS). Its claim table (`CLAIM1.md`, row
-S3) records the result as "Proved (exact rebuild)" with the same limits as above.
-The research check also matched the 28 key points in each `.sol` to their slots in
-the binary key; the byte comparison here subsumes that. `expected.json` carries the
-research values, and `check.sh` is a rewrite of the research scripts, with the
-self-test in place of the research run's planted controls.
+The reproduction was first run on 2026-09-30, once with the committed
+`generate-verifiers.sh` unmodified and once step by step, with the same result. `expected.json` carries its
+values. `check.sh` replaces its scripts, with the self-test in place of its planted
+controls.

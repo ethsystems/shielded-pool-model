@@ -68,10 +68,10 @@ The package does not say "Noir equals Solidity". It is not a security claim. Ope
    `solHash = solHashSeg` is a trusted step: the generator asserts that no variable crosses a
    cut except the three state words, and the Python replay agrees on 300 vectors, but the
    Lean equality is not proved. A `rfl` attempt stopped at the 2,000,000 heartbeat limit
-   after 81 s; the unbounded retry did not finish in 2,700 s (research repo,
-   `evidence/2026-10-11/a9proto-solseg/run.log`). Every theorem here is about `solHashSeg`.
+   after 81 s; the unbounded retry did not finish in 2,700 s (measured once on 2026-10-11,
+   not reproduced here). Every theorem here is about `solHashSeg`.
 3. **The Lampe link.** `noirHash2` is a transcription of the library source, not the
-   extracted circuit code. In the research repo's reading, Lampe's extraction proves that
+   extracted circuit code. An earlier reading of Lampe, not reproduced here, found that its extraction proves that
    the extracted `permute` computes a pure function over Lampe's own field type; that this
    function equals `noirPermute`, with equal tables, is not proved, and Lampe is not part
    of this package.
@@ -259,8 +259,8 @@ modules built one at a time:
 The run of 2026-10-13 that produced `expected.json`; each run writes its own numbers to
 `build/observed.json` (`timing`). Peak RSS is `ru_maxrss` of the largest Lean process
 (`os.wait4`), not a cgroup peak. The three logged runs that day gave 12.2 to 14.3 s and
-3.15 to 3.20 GiB for `Full`. The research repo measured the same proof as one monolithic file at
-19.4 s and 3.18 GiB. The Lean processes run with `-M4096`.
+3.15 to 3.20 GiB for `Full`. The same proof as one monolithic file took 19.4 s and 3.18 GiB
+(measured once on 2026-10-07, not reproduced here). The Lean processes run with `-M4096`.
 
 ## Files
 
@@ -284,19 +284,12 @@ The generated files are committed so that the proof can be read without running 
 
 ## Where it comes from
 
-The proof is the night prototype `experiments/a9proto/` of a private research repository
-(last change to the directory at commit `487569f`), reported in `evidence/2026-10-07/a9proto/REPORT.md` and reviewed there
-in four rounds. Research `Full.lean` has sha256
-`30350003ea44c7eaf34cee647c841a3277b264ceee602d1ef1b7d7124bd47172`. The proof text here is
-the same, with these changes: the namespace is `HashAgreement`, the one self-contained file
-is split into the modules above, every block comment that cited a research document now
-cites this README or `inputs/PROVENANCE.md`, the per-theorem `set_option profiler true`,
-`#print axioms` and `#eval` lines are gone (the census and `test/Vectors.lean` replace
-them), and two linter options are added. The blocks `CORE` and `UNFOLD` are byte-identical
-to the research `blocks.sha256`; the other blocks differ by comment lines only. The
-generators are the research generators with the input paths changed: the package data
-under `inputs/`, the two libraries fetched at their pins into `build/sources/`. New
-here: `Census.lean`, `scripts/sources.py`, `scripts/replay.py`, `check.sh`, `expected.json`, the module split in
-`gen_lean.py`, and `test/Vectors.lean`, which replaces the research's five-vector `#eval`
-and its Python replay log with a 300-vector run of the Lean definitions. Nothing is
-written back to the research repo.
+The proof started as a one-file prototype of 2026-10-07, reviewed in four rounds. The
+proof text here is the same, with these changes: the namespace is `HashAgreement`, the
+file is split into the modules above, block comments cite this README or
+`inputs/PROVENANCE.md`, the per-theorem `set_option profiler true`, `#print axioms` and
+`#eval` lines are gone (the census and `test/Vectors.lean` replace them), and two linter
+options are added. The generators read the package data under `inputs/` and the two
+libraries fetched at their pins into `build/sources/`. New here: `Census.lean`,
+`scripts/sources.py`, `scripts/replay.py`, `check.sh`, `expected.json`, the module split in
+`gen_lean.py`, and `test/Vectors.lean`, a 300-vector run of the Lean definitions.

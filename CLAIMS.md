@@ -80,12 +80,12 @@ no collision hypothesis. None of these results uses `EpochDistinct`.
 
 The epoch model follows the repinned base: its transfer guard requires
 membership for the first input, as the base guard does. The L5
-statements of rows 10 to 14 come from the research-repo source at
-`fa5526e`. Review here changed four of them: the consumption statement
+statements of rows 10 to 14 come from an earlier version of the
+model. Review changed four of them: the consumption statement
 of row 10, the immutability premise of row 11, the binding clause of
 row 13 and the refinement statement of row 14. Row 12 keeps its source
 text. Row 15 was added here. The model admits fewer histories than the
-pre-repin export did, and row 14 targets the revised base `CryptoHyp`.
+pre-repin version did, and row 14 targets the revised base `CryptoHyp`.
 
 Row 14 also states the implication from the base `noDoubleSpend`
 proposition to the epoch consumption claim (over `Tx.valueConsumes`, a

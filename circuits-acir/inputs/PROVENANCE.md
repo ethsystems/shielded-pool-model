@@ -68,16 +68,16 @@ rebuilt artifacts.
 ## History
 
 Earlier drafts of this package (pull request 6, until 2026-10-15) committed these nine
-outputs, compressed (4.2 MB), and replayed them without a rebuild. They came from a build in the research repo
-(oskarth/lean-shielded-pool at commit `fa5526e`), in two reviewed archives, one for
-deposit and one for withdraw and transfer. A rebuild from the pocs submodule with the
+outputs, compressed (4.2 MB), and replayed them without a rebuild. They came from an
+earlier build, in two reviewed archives, one for deposit and one for withdraw and
+transfer. A rebuild from the pocs submodule with the
 pinned tools reproduced all nine: the print, `func 0`, bytecode, ABI, `noir_version` and
 witness of each circuit are byte-identical to the archived ones; only the `file_map`
 paths differ. Every generated Lean module kept its hash.
 
-In the research repo, bb 5.0.0-nightly.20260324 (sha256
-d7621dfb151f55c23fb04bf274f366a6a1e0516b85a3cf0ae9165a9952509793) regenerated
+Measured once on the earlier build, not reproduced here: bb 5.0.0-nightly.20260324
+(sha256 d7621dfb151f55c23fb04bf274f366a6a1e0516b85a3cf0ae9165a9952509793) regenerated
 `DepositVerifier.sol`, `WithdrawVerifier.sol` and `TransferVerifier.sol` from these
 artifacts, byte for byte equal to the committed files at a04b8b3. That ties the artifacts
-to the committed verifier sources, not to deployed bytecode. This package does not re-run
-that step.
+to the committed verifier sources, not to deployed bytecode. The sibling package
+`verifier-reproduction` rebuilds the verifiers from the sources at a04b8b3.

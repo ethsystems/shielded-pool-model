@@ -52,10 +52,8 @@ claimed anywhere in this repo. A model theorem cannot see an
 implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what a deployment
 must satisfy for the model to describe it.
 
-Work in progress lives in a private research repository.
-Implementation links whose inputs are public come here as separate
-packages (below); the others stay in the research repository as claim
-records with re-check commands. Verus proofs of the shielded-pool
+Implementation checks whose inputs are public live here as separate
+packages (below). Verus proofs of the shielded-pool
 client's prover input encoders and public-input array builders live on
 a separate branch of the private implementation repository, off master
 on purpose; they are not linked to this model. Nothing is
@@ -63,15 +61,13 @@ claimed here beyond what the units below state.
 
 ## Where it comes from
 
-The model was written and proved in a private research repository in
-September 2026, and imported here with
-its file names: L3 is the core claim (`Statements/L3.lean`), L4 the
-accounting results, L4B authorization and events, L5 the epoch
+The model was written and proved in September 2026. The file names
+keep their first layout: L3 is the core claim (`Statements/L3.lean`),
+L4 the accounting results, L4B authorization and events, L5 the epoch
 results. `Draft/NonVacuity.lean` is not a draft; it shows that each
-guard can fire. The epoch and k-anonymity files came from the same
-repo at a later pin. The root-window files and the liveness control
-were written here. Many files changed here during review; the commit
-history records each change.
+guard can fire. The epoch and k-anonymity files came later, the
+root-window files and the liveness control last. Many files changed
+during review; the commit history records each change.
 
 AI agents from two model families wrote the proofs; Oskar and a second
 reader read the statements against the spec (REVIEW.md, part 5).
