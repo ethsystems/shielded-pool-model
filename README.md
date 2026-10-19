@@ -210,3 +210,13 @@ The core proofs and gate are complete. Two human readings of the
 model against the spec are done (REVIEW.md, part 5).
 [REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
 here, and each gets an answer.
+
+## License
+
+File-level SPDX headers are authoritative. Code without a more
+specific file-level license is licensed under MIT OR Apache-2.0
+([LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE)).
+Documentation, readmes and review notes are licensed under CC0-1.0
+([LICENSE-CC0](LICENSE-CC0)) unless otherwise stated. Third-party
+dependencies, including the pinned sources that the separate packages
+fetch, keep their own licenses.
