@@ -3,7 +3,7 @@
 Stable, reviewable claim units about the shielded pool, one unit at a
 time. Each unit states a fixed claim or supporting result and
 re-checks it with one command. The core unit is a small Lean 4 model of spec
-2/SHIELDED-POOL (`specs/2/README.md` in ethsystems/specs-private, at
+2/SHIELDED-POOL (`specs/2/README.md` in ethsystems/specs, at
 revision 4d4dce1). At that revision, spec section 6.2 marks "no double
 spend" and "value conservation" as "tested". This repo holds the
 candidate for moving those two rows to "machine-checked (model)". The
@@ -19,7 +19,8 @@ core is made to be read whole in an afternoon.
 > two distinct notes with `u128` amounts share a commitment. No two
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
-> the model says what the spec says is a human reading, still open.
+> the model says what the spec says is a human reading, not a
+> machine check; two readings are done (REVIEW.md, part 5).
 
 Nine theorems: nullifier uniqueness, no double spend and value
 conservation, plus six supporting results about the same model
@@ -51,29 +52,25 @@ claimed anywhere in this repo. A model theorem cannot see an
 implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what a deployment
 must satisfy for the model to describe it.
 
-Work in progress lives in a private research repo,
-oskarth/lean-shielded-pool. Implementation links whose inputs are public
-come here as separate packages (below); the others stay in the research
-repo as claim records with re-check commands. Verus proofs of the
-shielded-pool client's prover input encoders and public-input array
-builders live on branch [`verus/base`](https://github.com/ethsystems/pocs-private/tree/verus/base) of ethsystems/pocs-private,
-off master on purpose; they are not linked to this model. Nothing is
+Implementation checks whose inputs are public live here as separate
+packages (below). Verus proofs of the shielded-pool
+client's prover input encoders and public-input array builders live on
+a separate branch of the private implementation repository, off master
+on purpose; they are not linked to this model. Nothing is
 claimed here beyond what the units below state.
 
 ## Where it comes from
 
-The model was written and proved in a private research repo,
-oskarth/lean-shielded-pool, in September 2026, and imported here with
-its file names: L3 is the core claim (`Statements/L3.lean`), L4 the
-accounting results, L4B authorization and events, L5 the epoch
+The model was written and proved in September 2026. The file names
+keep their first layout: L3 is the core claim (`Statements/L3.lean`),
+L4 the accounting results, L4B authorization and events, L5 the epoch
 results. `Draft/NonVacuity.lean` is not a draft; it shows that each
-guard can fire. The epoch and k-anonymity files came from the same
-repo at a later pin. The root-window files and the liveness control
-were written here. Many files changed here during review; the commit
-history records each change.
+guard can fire. The epoch and k-anonymity files came later, the
+root-window files and the liveness control last. Many files changed
+during review; the commit history records each change.
 
-AI agents from two model families wrote the proofs; Oskar read the
-statements against the spec.
+AI agents from two model families wrote the proofs; Oskar and a second
+reader read the statements against the spec (REVIEW.md, part 5).
 The gate checks mechanical conditions on the result. It does not
 by itself establish independence from malicious build or elaboration
 code: the axiom census reads printed output, and code imported during
@@ -205,8 +202,17 @@ Each gate run copies `.lake`; without cheap file copies, set
 
 ## Status
 
-The core proofs and gate are complete. The open question is human:
-does the model say what the spec says? [REVIEW.md](REVIEW.md) is the
-reviewer guide; findings go in issues here, and each gets an answer.
+The core proofs and gate are complete. Two human readings of the
+model against the spec are done (REVIEW.md, part 5).
+[REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
+here, and each gets an answer.
 
-The repo is private; no license yet.
+## License
+
+File-level SPDX headers are authoritative. Code without a more
+specific file-level license is licensed under MIT OR Apache-2.0
+([LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE)).
+Documentation, readmes and review notes are licensed under CC0-1.0
+([LICENSE-CC0](LICENSE-CC0)) unless otherwise stated. Third-party
+dependencies, including the pinned sources that the separate packages
+fetch, keep their own licenses.

@@ -1,8 +1,9 @@
 # Review guide
 
 Find where the claim is wrong, too strong or unclear. This is not an
-audit. Start with Track A (part 5): does the model say what the spec
-says?
+audit. Track A (part 5) asks whether the model says what the spec
+says. It closed on 2026-10-19 with two readings; new readers are
+welcome.
 
 ## 1. What is claimed
 
@@ -14,7 +15,8 @@ says?
 > two distinct notes with `u128` amounts share a commitment. No two
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
-> the model says what the spec says is a human reading, still open.
+> the model says what the spec says is a human reading, not a
+> machine check; two readings are done (REVIEW.md, part 5).
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -50,8 +52,7 @@ gate test.
   chain check, as in the circuit (CLAIMS.md, "Ballast and the chain
   check").
 - No conservation or event replay result for arbitrary epoch runs.
-- The research repo's toy and smoke theorems are not here, except the
-  toy instances inside the k-anonymity extension file.
+- Toy and smoke theorems are not here, except the toy instances inside the k-anonymity extension file.
 - The root-window bug in the contract is not a claim of this repo (part 7).
   The five root-window theorems (CLAIMS.md rows 16 to 20) state what
   the model's window contains and that an honest owner can withdraw
@@ -60,8 +61,8 @@ gate test.
   (simplification 10), and the contract blocks withdrawals of a removed
   token, against spec 4.4 (266). They do not prove exact retention of
   100 roots or anything about the contract (zero and repeated roots are
-  pocs-private#15).
-- The spec reading is human and still open (part 5).
+  an open issue in the private implementation repository).
+- The spec reading is human, not machine-checked (part 5).
 
 ## 3. How to check
 
@@ -100,12 +101,34 @@ cache) and `gate_test.sh` about 21 minutes for the 26 cheats.
 
 ## 5. The hypothesis and the 16 simplifications (Track A)
 
-Does the model say what the spec says? No machine can check this. Oskar
-has read the statements against the spec. Track A is the second pair of
-eyes.
+Does the model say what the spec says? No machine can check this.
+Track A closed on 2026-10-19 with two human readings:
+
+- Oskar, the author, read the L3 statements, the guards and the
+  simplifications against spec 2 on 2026-09-30, from a one-page
+  summary. He recorded it as a high-level reading, not a full check.
+- The second reader reviewed PR #1 in 32 threads on 2026-10-01 and
+  approved it on 2026-10-02. The threads covered the guards in
+  `Pool/Tx.lean` (zero-value inputs, `Nat` amounts against field
+  wrap-around, the payout check), the state in `Pool/State.lean` (the
+  initial root, live value), the L3, L4 and L4B statements and
+  `CryptoHyp`, non-vacuity, the controls, `scripts/gate.sh`, the spec
+  line citations in SPEC-MAP.md and the two 6.2 rows. The same reader
+  reviewed the extensions: PR #5 (epochs, 11 threads) and PR #7
+  (k-anonymity, 12 threads) on 2026-10-06, PR #8 (root window, 5
+  threads) on 2026-10-13, all approved by 2026-10-14. Each thread in
+  these four PRs has an answer from the author.
+
+Neither reading is a proof, and Oskar's was not a full check. Two
+questions below have answers. The 6.2 question: yes, the rows may say
+"machine-checked (model)" if the level names what the model cannot
+show: field overflow, two encodings of one nullifier, circuit wiring
+and Merkle binding (simplifications 3, 6, 1 and 2; PR #1 review). The
+4.2 versus 5.3 question: the spec now follows 4.2. The questions stay
+open for new readers; report as in part 8.
 
 1. Read spec 2 sections 4-6 at the model's revision:
-   `git -C <specs-private> show 4d4dce1:specs/2/README.md`. SPEC-MAP line
+   `git -C <specs> show 4d4dce1:specs/2/README.md` (ethsystems/specs). SPEC-MAP line
    numbers refer to it.
 2. Read SPEC-MAP.md. The 16 simplifications are modelling choices, not
    hypotheses.
@@ -123,7 +146,7 @@ Questions:
 - Two spec clauses disagree. 4.2 pads the second input. 5.3 lets any
   zero-amount input skip membership. The model now follows 4.2 and the
   reference circuit (simplification 11), and spec main says the same
-  since specs-private#40 merged on 2026-10-06; this repo still cites
+  since spec commit 6bd4ba1 (2026-10-06); this repo still cites
   4d4dce1. Is 4.2 the rule you intend?
 
 For L5, read the extension clauses in SPEC-MAP.md, then `Pool/Epoch.lean`
@@ -155,20 +178,12 @@ secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
-A private exploratory repo (lean-shielded-pool) uses the same model.
-It links the model to the Rust client
-(Aeneas, Verus), the Noir circuits (Lampe, ACIR) and the Solidity
-contract (Halmos, Lean over Yul), and it has privacy games. Each link is
-partial, bounded or conditional, and this repo claims none of them.
-Separately from those links, Verus proofs of the client's prover input
-encoders and public-input array builders live on branch `verus/base` of
-ethsystems/pocs-private
-([crate README](https://github.com/ethsystems/pocs-private/blob/verus/base/pocs/private-payment/shielded-pool/crates/public-inputs/README.md));
-they prove the byte encoding of the `Prover.toml` inputs and the
+Verus proofs of the client's prover input encoders and public-input array builders live on a separate branch of
+the private implementation repository; they prove the byte encoding of the `Prover.toml` inputs and the
 public-input array layout only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
-share found one conformance bug in the contract, fixed in
-https://github.com/ethsystems/pocs-private/pull/12. This gate does not
+share found one conformance bug in the contract, fixed in ethsystems/pocs
+commit a04b8b3. This gate does not
 reproduce that check.
 
 ## 8. How to report

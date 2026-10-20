@@ -1,9 +1,9 @@
 # Clause map: base pool and epoch extension
 
-Base model status: the author has read its model and statements against
-spec 2. Track A in REVIEW.md is the second reading.
+Base model status: two human readings against spec 2 are done, the
+author's and a second reader's (REVIEW.md, part 5, Track A).
 
-Base source of truth: spec 2 at ethsystems/specs-private 4d4dce1 (`specs/2/README.md`;
+Base source of truth: spec 2 at ethsystems/specs 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is
 byte-identical). Line numbers are that file's.
 Spec main (72414f4) adds the commitment-seen set in 5.2 and shifts later
@@ -161,7 +161,7 @@ the model.
     step changes it. Token removal that must not block existing transfers and
     withdrawals (4.4, 266) is therefore modelled only by the fact that
     transfer and withdraw guards never read `supported`. Verifier mutability
-    and owner powers (6.1) are out. The contract at pocs-private a04b8b3
+    and owner powers (6.1) are out. The contract at ethsystems/pocs a04b8b3
     does not meet 266: `withdraw` reverts with `UnsupportedToken` for a
     removed token (`ShieldedPool.sol:254`), so the withdrawal liveness of
     CLAIMS.md rows 19 and 20 does not carry over to the contract after a
@@ -169,10 +169,10 @@ the model.
 11. **Ballast is the second input only.** The model follows 4.2 (208) and
     the reference circuit: input 0 is always membership-checked, and only
     input 1 may skip membership when its amount is zero
-    (transfer/src/main.nr:106-131 at pocs-private a04b8b3). 5.3 (356-358)
+    (transfer/src/main.nr:106-131 at ethsystems/pocs a04b8b3). 5.3 (356-358)
     derives ballast from `amount == 0` alone and does not restrict the
-    slot, so the two readings disagree at 4d4dce1; specs-private#40
-    (merged 2026-10-06) makes 5.3 match 4.2 on spec main. First-slot
+    slot, so the two readings disagree at 4d4dce1; spec commit
+    6bd4ba1 (2026-10-06) makes 5.3 match 4.2 on spec main. First-slot
     membership does not remove zero-value notes from the tree: transfer
     outputs may be zero-value and enter it as real leaves.
 12. **Privacy guarantees are not claimed.** Confidentiality, unlinkability
@@ -212,7 +212,7 @@ the model.
 
 ## L5: epoch extension
 
-L5 has a separate source: `ethsystems/pocs-private`,
+L5 has a separate source: `ethsystems/pocs`,
 `pocs/private-payment/shielded-pool-extension/SPEC.md`.
 Its SHA-256 is
 `a05e86a53a00725486c319f3ca40b35bd77db954bc4b3c1b233085ec7e6a5da0`.

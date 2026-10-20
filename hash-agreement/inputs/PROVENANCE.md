@@ -7,8 +7,7 @@ upstream libraries are not in the repo. `scripts/sources.py` fetches them at the
 `hash-agreement/.deps`), so only the first run needs the network (GitHub and the soldeer
 S3 bucket); later runs use the cache. The other network use is `lake exe cache get` for the
 Mathlib dependencies when no root build is present (README, "Re-check"). The extraction and
-the EVM runs named below happened in the research repo (oskarth/lean-shielded-pool); their
-records are cited, not re-run.
+the EVM runs named below were measured once; their records are cited, not re-run.
 
 ## Pinned sources
 
@@ -67,9 +66,9 @@ that tip.
   remaps `poseidon-solidity/=dependencies/poseidon-solidity-0.0.5/`). The pool contract
   does not call it directly: `ShieldedPool.sol` uses zk-kit's `LeanIMT`, whose
   `InternalLeanIMT.sol` computes every node as `PoseidonT3.hash([left, right])`. The file
-  carries an MIT SPDX header. Research record: the Poseidon frame work of 2026-10-01, which
-  rebuilt the library from this file and matched the archived runtime artifact byte for
-  byte (a local build, not evidence of a production deployment).
+  carries an MIT SPDX header. Measured once on 2026-10-01, not reproduced here: a rebuild
+  of the library from this file matched the archived runtime artifact byte for byte (a
+  local build, not evidence of a production deployment).
 - **Noir files.** noir-lang/poseidon at tag `v0.3.0`, git
   `0880c371e88e583d39515fd3f877538657ac41eb`, Apache-2.0. The three pool circuits pin it
   in their `Nargo.toml`
@@ -92,16 +91,14 @@ that tip.
   record found that nargo 1.0.0-beta.21 `hash_2` gives the same 300 values; that nargo run
   is not reproduced here.
 
-## Earlier records (research repo, not re-run here)
+## Earlier records (measured once, not reproduced here)
 
 - Hash differential, 2026-10-02: the parameters of both libraries equal entry for entry
   (modulus, t = 3, 8 + 57 rounds, x^5, MDS, round constants in both shapes); 300 of 300
   pairs agree in nargo, forge, a Python interpreter of the Yul text, a Python plain model and
   a Python port of Noir `permute`; four negative controls fail as they must.
-- The night prototype, 2026-10-07, that this package carries: `experiments/a9proto/` on
-  branch `dispatch/xo-fv-lean`, report `evidence/2026-10-07/a9proto/REPORT.md`; the
-  2026-10-11 retry of the monolithic-to-segmented Solidity equality,
-  `evidence/2026-10-11/a9proto-solseg/run.log` (README, "What stays open").
+- The one-file prototype of 2026-10-07 that this package carries, and the 2026-10-11
+  retry of the monolithic-to-segmented Solidity equality (README, "What stays open").
 
 The library sources are public and fetched at their pins. The vectors and the extracted
 parameters are the package's own derived data, committed with their hashes.
