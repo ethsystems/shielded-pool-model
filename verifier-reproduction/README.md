@@ -116,7 +116,7 @@ self-test must reproduce. The committed `VK_HASH` values:
 Start from a checkout of this repo with the submodule:
 
 ```
-git clone --recurse-submodules git@github.com:ethsystems/shielded-pool-model.git
+git clone --recurse-submodules https://github.com/ethsystems/shielded-pool-model.git
 # or, in an existing checkout:
 git submodule update --init verifier-reproduction/pocs
 ```

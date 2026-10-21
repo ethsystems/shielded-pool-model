@@ -59,6 +59,27 @@ a separate branch of the private implementation repository, off master
 on purpose; they are not linked to this model. Nothing is
 claimed here beyond what the units below state.
 
+## From the writeup
+
+The writeup ["Formally verifying a shielded pool: from spec to
+bytecode"](https://ethsystems.org/writeups/formally-verifying-a-shielded-pool-from-spec-to-bytecode/)
+describes the verification campaign around this repo. Its sections map
+to the units here:
+
+- The model and the two theorems: the core unit
+  ([CLAIMS.md](CLAIMS.md), rows 1 to 9); the epoch extension in the
+  same section is the L5 unit (rows 10 to 15).
+- The circuits, compiled route:
+  [circuits-acir/](circuits-acir/README.md).
+- The hash: [hash-agreement/](hash-agreement/README.md).
+- The verifier: [verifier-reproduction/](verifier-reproduction/README.md).
+- Privacy: the symbolic k-anonymity extension
+  (`LeanShieldedPool/Extensions/KAnonymity.lean`); the conditional
+  hiding bounds the writeup mentions are not in this repo.
+- The contract checks, the wallet proofs and the deployment check are
+  not in this repo (see Scope; issue #10 tracks the hand-offs below
+  the model).
+
 ## Where it comes from
 
 The model was written and proved in September 2026. The file names
@@ -181,7 +202,7 @@ checksum.
 You need git, bash, python3 and about 8 GB of free disk.
 
     curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-    git clone git@github.com:ethsystems/shielded-pool-model.git && cd shielded-pool-model
+    git clone https://github.com/ethsystems/shielded-pool-model.git && cd shielded-pool-model
     lake exe cache get          # one-time setup; .lake is about 7.5 GB
     bash scripts/gate.sh        # expect: GATE PASS (<commit>)
 
@@ -205,7 +226,7 @@ Each gate run copies `.lake`; without cheap file copies, set
 The core proofs and gate are complete. Two human readings of the
 model against the spec are done (REVIEW.md, part 5).
 [REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
-here, and each gets an answer.
+here (part 8 of that guide gives the format), and each gets an answer.
 
 ## License
 
