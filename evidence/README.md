@@ -59,7 +59,7 @@ dates are unchanged. For publication:
   ethsystems/pocs, so it is cited there.
 - Removed content: one paragraph about an unconfirmed suspicion in other
   projects, the text of F47 (an unconfirmed tool-defect suspicion), and
-  the text and status of F14 and F33 (PoC fixture details that the
+  the text, finder and status of F14 and F33 (PoC fixture details that the
   register marks "keep private"), all in the findings register; the harness-name table and the judge-id Evidence
   column of "Why not green" (claim board). The claim board keeps the
   sections from its header to "What is possible but expensive".
