@@ -72,7 +72,7 @@ File: `proj/contracts/test/halmos/PoolSymbolic.t.sol`.
   withdraw spending `0xa0`, transfer spending `0xa1`,`0xa2` with outputs 3 and 4.
   Result: 4 leaves, 3 spent nullifiers.
 
-Common command (run from `proj/`, with `PATH` including `~/.foundry/bin` and
+Common command (run from `proj/`, with `PATH` including the Foundry bin directory and
 `FOUNDRY_LINT_LINT_ON_BUILD=false`):
 
 ```
