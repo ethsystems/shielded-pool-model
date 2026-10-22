@@ -171,7 +171,7 @@ The package's own data, committed:
 
 | File | sha256 |
 |---|---|
-| `inputs/sol_params.json` | cbca794b53c67844b9ab3cd21203f6720e291b6c8639cece18ff37b3aa01f2b8 |
+| `inputs/sol_params.json` | 38c67746b3ca5572b33b01c10bc72663f7e854e17b639eb254291fe988b1f85c |
 | `inputs/vectors/inputs.json` | ab284c7668a2ba195000a4c8eb9ca709d74dc61f27c60fa613025b1f490f0bcd |
 | `inputs/vectors/sol_outputs.txt` | 8acc9017447ec7f85e804858d1ccbce78723119fae4688f905a8e32fa844152f |
 

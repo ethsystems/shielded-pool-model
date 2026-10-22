@@ -1,5 +1,5 @@
 {
- "source": "/home/oskarth/.cache/lean-shielded-pool/work/H1-hash-diff/deps/dependencies/poseidon-solidity-0.0.5/PoseidonT3.sol",
+ "source": "poseidon-solidity 0.0.5, member /PoseidonT3.sol of the soldeer archive that ethsystems/pocs pins at a04b8b38969dfc2ee64de47edee7e396454204a8 (see inputs/SOURCES.txt)",
  "modulus": 21888242871839275222246405745257275088548364400416034343698204186575808495617,
  "t": 3,
  "rounds_full": 8,

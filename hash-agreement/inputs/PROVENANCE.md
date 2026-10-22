@@ -41,7 +41,7 @@ the EVM runs named below were measured once; their records are cited, not re-run
 
 | File | What it is | sha256 |
 |---|---|---|
-| `sol_params.json` | the 195 plain round constants and the MDS matrix extracted from `PoseidonT3.sol` | cbca794b53c67844b9ab3cd21203f6720e291b6c8639cece18ff37b3aa01f2b8 |
+| `sol_params.json` | the 195 plain round constants and the MDS matrix extracted from `PoseidonT3.sol` | 38c67746b3ca5572b33b01c10bc72663f7e854e17b639eb254291fe988b1f85c |
 | `vectors/inputs.json` | 300 input pairs: 196 edge pairs and 104 seeded random pairs | ab284c7668a2ba195000a4c8eb9ca709d74dc61f27c60fa613025b1f490f0bcd |
 | `vectors/sol_outputs.txt` | `PoseidonT3.hash([a, b])` on those pairs, one decimal per line, from an EVM run | 8acc9017447ec7f85e804858d1ccbce78723119fae4688f905a8e32fa844152f |
 
