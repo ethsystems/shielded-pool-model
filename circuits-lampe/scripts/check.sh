@@ -101,7 +101,7 @@ python3 scripts/census.py || fail census "see above"
 
 step controls
 python3 scripts/controls.py --jobs "$JOBS" > build/controls.log 2>&1; ec=$?
-grep '^CONTROL' build/controls.log | head -20; tail -1 build/controls.log
+grep '^CONTROL ' build/controls.log | head -20; tail -1 build/controls.log
 [ "$ec" -eq 0 ] || fail controls "see build/controls/ and controls/EXPECTED.tsv"
 
 echo "CHECK PASS: pins, scan, rename check, regeneration, build, census and controls (${SECONDS}s)"
