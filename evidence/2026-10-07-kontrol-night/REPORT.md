@@ -6,7 +6,7 @@
 > commit 9d357ca (a research branch). Amended 2026-10-11: R5, C11 and C12 are applied in the text
 > below at the place the reviewer named. R6 and C13 concern the council's basis.md in private notes, not this report; they
 > are recorded here as accepted. The amended text was given to Astra for a re-read on 2026-10-11
-> (research record, 2026-10-11). Astra's verdicts: R5 CLOSED, C12 CLOSED (it recomputed the twelve
+> (2026-10-11). Astra's verdicts: R5 CLOSED, C12 CLOSED (it recomputed the twelve
 > precheck inequalities), C11 OPEN only for evidence: the goal-3 node constraint dumps were not tracked. They are now:
 > `d/outputs/g3-*-node{11,13,14,16}-constraints.txt` and `d/outputs/g3-constraints-summary.txt`, extracted with
 > `d/bin/kconstr.py` from the saved KCFGs on 2026-10-11 (node 16: 16 deposit / 20 transfer constraints; node 11 holds both
@@ -61,7 +61,7 @@ vm.assume(uint160(token) > 0x11);
 
 Body, setUp and mutants are SYMTOK's. Why 0x11 [read]: SYMTOK's run stalled where the no-account
 branch reached `#precompiled(token)` and forked on `#stackDelta`
-(research record, 2026-10-06). The compiled KEVM rule
+(2026-10-06). The compiled KEVM rule
 is `isPrecompiledAccount(A, SCHED) => 0 <Int A andBool A <=Int #precompiledAccountsUB(SCHED)`, and the
 bound is at most 17 over all schedules (PRAGUE 17; OSAKA reuses it). Above 0x11 the guard is false.
 
@@ -188,7 +188,7 @@ Plan (round 4): two new entry points in a trimmed copy of the S1/S2 harness
 (`W/d/harness3/S2x.t.sol`), `prove_S2d2(c, t, a, bytes proof, bytes note)` and
 `prove_S2t2(n0, n1, c0, c1, r, bytes proof, bytes note)`, with tree size, depth and current root
 pinned to zero (slots 0, 1 and `keccak(0 . 2)`; remaining tree storage and root history symbolic).
-Mutants S2D and S2T (specs from (research record, 2026-10-01), `W/d/bin/mkmut3.sh`).
+Mutants S2D and S2T (specs dated 2026-10-01, `W/d/bin/mkmut3.sh`).
 
 Builds [checked: `W/logs/g3-J5b.txt`, `g3-J5b2.txt`]: the first build hit the 8g cap (kompile OOM). I
 removed the six unused entry points (blob, witness, empty-proof) from the trimmed file; the second

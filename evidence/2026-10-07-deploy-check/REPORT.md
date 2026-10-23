@@ -5,8 +5,7 @@
 
 > Council 2026-10-07-night-deploy ended NOT SEALED at the round cap with one reject, R5-RERUN: the printed replay command
 > could not run as printed because `tools/replay.sh` had mode 100644. Commit 9bb593a set the executable bits and b53cdf8
-> ran the printed command (`replay-exec/`, RESULTS OK). Astra re-read both on 2026-10-11
-> (research record, 2026-10-11): modes 100755 at HEAD, the run follows the fix, `check-results.py`
+> ran the printed command (`replay-exec/`, RESULTS OK). Astra re-read both on 2026-10-11: modes 100755 at HEAD, the run follows the fix, `check-results.py`
 > on `replay-exec/logs` returns RESULTS OK; verdict CLOSED. It also noted one prerequisite the Rerun section omitted,
 > TRACE's `run/final/collected.json`; added below.
 
@@ -19,7 +18,7 @@ this report. Other paths are relative to the research-phase directory of this re
 
 `scripts/recheck.sh deploy <rpc> <addresses.json> [new-out-dir]` exists and works offline. It answers "how do you know you are running the OSS code?" for one chain snapshot, under the limits below.
 
-- On the TRACE anvil deployment (a local test chain, research record 2026-10-06) it gives `VERDICT PASS`. All 12 runtime codes are byte-equal to a fresh build of ethsystems/pocs `a04b8b3`, and so are their 53-byte CBOR metadata tails. [checked] `logs/real.log`
+- On the TRACE anvil deployment (a local test chain, 2026-10-06) it gives `VERDICT PASS`. All 12 runtime codes are byte-equal to a fresh build of ethsystems/pocs `a04b8b3`, and so are their 53-byte CBOR metadata tails. [checked] `logs/real.log`
 - Each of the three planted deviations gives `VERDICT FAIL` with the named check. [checked] `logs/d1-mock.log`, `logs/d2-swap.log`, `logs/d3-byte.log`
 - Four extra controls test the metadata boundary, the event check and the owner check. [checked] `logs/controls.log`
 - `tools/check-results.py` reads saved logs and checks each case's exit code, FAIL names and WARN names. It does not rerun the chain. On `logs/` (code at 25e19dc): `RESULTS OK`. [checked] `logs/RESULTS.txt`

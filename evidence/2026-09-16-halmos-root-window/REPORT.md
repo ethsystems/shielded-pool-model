@@ -201,7 +201,7 @@ only in `insert`, as `++index`. The pool never calls `update` or `remove`.
 ## Map onto the Lean model's named assumptions
 
 This is a reviewed table, not a theorem. No Lean statement refers to these
-checks. Row ids are from (research record, 2026-09-16).
+checks. Row ids are from the research-phase ledger of 2026-09-16.
 
 | Row / assumption | Lean side | Halmos evidence | Status |
 |---|---|---|---|

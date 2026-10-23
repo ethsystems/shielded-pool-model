@@ -7,7 +7,7 @@ N3 client coverage report
 [read] Production equivalence and external effects remain unproved. This result does not mean the complete client is verified.
 
 [checked] Target: ethsystems/pocs `a04b8b38969dfc2ee64de47edee7e396454204a8`.
-[checked] Start: 2026-09-30T22:43:33+08:00. End: 2026-09-30T23:14:19+08:00. Elapsed: 30.78 minutes.
+[checked] Start: 2026-09-30T22:43:33. End: 2026-09-30T23:14:19. Elapsed: 30.78 minutes.
 [checked] Deliverables remain in this work directory. No repository writes, commits, posts or downloads were performed.
 
 [checked] The final fresh-copy run passed with `--no-cheating`:
