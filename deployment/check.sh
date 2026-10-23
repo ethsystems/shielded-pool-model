@@ -44,10 +44,10 @@ claim = json.load(open(sys.argv[1])); out = sys.argv[2]
 dead = "0x000000000000000000000000000000000000dead"
 plants = {
     "unchanged": ({}, [], []),
-    "wrong-registry": ({"registry": claim["depositTranscriptLib"]}, ["CODE:registry", "WIRING"], ["METADATA:registry"]),
+    "wrong-registry": ({"registry": claim["depositTranscriptLib"]}, ["CODE:registry", "METADATA:registry", "WIRING"], []),
     "swapped-verifiers": ({"depositVerifier": claim["transferVerifier"], "transferVerifier": claim["depositVerifier"]},
-                          ["CODE:depositVerifier", "CODE:transferVerifier", "CODE:composite", "SLOTS"],
-                          ["METADATA:depositVerifier", "METADATA:transferVerifier"]),
+                          ["CODE:depositVerifier", "CODE:transferVerifier", "CODE:composite", "SLOTS",
+                           "METADATA:depositVerifier", "METADATA:transferVerifier"], []),
     "wrong-owner": ({"owner": dead}, ["OWNER"], []),
     "extra-token": ({"supportedTokens": claim["supportedTokens"] + [dead]}, ["TOKENS"], []),
     "wrong-block-hash": ({"blockHash": "0x" + "00" * 32}, ["CHAIN"], None),
