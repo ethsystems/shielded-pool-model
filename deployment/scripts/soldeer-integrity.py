@@ -5,7 +5,7 @@ Usage: soldeer-integrity.py <soldeer.lock> <dependencies-dir>
 The hash follows soldeer-core's hash_folder: one sha256 per walked entry (the root dir
 and every subdir by relative path; every file by relative path then the sha256 of its
 content), `.git` skipped, the entry hashes sorted and hashed again. This reimplementation
-reproduces the lock values for the a04b8b3 lock (the 2026-10-07 deployment check).
+reproduces the three integrity values of the soldeer.lock at ethsystems/pocs a04b8b3.
 Git dependencies have no integrity value; the caller checks them by tree id.
 """
 import hashlib, os, re, sys

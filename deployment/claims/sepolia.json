@@ -1,0 +1,21 @@
+{
+  "comment": "The shielded pool on Sepolia, 12 contracts, at block 11949456, the block of the last deployment transaction. logsFromBlock is the block of the first one. The thirteenth contract of the deployment, a MockERC20 at 0x9fce6bce03f3966b67da5f666d7ac0db1ba37e75, is not in the claim. deploy-check.py does not read this comment.",
+  "chainId": 11155111,
+  "block": 11949456,
+  "blockHash": "0xe2adfa5f7a107f04fd426348301d82be3f72590440a34a0f7cf12f81ce91ea60",
+  "logsFromBlock": 11948523,
+  "pool": "0xabefb40982e399f979cfdc712e57e334ea2b10ea",
+  "composite": "0x6b9785df1f803c0e5bcae78dbeb8c2397a0ac548",
+  "registry": "0xe64018ba103846d7b09b3cb2a8ac06384196b0ba",
+  "depositVerifier": "0x8f43176beb45505c0b80e0b115f91a1e7b1113fc",
+  "transferVerifier": "0x0283b13dc7af959449d8344de3caa6c0deeb90ff",
+  "withdrawVerifier": "0xfe5811d3a1918553027f428f56d427fb28c9def6",
+  "depositTranscriptLib": "0x3cba008e48a098017a4b331f514d5b83a16cdeac",
+  "transferTranscriptLib": "0x5045ed70c25d12da730f11a0f6d80249ebca152b",
+  "withdrawTranscriptLib": "0x7cd19aac2cc4491568c93609ad50ba9bb675f48a",
+  "leanIMT": "0x38b16dae55fefb3198b470e6559f76560c0cce19",
+  "poseidonT3": "0x72b98a5fff1dd0e7001a6327b5b99d256ebd1ce8",
+  "poseidonT5": "0x889010cdd13ee425bd7246e05fe872183b3cc39f",
+  "owner": "0x53d475a7232cfaf06ff6b63c1b62b689b4db3906",
+  "supportedTokens": []
+}

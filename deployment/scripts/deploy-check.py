@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""C1 deployment check: on-chain contracts against a fresh a04b8b3 build.
+"""Deployment check: on-chain contracts against a fresh a04b8b3 build.
 
 Usage: deploy-check.py <ref-dir> <rpc> <claim.json>
 <ref-dir> is the fresh export built with `forge build --offline --build-info`.
 Chain bytes come only from the RPC; expected bytes come only from <ref-dir>.
 Every expectation comes from the claim file or the exported source, never from the chain.
+The claimed block may lie below the chain head (a public chain moves on): CHAIN requires the
+claimed chain id and the claimed hash at the claimed block, and a head at or above that block.
+Pool logs are read from block 0 in one query, or, when the claim names `logsFromBlock`, from that
+block in windows of LOG_WINDOW blocks (env, default 10000; public RPCs cap the range); the pool
+must then have no code at logsFromBlock - 1.
 """
 import glob, hashlib, json, os, re, subprocess, sys, urllib.request
 
@@ -20,7 +25,7 @@ def report(name, status, why):
 
 def rpc(method, *params):
     req = urllib.request.Request(RPC, json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": list(params)}).encode(),
-                                 {"content-type": "application/json"})
+                                 {"content-type": "application/json", "user-agent": "deploy-check"})  # some RPCs refuse urllib's default agent
     r = json.load(urllib.request.urlopen(req, timeout=60))
     if "error" in r:
         raise RuntimeError(f"{method}: {r['error']}")
@@ -38,6 +43,10 @@ BLOCK = hex(claim["block"])
 
 def code_at(a):
     return bytes.fromhex(rpc("eth_getCode", a, BLOCK)[2:])
+
+
+def code_at_block(a, n):
+    return bytes.fromhex(rpc("eth_getCode", a, hex(n))[2:])
 
 
 def keccak_sig(s):
@@ -222,7 +231,7 @@ def chain_state():
 
 
 cid, head, bh = chain_state()
-ok = cid == claim["chainId"] and head == claim["block"] and bh == claim["blockHash"]
+ok = cid == claim["chainId"] and head >= claim["block"] and bh == claim["blockHash"]
 report("CHAIN", "PASS" if ok else "FAIL", f"chainId={cid} head={head} hash={bh} claimed chainId={claim['chainId']} block={claim['block']} "
        f"hash={claim['blockHash']} (the RPC and its history are trusted)")
 if not ok:
@@ -324,7 +333,13 @@ if reg != addr(claim["registry"]):
     w.append(f"pool.attestationRegistry()={reg} claimed {addr(claim['registry'])}")
 report("WIRING", "FAIL" if w else "PASS", "; ".join(w) if w else f"pool.verifier()={pv}, registry={reg}")
 
-logs = rpc("eth_getLogs", {"address": pool, "fromBlock": "0x0", "toBlock": BLOCK})
+FROM = claim.get("logsFromBlock", 0)
+logs, pre = [], (code_at_block(pool, FROM - 1) if FROM > 0 else b"")
+if FROM == 0:
+    logs = rpc("eth_getLogs", {"address": pool, "fromBlock": "0x0", "toBlock": BLOCK})
+WINDOW = int(os.environ.get("LOG_WINDOW", "10000"))
+for lo in range(FROM, claim["block"] + 1, WINDOW) if FROM > 0 else []:
+    logs += rpc("eth_getLogs", {"address": pool, "fromBlock": hex(lo), "toBlock": hex(min(lo + WINDOW - 1, claim["block"]))})
 T = {s.split("(")[0]: keccak_sig(s) for s in ["VerifierUpdated(address,address)", "OwnershipTransferred(address,address)",
                                               "TokenAdded(address)", "TokenRemoved(address)", "Deposit(bytes32,address,uint256,bytes)",
                                               "Withdraw(bytes32,address,address,uint256)", "AttestationRegistryUpdated(address,address)"]}
@@ -332,10 +347,13 @@ names = {v: k for k, v in T.items()}
 counts = {}
 for lg in logs:
     counts[names.get(lg["topics"][0], lg["topics"][0])] = counts.get(names.get(lg["topics"][0], lg["topics"][0]), 0) + 1
-print(f"LOGS pool blocks 0..{claim['block']}: {len(logs)} logs {counts}")
+print(f"LOGS pool blocks {FROM}..{claim['block']}: {len(logs)} logs {counts}"
+      + (f"; pool code at block {FROM - 1}: {len(pre)} bytes" if FROM > 0 else ""))
 vu = [lg for lg in logs if lg["topics"][0] == T["VerifierUpdated"]]
-report("EVENTS", "FAIL" if vu else "PASS",
-       f"{len(vu)} VerifierUpdated log(s), first in block {int(vu[0]['blockNumber'], 16)}" if vu else "no VerifierUpdated log in blocks 0..claimed block")
+report("EVENTS", "FAIL" if vu or pre else "PASS",
+       f"pool has code at block {FROM - 1}, before logsFromBlock" if pre else
+       f"{len(vu)} VerifierUpdated log(s), first in block {int(vu[0]['blockNumber'], 16)}" if vu else
+       f"no VerifierUpdated log in blocks {FROM}..claimed block" + (" (no pool code before them)" if FROM > 0 else ""))
 
 own = call(pool, *CONTRACTS["pool"], "owner()")
 order = lambda x: (int(x["blockNumber"], 16), int(x["transactionIndex"], 16), int(x["logIndex"], 16))
@@ -357,7 +375,8 @@ ok = tok == want and all(on.values())
 report("TOKENS", "PASS" if ok else "FAIL", f"from logs={sorted(tok)} claimed={sorted(want)} supportedTokens()={on}")
 
 end = chain_state()
-report("CHAIN-END", "PASS" if end == (cid, head, bh) else "FAIL", f"chain state at end {end}, at start {(cid, head, bh)}")
+report("CHAIN-END", "PASS" if (end[0], end[2]) == (cid, bh) and end[1] >= head else "FAIL",
+       f"chain state at end {end}, at start {(cid, head, bh)} (chain id and hash at block {claim['block']} unchanged, head not lower)")
 failing = [n for n, s in results if s == "FAIL"]
 warns = [n for n, s in results if s == "WARN"]
 print(f"VERDICT {'FAIL' if failing else 'PASS'} failing={failing} warnings={warns}")

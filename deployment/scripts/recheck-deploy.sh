@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# C1 deployment check: rebuild a04b8b3 from a fresh export, then compare a deployment with it.
-# Usage: scripts/recheck-deploy.sh <rpc> <addresses.json> <new-out-dir>
+# Deployment check: rebuild a04b8b3 from a fresh export, then compare a deployment with it.
+# Usage: scripts/recheck-deploy.sh <rpc> <claim.json> <new-out-dir>   (../check.sh fetches the inputs and calls it)
 # Env: POCS (an ethsystems/pocs clone that holds a04b8b3, read by git only), SOLDEER_DEPS (extracted soldeer packages),
-#      ZKKIT_GIT (a zk-kit.solidity clone that holds the lock rev). forge/cast 1.8.3 and solc 0.8.37 offline.
+#      ZKKIT_GIT (a zk-kit.solidity clone that holds the lock rev), SOLC (optional: the solc 0.8.37 binary forge must use),
+#      NO_NETNS=1 (build without a network namespace where unshare -rn is not permitted). forge/cast 1.8.3 on PATH.
 set -euo pipefail
 export LC_ALL=C
 RPC=$1; CLAIM=$(cd "$(dirname "$2")" && pwd)/$(basename "$2"); OUT=$3
@@ -33,11 +34,17 @@ mkdir "$R/dependencies/zk-kit-v1"; git -C "$ZKKIT_GIT" archive "$ZK" | tar -x -C
 echo "zk-kit: archive of $ZK, tree $(git -C "$ZKKIT_GIT" rev-parse "$ZK^{tree}")"
 python3 "$HERE/soldeer-integrity.py" "$R/soldeer.lock" "$R/dependencies"
 
-# 3. Offline build with the exported foundry.toml; no network namespace.
-echo "build: (cd $R && unshare -rn forge build --offline --build-info)"
-set +e; (cd "$R" && unshare -rn forge build --offline --build-info) > "$OUT/build.log" 2>&1; rc=$?; set -e
+# 3. Offline build with the exported foundry.toml, in a network namespace with no network.
+NETNS=(unshare -rn)
+if ! unshare -rn true 2>/dev/null; then
+  [ "${NO_NETNS:-0}" = 1 ] || { echo 'unshare -rn is not permitted here; NO_NETNS=1 builds with forge --offline only'; exit 1; }
+  NETNS=(); echo "build: NO_NETNS=1, no network namespace; forge --offline only"
+fi
+USE=(); [ -z "${SOLC:-}" ] || USE=(--use "$SOLC")
+echo "build: (cd $R && ${NETNS[*]} forge build --offline --build-info ${USE[*]})"
+set +e; (cd "$R" && "${NETNS[@]}" forge build --offline --build-info "${USE[@]}") > "$OUT/build.log" 2>&1; rc=$?; set -e
 echo "build exit=$rc; $(grep -E '^Compiling|finished in' "$OUT/build.log" | tr '\n' ' ')"
-[ "$rc" -eq 0 ] || exit 1
+[ "$rc" -eq 0 ] || { tail -20 "$OUT/build.log"; exit 1; }
 
 # 4. Compare the chain with the rebuild.
 set +e; python3 "$HERE/deploy-check.py" "$R" "$RPC" "$CLAIM"; rc=$?; set -e
