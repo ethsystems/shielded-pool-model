@@ -207,8 +207,8 @@ extracted packages build in 58 s (lake, `LEAN_NUM_THREADS=4`); with `LEAN_NUM_TH
 jobs, the census runs in 28 s and the 80 controls in 236 s with 3 jobs. Under a 10 GiB memory cap the peaks were 5.5 GB (lake, extracted
 packages) and 4.5 GB (leaves); one Lean process reached a resident size of 4.6 GB. A whole
 `scripts/check.sh` from a fresh copy of the package, with `JOBS=3` and Mathlib's oleans present
-(it fetches and builds Lampe and its stdlib), took 22 minutes to the census, with a 4.8 GB
-peak; a re-run on the built tree takes about 5 minutes, most of it the controls. With a warm
+(it fetches and builds Lampe and its stdlib), took 1,427 s (24 minutes) to `CHECK PASS`, with
+a 4.1 GB peak; a re-run on the built tree takes about 5 minutes, most of it the controls. With a warm
 cargo cache, the extractor build and the three extractions took 3 minutes.
 
 ## Layout
