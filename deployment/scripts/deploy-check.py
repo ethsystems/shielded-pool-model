@@ -11,7 +11,7 @@ Pool logs are read from block 0 in one query, or, when the claim names `logsFrom
 block in windows of LOG_WINDOW blocks (env, default 10000; public RPCs cap the range); the pool
 must then have no code at logsFromBlock - 1.
 """
-import glob, hashlib, json, os, re, subprocess, sys, urllib.request
+import glob, hashlib, json, os, re, subprocess, sys, time, urllib.error, urllib.request
 
 REF, RPC, CLAIM = sys.argv[1:4]
 claim = json.load(open(CLAIM))
@@ -26,7 +26,15 @@ def report(name, status, why):
 def rpc(method, *params):
     req = urllib.request.Request(RPC, json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": list(params)}).encode(),
                                  {"content-type": "application/json", "user-agent": "deploy-check"})  # some RPCs refuse urllib's default agent
-    r = json.load(urllib.request.urlopen(req, timeout=60))
+    for wait in (2, 4, 8, 16, 32, None):  # public RPCs rate-limit: retry 429 and 5xx, then give up
+        try:
+            r = json.load(urllib.request.urlopen(req, timeout=60))
+            break
+        except urllib.error.HTTPError as e:
+            if wait is None or not (e.code == 429 or e.code >= 500):
+                raise
+            print(f"RPC {method}: HTTP {e.code}, retry in {wait}s", flush=True)
+            time.sleep(wait)
     if "error" in r:
         raise RuntimeError(f"{method}: {r['error']}")
     return r["result"]
