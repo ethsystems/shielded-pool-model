@@ -6,8 +6,9 @@ claimed addresses equals the matching contract of a fresh offline build of ethsy
 metadata tails are equal too. At the same block, the three composite verifier slots hold the
 claimed Honk verifiers with their own `VK_HASH`, no slot and not `pool.verifier()` holds mock
 verifier code, the pool points at the claimed composite and registry, the pool emitted no
-`VerifierUpdated` log, its owner and ownership history match the claim, and its token set is
-the claimed one (empty). The same holds at block 11976486, a finalized block of 2026-10-23.
+`VerifierUpdated` log, `owner()` is the claimed owner and the pool emitted exactly one
+`OwnershipTransferred` log, from zero to that owner, and its token set is the claimed one
+(empty). The same holds at block 11976486, a finalized block of 2026-10-23.
 [RESULT.md](RESULT.md) records both runs.
 
 `check.sh` reads the pool sources from the pocs repository itself (the git submodule `pocs/`,
@@ -19,11 +20,15 @@ parent README.
 
 ## What the check says, and what it does not
 
-The check establishes one thing: at the claimed block, the claimed addresses hold the code
-that forge 1.8.3 and solc 0.8.37 build from `a04b8b3`, wired as the claim says. A different
-contract, a changed byte, a swapped verifier, a mock verifier, a later `setVerifier` call, a
-new owner or an added token would show up as a FAIL (the controls plant such changes in the
-claim; RESULT.md lists them). Everything below is open, and the package claims none of it.
+The check establishes one thing: at the claimed block, the claimed addresses hold exactly
+the runtime code that forge 1.8.3 and solc 0.8.37 build from `a04b8b3`, wired as the claim
+says. By its logic, a different contract, a changed byte (metadata included), a swapped
+verifier, a mock verifier, a `setVerifier` call up to the claimed block, a second ownership
+transfer or an added token gives a FAIL. The controls exercise part of this. They change the
+claim file only, never the chain: a wrong registry address, the deposit and transfer
+verifiers swapped, a wrong owner, an extra token, a wrong block hash, and logs that start
+after the pool's creation. RESULT.md lists the checks each one fails. Everything below is
+open, and the package claims none of it.
 
 - Later blocks. The check binds code and configuration at the claimed block only. A
   `setVerifier`, `transferOwnership` or token change after it shows only if the check runs
@@ -58,10 +63,17 @@ immutables with claimed values (the composite's three verifier addresses) or sou
 library's call-protection prefix with its own claimed address. No byte is masked; an unknown
 link or immutable is a FAIL. The two-byte suffix names the length of the CBOR metadata tail;
 the check cuts exactly that tail from both sides, compares the bodies (CODE) and the tails
-(METADATA). A tail difference with the same solc is a WARN, never hidden: a deployment whose
-compiler settings carry library addresses (`forge create --libraries`) gives that WARN on the
-pool. The rest is read from the RPC at the claimed block: SLOTS, MOCK, WIRING, EVENTS, OWNER,
-TOKENS, and CHAIN and CHAIN-END (chain id and block hash, at the start and at the end).
+(METADATA). Both must be equal. A tail difference is a FAIL even with the same solc (the
+reason line says "same solc"). The claim is equality of the whole runtime code, and the tail
+is part of it: the ipfs hash in it commits to the metadata, which holds the source hashes
+and the compiler settings. So a deployment whose compiler settings carry library addresses
+(`forge create --libraries`) fails METADATA on the pool, although its body may equal the
+rebuild. That is the intended behaviour: such a deployment is not the exact build checked
+here, and a looser check would need its own claim. The rest is read from the RPC at the
+claimed block: SLOTS, MOCK, WIRING, EVENTS, OWNER, TOKENS, and CHAIN and CHAIN-END (chain id
+and block hash, at the start and at the end). OWNER requires that `owner()` is the claimed
+owner and that the pool emitted exactly one `OwnershipTransferred` log, from zero to that
+owner; a transfer away and back again fails.
 
 The 12 contracts and the block in which each was created, measured by `eth_getCode` at
 consecutive blocks:
@@ -109,7 +121,7 @@ from block 0 in one query, as the check first did on a local test chain.
 - `check.sh` fails closed on another version. Another build of the same version (for example
   macOS) needs `TOOLS_UNPINNED=1`, and the last line then says so.
 - The RPC, for chain bytes, calls, logs and the block hash. `check.sh` takes any URL; RESULT.md
-  names the three that were tried and what each serves.
+  records the endpoints tried and their results.
 - The pool sources: ethsystems/pocs at `a04b8b38969dfc2ee64de47edee7e396454204a8`, as the
   submodule `pocs/`. `scripts/recheck-deploy.sh` exports `foundry.toml`, `soldeer.lock`,
   `contracts/src` and `contracts/script` of `pocs/private-payment/shielded-pool/` with
@@ -136,6 +148,7 @@ Start from a checkout of this repo with the submodule:
 
 ```
 git clone --recurse-submodules https://github.com/ethsystems/shielded-pool-model.git
+cd shielded-pool-model
 # or, in an existing checkout:
 git submodule update --init deployment/pocs
 ```
@@ -181,12 +194,13 @@ from an svm copy (`~/.svm` or `~/.local/share/svm`), else `check.sh` downloads i
    integrity check, the offline build, and `scripts/deploy-check.py`, which prints one
    `CHECK` line per check and the `VERDICT` line.
 
-Exit 0 means `VERDICT PASS`. Any FAIL, and any RPC error, gives exit 1; an RPC error stops
-the comparison with no verdict, never with a PASS. `deploy-check.py` retries HTTP 429 and
-5xx answers five times.
+Exit 0 means `VERDICT PASS`. Any FAIL gives exit 1. On an RPC error the comparison stops
+without its final verdict; `check.sh` reports `VERDICT FAIL` and exits 1, never PASS.
+`deploy-check.py` retries HTTP 429 and 5xx answers five times.
 
-`--controls` runs the given claim unchanged, which must pass, then planted copies of it in
-`work/controls/`: a wrong registry address, the deposit and transfer verifiers swapped, a
+`--controls` runs the given claim unchanged as a baseline, which must pass, then six planted
+copies of it in `work/controls/` (five when the claim has no `logsFromBlock`): a wrong
+registry address, the deposit and transfer verifiers swapped, a
 wrong owner, an extra token, a wrong block hash, and (when the claim names
 `logsFromBlock`) logs that start after the pool's creation. Each must fail at exactly its
 named checks, with exactly its named warnings. The chain, the source and the build are
@@ -194,7 +208,7 @@ those of the unchanged run.
 
 Cost on a Linux laptop (16 threads, btrfs), measured 2026-10-23: `check.sh` 9 to 13 s at
 either block on Tenderly, 11 s at block 11949456 and 43 s at block 11976486 on drpc
-(`LOG_WINDOW=100`, 280 log queries); `--controls` 65 to 71 s. The build takes about 3 s.
+(`LOG_WINDOW=100`, 280 log queries); `--controls` 63 to 74 s. The build takes about 3 s.
 `work/` takes 134 MB per claim and `.deps/` 2 MB; neither is tracked.
 
 ## Files
@@ -224,7 +238,9 @@ The changes are for a public chain and for running from this package: CHAIN and 
 accept a chain head above the claimed block, the pool logs can start at `logsFromBlock` in
 windows with the guard above, RPC calls send their own user-agent and retry rate limits, forge
 uses the checked solc binary, `NO_NETNS=1` replaces the namespace where it is not permitted,
-and a failed build prints its log tail. The comparison itself is unchanged.
+and a failed build prints its log tail. Two changes make the comparison stricter: a
+metadata difference with the same solc is a FAIL, not a WARN, and OWNER requires exactly one
+`OwnershipTransferred` log. The rest of the comparison is unchanged.
 
 The writeup reports a Sepolia run of this check on 2026-10-19 at block 11949456 with a PASS.
 This package reproduces that verdict at that block from public inputs (RESULT.md).
