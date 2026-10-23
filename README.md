@@ -59,6 +59,12 @@ a separate branch of the private implementation repository, off master
 on purpose; they are not linked to this model. Nothing is
 claimed here beyond what the units below state.
 
+[evidence/](evidence/README.md) holds frozen reports from the research
+phase: the deployment checker and its run, the 36-rule claim board, the
+findings register, and the Halmos, Kontrol, client-coverage and privacy
+reports. Each was measured once and is not rerun here; no claim in this
+repo depends on it, and the gate does not read it.
+
 ## From the writeup
 
 The writeup ["Formally verifying a shielded pool: from spec to
