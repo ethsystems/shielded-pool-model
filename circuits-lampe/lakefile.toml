@@ -1,0 +1,78 @@
+name = "circuits-lampe"
+defaultTargets = ["Semantics", "Exec", "Poseidon", "Determinism", "Deposit", "Withdraw", "Transfer", "Merkle"]
+
+# The flags of every module of this package, as for the extracted packages.
+moreLeanArgs = ["--tstack=65536", "-M8192", "-DElab.async=false"]
+
+[leanOptions]
+maxRecDepth = 10000
+maxHeartbeats = 4000000
+
+[[lean_lib]]
+name = "Semantics"
+globs = ["Semantics.+"]
+
+[[lean_lib]]
+name = "Exec"
+globs = ["Exec.+"]
+
+[[lean_lib]]
+name = "Poseidon"
+globs = ["Poseidon.+"]
+
+[[lean_lib]]
+name = "Determinism"
+globs = ["Determinism.*"]
+
+[[lean_lib]]
+name = "Deposit"
+globs = ["Deposit.+"]
+
+[[lean_lib]]
+name = "Withdraw"
+globs = ["Withdraw.+"]
+
+[[lean_lib]]
+name = "Transfer"
+globs = ["Transfer.+"]
+
+[[lean_lib]]
+name = "Merkle"
+globs = ["Merkle.+"]
+
+# Lampe and its generated stdlib, from the patched fork at the pinned commit (PINS.sha256,
+# `lampe_rev`). For local development against a checkout of the fork, replace the git, rev
+# and subDir lines of each entry with a path line, `path = ".lampe/Lampe"` and
+# `path = ".lampe/stdlib/lampe"`, where `.lampe` is (a link to) the checkout.
+[[require]]
+name = "Lampe"
+git = "https://github.com/oskarth/lampe"
+rev = "55d4fbaeb5c6aeb69de2de7516fb86285120afad"
+subDir = "Lampe"
+
+[[require]]
+name = "std-1.0.0-beta.21"
+git = "https://github.com/oskarth/lampe"
+rev = "55d4fbaeb5c6aeb69de2de7516fb86285120afad"
+subDir = "stdlib/lampe"
+
+# The extracted circuits and their two Noir dependencies (extracted/).
+[[require]]
+name = "deposit-0.0.0"
+path = "extracted/deposit-0.0.0"
+
+[[require]]
+name = "withdraw-0.0.0"
+path = "extracted/withdraw-0.0.0"
+
+[[require]]
+name = "transfer-0.0.0"
+path = "extracted/transfer-0.0.0"
+
+[[require]]
+name = "poseidon-0.0.0"
+path = "extracted/deps/poseidon-0.0.0"
+
+[[require]]
+name = "binary_merkle_root-0.0.0"
+path = "extracted/deps/binary_merkle_root-0.0.0"

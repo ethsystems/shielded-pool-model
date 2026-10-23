@@ -1,0 +1,86 @@
+# Pins of circuits-lampe. Lines "# key value" are read by scripts/check.sh and scripts/extract.sh;
+# the other lines are sha256sum lines.
+# lampe_repo https://github.com/oskarth/lampe
+# lampe_rev 55d4fbaeb5c6aeb69de2de7516fb86285120afad
+# lampe_upstream https://github.com/reilabs/lampe
+# lampe_upstream_rev 919a38712d22d05fc83e59af17ef57077abda1e0
+# lean leanprover/lean4:v4.33.1
+# mathlib_rev 0df444a360eaa60ab8c11dca51a86af692955474
+# noir_version 1.0.0-beta.21
+# noir_git 89a0f0faf3a5f1273c8ac4843b7877882437e277
+# pocs_repo https://github.com/ethsystems/pocs
+# pocs_commit a04b8b38969dfc2ee64de47edee7e396454204a8
+# pocs_dir pocs/private-payment/shielded-pool
+# dep nargo/github.com/noir-lang/poseidon/v0.3.0 head=0880c371e88e583d39515fd3f877538657ac41eb tag=v0.3.0
+# dep nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2 head=ff3070116b446ca02ad233b9ad466677d127e64e tag=binary-merkle-root-v0.0.2
+#
+# The extracted Lean sources (extracted/), as the extractor wrote them.
+6234375eede464c73f396c4bdb06482509562d3fd42dd9c165e14a33dcafa6a2  extracted/deposit-0.0.0/deposit-0.0.0.lean
+95147bfde4728da7b977fe31dd7dbf7cb8b8b926d80e828d805f6e822cf50a63  extracted/deposit-0.0.0/deposit-0.0.0/Extracted.lean
+e028dfce2ad6614a686c46037d307ee7f32b835be3b7ebc930ad9942425ff171  extracted/deposit-0.0.0/deposit-0.0.0/Extracted/GeneratedTypes.lean
+09cfdc374d5d04cd640099a67a66392ae7171d2278b9f25be45472ddda2a7188  extracted/deposit-0.0.0/deposit-0.0.0/Extracted/Main.lean
+556ed60c31013b13109e22bc81aa6379efe8110b80c8fbb69301288377c4edf3  extracted/deps/binary_merkle_root-0.0.0/binary_merkle_root-0.0.0.lean
+93ac5aaddc50c8c7cb9988b3ce07f2883b68f03e5533395d21656475872206f7  extracted/deps/binary_merkle_root-0.0.0/binary_merkle_root-0.0.0/Extracted.lean
+0350f14c1f9afc4089dbe8b7ad313a344ff8242df6bf99bb16a94f37df2108b4  extracted/deps/binary_merkle_root-0.0.0/binary_merkle_root-0.0.0/Extracted/GeneratedTypes.lean
+6e74bb9bdc565d87f24ec16611ff2409bd507c953dba8801b590135c7bc94358  extracted/deps/binary_merkle_root-0.0.0/binary_merkle_root-0.0.0/Extracted/Lib.lean
+657761dffc5be050457bbb6c8ed072128ac96129f8d9e5742acfe584b2f1cab7  extracted/deps/poseidon-0.0.0/poseidon-0.0.0.lean
+ccab4d6e77f7046273100c8d578882f93caf7d2f77a635c2f2742a360b977b26  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted.lean
+0555b3342f13e34600e87c8b6ebf5a1434d00899fd012ac9116188d387aef129  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Bench.lean
+4a06ba5b00a7492640b05f4bf357462e54a254d447814ec281b18a4efa1d16e4  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/GeneratedTypes.lean
+f68f2afd281675ce0cff0d577d7506682ba81133d9accb0a0a5d663b27421fe1  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Lib.lean
+d2bd6a4ff9b1890f7fa260b357c5188e5743a22e26d10120bdc5f231dee820d0  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/OracleTests.lean
+c4e7a6e9e2791ac3a080d5197cd514f6359e8893c338f7254849eed97faeb9c9  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Poseidon/Bn254.lean
+8231c5d69ea94f72b15854f03ffbcc71b8c0f98e22ecdec213e3cfd616c98f72  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Poseidon/Bn254/Consts.lean
+c2d72c87ca509e3d57a19146e8c35680abb0adb6ad451a2f06f6f33eb2cf2373  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Poseidon/Bn254/Perm.lean
+9845a07c2f960766c8fedf8631ae578a201f82c22882111193860acc864f0a89  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Poseidon/Mod.lean
+33fd633a68e8601bab2351eea4e85df37733244209cbcbf9c2f8988f3f0961b5  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Poseidon2.lean
+734b58f1da815ef430ee7651ef431a0e891faffe9ac5e1acb7f19046c5f5333c  extracted/deps/poseidon-0.0.0/poseidon-0.0.0/Extracted/Tests.lean
+d01faec57d36a17155359afd5f274907b19b34d46fb0d7f3b99beb4fa6a471df  extracted/transfer-0.0.0/transfer-0.0.0.lean
+b2e1cbde9544fc66c1b70b85e4174eaa0931ce049253298dca9cc41729cfc250  extracted/transfer-0.0.0/transfer-0.0.0/Extracted.lean
+e028dfce2ad6614a686c46037d307ee7f32b835be3b7ebc930ad9942425ff171  extracted/transfer-0.0.0/transfer-0.0.0/Extracted/GeneratedTypes.lean
+0e9948b243448aadc65755f8589fe19d06af8102a1e4a469eadb73702538daf5  extracted/transfer-0.0.0/transfer-0.0.0/Extracted/Main.lean
+9d3010b3d67f55465b8288e51f8d93a818c85262dbb8ad307840d0c8c554a80b  extracted/withdraw-0.0.0/withdraw-0.0.0.lean
+fa085fbcdac50607d12ba1b2a4db3788eb88aed348eb9197f12e5c2ffb0e411a  extracted/withdraw-0.0.0/withdraw-0.0.0/Extracted.lean
+e028dfce2ad6614a686c46037d307ee7f32b835be3b7ebc930ad9942425ff171  extracted/withdraw-0.0.0/withdraw-0.0.0/Extracted/GeneratedTypes.lean
+3daec6c1f09392eb101b6a2a978ff3a4d2fdfb2ff59bbfc02fd53d37b4df69fa  extracted/withdraw-0.0.0/withdraw-0.0.0/Extracted/Main.lean
+#
+# The Noir circuit sources at the pocs pin (pool/ is pocs_dir).
+faa7ad281fd18a0a46e9a926aeec3a568980f4cff71ee17807c0fdaf9de7f390  pool/Nargo.toml
+943dd0ccf79c52d54fe7b82c8eb9c714ab4b186c4e225fc8316f5c17bc1ec4c3  pool/circuits/deposit/Nargo.toml
+7d1b3c3347415023fe2e7e193663f28beaf3a042d0628b04d64bbcc8aa515391  pool/circuits/deposit/src/main.nr
+e5fd8e9f7835106096fb5da834ebc00ec95ab3c71e8b17963403fa81ba34fc18  pool/circuits/transfer/Nargo.toml
+33ab018365efdc2107ae31bba10978ee878bf316c6bf4d51de777c0c9b1b8cfd  pool/circuits/transfer/src/main.nr
+bf3f9ce44081660bad67a0ad775af00e0603b9066dc5d8739ba03523f82d60d1  pool/circuits/withdraw/Nargo.toml
+a987c5ba151a9dafa03ff3cc3082a210f2ab098a89d0f89b4a87b5addf84b974  pool/circuits/withdraw/src/main.nr
+#
+# The Noir dependency sources (under the nargo home of scripts/extract.sh).
+64f658d97495738f12585aa0fbba025bcf51e9bc7930da8ca94fe02d3c9b479a  nargo/github.com/noir-lang/poseidon/v0.3.0/src/bench.nr
+5d8b3eeccceb4ac36b66430d3678fc2e8d9e6ab5b759556244be1234882fdff9  nargo/github.com/noir-lang/poseidon/v0.3.0/src/lib.nr
+f5e7fb3f99cf446974836548e2cba9b34f1bf72434a4a3764dbc51fb998aa398  nargo/github.com/noir-lang/poseidon/v0.3.0/src/oracle_tests.nr
+4800b851b4b0e2c71cd6456efb021be865e4fde040c6e63797b6f157c042653a  nargo/github.com/noir-lang/poseidon/v0.3.0/src/poseidon/bn254.nr
+0e1ce6ec6ed2ebbab52739ab07a2ab7a9cfb9b479cb012527f5e08447677dfd2  nargo/github.com/noir-lang/poseidon/v0.3.0/src/poseidon/bn254/consts.nr
+1daf55657af0418deb717b74cd45a1a4e9ac9d59678335cf0e677ed8a682be23  nargo/github.com/noir-lang/poseidon/v0.3.0/src/poseidon/bn254/perm.nr
+d0b044a17c0d7c26470137c17b7a43c172051da8ea74e56797323f3cc07a5a84  nargo/github.com/noir-lang/poseidon/v0.3.0/src/poseidon/mod.nr
+44f3a3d1abe7d5fa2da5c0339e52018195d55f295c320e530d355f9cc62159d8  nargo/github.com/noir-lang/poseidon/v0.3.0/src/poseidon2.nr
+6b24a2c10534708e4f74a80f9eefbe2ff869f4709f16cddb4c686995b4c38172  nargo/github.com/noir-lang/poseidon/v0.3.0/src/tests.nr
+69cbbc3f01f6b7780caaabac6f8494d94c0725f53d9147caa20617d02c254bf1  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/binary-merkle-root/src/lib.nr
+a68fdee2f70ea81a8789f75138256bec6c3284f612892d28d2e1569ccac7389d  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/ecdh/src/bjj.nr
+7283d1a87cecc2ed2b8c3ebac4088b5d9cc13b3ea466f14dda2d3db807ab508c  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/ecdh/src/lib.nr
+fe286a67d90ee8322839251bd2cf9787c8cadfd50a5757bcd343fdb224e2a14c  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/lazytower/src/lib.nr
+39fd9f1e001029379298e1268abaa845efd75a3ecda0f3dafc37aeb67cc51eef  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/lazytower/src/tower.nr
+49028f3a4f87e3a085df7aa6f004cc97a2cd3d95be5ef183f64c47e24819cf7b  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/merkle-trees/src/lib.nr
+56c3a05b71bec3d8569fccb61822da47a58f4cf85d1eb1f01a6415c2623104aa  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/merkle-trees/src/merkle.nr
+14a9288757cb6ad14b49799273186b3fc0af0f76ae2a5a9380e07d5c608608ca  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/merkle-trees/src/sparse_merkle.nr
+f05b079973602a03e71d06e3fedcaf98e5502fb15d270b899da2a485ee5fd6ae  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/packages/merkle-trees/src/types.nr
+2ba5feb7243a5f86bd9d57ce803cb232a55147396e9f6fbb256fe6404019be66  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/binary_merkle_root/mod.nr
+bbfaf2c26484116610575b2686f3b60bab0ffad18f9cd7c4cd2d910c94abb0e1  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/ecdh/mod.nr
+b48a8b3cc85888fde2c9abcb5d1c22f4e8c4baae7f0ca4ca38c7feeb1a1b59c6  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/lazytower/mod.nr
+cc226115b9ef29aea03c57997852e50751d378d8a59b887850d5087fd9766107  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/lib.nr
+99504aa337286d6464605086a9bff040fe248ca97b825d3f1e2b5a3dbcfde314  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/mt/bignum.nr
+91e6b562a8349118cd017cc7abd5ab966e53f92e754558abdbaa5e0e1dd7db35  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/mt/mod.nr
+07996fdc977425cfea175c68140bc01578b852ccf93d1930fd35536f6e19f62c  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/mt/pedersen.nr
+dad410afcd006b6f362534ce74325070ea267ec1a1875df0b484c038db04ee05  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/mt/poseidon2.nr
+7418c8db78db3eac92a2353dd6d7d592bc6bc1061c5778b64c6fdae8013c8840  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/smt/bignum.nr
+91e6b562a8349118cd017cc7abd5ab966e53f92e754558abdbaa5e0e1dd7db35  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/smt/mod.nr
+3a46b29d5ff248f4290908eb48ee483c96c68edd6f605ed9b7a20c03db583294  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/smt/pedersen.nr
+9c57b8a51e739c32e200cba5bd4a8b47a0408695995669cbc513d29150217ae5  nargo/github.com/privacy-scaling-explorations/zk-kit.noir/binary-merkle-root-v0.0.2/tests/src/smt/poseidon2.nr

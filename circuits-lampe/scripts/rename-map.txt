@@ -1,0 +1,206 @@
+# Rename map: old name -> new name.
+#
+# The proof modules were first written with working names. This map gives each old
+# module, namespace and helper-function name the new name it has in this package, so
+# that older reports can be read against these files. scripts/rename.py applies it as
+# a token substitution (whole identifiers, longest first) and scripts/check-rename.py
+# applies it backwards to check that only names and comments changed.
+#
+# Kinds: "module" names a Lean module (and its file), "namespace" a namespace,
+# "both" a name used as module and namespace, "prefix" a Noir path prefix of the
+# helper functions declared with noir_def, "control" a must-fail control.
+
+# Semantics lemmas about Lampe builtins
+both       Stage3Semantics      -> Semantics.Builtins
+both       Stage4Bits           -> Semantics.Bits
+
+# Execution helpers
+both       Stage4Exec           -> Exec.Basic
+module     Stage4Run            -> Exec.Run
+both       Stage4BitWrapper     -> Exec.BitWrapper
+both       Stage4RangeRun       -> Exec.RangeRun
+both       Stage5Array          -> Exec.ArrayOps
+both       Stage5Heap           -> Exec.Heap
+both       Stage5Loop           -> Exec.Loop
+both       Stage5UInt           -> Exec.UIntOps
+
+# Poseidon permutation of the extracted hash code (widths 2, 3 and 5)
+both       Stage4Matrix         -> Poseidon.MatrixSteps
+both       Stage4Poseidon       -> Poseidon.SigmaSteps
+both       Stage5Pow            -> Poseidon.Pow
+both       Stage5AddRound       -> Poseidon.AddRound
+both       Stage5FullRound      -> Poseidon.FullRound
+both       Stage5Matrix         -> Poseidon.Matrix
+both       Stage5Sigma          -> Poseidon.SigmaRound
+both       Stage5Config         -> Poseidon.Config
+both       Stage5Constants2     -> Poseidon.Constants2
+both       Stage5Constants5     -> Poseidon.Constants5
+both       ZcfConstants3        -> Poseidon.Constants3
+both       Stage5Partial2       -> Poseidon.PartialStep2
+both       Stage5Wrappers       -> Poseidon.Wrappers
+both       Stage5Hash           -> Poseidon.Hash
+both       Stage6Add2           -> Poseidon.Add2
+both       Stage6Add5           -> Poseidon.Add5
+both       ZcfAdd3              -> Poseidon.Add3
+both       Stage6Partial2       -> Poseidon.Partial2
+both       Stage6Partial5       -> Poseidon.Partial5
+both       ZcfPartial3          -> Poseidon.Partial3
+both       Stage6Tail2          -> Poseidon.Tail2
+both       Stage6Tail5          -> Poseidon.Tail5
+both       ZcfTail3             -> Poseidon.Tail3
+both       Stage6Permute2       -> Poseidon.Permutation2
+both       Stage6Permute5       -> Poseidon.Permutation5
+both       ZcfPermute3          -> Poseidon.Permutation3
+both       ZcfWrap3             -> Poseidon.Hash2
+
+# Determinism of the builtins and of the hash bodies
+both       Stage8Det            -> Determinism
+module     Stage8DetConfig      -> Determinism.Config
+module     Stage8DetBuiltins    -> Determinism.Builtins
+module     Stage8DetMemory      -> Determinism.Memory
+module     Stage8DetBits        -> Determinism.Bits
+module     Stage8DetHash        -> Determinism.DepositHash
+
+# Deposit
+both       Stage3Lookup         -> Deposit.MainLookup
+both       Stage3Range          -> Deposit.Range
+both       Stage4Main           -> Deposit.MainHashes
+both       Stage5Members        -> Deposit.Members
+both       Stage5Main           -> Deposit.MainPermutations
+both       Stage6Main           -> Deposit.Main
+module     Stage7Steps          -> Deposit.Steps
+module     Stage7Range          -> Deposit.RangeWitness
+both       Stage7Rules          -> Deposit.Rules
+module     Stage7Attestation    -> Deposit.Attestation
+both       Stage7Lookup         -> Deposit.VerifyLookup
+both       Stage7Witness        -> Deposit.Witness
+module     Stage7WitnessAll     -> Deposit.WitnessRules
+both       Stage8LookupConfig   -> Deposit.ConfigLookup
+both       Stage8LookupHash     -> Deposit.HashLookup
+both       Stage8Cast           -> Deposit.PinnedCast
+both       Stage8Rule3          -> Deposit.Commitment
+both       N1LookupD            -> Deposit.MerkleLookup
+both       N1Deposit            -> Deposit.AttestationRoot
+
+# Withdraw
+module     ZcfDetHash           -> Withdraw.HashDeterminism
+namespace  ZcfDet               -> Withdraw.HashGood
+both       ZcfLookupW           -> Withdraw.Lookup
+both       ZcfRules             -> Withdraw.Rules
+both       ZcfNullifier         -> Withdraw.Nullifier
+both       N1Withdraw           -> Withdraw.Root
+
+# Transfer
+module     IxpDetHash           -> Transfer.HashDeterminism
+namespace  IxpDet               -> Transfer.HashGood
+both       IxpLookupT           -> Transfer.Lookup
+both       IxpSteps             -> Transfer.CastSteps
+both       IxpFwd               -> Transfer.Forward
+both       IxpRules             -> Transfer.Rules
+both       IxpRel               -> Transfer.Relational
+both       IxpExec              -> Transfer.Execution
+both       N1Transfer           -> Transfer.Root
+
+# Merkle fold
+both       N1Merkle             -> Merkle.Fold
+both       Stage4Merkle         -> Merkle.ZeroDepth
+
+# Noir paths of the helper functions declared with noir_def
+prefix     stage5::             -> steps::
+prefix     stage6::             -> rounds::
+
+# Namespaces of the must-fail controls
+namespace  Stage7Controls       -> Controls.DepositRules
+namespace  Stage8Controls       -> Controls.DepositCast
+namespace  Stage8Controls9      -> Controls.DepositHash
+namespace  ZcfControls          -> Controls.Withdraw
+namespace  IxpControls          -> Controls.Transfer
+namespace  N1Controls           -> Controls.Merkle
+
+# Theorem names in the hand-written controls (controls/hand/)
+theorem    C9_bdet_pure_fresh   -> bdet_pure_on_fresh
+theorem    C9_config_det_nocert -> config_det_without_certificate
+theorem    C9_to_le_bits_nohp   -> to_le_bits_good_without_bound
+theorem    C9_toLeBits_nohp     -> toLeBits_det_without_bound
+
+# Control files: old file name (without .lean) -> control name in controls/
+control    Stage7Control_P0_rule3_unmodified            -> same_deposit_commitment_rel
+control    Stage7Control_C2_owner_from_salt             -> deposit_commitment_rel_owner_from_salt
+control    Stage7Control_C3_token_amount_swapped        -> deposit_commitment_rel_token_amount_swapped
+control    Stage7Control_C3_owner_salt_swapped          -> deposit_commitment_rel_owner_salt_swapped
+control    Stage7Control_P0_rule4_unmodified            -> same_deposit_attestation_rel
+control    Stage7Control_C4_depth_strict                -> deposit_attestation_rel_depth_strict
+control    Stage7Control_C4_leaf_args_swapped           -> deposit_attestation_rel_leaf_args_swapped
+control    Stage7Control_C4_root_is_commitment          -> deposit_attestation_rel_root_is_commitment
+control    Stage7Control_F_cast_canonical               -> pass_deposit_attestation_rel_canonical_casts
+control    Stage7Control_P0_pinned_unmodified           -> same_deposit_pinned_rules
+control    Stage7Control_C8_timestamps_swapped          -> deposit_pinned_rules_timestamps_swapped
+control    Stage7Control_P0_cast_u64_unmodified         -> same_cast_u64_field
+control    Stage7Control_C8_cast_plus_one               -> cast_u64_field_plus_one
+control    Stage9Control_P0_rule3_eq_unmodified         -> same_deposit_commitment_eq
+control    Stage9Control_C9_rule3_token_amount_swapped  -> deposit_commitment_eq_token_amount_swapped
+control    Stage9Control_P0_rules_eq_unmodified         -> same_deposit_rules_eq
+control    Stage9Control_C9_rules_eq_timestamps_swapped -> deposit_rules_eq_timestamps_swapped
+control    Stage9Control_C9_rules_eq_depth_strict       -> deposit_rules_eq_depth_strict
+control    Stage9Control_P0_owner_key_unmodified        -> same_deposit_owner_key
+control    Stage9Control_C9_owner_key_from_salt         -> deposit_owner_key_from_salt
+control    Stage9Control_P0_hash1_pinned_unmodified     -> same_hash_1_pinned
+control    Stage9Control_C9_hash1_pinned_plus_one       -> hash_1_pinned_plus_one
+control    Stage9Control_P0_poseidon4_pinned_unmodified -> same_deposit_poseidon4_pinned
+control    Stage9Control_C9_poseidon4_pinned_swapped    -> deposit_poseidon4_pinned_swapped
+control    ZcfControl_P0_rel_unmodified                 -> same_withdraw_rel
+control    ZcfControl_CZ_rel_token_amount_swapped       -> withdraw_rel_token_amount_swapped
+control    ZcfControl_CZ_rel_nullifier_is_root          -> withdraw_rel_nullifier_is_root
+control    ZcfControl_P0_rules_eq_unmodified            -> same_withdraw_rules_eq
+control    ZcfControl_CZ_W3_owner_from_salt             -> withdraw_rules_eq_owner_from_salt
+control    ZcfControl_CZ_W5_token_amount_swapped        -> withdraw_rules_eq_token_amount_swapped
+control    ZcfControl_P0_withdraw_rules_unmodified      -> same_withdraw_rules
+control    ZcfControl_CZ_W4_key_is_salt                 -> withdraw_nullifier_key_is_salt
+control    ZcfControl_CZ_W4_args_swapped                -> withdraw_nullifier_args_swapped
+control    ZcfControl_CZ_W2_depth_strict                -> withdraw_depth_strict
+control    ZcfControl_CZ_W2_root_is_nullifier           -> withdraw_root_is_nullifier
+control    ZcfControl_P0_poseidon2_pinned_unmodified    -> same_withdraw_poseidon2_pinned
+control    ZcfControl_CZ_poseidon2_pinned_swapped       -> withdraw_poseidon2_pinned_swapped
+control    ZcfControl_P0_hash2_fwd_unmodified           -> same_hash_2_fwd
+control    ZcfControl_CZ_hash2_fwd_plus_one             -> hash_2_fwd_plus_one
+control    IxpControl_P0_rel_unmodified                 -> same_transfer_rel
+control    IxpControl_CT_rel_T2_input1_owner_is_key     -> transfer_rel_input1_owner_is_key
+control    IxpControl_CT_rel_T3_ballast_unguarded       -> transfer_rel_ballast_unguarded
+control    IxpControl_CT_rel_T4_args_swapped            -> transfer_rel_nullifier_args_swapped
+control    IxpControl_CT_rel_T10_owner_salt_swapped     -> transfer_rel_output_owner_salt_swapped
+control    IxpControl_P0_rules_unmodified               -> same_transfer_rules
+control    IxpControl_CT_T2_input1_owner_from_salt      -> transfer_input1_owner_from_salt
+control    IxpControl_CT_T3_depth_strict                -> transfer_depth_strict
+control    IxpControl_CT_T3_ballast_unguarded           -> transfer_ballast_unguarded
+control    IxpControl_CT_T3_root_is_nullifier           -> transfer_root_is_nullifier
+control    IxpControl_CT_T4_key_is_salt                 -> transfer_nullifier_key_is_salt
+control    IxpControl_CT_T4_nullifiers_swapped          -> transfer_nullifiers_swapped
+control    IxpControl_CT_T10_token_amount_swapped       -> transfer_output_token_amount_swapped
+control    IxpControl_CT_T10_out1_owner_is_out0         -> transfer_output1_owner_is_output0
+control    IxpControl_P0_cast_u128_unmodified           -> same_cast_u128_field
+control    IxpControl_CT_cast_u128_plus_one             -> cast_u128_field_plus_one
+control    IxpControl_P0_poseidon4_pinned_unmodified    -> same_transfer_poseidon4_pinned
+control    IxpControl_CT_poseidon4_pinned_swapped       -> transfer_poseidon4_pinned_swapped
+control    IxpControl_P0_nonvacuous_unmodified          -> same_transfer_nonvacuous
+control    IxpControl_CT_nonvacuous_ballast_bound       -> transfer_nonvacuous_ballast_bound
+control    N1Control_P0_bmr_fwd_unmodified              -> same_bmr_fwd
+control    N1Control_CN_bmr_fwd_direction_flipped       -> bmr_fwd_direction_flipped
+control    N1Control_CN_bmr_fwd_all_levels_active       -> bmr_fwd_all_levels_active
+control    N1Control_P0_withdraw_root_unmodified        -> same_withdraw_root
+control    N1Control_CN_W2_depth_ignored                -> withdraw_root_depth_ignored
+control    N1Control_CN_W2_leaf_is_nullifier            -> withdraw_root_leaf_is_nullifier
+control    N1Control_P0_exec_depth_unmodified           -> same_withdraw_execution_depth
+control    N1Control_CN_exec_root_is_leaf               -> withdraw_execution_root_is_leaf
+control    N1Control_P0_root_depth3_unmodified          -> same_root_depth3
+control    N1Control_CN_root_depth3_two_levels          -> root_depth3_two_levels
+control    N1Control_P0_transfer_root_unmodified        -> same_transfer_root
+control    N1Control_CN_T3_input1_unguarded             -> transfer_root_input1_unguarded
+control    N1Control_CN_T3_input0_path_of_input1        -> transfer_root_input0_path_of_input1
+control    N1Control_P0_attestation_root_unmodified     -> same_attestation_root
+control    N1Control_CN_R4_depth_ignored                -> attestation_root_depth_ignored
+control    N1Control_CN_R4_timestamps_swapped           -> attestation_root_timestamps_swapped
+control    Stage9Control_C9_bdet_pure_fresh             -> bdet_pure_on_fresh
+control    Stage9Control_C9_config_det_nocert           -> config_det_without_certificate
+control    Stage9Control_C9_to_le_bits_nohp             -> to_le_bits_good_without_bound
+control    Stage9Control_C9_toLeBits_nohp               -> toLeBits_det_without_bound
+control    Stage7Control_C8_cast_unconstrained          -> cast_unconstrained

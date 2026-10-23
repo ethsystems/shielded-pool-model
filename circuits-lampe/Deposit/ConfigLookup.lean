@@ -1,0 +1,70 @@
+import Deposit.ConfigLookup.Leaf0
+import Deposit.ConfigLookup.Leaf1
+import Deposit.ConfigLookup.Leaf2
+import Deposit.ConfigLookup.Leaf3
+import Deposit.ConfigLookup.Leaf4
+import Deposit.ConfigLookup.Leaf5
+import Deposit.ConfigLookup.Leaf6
+import Deposit.ConfigLookup.Leaf7
+import Deposit.ConfigLookup.Leaf8
+import Deposit.ConfigLookup.Leaf9
+import Deposit.ConfigLookup.Leaf10
+import Deposit.ConfigLookup.Leaf11
+import Deposit.ConfigLookup.Leaf12
+import Deposit.ConfigLookup.Leaf13
+import Deposit.ConfigLookup.Leaf14
+import Deposit.ConfigLookup.Leaf15
+import Deposit.ConfigLookup.Leaf16
+import Deposit.ConfigLookup.Leaf17
+import Deposit.ConfigLookup.Leaf18
+import Deposit.ConfigLookup.Leaf19
+import Deposit.ConfigLookup.Leaf20
+import Deposit.ConfigLookup.Leaf21
+import Deposit.ConfigLookup.Leaf22
+import Deposit.ConfigLookup.Leaf23
+import Deposit.ConfigLookup.Leaf24
+import Deposit.ConfigLookup.Leaf25
+import Deposit.ConfigLookup.Leaf26
+import Deposit.ConfigLookup.Leaf27
+import Deposit.ConfigLookup.Leaf28
+import Deposit.ConfigLookup.Leaf29
+import Deposit.ConfigLookup.Leaf30
+import Deposit.ConfigLookup.Leaf31
+import Deposit.ConfigLookup.Leaf32
+import Deposit.ConfigLookup.Leaf33
+import Deposit.ConfigLookup.Leaf34
+import Deposit.ConfigLookup.Leaf35
+import Deposit.ConfigLookup.Leaf36
+import Deposit.ConfigLookup.Leaf37
+import Deposit.ConfigLookup.Leaf38
+import Deposit.ConfigLookup.Leaf39
+import Deposit.ConfigLookup.Leaf40
+import Deposit.ConfigLookup.Leaf41
+import Deposit.ConfigLookup.Leaf42
+import Deposit.ConfigLookup.Leaf43
+import Deposit.ConfigLookup.Leaf44
+import Deposit.ConfigLookup.Leaf45
+import Deposit.ConfigLookup.Leaf46
+import Deposit.ConfigLookup.Leaf47
+import Deposit.ConfigLookup.Leaf48
+import Deposit.ConfigLookup.Leaf49
+import Deposit.ConfigLookup.Leaf50
+import Deposit.ConfigLookup.Leaf51
+import Deposit.ConfigLookup.Leaf52
+import Deposit.ConfigLookup.Leaf53
+import Deposit.ConfigLookup.Leaf54
+import Deposit.ConfigLookup.Leaf55
+import Deposit.ConfigLookup.Leaf56
+import Deposit.ConfigLookup.Leaf57
+import Deposit.ConfigLookup.Leaf58
+import «deposit-0.0.0».Extracted
+import Deposit.Range
+open Lampe
+namespace Deposit.ConfigLookup
+theorem config_filter : «deposit-0.0.0».env.functions.filter (fun d => d.name == «poseidon-0.0.0::poseidon::config».name) = [«poseidon-0.0.0::poseidon::config»] := by
+  simp only [«deposit-0.0.0».env, «binary_merkle_root-0.0.0».env, «poseidon-0.0.0».env, «std-1.0.0-beta.21».env, Env.functions_append, List.filter_append, config_filter_0, config_filter_1, config_filter_2, config_filter_3, config_filter_4, config_filter_5, config_filter_6, config_filter_7, config_filter_8, config_filter_9, config_filter_10, config_filter_11, config_filter_12, config_filter_13, config_filter_14, config_filter_15, config_filter_16, config_filter_17, config_filter_18, config_filter_19, config_filter_20, config_filter_21, config_filter_22, config_filter_23, config_filter_24, config_filter_25, config_filter_26, config_filter_27, config_filter_28, config_filter_29, config_filter_30, config_filter_31, config_filter_32, config_filter_33, config_filter_34, config_filter_35, config_filter_36, config_filter_37, config_filter_38, config_filter_39, config_filter_40, config_filter_41, config_filter_42, config_filter_43, config_filter_44, config_filter_45, config_filter_46, config_filter_47, config_filter_48, config_filter_49, config_filter_50, config_filter_51, config_filter_52, config_filter_53, config_filter_54, config_filter_55, config_filter_56, config_filter_57, config_filter_58, List.nil_append, List.append_nil]
+theorem config_unique : Deposit.Range.UniqueDecl «deposit-0.0.0».env «poseidon-0.0.0::poseidon::config» :=
+  Deposit.Range.unique_of_filter (n := 1) config_filter
+#print axioms config_filter
+#print axioms config_unique
+end Deposit.ConfigLookup
