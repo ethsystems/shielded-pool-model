@@ -4,3 +4,6 @@
 [submodule "circuits-acir/pocs"]
 	path = circuits-acir/pocs
 	url = https://github.com/ethsystems/pocs
+[submodule "deployment/pocs"]
+	path = deployment/pocs
+	url = https://github.com/ethsystems/pocs
