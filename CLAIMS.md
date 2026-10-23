@@ -405,9 +405,10 @@ model that encryption.
 
 ## Separate packages
 
-Three packages outside the gate, [hash-agreement/](hash-agreement/README.md),
-[circuits-acir/](circuits-acir/README.md) and
-[verifier-reproduction/](verifier-reproduction/README.md), each with its own
+Four packages outside the gate, [hash-agreement/](hash-agreement/README.md),
+[circuits-acir/](circuits-acir/README.md),
+[verifier-reproduction/](verifier-reproduction/README.md) and
+[deployment/](deployment/README.md), each with its own
 check and trust base. None of them changes a claim above. Each package
 README states its claim, its trust base and what stays open.
 
@@ -416,8 +417,9 @@ README states its claim, its trust base and what stays open.
 | `hash-agreement/` | `noirPermute_eq_plainPerm`, `noirHash2_eq_plainHash2`, `solHashSeg_eq_plainHash2`, `solHashSeg_eq_noirHash2` | Over the BN254 scalar field, the Noir, plain and segmented Solidity transcriptions of the two-input Poseidon hash (Poseidon2 in the spec's naming: x^5, t = 3, 65 rounds) agree as functions of the two inputs; the Noir and plain permutations also agree on every state. Standard axioms only. | No simplification of the model: `PrimSpec.nullify` stays opaque, and no theorem links it to these definitions. Evidence for the implementation side of the membership guard (simplifications 1 and 2): the contract (`PoseidonT3` in LeanIMT) and the circuits (`hash_2`) hash Merkle nodes with the same function. Not collision resistance: `CryptoHyp` stays as it is. The transcriptions, the monolithic-to-segmented Solidity cut, the Lampe link and EVM semantics stay open (its README). | none |
 | `circuits-acir/` | `AcirLean.Deposit.amount_lt_two_pow_128`, `AcirLean.Withdraw.amount_lt_two_pow_128`, `AcirLean.Transfer.amount_ranges`, `AcirLean.Transfer.conservation`, `AcirLean.Transfer.token_consistency`, and `satisfiable` for each circuit | Every assignment that satisfies the compiled ACIR constraints (AssertZero and RANGE) of the deposit, withdraw and transfer circuits at ethsystems/pocs `a04b8b3` keeps each amount below 2^128; in transfer, the two input amounts sum to the two output amounts over the naturals, with no u128 wrap, and the four token fields are equal. Each circuit has a kernel-checked satisfying witness. Standard axioms only. | No simplification of the model. Evidence for the circuit side of three guard conjuncts that the proofs consume: the `U128` range, the transfer sum equation and token consistency. Not the contract's checks, Brillig execution, the extractor or the ABI allocation, compiler or prover soundness, or the deployed verifier (its README). The pin predates ethsystems/pocs `748884e`, which changed the transfer circuit. | none |
 
-`verifier-reproduction/` is a build reproduction, not a Lean theorem:
+`verifier-reproduction/` and `deployment/` are a build reproduction and a deployment check, not Lean theorems:
 
 | Package | Claim | Checked by | Not claimed |
 |---|---|---|---|
 | `verifier-reproduction/` | The three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (public) are bb's output for the three committed circuits, byte for byte, and bb's key hash for each equals the committed `VK_HASH` (nargo 1.0.0-beta.21, bb 5.0.0-nightly.20260324). | `verifier-reproduction/check.sh`: a rebuild from the pocs submodule at `a04b8b3` and a byte comparison, 9 s | Proof-system soundness (that an accepted proof implies a satisfying witness), that a deployed contract is compiled from these sources, the pool contract, that nargo and bb translate the circuits faithfully, and the transfer circuit after ethsystems/pocs `748884e` (2026-10-08). It never says "the verifier is correct". |
+| `deployment/` | At Sepolia block 11949456, the runtime code at the 12 claimed addresses (pool, composite, registry, three Honk verifiers, their three `ZKTranscriptLib` libraries, LeanIMT, PoseidonT3, PoseidonT5) equals a fresh offline build of ethsystems/pocs `a04b8b3` (forge 1.8.3, solc 0.8.37), with links and immutables filled, nothing masked and the metadata tails equal; the composite slots hold the verifiers with their own `VK_HASH`, no slot holds mock code, the pool emitted no `VerifierUpdated` log, and the owner and the (empty) token set match the claim. The same holds at block 11976486 (2026-10-23). | `deployment/check.sh <rpc> claims/sepolia.json`: dependencies fetched and checked by hash, a rebuild in a network namespace with no network, then a comparison through the RPC, about 10 s; `--controls` plants seven deviations that must each fail at its named check | Anything after the claimed block, token or owner behaviour, verifier or proof-system soundness, the correctness of the contracts, the mock token of the deployment (not in the claim), and the RPC, which is trusted with its history. |

@@ -43,12 +43,13 @@ collision can lock a note; locked value counts as live.
 Two kinds of units live here: machine-checked model claims and scoped
 implementation evidence with pinned inputs. A unit moves in once its
 claim is stable and its check is self-contained. No unit verifies
-deployed code: nothing about the verifier in production, the on-chain
-Merkle tree, field encodings, callers, re-entrancy, arithmetic of the
-deployed contract, governance, or privacy of the real system. The separate
-packages check selected facts about circuits, hash code and verifier
-builds, not deployed execution; no end-to-end implementation proof is
-claimed anywhere in this repo. A model theorem cannot see an
+deployed execution: nothing about the verifier's soundness in production,
+the on-chain Merkle tree, field encodings, callers, re-entrancy, arithmetic
+of the deployed contract, governance, or privacy of the real system. The
+separate packages check selected facts about circuits, hash code, verifier
+builds and the bytes of one deployment at one block, not deployed
+execution; no end-to-end implementation proof is claimed anywhere in this
+repo. A model theorem cannot see an
 implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what a deployment
 must satisfy for the model to describe it.
 
@@ -82,9 +83,13 @@ to the units here:
 - Privacy: the symbolic k-anonymity extension
   (`LeanShieldedPool/Extensions/KAnonymity.lean`); the conditional
   hiding bounds the writeup mentions are not in this repo.
-- The contract checks, the wallet proofs and the deployment check are
-  not in this repo (see Scope; issue #10 tracks the hand-offs below
-  the model).
+- The deployment check: [deployment/](deployment/README.md), the Sepolia
+  deployment at block 11949456 against a fresh build of `a04b8b3`.
+- The contract checks and the wallet proofs are not in this repo as
+  re-checkable units; their frozen reports are in
+  [evidence/](evidence/README.md) (see Scope; issue #10 tracks the
+  hand-offs below the model, issue #15 the conversion of the reports
+  into packages).
 
 ## Where it comes from
 
@@ -202,6 +207,14 @@ checksum.
   pinned nargo and bb, and compares the bytes and the key hashes. A build
   reproduction, not a theorem; it says nothing about soundness or deployed
   code.
+- [deployment/](deployment/README.md): at Sepolia block 11949456, the 12
+  contracts of the shielded pool deployment equal a fresh offline build of
+  ethsystems/pocs `a04b8b3` (the submodule `deployment/pocs`), byte for
+  byte, with links and immutables filled; the composite slots, the absence
+  of mock verifiers, the `VerifierUpdated` history, the owner and the token
+  set match the claim. A check of one chain at one block, against any RPC.
+  It trusts the RPC and says nothing about later blocks, token or owner
+  behaviour, or soundness.
 
 ## Re-check
 
