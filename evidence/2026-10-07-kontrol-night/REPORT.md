@@ -1,20 +1,19 @@
 > Frozen copy. Measured once in the research phase, not rerun here. Source date 2026-10-07 (amended 2026-10-11).
 > Sanitised for publication: see [../README.md](../README.md).
 
-> Reviewed at round 6 (artifact.md sha256 26aad2be934b2c3a8b1ed843afff77fc8808a54346550a6ec09142047ecbb49b), 1 open reject on
-> artifact.md (R5) and 1 on basis.md (R6): NOT SEALED (round cap reached). The round-6 text, byte for byte, is in git at
-> commit 9d357ca (a research branch). Amended 2026-10-11: R5, C11 and C12 are applied in the text
-> below at the place the reviewer named. R6 and C13 concern the council's basis.md in private notes, not this report; they
+> Reviewed over six rounds, with one open item on this report (R5) and one on the review's basis note (R6), which
+> is not included. Amended 2026-10-11: R5, C11 and C12 are applied in the text
+> below at the place the reviewer named. R6 and C13 concern the review's basis note, not this report; they
 > are recorded here as accepted. The amended text was given to Astra for a re-read on 2026-10-11
 > (2026-10-11). Astra's verdicts: R5 CLOSED, C12 CLOSED (it recomputed the twelve
 > precheck inequalities), C11 OPEN only for evidence: the goal-3 node constraint dumps were not tracked. They are now:
 > `d/outputs/g3-*-node{11,13,14,16}-constraints.txt` and `d/outputs/g3-constraints-summary.txt`, extracted with
 > `d/bin/kconstr.py` from the saved KCFGs on 2026-10-11 (node 16: 16 deposit / 20 transfer constraints; node 11 holds both
-> `< 2^64` bounds and the combined bound). R6 and C13 stay open until the council's basis.md in private notes is edited
+> `< 2^64` bounds and the combined bound). R6 and C13 stay open until the basis note is edited
 > (one sentence each; the text is below). The items, as the round-6 review stated them:
 > - R5 (applied, section "Proposed CLAIM1 wording", X2): the proposed X2 change dropped `t != vm` and targeted wording
 >   that is not in CLAIM1.md:118. The X2 bullet now appends the reviewer's sentence and keeps the deposit and movement limits.
-> - R6 (basis.md, accepted): "the prank split blocks every symbolic-caller proof in Kontrol 1.0.255" is too wide. Read:
+> - R6 (basis note, accepted): "the prank split blocks every symbolic-caller proof in Kontrol 1.0.255" is too wide. Read:
 >   "the prank split blocked this symbolic-caller harness (and N5b's) in Kontrol 1.0.255."
 > - C11 (applied, goal 3 result): "the only path constraint" was wrong. It now reads "the additional decoder branch
 >   constraint": node 16 holds 16 (deposit) / 20 (transfer) constraints. Entry node 11 holds both independent bounds (proof
@@ -22,13 +21,12 @@
 >   entry-length check (C4) was possible; it is input-domain evidence, not an S2 result.
 > - C12 (applied, "Runs and costs"): "Every logged precheck passed its arithmetic" was false. The first precheck (01:15:47)
 >   failed (11 >= 12), the job waited and retried, and all later prechecks passed.
-> - C13 (basis.md, accepted): the goal-3 OOM was not caused by the withdraw part (already removed); the unused S2 entry
+> - C13 (basis note, accepted): the goal-3 OOM was not caused by the withdraw part (already removed); the unused S2 entry
 >   points were removed after it.
 
 # REPORT night-kontrol (track K): withdraw with a token at any address, symbolic caller, S2 with two symbolic byte strings
 
-Writer: a Claude Opus 5.5 agent; reviewer: a Codex agent. Night of 2026-10-06/07, on a
-research branch from research commit 4df399e. Work dir: the research-phase directory of this
+Writer: a Claude Opus 5.5 agent; reviewer: a Codex agent. Night of 2026-10-06/07. Work dir: the research-phase directory of this
 report (W below; not copied here). Tags: [checked] = I ran it, with the log path;
 [read] = source reading, with file:line.
 
@@ -244,7 +242,7 @@ Every container: cap 8g with no swap, core dumps off, the Kontrol image
 mounted read-only. Gates before each start: `precheck.sh` (available - 3 GiB >= cap + every capped
 user scope) and `crun.sh` (available >= cap + 3 GiB, plus `acir-deposit/scripts/gate.sh`). Round 5
 found that `launch.sh` ignored the precheck exit status; it now enforces it and the 07:00 deadline
-(commit a77881e). The first precheck (01:15:47) failed its arithmetic (available 14 GiB - 3 = 11 against cap 8 + capped scopes 4 = 12); the job waited and retried; every later precheck passed (C12 applied).
+(a later fix). The first precheck (01:15:47) failed its arithmetic (available 14 GiB - 3 = 11 against cap 8 + capped scopes 4 = 12); the job waited and retried; every later precheck passed (C12 applied).
 
 ## Files
 

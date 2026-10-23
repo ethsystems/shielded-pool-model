@@ -3,13 +3,13 @@
 
 # REPORT: deployment check (C1), 2026-10-07
 
-> Council 2026-10-07-night-deploy ended NOT SEALED at the round cap with one reject, R5-RERUN: the printed replay command
-> could not run as printed because `tools/replay.sh` had mode 100644. Commit 9bb593a set the executable bits and b53cdf8
+> The review of this report ended with one open item, R5-RERUN: the printed replay command
+> could not run as printed because `tools/replay.sh` had mode 100644. A later commit set the executable bits and the next
 > ran the printed command (`replay-exec/`, RESULTS OK). Astra re-read both on 2026-10-11: modes 100755 at HEAD, the run follows the fix, `check-results.py`
 > on `replay-exec/logs` returns RESULTS OK; verdict CLOSED. It also noted one prerequisite the Rerun section omitted,
 > TRACE's `run/final/collected.json`; added below.
 
-Track D, night of 2026-10-06/07. Research commits 220dfdf to 4c9b1de (parent 4df399e). Nothing pushed or posted.
+Night of 2026-10-06/07. Nothing pushed or posted.
 
 Tags: [checked] means I ran it and the output is in the named log. [read] means I read it at the named place. `deploy-check.py`, `recheck-deploy.sh` and `soldeer-integrity.py` are copied in `scripts/` beside
 this report. Other paths are relative to the research-phase directory of this report (not copied here).
@@ -21,8 +21,8 @@ this report. Other paths are relative to the research-phase directory of this re
 - On the TRACE anvil deployment (a local test chain, 2026-10-06) it gives `VERDICT PASS`. All 12 runtime codes are byte-equal to a fresh build of ethsystems/pocs `a04b8b3`, and so are their 53-byte CBOR metadata tails. [checked] `logs/real.log`
 - Each of the three planted deviations gives `VERDICT FAIL` with the named check. [checked] `logs/d1-mock.log`, `logs/d2-swap.log`, `logs/d3-byte.log`
 - Four extra controls test the metadata boundary, the event check and the owner check. [checked] `logs/controls.log`
-- `tools/check-results.py` reads saved logs and checks each case's exit code, FAIL names and WARN names. It does not rerun the chain. On `logs/` (code at 25e19dc): `RESULTS OK`. [checked] `logs/RESULTS.txt`
-- `tools/replay.sh` reran all eight cases at 2f3ad65 into a new dir with fresh runs, claims and logs, then validated them: `RESULTS OK`. [checked] `replay/logs/RESULTS.txt`
+- `tools/check-results.py` reads saved logs and checks each case's exit code, FAIL names and WARN names. It does not rerun the chain. On `logs/`: `RESULTS OK`. [checked] `logs/RESULTS.txt`
+- `tools/replay.sh` reran all eight cases into a new dir with fresh runs, claims and logs, then validated them: `RESULTS OK`. [checked] `replay/logs/RESULTS.txt`
 
 | Case | Plant | Verdict | Failing checks |
 |---|---|---|---|
@@ -74,7 +74,7 @@ The 12 contracts: pool, composite, registry, three Honk verifiers, their three `
 
 - **Sources from the deployment's own `out/`.** Every reference is a fresh `git archive` built in the run's own out dir; a build-info with other source text is refused. TRACE gave only addresses, the state and its provenance hashes. [read] `deploy-check.py:58`; [checked] `logs/real.log`
 - **Strip that hides differences.** Links, immutables and the library prefix are filled, not masked. The cut is exactly the tail the suffix names: c5 (last body byte) FAILs, c4 (tail byte) WARNs. [checked] `logs/controls.log`
-- **PASS without deviations.** Real and deviation runs used the same code: `driver=25e19dc` in every `logs/` header, `driver=2f3ad65` in every `replay/logs/` header. [checked] `logs/CODE-SHA256.txt`, `replay/CODE-SHA256.txt`
+- **PASS without deviations.** Real and deviation runs used the same code: one driver hash in every `logs/` header, and one in every `replay/logs/` header. [checked] `logs/CODE-SHA256.txt`, `replay/CODE-SHA256.txt`
 - **FAIL for an unrelated reason.** Every case has CHAIN and CHAIN-END PASS and no traceback; d3, c5, c6 and c7 fail only at the planted check. [checked] `logs/RESULTS.txt`
 - **Rebuild compared with itself.** Chain bytes come only from `eth_getCode`; d3 and c5 show a one-byte chain change is found. [checked]
 
@@ -86,7 +86,7 @@ The 12 contracts: pool, composite, registry, three Honk verifiers, their three `
 - forge 1.8.3, solc 0.8.37 and anvil are trusted; a shared compiler bug affects both sides. [read]
 - zk-kit provenance is the direct `git archive` of the lock rev; the tree id is recorded, not recomputed after extraction. [read] `recheck-deploy.sh:33`
 - `logs/` headers say "driver working tree differs" because those runs wrote tracked log files. The replay writes no tracked file, and its headers have no such line. [checked] `replay/logs/*.log`
-- The 220dfdf commit message says 13 runtime codes; the right count is 12. The round 2 plan had 1,502 words, two over its cap. [read]
+- An early commit message says 13 runtime codes; the right count is 12. The round 2 plan had 1,502 words, two over its cap. [read]
 
 ## Generated files, not committed
 

@@ -3,7 +3,7 @@
 
 # Claim 2: privacy, prospective
 
-These privacy results are ported (PRIVPORT) to the repinned model. The pre-repin results remain replayable at `753c60b`.
+These privacy results are ported (PRIVPORT) to the repinned model. The pre-repin results remain replayable at the pre-repin revision, which is not included.
 
 Chapter for the research-phase writeup, section 6 (written by Fable; v2 after a cross-family
 review, all nine items applied; zero new proofs; sources: LEDGER rows 8-9 (ported, PRIVPORT), A6,
@@ -143,7 +143,7 @@ Replay: `scripts/recheck.sh privacy <new-out-dir>` checks the ported sources aga
 The reviewed PRIVPORT replay rebuilt 96 modules and audited 1,487 declarations, including 769 theorems, with standard axioms only.
 It includes stages 1-7b and the pair witness. It trusts prebuilt VCV-io dfc7ff07, Mathlib, and the Lean v4.33.1 binary.
 The main gate excludes these evidence privacy sources.
-The historical replay at `753c60b` audited 1,478 declarations; its validation driver rejected 18 planted cases.
+The historical pre-repin replay audited 1,478 declarations; its validation driver rejected 18 planted cases.
 That driver remains historical. The current replay is dated 2026-10-06.
 
 (No disagreements: all nine review items applied; two status changes were re-verified against

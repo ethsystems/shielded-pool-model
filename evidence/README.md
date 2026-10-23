@@ -18,9 +18,9 @@ private; these copies keep the reports, their numbers and their dates.
 | [2026-10-07-deploy-check/REPORT.md](2026-10-07-deploy-check/REPORT.md) | 2026-10-07 (amended 2026-10-11) | The deployment check (C1) on a local test chain: all 12 runtime codes equal a fresh offline build of `a04b8b3`; three planted deviations and four controls give the expected verdicts | A check of any public chain; it binds code and configuration at one block only |
 | [2026-10-07-deploy-check/scripts/](2026-10-07-deploy-check/scripts/) | 2026-10-07 | The three scripts that report ran: `recheck-deploy.sh` (export, dependency check, offline build), `deploy-check.py` (compare with the chain), `soldeer-integrity.py` | A packaged check: they are copies, not wired into this repository and not run here; the test-chain fixtures and `tools/` they were run with are not copied |
 | [2026-10-07-kontrol-night/REPORT.md](2026-10-07-kontrol-night/REPORT.md) | 2026-10-07 (amended 2026-10-11) | Kontrol 1.0.255: the withdraw success path passes with the token argument at any address above 0x11 except the cheatcode account, in a fixed-code environment where success exists only on two recording tokens, with one trusted bytes-prefix rewrite rule; six mutants fail (the stock proof and the mutants together: 2288 s, 6.52 GB peak); 23 of 23 forge replays pass; the symbolic-caller run and the two-symbolic-byte-string run stop | A symbolic caller, arbitrary token behaviour, or a pool result for two symbolic byte strings |
-| [2026-10-13-claim-board/CLAIM1-board.md](2026-10-13-claim-board/CLAIM1-board.md) | 2026-10-13 (rows from 2026-10-02) | The 36-rule board for claim 1 (on-chain safety): 20 rows green within a stated scope (five of them Proved*), 16 assumed; its counting rule, assumption groups, conditions, and "Why not green" with one blocker per assumed row | A proof of claim 1: the claim is a target, and a green row is scoped, not deployment safety |
+| [2026-10-13-claim-board/CLAIM1-board.md](2026-10-13-claim-board/CLAIM1-board.md) | 2026-10-13 (rows from 2026-10-02) | The 36-rule board for claim 1 (on-chain safety): 20 rows green within a stated scope (five with Proved* evidence), 16 assumed; its counting rule, assumption groups, conditions, and "Why not green" with one blocker per assumed row | A proof of claim 1: the claim is a target, and a green row is scoped, not deployment safety |
 | [2026-10-13-findings/FINDINGS.md](2026-10-13-findings/FINDINGS.md) | 2026-10-13 | The findings register: 80 rows, one pool bug (F8), 29 errors in our own claims, 11 client defects, and the tool defects and limits, with the state of each on 2026-10-13 | Current upstream states; evidence for each row (this copy keeps only the date of each record) |
-| [2026-10-13-halmos-caller/REPORT.md](2026-10-13-halmos-caller/REPORT.md) | 2026-10-13 | Halmos 0.3.3: the withdraw success path holds with a symbolic caller (154 paths); both mutants fail with concrete replays | Proof lengths other than 0, 1, 32, 65 and 1024 bytes; deposit and transfer |
+| [2026-10-13-halmos-caller/REPORT.md](2026-10-13-halmos-caller/REPORT.md) | 2026-10-13 | Halmos 0.3.3: the withdraw success path holds with a symbolic caller (154 paths) in a fixed-code environment where success exists only on two recording tokens; both mutants fail with concrete replays | Proof lengths other than 0, 1, 32, 65 and 1024 bytes; arbitrary token behaviour, actual token movement, proof binding; deposit and transfer |
 
 ## Read with care
 
@@ -37,9 +37,17 @@ they were copied:
   private implementation repository's PR #16 (2026-10-08) changed the
   transfer circuit after that pin.
 - Run labels (N5, D4, SYMTOK and others) name research-phase work done
-  once; the glossary below says what each was. Research commit hashes
-  are left as written. Paths that a report gives relative to its own
-  work directory (`W/...`, `logs/...`, `bin/...`) were not copied.
+  once; the glossary below says what each was. Paths that a report
+  gives relative to its own work directory (`W/...`, `logs/...`,
+  `bin/...`) were not copied.
+- The re-run and reproduction sections of the reports (`run.sh`,
+  `bin/verify.sh`, `tools/replay.sh`, `scripts/recheck.sh privacy`)
+  describe the research archives, which are not included. None of them
+  runs from this repository. This repository's command is
+  `bash scripts/gate.sh`, and it does not read this folder.
+- The old Halmos report (2026-09-16) numbers assumptions its own way:
+  there A1 is verifier soundness, A3 token honesty and A6 mapping-key
+  injectivity. The board's A-numbers (below) are the later ones.
 
 ## Glossary
 
@@ -73,9 +81,8 @@ Lean results over the model and the contract:
 
 Circuit and hash results:
 
-- N1 (2026-10-01): under patched Lampe, the Merkle-fold equations of the
-  extracted withdraw, transfer and deposit circuits, with depth bounds
-  32, 32 and 20.
+- N1: under patched Lampe, the Merkle-fold equations of the extracted
+  circuits (rows T3 and W2).
 - Stages 2 to 8, `Stage8Rule3`, `ZcfNullifier`, "the deposit rules
   work": the source-route proofs over the Noir circuits extracted with a
   patched Lampe (the commitment, nullifier, ownership and depth
@@ -102,7 +109,7 @@ Contract runs, on the pool at `a04b8b3` unless the report says otherwise:
   and transfer guards for proof and payload lengths 0..2^30; N5b the
   withdraw guards for proof lengths below 2^64, with a patched KEVM
   `abi.md`. The scope paragraph near the top of the board is theirs.
-- N9b (2026-10-02): Halmos, the five owner functions of row G1.
+- N9b: Halmos, the five owner functions of row G1.
 - N12, N14: bounded tree checks at depth 0..3 with a keccak stand-in;
   N14 checks the new flag marking of row T12.
 - N15b, N15c: scoped symbolic proofs of the insertion loop's storage
@@ -124,6 +131,11 @@ Contract runs, on the pool at `a04b8b3` unless the report says otherwise:
   payload and withdraw proofs symbolic below 2^64.
 - D5X1: Halmos, duplicate-leaf rejection and re-entry rejection with no
   tree-depth bound; byte lengths 0, 1, 32, 65 and 1024 (rows D5, X1).
+- N3: the client coverage run of 2026-09-30, reported in
+  [its report](2026-10-01-client-coverage/REPORT.md). The archive files
+  it names (`TRUSTED.md`, `REVIEW.md`, `GAPS.md`, `deliverable/`,
+  `run.sh`) are the archive's own and are not included; its `REVIEW.md`
+  is not this repository's [REVIEW.md](../REVIEW.md).
 - "The Halmos guard checks", "the bounded insert checks": earlier Halmos
   runs on the guards and on insertion, bytes 0 and 65, depth 0..3.
 - NIGHT-LEMMAS: a K rewrite rule on byte-string prefixes, defined in the
@@ -139,8 +151,9 @@ Documents and process words:
   ([REVIEW.md](../REVIEW.md), part 5); row 3 the client; row 4 the
   circuit source under patched Lampe; row 6 the Halmos contract
   properties; row 7 exact root retention; rows 8 and 9 the privacy
-  games. A1 to A13 are its assumption ids, restated in the board's
-  "Conditions and assumptions".
+  games. A1 to A13 are its assumption ids; the board's "Conditions and
+  assumptions" restates the ones the board uses (A3, A6 and A8 appear
+  only in its assumption groups).
 - CLAIM1.md: the research board. Its copy is
   [CLAIM1-board.md](2026-10-13-claim-board/CLAIM1-board.md); line
   numbers in the reports refer to the original. WHY-NOT-GREEN was merged
@@ -155,12 +168,14 @@ Documents and process words:
   retrospective. Not included.
 - Council, "Council C2", CARDS, "writeup plan v3": review and planning
   records of the research phase. A council is a writer and a reviewer
-  from two model families over fixed rounds; C2 is the challenge that set
-  the board's counting rule.
+  from two model families over fixed rounds; its artifact and basis
+  notes are the review's documents, not included. C2 is the challenge
+  that set the board's counting rule. R-, C-numbered items in a report's
+  banner are that review's rejects and corrections.
 - Judges ("Astra judge", "Fable judge", "Claude judge", "Codex council
   reviewer"): a model of that family read the result.
-  PASS-WITH-CORRECTIONS means it passed after the named corrections were
-  applied. "Controller": the session that coordinated the workers.
+  PASS-WITH-CORRECTIONS is a pass conditional on the named corrections;
+  where a report says they were applied, it says so separately. "Controller": the session that coordinated the workers.
 - The private implementation repository and the private spec repository
   are named by role. The code pinned at `a04b8b3` is public in
   ethsystems/pocs; spec 2 at revision 4d4dce1 is public in
@@ -176,7 +191,9 @@ dates are unchanged. For publication:
   register's "Record date" column holds those dates. Links between the
   copies point to the copies.
 - One third-party product name in F28 became "a provider content
-  filter". Timezone offsets were removed from timestamps.
+  filter". Timezone offsets were removed from timestamps. Research
+  commit hashes were removed; the public pins `a04b8b3` and `4d4dce1`
+  stay.
 - Internal task ids, judge record ids, agent session names, research
   branch names, machine names and local paths were removed. Model family names
   (Astra, Fable, Claude, Codex) were kept.
@@ -184,8 +201,8 @@ dates are unchanged. For publication:
   ethsystems/pocs, so it is cited there.
 - Removed content: one paragraph about an unconfirmed suspicion in other
   projects, the text of F47 (an unconfirmed tool-defect suspicion), and
-  the text, finder and status of F14 and F33 (PoC fixture details that the
-  register marks "keep private"), all in the findings register; the harness-name table and the judge-id Evidence
+  the text, component, finder, status and writeup cells of F14, F33 and
+  F47 (marked keep-private in the register), all in the findings register; the harness-name table and the judge-id Evidence
   column of "Why not green" (claim board). The claim board keeps the
   sections from its header to "What is possible but expensive".
 - Scripts: in `recheck-deploy.sh`, the `POCS` default path became a

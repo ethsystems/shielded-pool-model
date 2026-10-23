@@ -6,8 +6,7 @@
 Worker: Claude Opus 5, 2026-09-16. Start 19:00:10, end 19:47 (47 minutes).
 Budget 60 minutes. Work dir: a local cache directory (not copied here).
 
-Input: the private implementation repository at `94e30f3f0b9fb4a3ba0d0a3b220c49c075c42672`,
-before the fix in its PR #12
+Input: the implementation before the fix in PR #12 (the pre-fix commit is not public)
 (only an untracked `.claude/`). `ShieldedPool.sol` is 383 lines, read in full.
 
 ## Summary
@@ -213,7 +212,7 @@ checks. Row ids are from the research-phase ledger of 2026-09-16.
 | P4 tree grows | `St.minted` grow-only | P5 out of reach; code reading only | open |
 | A1 verifier soundness | `CryptoHyp` | mock always true | stays assumed |
 | A3 ERC-20 honesty | `St.balance` | one OZ mock, one hook token | stays assumed |
-| A6 mapping-key injectivity | (new at L8) | Halmos models `keccak` mapping slots as injective | assumed inside the tool, same as A6 |
+| A6 mapping-key injectivity | (not a model hypothesis) | Halmos models `keccak` mapping slots as injective | assumed inside the tool, same as A6 |
 
 ## Recommendation
 
