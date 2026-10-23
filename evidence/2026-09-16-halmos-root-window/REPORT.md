@@ -1,5 +1,9 @@
 > Frozen copy. Measured once in the research phase, not rerun here. Source date 2026-09-16.
 > Sanitised for publication: see [../README.md](../README.md).
+> Correction (findings register F30, 2026-09-17): the "arbitrary storage" results below covered one reached
+> state. Halmos's symbolic-storage flag kept the slots that `setUp` wrote concrete. Read every "arbitrary
+> storage", "all states" and "every reachable state" sentence in this report as a reached-state result.
+> The symbolic-storage checks did not establish one-step induction over all storage.
 
 # REPORT: contract layer trial with Halmos
 

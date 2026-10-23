@@ -48,6 +48,13 @@ they were copied:
 - The old Halmos report (2026-09-16) numbers assumptions its own way:
   there A1 is verifier soundness, A3 token honesty and A6 mapping-key
   injectivity. The board's A-numbers (below) are the later ones.
+- The same report's "arbitrary storage" results were withdrawn the next
+  day (F30): the symbolic-storage flag kept the `setUp` slots concrete,
+  so they are reached-state results. The copy carries a correction note.
+- G1 (owner functions) is green "under N9b owner-check scope". The frame
+  exclusions of that scope are in review records that are not included,
+  so the public claim is narrower than the cell reads: the five owner
+  functions behave as stated within a frame scope not given here.
 
 ## Glossary
 

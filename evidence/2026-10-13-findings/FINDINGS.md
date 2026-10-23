@@ -95,7 +95,7 @@ Every row cited at least one evidence path in the research phase, checked to exi
 
 - Mechanism (F8): before PR #12, `_insertCommitment` banked the current root, when nonzero, into `validRoots` and the 100-slot ring before it inserted. A transfer calls it twice, so its second call banked the root between the two outputs, although no operation ends there.
 - Spec 4.4 admits only the root after an operation's final insertion (spec 2 at the pin `4d4dce1`, `specs/2/README.md`, section 4.4). The model pushes one root per operation, so the chain was more permissive. Each transfer used two ring slots, so in a run of transfers only, the ring held roots for as few as 50 transfers; the current root is accepted separately.
-- Found on 2026-09-16 by Halmos: `check_P4v1_postTxRootsOnly_expectFail` returned the mid-transfer root after leaf 3 in 0.13 s. No theft path: that root is a real prefix root, so membership stays sound.
+- Found on 2026-09-16 by Halmos: `check_P4v1_postTxRootsOnly_expectFail` returned the mid-transfer root after leaf 3 in 0.13 s. That root is a real prefix root, so membership against it stays sound; no theft path was found, and the check does not prove there is none.
 - Fix: the private implementation repository's PR #12, merged as a04b8b3 on 2026-09-22. It removes `_insertCommitment`. Deposit and transfer call `_tree.insert` directly, then one `_recordRoot` after the last insert, so the window holds 100 post-operation roots. The same PR fixed the compliance pool.
 - Re-check: the counterexample is gone on the PR branch and the merged code (2026-09-22), and Lean over via-IR Yul shows the ring slot gets the root after both inserts (LEDGER row 7Y).
 
