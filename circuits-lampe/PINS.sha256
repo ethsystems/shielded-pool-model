@@ -1,7 +1,7 @@
 # Pins of circuits-lampe. Lines "# key value" are read by scripts/check.sh and scripts/extract.sh;
 # the other lines are sha256sum lines.
 # lampe_repo https://github.com/oskarth/lampe
-# lampe_rev 55d4fbaeb5c6aeb69de2de7516fb86285120afad
+# lampe_rev e0c0f6097bb97dd539355b76371e2443bd58b656
 # lampe_upstream https://github.com/reilabs/lampe
 # lampe_upstream_rev 919a38712d22d05fc83e59af17ef57077abda1e0
 # lean leanprover/lean4:v4.33.1

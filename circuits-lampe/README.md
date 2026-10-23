@@ -65,8 +65,10 @@ In withdraw and transfer `C` (or `Cᵢ`) is `hash4 token amount (ownerKey spendi
 of that note; transfer amounts are `u128` and enter as `amount.toNat`. Relational forms of the
 same rules (`Deposit.Rules`, `Deposit.Attestation`, `Withdraw.Rules`, `Transfer.Relational`)
 state them over the outcomes of the extracted hash calls, with no pure function.
-[statements/INVENTORY.md](statements/INVENTORY.md) lists every theorem of the package with
-its exact statement: 4,705 theorems, most of them lookup certificates.
+[statements/INVENTORY.md](statements/INVENTORY.md) lists the 634 theorems of the package
+outside the lookup-certificate leaves, each with its exact statement;
+[statements/CERTIFICATES.md](statements/CERTIFICATES.md) lists the 4,071 theorems of the leaves
+in the same format.
 
 The comments in the modules name rules by number: deposit rule 2 is the owner key, rule 3 the
 commitment, rule 4 the attestation membership; withdraw W2 is the Merkle root, W3 the
@@ -109,7 +111,7 @@ No proof uses `native_decide`.
 
 ## Trust base
 
-- Lampe at the fork commit (`oskarth/lampe` at `55d4fba`, on upstream reilabs/lampe
+- Lampe at the fork commit (`oskarth/lampe` at `e0c0f60`, on upstream reilabs/lampe
   `919a387`): its semantics and its generated stdlib. The fork changes, in commit order: the
   loop rule must establish the postcondition after zero iterations (upstream #315); the
   extractor builds against Noir 1.0.0-beta.21; Lean 4.33.1 and the matching Mathlib; the Noir
@@ -122,7 +124,8 @@ No proof uses `native_decide`.
   assertion reaches (it renders no text); `as_witness` gets a value-level semantics (a no-op),
   `toLeBits` and `modulusLeBits` get Boolean signatures; the cast builtin is one fixed function
   per type pair (upstream #317), where before a derivation could choose any cast value; build
-  flags. Each change is a commit on the fork branch.
+  flags and manifests; the stdlib's own check modules move to `stdlib/lampe/Checks/`. Each
+  change is a commit on the fork branch.
 - The extractor (the fork's Rust binary, which runs the Noir 1.0.0-beta.21 frontend):
   trusted to translate the Noir source faithfully. `scripts/extract.sh` shows that it
   reproduces `extracted/` byte for byte; it does not show that the translation is right.
@@ -136,7 +139,7 @@ No proof uses `native_decide`.
 
 [PINS.sha256](PINS.sha256) holds the pins as `# key value` lines and sha256sum lines:
 
-- Lampe: `https://github.com/oskarth/lampe` at `55d4fbaeb5c6aeb69de2de7516fb86285120afad`,
+- Lampe: `https://github.com/oskarth/lampe` at `e0c0f6097bb97dd539355b76371e2443bd58b656`,
   on upstream `https://github.com/reilabs/lampe` at `919a38712d22d05fc83e59af17ef57077abda1e0`.
   `lakefile.toml` requires the fork by git at that commit, twice: `Lampe` (`subDir = "Lampe"`)
   and its generated stdlib `std-1.0.0-beta.21` (`subDir = "stdlib/lampe"`).
@@ -185,7 +188,8 @@ the circuit-source pins, check out the pocs submodule first (from the repo root:
    auxiliary ones included, depends on a subset of the three axioms; no package module declares
    an axiom or an opaque constant; the census imports every module; and the theorems, their
    printed statements and the SHA-256 of their raw types equal
-   [statements/INVENTORY.md](statements/INVENTORY.md) and `statements/RAW.sha256`;
+   [statements/INVENTORY.md](statements/INVENTORY.md), `statements/CERTIFICATES.md` and
+   `statements/RAW.sha256`;
 8. the controls (`scripts/controls.py`): `scripts/gen-controls.py` must reproduce every file
    of `controls/`; each must-fail control must fail with the first error in
    `controls/EXPECTED.tsv`, and not by a parse or name error; each must-pass copy must compile
@@ -194,7 +198,8 @@ the circuit-source pins, check out the pocs submodule first (from the repo root:
 `scripts/extract.sh` is not part of the check. It builds the fork's extractor, reads the three
 circuits from the pocs submodule at the pin, clones the two Noir dependencies by tag (commit
 and source hashes checked), runs the extractor with no network access for nargo, and compares
-every generated Lean file with `extracted/`.
+every generated Lean file with `extracted/`. The fork pins Rust 1.90.0 in `rust-toolchain.toml`;
+the reproduction recorded here used Rust 1.95.0 (`RUST_TOOLCHAIN=1.95.0`).
 
 Cost on a Linux laptop (16 threads, 30 GB, btrfs), with Mathlib's oleans present: the
 extracted packages build in 58 s (lake, `LEAN_NUM_THREADS=4`); with `LEAN_NUM_THREADS=1`, the
@@ -211,7 +216,8 @@ cargo cache, the extractor build and the three extractions took 3 minutes.
 - `extracted/`: `deposit-0.0.0/`, `withdraw-0.0.0/`, `transfer-0.0.0/`, and
   `deps/poseidon-0.0.0/`, `deps/binary_merkle_root-0.0.0/`, as the extractor wrote them.
 - `Semantics/`: lemmas about Lampe builtins the proofs use (the stdlib Poseidon2 permutation
-  call, `toLeBits` on 32 Boolean bits).
+  call, `toLeBits` on 32 Boolean bits). They are copies, under package names, of two check
+  modules of the fork's stdlib (`stdlib/lampe/Checks/Semantics.lean` and `Checks/Bits.lean`).
 - `Exec/`: execution lemmas (binding, heap frames, loops, arrays, integer operations).
 - `Poseidon/`: the extracted permutation at widths 2, 3 and 5: round constants, constant
   additions, S-boxes, matrices, full and partial rounds, `Permutation2/3/5`, `Hash2`.
@@ -220,7 +226,7 @@ cargo cache, the extractor build and the three extractions took 3 minutes.
 - `Deposit/`, `Withdraw/`, `Transfer/`: the rule theorems, the lookup certificates and the
   non-vacuity executions of each circuit.
 - `Merkle/`: the Merkle fold and the depth-0 root.
-- `Census.lean`; `statements/`: the inventory and the raw-type hashes.
+- `Census.lean`; `statements/`: the inventory, the certificate list and the raw-type hashes.
 - `controls/`: the generated controls, `controls/hand/` (five written by hand) and
   `controls/EXPECTED.tsv`.
 - `scripts/`: `check.sh`, `build.py`, `census.py`, `controls.py`, `gen-controls.py`,

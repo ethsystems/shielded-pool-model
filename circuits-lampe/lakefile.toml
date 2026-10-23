@@ -47,13 +47,13 @@ globs = ["Merkle.+"]
 [[require]]
 name = "Lampe"
 git = "https://github.com/oskarth/lampe"
-rev = "55d4fbaeb5c6aeb69de2de7516fb86285120afad"
+rev = "e0c0f6097bb97dd539355b76371e2443bd58b656"
 subDir = "Lampe"
 
 [[require]]
 name = "std-1.0.0-beta.21"
 git = "https://github.com/oskarth/lampe"
-rev = "55d4fbaeb5c6aeb69de2de7516fb86285120afad"
+rev = "e0c0f6097bb97dd539355b76371e2443bd58b656"
 subDir = "stdlib/lampe"
 
 # The extracted circuits and their two Noir dependencies (extracted/).
