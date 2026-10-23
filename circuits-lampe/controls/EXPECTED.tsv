@@ -1,0 +1,81 @@
+# control	verdict	first error (line:col: message), for fail controls
+same_deposit_commitment_rel	pass	
+deposit_commitment_rel_owner_from_salt	fail	32:36: Application type mismatch: The argument
+deposit_commitment_rel_token_amount_swapped	fail	35:36: Application type mismatch: The argument
+deposit_commitment_rel_owner_salt_swapped	fail	35:36: Application type mismatch: The argument
+same_deposit_attestation_rel	pass	
+deposit_attestation_rel_depth_strict	fail	65:10: Application type mismatch: The argument
+deposit_attestation_rel_leaf_args_swapped	fail	55:36: Application type mismatch: The argument
+deposit_attestation_rel_root_is_commitment	fail	71:14: Application type mismatch: The argument
+pass_deposit_attestation_rel_canonical_casts	pass	
+same_deposit_pinned_rules	pass	
+deposit_pinned_rules_timestamps_swapped	fail	52:36: Application type mismatch: The argument
+same_cast_u64_field	pass	
+cast_u64_field_plus_one	fail	14:4: Type mismatch
+same_deposit_commitment_eq	pass	
+deposit_commitment_eq_token_amount_swapped	fail	23:8: maximum recursion depth has been reached
+same_deposit_rules_eq	pass	
+deposit_rules_eq_timestamps_swapped	fail	32:22: maximum recursion depth has been reached
+deposit_rules_eq_depth_strict	fail	32:14: Application type mismatch: The argument
+same_deposit_owner_key	pass	
+deposit_owner_key_from_salt	fail	24:12: maximum recursion depth has been reached
+same_hash_1_pinned	pass	
+hash_1_pinned_plus_one	fail	13:32: maximum recursion depth has been reached
+same_deposit_poseidon4_pinned	pass	
+deposit_poseidon4_pinned_swapped	fail	13:41: maximum recursion depth has been reached
+same_withdraw_rel	pass	
+withdraw_rel_token_amount_swapped	fail	39:36: Application type mismatch: The argument
+withdraw_rel_nullifier_is_root	fail	58:16: Application type mismatch: The argument
+same_withdraw_rules_eq	pass	
+withdraw_rules_eq_owner_from_salt	fail	35:17: maximum recursion depth has been reached
+withdraw_rules_eq_token_amount_swapped	fail	35:17: maximum recursion depth has been reached
+same_withdraw_rules	pass	
+withdraw_nullifier_key_is_salt	fail	28:9: maximum recursion depth has been reached
+withdraw_nullifier_args_swapped	fail	22:61: (deterministic) timeout at `whnf`, maximum number of heartbeats (4000000) has been reached
+withdraw_depth_strict	fail	28:53: Application type mismatch: The argument
+withdraw_root_is_nullifier	fail	28:58: Application type mismatch: The argument
+same_withdraw_poseidon2_pinned	pass	
+withdraw_poseidon2_pinned_swapped	fail	12:38: maximum recursion depth has been reached
+same_hash_2_fwd	pass	
+hash_2_fwd_plus_one	fail	12:2: maximum recursion depth has been reached
+same_transfer_rel	pass	
+transfer_rel_input1_owner_is_key	fail	65:36: Application type mismatch: The argument
+transfer_rel_ballast_unguarded	fail	91:23: Application type mismatch: The argument
+transfer_rel_nullifier_args_swapped	fail	58:36: Application type mismatch: The argument
+transfer_rel_output_owner_salt_swapped	fail	98:36: Application type mismatch: The argument
+same_transfer_rules	pass	
+transfer_input1_owner_from_salt	fail	99:26: maximum recursion depth has been reached
+transfer_depth_strict	fail	99:9: Application type mismatch: The argument
+transfer_ballast_unguarded	fail	99:15: Application type mismatch: The argument
+transfer_root_is_nullifier	fail	99:9: Application type mismatch: The argument
+transfer_nullifier_key_is_salt	fail	99:21: maximum recursion depth has been reached
+transfer_nullifiers_swapped	fail	99:21: Application type mismatch: The argument
+transfer_output_token_amount_swapped	fail	99:31: maximum recursion depth has been reached
+transfer_output1_owner_is_output0	fail	99:36: maximum recursion depth has been reached
+same_cast_u128_field	pass	
+cast_u128_field_plus_one	fail	14:4: Type mismatch
+same_transfer_poseidon4_pinned	pass	
+transfer_poseidon4_pinned_swapped	fail	11:57: maximum recursion depth has been reached
+same_transfer_nonvacuous	pass	
+transfer_nonvacuous_ballast_bound	fail	14:39: Tactic `decide` proved that the proposition
+same_bmr_fwd	pass	
+bmr_fwd_direction_flipped	fail	99:14: Application type mismatch: The argument
+bmr_fwd_all_levels_active	fail	99:14: Application type mismatch: The argument
+same_withdraw_root	pass	
+withdraw_root_depth_ignored	fail	24:14: Application type mismatch: The argument
+withdraw_root_leaf_is_nullifier	fail	20:129: (deterministic) timeout at `whnf`, maximum number of heartbeats (4000000) has been reached
+same_withdraw_execution_depth	pass	
+withdraw_execution_root_is_leaf	fail	18:14: Type mismatch
+same_root_depth3	pass	
+root_depth3_two_levels	fail	15:2: maximum recursion depth has been reached
+same_transfer_root	pass	
+transfer_root_input1_unguarded	fail	39:8: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+transfer_root_input0_path_of_input1	fail	38:33: Application type mismatch: The argument
+same_attestation_root	pass	
+attestation_root_depth_ignored	fail	25:18: Application type mismatch: The argument
+attestation_root_timestamps_swapped	fail	25:18: maximum recursion depth has been reached
+bdet_pure_on_fresh	fail	6:83: Type mismatch
+config_det_without_certificate	fail	10:2: Tactic `apply` failed: could not unify the conclusion of `Good.call Deposit.HashLookup.x5_2_config_unique`
+to_le_bits_good_without_bound	fail	9:85: unsolved goals
+toLeBits_det_without_bound	fail	23:38: Tactic `assumption` failed
+cast_unconstrained	fail	18:5: Application type mismatch: The argument

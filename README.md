@@ -201,6 +201,15 @@ checksum.
   `circuits-acir/pocs` with pinned nargo and noir-inspector and compares
   them with pinned hashes. Separate package, own check and trust base;
   the gate does not build it.
+- [circuits-lampe/](circuits-lampe/README.md): over the Noir source of the
+  three PoC circuits at ethsystems/pocs `a04b8b3`, extracted into Lean by a
+  patched Lampe (a fork pinned by commit), the hash-bound rules hold for
+  every accepting execution: the commitment and nullifier equations, the
+  one owner key, and the Merkle roots as folds with depth bounds 20, 32
+  and 32; the extracted Poseidon permutations compute their pure
+  functions. Statements about the program as Lampe reads it, not the
+  compiled constraints; the Noir compiler stays trusted on this route.
+  Separate package, own check and trust base; the gate does not build it.
 - [verifier-reproduction/](verifier-reproduction/README.md): rebuilds the
   three Solidity verifiers committed in ethsystems/pocs at `a04b8b3` (the
   submodule `verifier-reproduction/pocs`) from the committed circuits with
