@@ -94,8 +94,9 @@ Circuit and hash results:
 - Stages 2 to 8, `Stage8Rule3`, `ZcfNullifier`, "the deposit rules
   work": the source-route proofs over the Noir circuits extracted with a
   patched Lampe (the commitment, nullifier, ownership and depth
-  equations of rows D4, T2, T4, T10, W3, W4 and W5). Not in this
-  repository.
+  equations of rows D4, T2, T4, T10, W3, W4 and W5). In this repository
+  as [circuits-lampe/](../circuits-lampe/README.md), under new module
+  names; its `scripts/rename-map.txt` maps the old names.
 - "The ACIR deposit and verifier-rebuild work", `AcirLean`: the
   compiled-constraint proofs and the verifier rebuild. In this
   repository as [circuits-acir/](../circuits-acir/README.md) and
