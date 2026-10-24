@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_DEPOSIT_FUNDER_CALLER.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_DEPOSIT_FUNDER_CALLER is ReentrancyGuard { // mutant DEPOSIT_FUNDER_CALLER: one guard removed
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -146,7 +146,7 @@
+         if (amount == 0) revert ZeroAmount();
+         if (amount >= MAX_AMOUNT) revert AmountTooLarge();
+         if (fundingAddress == address(0)) revert ZeroAddress();
+-        if (msg.sender != fundingAddress) revert FundingAddressMismatch();
++        // mutant DEPOSIT_FUNDER_CALLER: guard removed
+ 
+         // Build public inputs for verification. The payload commitment is derived here
+         // from the submitted bytes, so a payload that differs from the one the prover

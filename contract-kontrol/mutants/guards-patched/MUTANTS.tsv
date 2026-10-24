@@ -1,0 +1,5 @@
+id	base	diff	output	change
+WITHDRAW_ZERO_AMOUNT	pool	ShieldedPool_M_WITHDRAW_ZERO_AMOUNT.diff	ShieldedPool_M_WITHDRAW_ZERO_AMOUNT.sol	withdraw: the zero-amount check removed (line 255)
+WITHDRAW_AMOUNT_MAX	pool	ShieldedPool_M_WITHDRAW_AMOUNT_MAX.diff	ShieldedPool_M_WITHDRAW_AMOUNT_MAX.sol	withdraw: the 2^128 amount check removed (line 256)
+WITHDRAW_SPENT	pool	ShieldedPool_M_WITHDRAW_SPENT.diff	ShieldedPool_M_WITHDRAW_SPENT.sol	withdraw: the spent-nullifier check removed (line 260)
+WITHDRAW_ROOT	pool	ShieldedPool_M_WITHDRAW_ROOT.diff	ShieldedPool_M_WITHDRAW_ROOT.sol	withdraw: the known-root check removed (line 263)

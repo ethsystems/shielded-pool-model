@@ -11,7 +11,8 @@
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
 # Linux x86_64 build; its version must still match), PULL=0 (never pull the image), CAP (container
-# memory cap, default 8g), TLIM (seconds per container, default 7200), GATE_GIB (available memory
+# memory cap, default 8g), BUILD_CPUS and PROVE_CPUS (docker --cpus for kontrol build and kontrol
+# prove, default 4 and 6), TLIM (seconds per container, default 7200), GATE_GIB (available memory
 # before each container starts, default 10).
 # Relative paths are taken from the caller's directory.
 set -uo pipefail
@@ -165,7 +166,7 @@ for s in "${SUITES[@]}"; do
     t0=$SECONDS
     case "$kind" in
       build)
-        bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
+        CPUS="${BUILD_CPUS:-4}" bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
         if grep -q "^BUILD_EXIT=0$" "$L/$run.txt" || { grep -q "Kontrol project built" "$L/$run.txt" && grep -q "^COMMAND_EXIT=0$" "$L/$run.txt"; }; then built=1; fi
         want_abi="$(pin "kevm_abi_${abi}_sha256")"
         grep -q "^$want_abi " "$L/$run.txt" || { echo "suite $s: the container did not see the $abi abi.md"; built=0; }
@@ -174,7 +175,7 @@ for s in "${SUITES[@]}"; do
         [ $built = 1 ] || break ;;
       prove)
         [ $built = 1 ] || { echo "suite $s run $run: no build"; continue; }
-        bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
+        CPUS="${PROVE_CPUS:-6}" bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
         python3 "$PKG/scripts/kverdicts.py" "$s" "$run" "$L/$run.txt" "$W/kontrol/contracts/out/proofs" > "$L/$run.tsv"
         [ -s "$L/$run.tsv" ] || printf '%s\t%s\t-\tNO-VERDICT\t-\t-\t-\n' "$s" "$run" > "$L/$run.tsv"
         cat "$L/$run.tsv" >> "$L/results.tsv"
