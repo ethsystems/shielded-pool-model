@@ -263,10 +263,10 @@ the three rows that had none (`decode_path`, `DecryptionError::from`,
 `EncryptedTransferNotes::to_bytes`). A refuted control shows that the proof does not accept the changed
 function or the stronger claim; it does not show that the changed claim is false.
 
-Cost on a Linux laptop (16 threads, 30 GB, btrfs), measured 2026-10-24: `check.sh` 99 s with
-`JOBS=4`, of which about 10 s unpack the zip and 86 s are the 259 Verus runs (340 s summed).
-Each Verus run takes 0.4 to 9 s and at most 359 MiB resident; under a 6 GiB scope the peak was
-3.6 GB, most of it page cache from the unpacked release. `.deps/` takes 1.6 GB unpacked, plus
+Cost on a Linux laptop (16 threads, 30 GB, btrfs), measured 2026-10-24: `check.sh` 103 s with
+`JOBS=4`, of which about 10 s unpack the zip and 90 s are the 259 Verus runs (356 s summed).
+Each Verus run takes 0.4 to 10 s and at most 358 MiB resident; under a 6 GiB scope the peak was
+2.2 GB, most of it page cache from the unpacked release. `.deps/` takes 1.6 GB unpacked, plus
 the 486 MB zip when `check.sh` downloads it; `work/` about 5 MB. Neither is tracked.
 
 ## Layout
