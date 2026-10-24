@@ -31,11 +31,11 @@ Which numbers this machine reproduced: [RESULT.md](RESULT.md) has one table per 
 that matched come from separate invocations: `guards-patched` (run 3, compared afterwards on its
 work directory); `withdraw-success`, `guards-stock`, `insert-loop` and `poseidon-frame` (run 5,
 whose last line was `CHECK FAIL` because the `public-inputs` build was stopped); the `public-inputs`
-build and replays only (run 6); and `insert-loop` again (run 7). The `check.sh` and `compare.py` of
-those runs predate the stricter checks that RESULT.md lists. **Not rerun here:** the `public-inputs`
-proof runs `canonical`, `order` and `fixed-token`, whose expected verdicts are results of the
-2026-10-01 run on the 0.8.33 build, not yet confirmed on the 0.8.37 build; and the archived K claims
-in `insert-loop/k/`, which `check.sh` does not run.
+build and replays only (run 6); `insert-loop` again (run 7); and every run of `public-inputs`
+(run 8). So every run of every suite has matched, but no single invocation covered them all. The
+`check.sh` and `compare.py` of those runs predate the stricter checks that RESULT.md lists.
+**Packaged, not run:** the archived K claims in `insert-loop/k/`, about the 0.8.33 build;
+`check.sh` does not run them.
 
 ## Suites
 
@@ -239,9 +239,9 @@ fixed; the inputs are compared in the decoded body of the comparison mock, which
 `DROP_BIT253`, `PAY_CALLER`, `SKIP_VERIFIER` with the outputs of the table above; a witness must fail with Panic 0x01. The `token-above-0x11` run covers
 this token as one case, with a stronger body.
 
-**Not rerun here** (time): the runs `canonical`, `order` and `fixed-token`. Their expected verdicts
-in `EXPECTED.tsv` are results of the 2026-10-01 run on the 0.8.33 build, not yet confirmed on the
-0.8.37 build. The build (peak 8.59 GB, just under the cap) and the 36 replays ran here.
+Rerun here on the 0.8.37 build (run 8 of RESULT.md): the build, `canonical` (9 of 9), `order` (6
+of 6), `fixed-token` (7 of 7) and the 36 replays gave the verdicts and failing outputs of
+`EXPECTED.tsv`, which first came from the 2026-10-01 run on the 0.8.33 build.
 
 Not shown: deposit and transfer with a nonempty symbolic proof and a symbolic payload together (the
 `*_split` bodies, one `bytes` split at a symbolic index, did not finish in the earlier run and no
@@ -458,9 +458,9 @@ to 4 minutes at 7.3 to 7.9 GB peak (the `public-inputs` build reached 8.59 GB, j
 KEVM runs two kompiles in parallel, so a build can hit the cap and must then be rerun);
 `withdraw-success` `token-above-0x11` 3,438 s and `two-tokens` 3,554 s (peaks 6.9 and 7.1 GB);
 `guards-patched` 3,000 s; `guards-stock` 2,179 to 2,324 s per run; `insert-loop` `rejections`
-326 s and `controls` a few seconds; `poseidon-frame` about 30 s. Everything except the
-`public-inputs` proofs took about 5 hours; the earlier run of `public-inputs` `canonical` and
-`order` took 4,996 s. `work/` takes 0.5 to 2.5 GB per suite (saved proof graphs); neither `work/`
+326 s and `controls` a few seconds; `public-inputs` `canonical` 1,387 s, `order` 1,532 s and
+`fixed-token` 1,543 s (peaks 7.8, 7.6 and 6.8 GB; the whole suite 4,619 s); `poseidon-frame`
+about 30 s. Everything took about 6.3 hours. `work/` takes 0.5 to 2.5 GB per suite (saved proof graphs); neither `work/`
 nor `.deps/` is tracked.
 
 ## Layout
@@ -502,8 +502,8 @@ The compiler differs from the earlier Kontrol runs: they let the image's forge 1
 and it chose 0.8.33 (Prague EVM target, from the saved build information). This package pins solc
 0.8.37, the compiler of the deployment check, and keeps forge 1.5.1's Prague target (the deployment
 builds for Osaka). So the bytecode under proof here is the 0.8.37 build, not the 0.8.33 build of the
-earlier runs; a verdict reproduced here is a verdict about the 0.8.37 build. The `public-inputs`
-proofs and the archived K claims were not reproduced (see the opening). `check.sh` requires solc
+earlier runs; a verdict reproduced here is a verdict about the 0.8.37 build. The archived K claims
+were not reproduced (see the opening). `check.sh` requires solc
 0.8.37: `SOLC` can point at another copy of it, and `TOOLS_UNPINNED=1` accepts a build of 0.8.37
 whose sha256 differs from the pinned Linux x86_64 binary. Another compiler version needs other pins
 in `PINS.txt`.
