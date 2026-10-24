@@ -7,7 +7,7 @@
 #       runs of harness/<suite>/runs.tsv (default: all), run the forge replays on the host, and compare
 #       every verdict and every failing node's output with EXPECTED.tsv. Prints CHECK PASS|FAIL per suite
 #       and a last line CHECK PASS|FAIL.
-# Env: FORGE (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download into
+# Env: FORGE, CAST (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download into
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
 # Linux x86_64 build; its version must still match), PULL=0 (never pull the image), CAP (container
@@ -19,6 +19,7 @@ set -uo pipefail
 CALLER="$(pwd)"
 rel() { case "$1" in /*|"") printf '%s' "$1" ;; *) printf '%s/%s' "$CALLER" "$1" ;; esac; }
 FORGE="$(rel "${FORGE:-$(command -v forge || true)}")"
+CAST="$(rel "${CAST:-$(command -v cast || true)}")"
 [ -z "${SOLC:-}" ] || SOLC="$(rel "$SOLC")"
 cd "$(dirname "$0")"
 PKG="$(pwd)"
@@ -53,6 +54,9 @@ command -v python3 >/dev/null || fail tools "python3 not found"
 command -v docker >/dev/null || fail tools "docker not found"
 command -v patch >/dev/null || fail tools "patch not found"
 [ -n "$FORGE" ] && [ -x "$FORGE" ] || fail tools "forge not found (set FORGE=/path; $(pin foundry_asset))"
+[ -n "$CAST" ] && [ -x "$CAST" ] || fail tools "cast not found (set CAST=/path; $(pin foundry_asset))"
+"$CAST" --version 2>/dev/null | grep -qF "Version: $(pin forge_version)" || fail tools "cast is not $(pin forge_version)"
+binpin cast "$CAST" "$(pin cast_sha256)"
 v="$("$FORGE" --version 2>/dev/null | tr '\n' ' ')"
 grep -qF "Version: $(pin forge_version)" <<<"$v" && grep -qF "$(pin forge_commit)" <<<"$v" || fail tools "forge is '$v', pinned $(pin forge_version) at $(pin forge_commit)"
 binpin forge "$FORGE" "$(pin forge_sha256)"
@@ -195,6 +199,25 @@ for l in open(log, errors="replace"):
     if m and suite: print(f"{s}\t{run}\t{suite}.{m.group(2)}\t{m.group(1)}\t-\t-\t-")
 PY
         echo "suite $s replays: $(grep -cP "^$s\t$run\t.*\tPASS\t" "$L/results.tsv") pass, $(grep -cP "^$s\t$run\t.*\tFAIL\t" "$L/results.tsv") fail, $((SECONDS - t0))s" ;;
+      controls)
+        # A plain Foundry project run on the host (no Kontrol): copy it and the K claims it reads.
+        rm -rf "$W/$cmd" "$W/k" "$W/zk-kit"; cp -a "$PKG/harness/$s/$cmd" "$W/$cmd"; cp -a "$PKG/harness/$s/k" "$W/k"
+        mkdir "$W/zk-kit"; git -C "$DEPS_CACHE/zk-kit.solidity" archive "$(pin zkkit_rev)" | tar -x -C "$W/zk-kit"
+        mkdir -p "$T/bin"; ln -sf "$FORGE" "$T/bin/forge"; ln -sf "$CAST" "$T/bin/cast"
+        (cd "$W/$cmd" && PATH="$T/bin:$PATH" FOUNDRY_SOLC="$SOLC" FOUNDRY_LINT_LINT_ON_BUILD=false python3 tools/run.py \
+          && PATH="$T/bin:$PATH" ZKKIT_DIR="$W/zk-kit" POSEIDON_DIR="$T/soldeer/poseidon-solidity-0.0.5" python3 tools/check_witnesses.py) > "$L/$run.txt" 2>&1
+        crc=$?
+        python3 - "$s" "$run" "$W/$cmd/logs/results.json" "$crc" >> "$L/results.tsv" <<'PY'
+import json, os, sys
+s, run, res, crc = sys.argv[1:5]
+if os.path.exists(res):
+    for part, r in json.load(open(res)).items():
+        for x in r["results"]:
+            v = x["status"] + (":" + x["reason"].replace(" ", "_") if x["reason"] else "")
+            print(f"{s}\t{run}-{part}\t{x['test']}\t{v}\t-\t-\t-")
+print(f"{s}\t{run}\tall-checks\t{'PASS' if crc == '0' else 'FAIL'}\t-\t-\t-")
+PY
+        echo "suite $s $run: $(tail -1 "$L/$run.txt"), exit $crc, $((SECONDS - t0))s" ;;
     esac
   done < "$PKG/harness/$s/runs.tsv"
 done
