@@ -295,7 +295,8 @@ solc from `SOLC`, an svm copy, or a checked download into `.deps/` (`SOLC_FETCH=
 line says so. In order, `check.sh`:
 
 0. checks the inventory (`scripts/compare.py --inventory`): every run of `runs.tsv` has rows in
-   `EXPECTED.tsv` and the reverse, and no run or expected verdict is named twice;
+   `EXPECTED.tsv` and the reverse, no run or expected verdict is named twice, and every mutant of
+   `MUTANTS.tsv` is checked as its last column says (below);
 1. checks that the halmos environment runs Python 3.12, halmos 0.3.3, the z3 module 4.12.6, yices 2.6.4 and its sha256, forge 1.8.3 at the pinned
    commit and sha256, and solc 0.8.37 and its sha256;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
@@ -320,6 +321,14 @@ line says so. In order, `check.sh`:
    warning or a solver "unknown" makes every PASS of the run a mismatch. It prints one `CHECK`
    line per verdict, a `PATHS` line per differing path count, and the last line.
 
+The last column of `MUTANTS.tsv` says how each mutant is checked. `runs`: at least one run of the
+suite selects it (its test contract ends in `Mut_<id>` or `Mut_<id>Test`, or `PROJECT=` names its
+variant), the run name holds `mutant-<id>`, and `EXPECTED.tsv` has at least one FAIL for those
+runs, with its assertion where the suite has `assertions.tsv`. `check <name>`: a check of the
+suite deploys it and must FAIL (root-window's `NO_GUARD_W`). `suite <other>`: it is built only
+because a harness file imports it, and the other suite runs the same file (ring-funding builds
+seven insert-callback mutants this way; their sha256 pins must agree).
+
 Exit 0 means every verdict equals `EXPECTED.tsv`. Path counts are compared too, but a different
 count alone does not fail the check: Halmos decides branch feasibility with a 1 ms solver timeout
 (`--solver-timeout-branching`), so the number of explored paths depends on the machine and its
@@ -342,7 +351,7 @@ every run.
   `requires.txt`, `foundry-extra.txt`, `variants.tsv`, `assertions.tsv`. `harness/SUITES.txt`: the
   suites in run order.
 - `mutants/<suite>/`: one unified diff per mutant file, `MUTANTS.tsv` (id, base file, diff, output,
-  change) and `MUTANTS.sha256`; `mutants/make.py` applies them.
+  change, checked by) and `MUTANTS.sha256`; `mutants/make.py` applies them.
 - `scripts/`: `setup-suite.sh`, `run.py`, `compare.py`, `locate.py`, `soldeer-integrity.py` (from
   `deployment/`), `foundry-libraries.txt`, `rename-map.txt`.
 - `EXPECTED.tsv`: suite, run, check, verdict, path count, assertion.

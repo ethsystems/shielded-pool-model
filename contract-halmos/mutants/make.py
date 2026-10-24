@@ -3,7 +3,8 @@
 
 Usage: make.py <suite> <project-dir>
 
-mutants/<suite>/MUTANTS.tsv names each mutant: id, base file, diff, output path, description.
+mutants/<suite>/MUTANTS.tsv names each mutant: id, base file, diff, output path, description, and how
+it is checked (scripts/compare.py checks that column against runs.tsv and EXPECTED.tsv).
 The base is a file of the exported project (pool: contracts/src/ShieldedPool.sol; internal-leanimt
 and leanimt: the zk-kit library sources under dependencies/). Each diff is a unified diff against
 that base. It is applied strictly: every context and removed line must equal the base line at its
@@ -70,7 +71,7 @@ def main() -> None:
     dest = proj / "contracts" / "test" / suite / "mutants"
     dest.mkdir(parents=True, exist_ok=True)
     made = set()
-    for mid, base, diff, outname, _desc in rows:
+    for mid, base, diff, outname, _desc, _checked in rows:
         src = (proj / BASES[base]).read_text().split("\n")
         res = "\n".join(apply(src, (d / diff).read_text().split("\n")[:-1], f"{suite}/{mid}"))
         got = hashlib.sha256(res.encode()).hexdigest()

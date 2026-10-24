@@ -1,10 +1,10 @@
-id	base	diff	output	change
-NR_D	pool	ShieldedPool_M_NR_D.diff	ShieldedPool_M_NR_D.sol	nonReentrant dropped from deposit (line 144)
-NR_T	pool	ShieldedPool_M_NR_T.diff	ShieldedPool_M_NR_T.sol	nonReentrant dropped from transfer (line 193)
-NR_W	pool	ShieldedPool_M_NR_W.diff	ShieldedPool_M_NR_W.sol	nonReentrant dropped from withdraw (line 253)
-ORD_D	pool	ShieldedPool_M_ORD_D.diff	ShieldedPool_M_ORD_D.sol	deposit: tree insert and root record (lines 169-170) moved after the token call (line 178)
-ORD_W	pool	ShieldedPool_M_ORD_W.diff	ShieldedPool_M_ORD_W.sol	withdraw: spent-marking (line 283) moved after the token call (line 286)
-INS_D	pool	ShieldedPool_M_INS_D.diff	ShieldedPool_M_INS_D.sol	deposit inserts publicInputs[5] instead of the commitment (line 169)
-SWAP_T	pool	ShieldedPool_M_SWAP_T.diff	ShieldedPool_M_SWAP_T.sol	transfer inserts its two outputs in the other order (lines 230-231)
-DUP	internal-leanimt	InternalLeanIMT_M_DUP.diff	InternalLeanIMT_M_DUP.sol	the library duplicate-leaf check removed (InternalLeanIMT.sol lines 45-47)
-DUP	leanimt	LeanIMT_M_DUP.diff	LeanIMT_M_DUP.sol	wrapper library that calls the DUP copy
+id	base	diff	output	change	checked by
+NR_D	pool	ShieldedPool_M_NR_D.diff	ShieldedPool_M_NR_D.sol	nonReentrant dropped from deposit (line 144)	runs
+NR_T	pool	ShieldedPool_M_NR_T.diff	ShieldedPool_M_NR_T.sol	nonReentrant dropped from transfer (line 193)	runs
+NR_W	pool	ShieldedPool_M_NR_W.diff	ShieldedPool_M_NR_W.sol	nonReentrant dropped from withdraw (line 253)	runs
+ORD_D	pool	ShieldedPool_M_ORD_D.diff	ShieldedPool_M_ORD_D.sol	deposit: tree insert and root record (lines 169-170) moved after the token call (line 178)	runs
+ORD_W	pool	ShieldedPool_M_ORD_W.diff	ShieldedPool_M_ORD_W.sol	withdraw: spent-marking (line 283) moved after the token call (line 286)	runs
+INS_D	pool	ShieldedPool_M_INS_D.diff	ShieldedPool_M_INS_D.sol	deposit inserts publicInputs[5] instead of the commitment (line 169)	runs
+SWAP_T	pool	ShieldedPool_M_SWAP_T.diff	ShieldedPool_M_SWAP_T.sol	transfer inserts its two outputs in the other order (lines 230-231)	runs
+DUP	internal-leanimt	InternalLeanIMT_M_DUP.diff	InternalLeanIMT_M_DUP.sol	the library duplicate-leaf check removed (InternalLeanIMT.sol lines 45-47)	runs
+DUP	leanimt	LeanIMT_M_DUP.diff	LeanIMT_M_DUP.sol	wrapper library that calls the DUP copy	runs

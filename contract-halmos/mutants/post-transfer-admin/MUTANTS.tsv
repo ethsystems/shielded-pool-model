@@ -1,16 +1,16 @@
-id	base	diff	output	change
-T_distinct	pool	M_T_distinct.diff	M_T_distinct.sol	transfer: the distinct-nullifier revert removed
-T_unspent	pool	M_T_unspent.diff	M_T_unspent.sol	transfer: the second spent-nullifier guard removed
-T_known_root	pool	M_T_known_root.diff	M_T_known_root.sol	transfer: the known-root guard removed
-T_fresh_outputs	pool	M_T_fresh_outputs.diff	M_T_fresh_outputs.sol	transfer clears the first output leaf index before insertion
-T_verified	pool	M_T_verified.diff	M_T_verified.sol	transfer: public input 0 has bit 129 flipped
-T_no_effects	pool	M_T_no_effects.diff	M_T_no_effects.sol	transfer also makes a token transfer
-T_post	pool	M_T_post.diff	M_T_post.sol	transfer also overwrites ring entry 37
-A_add	pool	M_A_add.diff	M_A_add.sol	addSupportedToken stores false
-A_remove	pool	M_A_remove.diff	M_A_remove.sol	removeSupportedToken also writes a nullifier
-A_registry	pool	M_A_registry.diff	M_A_registry.sol	setAttestationRegistry also overwrites ring entry 41
-A_owner	pool	M_A_owner.diff	M_A_owner.sol	transferOwnership keeps the caller as owner
-T_verified_root	pool	M_T_verified_root.diff	M_T_verified_root.sol	transfer: public input 4 (root) has bit 129 flipped
-T_verified_canonical	pool	M_T_verified_canonical.diff	M_T_verified_canonical.sol	transfer: the canonical-input check removed
-T_post_mapping	pool	M_T_post_mapping.diff	M_T_post_mapping.sol	transfer also writes the supported-token mapping
-T_post_order	pool	M_T_post_order.diff	M_T_post_order.sol	transfer inserts its outputs in reverse order
+id	base	diff	output	change	checked by
+T_distinct	pool	M_T_distinct.diff	M_T_distinct.sol	transfer: the distinct-nullifier revert removed	runs
+T_unspent	pool	M_T_unspent.diff	M_T_unspent.sol	transfer: the second spent-nullifier guard removed	runs
+T_known_root	pool	M_T_known_root.diff	M_T_known_root.sol	transfer: the known-root guard removed	runs
+T_fresh_outputs	pool	M_T_fresh_outputs.diff	M_T_fresh_outputs.sol	transfer clears the first output leaf index before insertion	runs
+T_verified	pool	M_T_verified.diff	M_T_verified.sol	transfer: public input 0 has bit 129 flipped	runs
+T_no_effects	pool	M_T_no_effects.diff	M_T_no_effects.sol	transfer also makes a token transfer	runs
+T_post	pool	M_T_post.diff	M_T_post.sol	transfer also overwrites ring entry 37	runs
+A_add	pool	M_A_add.diff	M_A_add.sol	addSupportedToken stores false	runs
+A_remove	pool	M_A_remove.diff	M_A_remove.sol	removeSupportedToken also writes a nullifier	runs
+A_registry	pool	M_A_registry.diff	M_A_registry.sol	setAttestationRegistry also overwrites ring entry 41	runs
+A_owner	pool	M_A_owner.diff	M_A_owner.sol	transferOwnership keeps the caller as owner	runs
+T_verified_root	pool	M_T_verified_root.diff	M_T_verified_root.sol	transfer: public input 4 (root) has bit 129 flipped	runs
+T_verified_canonical	pool	M_T_verified_canonical.diff	M_T_verified_canonical.sol	transfer: the canonical-input check removed	runs
+T_post_mapping	pool	M_T_post_mapping.diff	M_T_post_mapping.sol	transfer also writes the supported-token mapping	runs
+T_post_order	pool	M_T_post_order.diff	M_T_post_order.sol	transfer inserts its outputs in reverse order	runs

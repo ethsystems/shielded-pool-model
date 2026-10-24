@@ -44,9 +44,9 @@ done
 T="$(mktemp -d "${TMPDIR:-/tmp}/contract-halmos.XXXXXX")"
 trap 'rm -rf "$T"' EXIT
 
-# --- 0. inventory: runs and expected verdicts agree (scripts/compare.py) ----------------------
+# --- 0. inventory: runs, expected verdicts and mutants agree (scripts/compare.py) ----------
 python3 "$PKG/scripts/compare.py" --inventory "$PKG/EXPECTED.tsv" "$WORK" "${SUITES[@]}" > "$T/inventory.txt" \
-  || { cat "$T/inventory.txt"; fail inventory "runs.tsv and EXPECTED.tsv disagree (INVENTORY FAIL lines above)"; }
+  || { cat "$T/inventory.txt"; fail inventory "runs.tsv, EXPECTED.tsv and MUTANTS.tsv disagree (INVENTORY FAIL lines above)"; }
 cat "$T/inventory.txt"
 
 # --- 1. tools ------------------------------------------------------------------------

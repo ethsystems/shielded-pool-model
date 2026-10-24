@@ -1,23 +1,23 @@
-id	base	diff	output	change
-EFF_ADD	pool	ShieldedPool_M_EFF_ADD.diff	ShieldedPool_M_EFF_ADD.sol	addSupportedToken also writes historicalRoots[1]
-EFF_OWN	pool	ShieldedPool_M_EFF_OWN.diff	ShieldedPool_M_EFF_OWN.sol	transferOwnership also writes historicalRoots[57]
-EFF_REM	pool	ShieldedPool_M_EFF_REM.diff	ShieldedPool_M_EFF_REM.sol	removeSupportedToken also writes validRoots
-EFF_SETR	pool	ShieldedPool_M_EFF_SETR.diff	ShieldedPool_M_EFF_SETR.sol	setAttestationRegistry also marks the registry a supported token
-EFF_SETV	pool	ShieldedPool_M_EFF_SETV.diff	ShieldedPool_M_EFF_SETV.sol	setVerifier also writes historicalRoots[1]
-OO_ADD	pool	ShieldedPool_M_OO_ADD.diff	ShieldedPool_M_OO_ADD.sol	onlyOwner dropped from addSupportedToken
-OO_OWN	pool	ShieldedPool_M_OO_OWN.diff	ShieldedPool_M_OO_OWN.sol	onlyOwner dropped from transferOwnership
-OO_REM	pool	ShieldedPool_M_OO_REM.diff	ShieldedPool_M_OO_REM.sol	onlyOwner dropped from removeSupportedToken
-OO_SETR	pool	ShieldedPool_M_OO_SETR.diff	ShieldedPool_M_OO_SETR.sol	onlyOwner dropped from setAttestationRegistry
-OO_SETV	pool	ShieldedPool_M_OO_SETV.diff	ShieldedPool_M_OO_SETV.sol	onlyOwner dropped from setVerifier
-PAY_AMT1	pool	ShieldedPool_M_PAY_AMT1.diff	ShieldedPool_M_PAY_AMT1.sol	pays amount - 1
-PAY_RCP_HI	pool	ShieldedPool_M_PAY_RCP_HI.diff	ShieldedPool_M_PAY_RCP_HI.sol	pays recipient ^ 1 when recipient >= 2^129
-PAY_SENDER	pool	ShieldedPool_M_PAY_SENDER.diff	ShieldedPool_M_PAY_SENDER.sol	pays msg.sender instead of recipient
-PAY_TOK	pool	ShieldedPool_M_PAY_TOK.diff	ShieldedPool_M_PAY_TOK.sol	pays from another token (the recipient address used as the token)
-PAY_TWICE	pool	ShieldedPool_M_PAY_TWICE.diff	ShieldedPool_M_PAY_TWICE.sol	pays twice
-PI_AMT	pool	ShieldedPool_M_PI_AMT.diff	ShieldedPool_M_PI_AMT.sol	public input 2 is amount - 1
-PI_NUL_HI	pool	ShieldedPool_M_PI_NUL_HI.diff	ShieldedPool_M_PI_NUL_HI.sol	public input 0 is nullifier ^ 1 when nullifier >= 2^200
-PI_RCP	pool	ShieldedPool_M_PI_RCP.diff	ShieldedPool_M_PI_RCP.sol	public input 3 is msg.sender, not the recipient
-PI_RCP_HI	pool	ShieldedPool_M_PI_RCP_HI.diff	ShieldedPool_M_PI_RCP_HI.sol	public input 3 is recipient + 1 when recipient >= 2^129
-PI_ROOT_HI	pool	ShieldedPool_M_PI_ROOT_HI.diff	ShieldedPool_M_PI_ROOT_HI.sol	public input 4 is root ^ 1 when root >= 2^200
-PI_TOK	pool	ShieldedPool_M_PI_TOK.diff	ShieldedPool_M_PI_TOK.sol	public input 1 is the recipient, not the token
-PI_TOK_HI	pool	ShieldedPool_M_PI_TOK_HI.diff	ShieldedPool_M_PI_TOK_HI.sol	public input 1 is token ^ 1 when token >= 2^129
+id	base	diff	output	change	checked by
+EFF_ADD	pool	ShieldedPool_M_EFF_ADD.diff	ShieldedPool_M_EFF_ADD.sol	addSupportedToken also writes historicalRoots[1]	runs
+EFF_OWN	pool	ShieldedPool_M_EFF_OWN.diff	ShieldedPool_M_EFF_OWN.sol	transferOwnership also writes historicalRoots[57]	runs
+EFF_REM	pool	ShieldedPool_M_EFF_REM.diff	ShieldedPool_M_EFF_REM.sol	removeSupportedToken also writes validRoots	runs
+EFF_SETR	pool	ShieldedPool_M_EFF_SETR.diff	ShieldedPool_M_EFF_SETR.sol	setAttestationRegistry also marks the registry a supported token	runs
+EFF_SETV	pool	ShieldedPool_M_EFF_SETV.diff	ShieldedPool_M_EFF_SETV.sol	setVerifier also writes historicalRoots[1]	runs
+OO_ADD	pool	ShieldedPool_M_OO_ADD.diff	ShieldedPool_M_OO_ADD.sol	onlyOwner dropped from addSupportedToken	runs
+OO_OWN	pool	ShieldedPool_M_OO_OWN.diff	ShieldedPool_M_OO_OWN.sol	onlyOwner dropped from transferOwnership	runs
+OO_REM	pool	ShieldedPool_M_OO_REM.diff	ShieldedPool_M_OO_REM.sol	onlyOwner dropped from removeSupportedToken	runs
+OO_SETR	pool	ShieldedPool_M_OO_SETR.diff	ShieldedPool_M_OO_SETR.sol	onlyOwner dropped from setAttestationRegistry	runs
+OO_SETV	pool	ShieldedPool_M_OO_SETV.diff	ShieldedPool_M_OO_SETV.sol	onlyOwner dropped from setVerifier	runs
+PAY_AMT1	pool	ShieldedPool_M_PAY_AMT1.diff	ShieldedPool_M_PAY_AMT1.sol	pays amount - 1	runs
+PAY_RCP_HI	pool	ShieldedPool_M_PAY_RCP_HI.diff	ShieldedPool_M_PAY_RCP_HI.sol	pays recipient ^ 1 when recipient >= 2^129	runs
+PAY_SENDER	pool	ShieldedPool_M_PAY_SENDER.diff	ShieldedPool_M_PAY_SENDER.sol	pays msg.sender instead of recipient	runs
+PAY_TOK	pool	ShieldedPool_M_PAY_TOK.diff	ShieldedPool_M_PAY_TOK.sol	pays from another token (the recipient address used as the token)	runs
+PAY_TWICE	pool	ShieldedPool_M_PAY_TWICE.diff	ShieldedPool_M_PAY_TWICE.sol	pays twice	runs
+PI_AMT	pool	ShieldedPool_M_PI_AMT.diff	ShieldedPool_M_PI_AMT.sol	public input 2 is amount - 1	runs
+PI_NUL_HI	pool	ShieldedPool_M_PI_NUL_HI.diff	ShieldedPool_M_PI_NUL_HI.sol	public input 0 is nullifier ^ 1 when nullifier >= 2^200	runs
+PI_RCP	pool	ShieldedPool_M_PI_RCP.diff	ShieldedPool_M_PI_RCP.sol	public input 3 is msg.sender, not the recipient	runs
+PI_RCP_HI	pool	ShieldedPool_M_PI_RCP_HI.diff	ShieldedPool_M_PI_RCP_HI.sol	public input 3 is recipient + 1 when recipient >= 2^129	runs
+PI_ROOT_HI	pool	ShieldedPool_M_PI_ROOT_HI.diff	ShieldedPool_M_PI_ROOT_HI.sol	public input 4 is root ^ 1 when root >= 2^200	runs
+PI_TOK	pool	ShieldedPool_M_PI_TOK.diff	ShieldedPool_M_PI_TOK.sol	public input 1 is the recipient, not the token	runs
+PI_TOK_HI	pool	ShieldedPool_M_PI_TOK_HI.diff	ShieldedPool_M_PI_TOK_HI.sol	public input 1 is token ^ 1 when token >= 2^129	runs

@@ -1,2 +1,2 @@
-id	base	diff	output	change
-NO_GUARD_W	pool	ShieldedPoolNoGuard.diff	ShieldedPoolNoGuard.sol	nonReentrant dropped from withdraw (line 253); contract renamed ShieldedPoolNoGuard (the P3b control)
+id	base	diff	output	change	checked by
+NO_GUARD_W	pool	ShieldedPoolNoGuard.diff	ShieldedPoolNoGuard.sol	nonReentrant dropped from withdraw (line 253); contract renamed ShieldedPoolNoGuard (the P3b control)	check check_P3b_noGuard_freshReentryFails_expectFail
