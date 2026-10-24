@@ -92,8 +92,8 @@ control    CB1_bridge_direction_flipped               -> fail_bridge_direction_f
 control    CB2_bridge_depth_plus_one                  -> fail_bridge_depth_plus_one
 control    CB3_bad_field_no_range                     -> fail_bridge_bad_field_no_range
 
-# Labels of the claim board (evidence/2026-10-13-claim-board/CLAIM1-board.md and the glossary
-# in evidence/README.md) and of the earlier reports -> the results here.
+# Labels of the claim board (../BOARD.md) and of the earlier reports (not in this repository)
+# -> the results here.
 label      D3                                         -> root provenance and refineP_run: Refinement/Provenance.lean, Refinement/ProvenanceModel.lean, Refinement/ProvenanceRefine.lean, Refinement/ProvenanceNonVacuity.lean
 label      PATHLOCAL                                  -> refinePL_run with PathFacts and PathTreeHyp: Refinement/PathLocal.lean, Refinement/PathLocalNonVacuity.lean
 label      N11                                        -> refine_run: Refinement/Storage.lean to Refinement/Cases.lean

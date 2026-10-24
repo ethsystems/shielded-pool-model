@@ -248,9 +248,8 @@ end 2026-10-23 13:36:45 UTC
 
 The controls change only the claim. None of them changes a byte on the chain, so no control
 shows a changed byte, a mock verifier or a later `setVerifier` here. Those cases rest on the
-check's logic; the frozen test-chain report
-([../evidence/2026-10-07-deploy-check/REPORT.md](../evidence/2026-10-07-deploy-check/REPORT.md))
-planted such changes on a local chain, with the earlier scripts.
+check's logic; the test-chain report of 2026-10-07 (not in this repository) planted such
+changes on a local chain, with the earlier scripts.
 
 Earlier runs on 2026-10-23, with the checker before commit `c128fce`, gave the same PASS at both
 blocks. In one of them a
