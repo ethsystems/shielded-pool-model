@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Halmos checks of ShieldedPool.sol at ethsystems/pocs a04b8b3 (see README.md). Needs bash, git,
-# python3, curl, sha256sum, tar, the pocs submodule (git -C contract-halmos submodule update --init
-# pocs), forge 1.8.3, solc 0.8.37, and halmos 0.3.3 with its solvers (--venv makes one).
+# Halmos checks of ShieldedPool.sol at ethsystems/pocs a04b8b3 (see README.md). Needs Linux, bash,
+# git, python3, curl, sha256sum, tar, GNU coreutils timeout, the pocs submodule (git -C contract-halmos
+# submodule update --init pocs), forge 1.8.3, solc 0.8.37, and halmos 0.3.3 with its solvers (--venv
+# makes one); systemd-run --user for the memory caps (scripts/run.py).
 #   ./check.sh [--venv] [suite...]   build each suite from a fresh export of the pin, run every
 #                                    Halmos check and mutant of harness/<suite>/runs.tsv and the
 #                                    forge replays, compare with EXPECTED.tsv; last line CHECK PASS|FAIL
@@ -56,6 +57,7 @@ binpin() { # name, binary, pinned sha256
   UNPINNED="$UNPINNED $1"
 }
 command -v python3 >/dev/null || fail tools "python3 not found"
+python3 "$PKG/scripts/run.py" --preflight > "$T/runner.txt" || fail tools "the runner cannot run here (FAIL runner line above; see README.md, Re-check)"
 if [ "$VENV" = 1 ]; then
   [ -x "$PKG/.venv/bin/halmos" ] || {
     PY="${PYTHON:-$(command -v "python$(pin python_version)" || true)}"
@@ -107,6 +109,7 @@ binpin solc "$SOLC" "$solc_sha"
 mkdir -p "$T/bin" && ln -s "$FORGE" "$T/bin/forge"
 export PATH="$T/bin:$PATH" SOLC HALMOS YICES
 echo "tools: halmos $(pin halmos_version) ($HALMOS, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+cat "$T/runner.txt"
 
 # --- 2. source -----------------------------------------------------------------------
 commit="$(pin pocs_commit)"; dir="$(pin pocs_dir)"

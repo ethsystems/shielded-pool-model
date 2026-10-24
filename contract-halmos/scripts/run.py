@@ -2,10 +2,18 @@
 """Run every row of harness/<suite>/runs.tsv in a built project and record each verdict.
 
 Usage: run.py <suite> <project-dir> <log-dir>
+       run.py --preflight      check what the runner needs, print the runner line, run nothing
 Env: HALMOS (the halmos 0.3.3 executable), YICES (the yices-smt2 binary), SOLC, CAP (memory cap of
 each run, default 8G), TLIM (seconds, default 900), RUN_SCOPE (auto, 1 or 0: run each process in its
-own systemd user scope with MemoryMax=CAP; auto uses one when systemd-run --user works), ONLY (a
+own systemd user scope with MemoryMax=CAP; auto uses one when the scope probe works), ONLY (a
 regex on run names, for debugging; check.sh never sets it).
+
+The runner needs Linux, bash, and GNU coreutils timeout (each run is killed after TLIM seconds) on
+PATH. A scope also needs systemd-run --user and cgroup v2 with memory.peak (Linux 5.19 or later),
+read through /proc/self/cgroup and /sys/fs/cgroup. The probe runs one scope with the same settings
+and reads those files; RUN_SCOPE=1 fails if it does not work, auto falls back to no scope (runs are
+not memory-capped, the peak is the largest child RSS so far) and says so. Without a scope an OOM kill
+shows only as exit status 137, which compare.py counts as a mismatch.
 
 runs.tsv columns: kind, run, contract, test regex (or test file for kind forge), loop, byte lengths
 (or - for Halmos's default), env (K=V,K=V or -), extra flags (or -). Every halmos run gets the same base command:
@@ -31,24 +39,51 @@ FORGE = re.compile(r"^\[(PASS|FAIL)[^\]]*\] ([A-Za-z0-9_]+)\(", re.M)
 SUITE_HDR = re.compile(r"^Ran \d+ tests? for [^:]+:(\w+)", re.M)
 
 
-def scope_ok() -> bool:
+PROBE = ("cg=/sys/fs/cgroup$(cut -d: -f3 /proc/self/cgroup); "
+         "echo \"peak_bytes=$(cat $cg/memory.peak) oom_kill=$(grep -E '^oom_kill ' $cg/memory.events | cut -d' ' -f2)\"")
+
+
+def need(cond: bool, msg: str) -> None:
+    if not cond:
+        sys.exit(f"FAIL runner: {msg}")
+
+
+def preflight() -> tuple[bool, str]:
+    """Check the runner's tools; return (use a scope, the runner line)."""
+    need(sys.platform.startswith("linux"), f"the runner needs Linux (this is {sys.platform})")
+    for t in ("bash", "timeout", "cut", "grep", "cat"):
+        need(shutil.which(t) is not None, f"{t} not found on PATH (the runner needs bash and GNU coreutils)")
+    need(subprocess.run(["timeout", "-s", "KILL", "5", "true"], capture_output=True).returncode == 0,
+         "timeout -s KILL 5 true fails (the runner needs GNU coreutils timeout)")
+    cap, tlim = os.environ.get("CAP", "8G"), os.environ.get("TLIM", "900")
     mode = os.environ.get("RUN_SCOPE", "auto")
-    if mode == "0":
-        return False
-    ok = shutil.which("systemd-run") is not None and subprocess.run(
-        ["systemd-run", "--user", "--scope", "-q", "true"], capture_output=True).returncode == 0
-    if mode == "1" and not ok:
-        sys.exit("RUN_SCOPE=1 but systemd-run --user --scope does not work here")
-    return ok
+    need(mode in ("auto", "0", "1"), f"RUN_SCOPE={mode}, expected auto, 1 or 0")
+    why = "RUN_SCOPE=0"
+    if mode != "0":
+        if shutil.which("systemd-run") is None:
+            why = "systemd-run not found"
+        else:
+            p = subprocess.run(["systemd-run", "--user", "--scope", "-q", "-p", f"MemoryMax={cap}", "-p", "MemorySwapMax=512M",
+                                "bash", "-c", PROBE], capture_output=True, text=True)
+            if p.returncode == 0 and re.fullmatch(r"peak_bytes=\d+ oom_kill=\d+\n", p.stdout):
+                return True, f"runner: one systemd user scope per run, MemoryMax={cap}, MemorySwapMax=512M, killed after {tlim} s"
+            last = ((p.stderr or p.stdout).strip().splitlines() or ["no output"])[-1]
+            why = f"the scope probe failed: {last}"
+        need(mode != "1", f"RUN_SCOPE=1 but {why}")
+    return False, f"runner: NO scope ({why}): runs are not memory-capped, peaks are child RSS; killed after {tlim} s"
 
 
 def main() -> None:
+    if sys.argv[1:] == ["--preflight"]:
+        print(preflight()[1])
+        return
     suite, proj, logs = sys.argv[1], Path(sys.argv[2]).resolve(), Path(sys.argv[3]).resolve()
     logs.mkdir(parents=True, exist_ok=True)
     halmos, yices = os.environ["HALMOS"], os.environ["YICES"]
     cap, tlim = os.environ.get("CAP", "8G"), os.environ.get("TLIM", "900")
     only = re.compile(os.environ["ONLY"]) if os.environ.get("ONLY") else None
-    use_scope = scope_ok()
+    use_scope, line = preflight()
+    print(f"{suite}: {line}", flush=True)
     rows = [l.rstrip("\n").split("\t") for l in (PKG / "harness" / suite / "runs.tsv").read_text().splitlines()
             if l.strip() and not l.startswith("#")][1:]
     res = (logs / "results.tsv").open("a")

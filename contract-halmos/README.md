@@ -292,13 +292,21 @@ Without `--venv`, `check.sh` installs nothing: it takes halmos from `HALMOS`, el
 else `PATH`, and the solver `yices-smt2` from the same directory. forge comes from `FORGE` or `PATH`;
 solc from `SOLC`, an svm copy, or a checked download into `.deps/` (`SOLC_FETCH=0` forbids it).
 `TOOLS_UNPINNED=1` accepts another build of the pinned versions (for example macOS), and the last
-line says so. In order, `check.sh`:
+line says so.
+
+The runner needs Linux, bash and GNU coreutils `timeout` on `PATH`. For the memory cap it also
+needs `systemd-run --user` and cgroup v2 with `memory.peak` (Linux 5.19 or later). It tests this
+with one probe scope before any build. If the probe fails, the runs go on without a scope: they
+have no memory cap, the peaks are child RSS, and the runner line says "NO scope". An OOM kill then
+shows only as exit status 137, which step 6 counts as a mismatch. `RUN_SCOPE=1` makes a failed
+probe stop the check; `RUN_SCOPE=0` skips the scope. In order, `check.sh`:
 
 0. checks the inventory (`scripts/compare.py --inventory`): every run of `runs.tsv` has rows in
    `EXPECTED.tsv` and the reverse, no run or expected verdict is named twice, and every mutant of
    `MUTANTS.tsv` is checked as its last column says (below);
-1. checks that the halmos environment runs Python 3.12, halmos 0.3.3, the z3 module 4.12.6, yices 2.6.4 and its sha256, forge 1.8.3 at the pinned
-   commit and sha256, and solc 0.8.37 and its sha256;
+1. checks that the runner can run (the probe above), that the halmos environment runs Python 3.12,
+   halmos 0.3.3, the z3 module 4.12.6, yices 2.6.4 and its sha256, forge 1.8.3 at the pinned commit
+   and sha256, and solc 0.8.37 and its sha256;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
 3. fetches the three soldeer zips by the pinned lock (cached in `.deps/` by sha256), checks their
    sha256 and soldeer integrity, and fetches zk-kit.solidity at the lock rev and checks its tree id;
@@ -309,7 +317,7 @@ line says so. In order, `check.sh`:
    `MUTANTS.sha256`), and an offline build with the pinned solc; a suite with `variants.tsv` also
    gets one project per in-place mutant;
 5. `scripts/run.py` runs every row of `harness/<suite>/runs.tsv`, each Halmos process in its own
-   `systemd-run --user --scope` with `MemoryMax=8G` (`CAP`) when the user bus answers, killed after
+   `systemd-run --user --scope` with `MemoryMax=8G` (`CAP`) when the probe works, killed after
    900 s (`TLIM`), and the forge replays;
 6. `scripts/compare.py` checks the inventory again, then compares every verdict with
    `EXPECTED.tsv` and names the failing assertion of the caller mutants. A verdict recorded twice
