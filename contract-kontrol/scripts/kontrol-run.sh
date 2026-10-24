@@ -5,9 +5,12 @@
 # than GATE_GIB (default 10) GiB available (free -g), then runs <command> in <project-dir> with a hard
 # memory cap CAP (default 8g) and no swap, core dumps off, no network, the pinned solc as forge's
 # compiler (FOUNDRY_SOLC), and, for "patched", kevm-patch/abi.md mounted read-only over the image's
-# abi.md. Kills the container after TLIM seconds (default 7200). The log gets the abi.md sha256 seen
-# inside the container, the command output, COMMAND_EXIT, PEAK_BYTES (the container cgroup's
-# memory.peak) and a RUN line (wall seconds, exit, timeout or OOM).
+# abi.md. Kills the container after TLIM seconds (default 7200). The log gets a RUN start line, the
+# abi.md sha256 seen inside the container, the command output, COMMAND_EXIT, PEAK_BYTES (the container
+# cgroup's memory.peak) and a RUN end line (wall seconds, command exit, peak, runner exit). The shell in
+# the container exits with the command's status, so the runner exit equals the command exit unless the
+# run was stopped (124: timeout, 137: kill, 125: docker could not run it). The runner exits with it.
+# A runner that gives up at the gate writes "RUN gate: gave up" and no RUN start or end line.
 # Env: IMAGE (default the pinned digest), SOLC (the checked solc 0.8.37 binary; required), ABI_PATH
 # (the image's abi.md, which check.sh looks up; required), CAP,
 # CPUSET (docker --cpuset-cpus, the CPUs the container sees; unset: all), TLIM, GATE_GIB, GATE_WAIT (seconds to wait for the gate before giving up, default 14400).
@@ -41,7 +44,7 @@ timeout --signal=TERM --kill-after=30 "$TLIM" docker run --rm --name "$N" --netw
   --memory "$CAP" --memory-swap "$CAP" ${CPUSET:+--cpuset-cpus "$CPUSET"} --ulimit core=0 \
   -e KPROFILE_TELEMETRY_DISABLED=true -e FOUNDRY_OFFLINE=true -e FOUNDRY_SOLC=/opt/solc/solc \
   -v "$SOLC:/opt/solc/solc:ro" "${MOUNT_ABI[@]}" -v "$P:/w/proj" -w /w/proj "$IMAGE" \
-  bash -c "ulimit -c 0; sha256sum $ABI; $CMD; echo COMMAND_EXIT=\$?; echo PEAK_BYTES=\$(cat /sys/fs/cgroup/memory.peak 2>/dev/null)" >> "$LOG" 2>&1
+  bash -c "ulimit -c 0; sha256sum $ABI; $CMD; rc=\$?; echo COMMAND_EXIT=\$rc; echo PEAK_BYTES=\$(cat /sys/fs/cgroup/memory.peak 2>/dev/null); exit \$rc" >> "$LOG" 2>&1
 RC=$?
 docker inspect "$N" >/dev/null 2>&1 && docker kill "$N" >/dev/null 2>&1
 S=$(( $(date +%s) - T0 ))

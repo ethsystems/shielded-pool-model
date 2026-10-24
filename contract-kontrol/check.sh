@@ -3,10 +3,14 @@
 # python3, curl, sha256sum, tar, patch, docker (with the right to run containers), the pocs submodule
 # (git -C contract-kontrol submodule update --init pocs), forge 1.8.3 and solc 0.8.37 on the host.
 #   ./check.sh [suite[:run[,run...]]...]   for each suite (default: every suite of harness/SUITES.txt),
-#       export the pin, build the Kontrol project in the pinned image, run the selected kontrol prove
-#       runs of harness/<suite>/runs.tsv (default: all), run the forge replays on the host, and compare
-#       every verdict and every failing node's output with EXPECTED.tsv. Prints CHECK PASS|FAIL per suite
-#       and a last line CHECK PASS|FAIL.
+#       export the pin and run the selected runs of harness/<suite>/runs.tsv (default: all; a selected
+#       prove run brings the suite's build): the Kontrol build and prove runs in the pinned image, the
+#       forge replays, controls and Halmos checks on the host. Then compare every run's exit status,
+#       every verdict and every failing node's output with EXPECTED.tsv (scripts/compare.py). Prints
+#       CHECK PASS|PARTIAL|FAIL per suite and a last line:
+#         CHECK PASS     exit 0: every run of every named suite ran and matched;
+#         CHECK PARTIAL  exit 3: every selected run ran and matched, but a selection left runs out;
+#         CHECK FAIL     exit 1: a mismatch, a void run, or a failed stage; exit 2: a usage error.
 # Env: FORGE, CAST (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download into
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
@@ -32,16 +36,38 @@ UNPINNED=""
 pin() { sed -n "s/^$1 \([^ ]*\).*$/\1/p" "$PKG/PINS.txt" | head -1; }
 sha() { sha256sum "$1" | cut -d' ' -f1; }
 fail() { echo "FAIL $1: $2"; echo "CHECK FAIL ($1) after ${SECONDS}s"; exit 1; }
+usage() { echo "usage: ./check.sh [suite[:run[,run...]]...]: $1" >&2; echo "CHECK FAIL (usage)"; exit 2; }
 
+# The selection: suites of harness/SUITES.txt and runs of their runs.tsv, each named once. A selected
+# prove run brings the suite's build. SELECT[suite] is the comma list of the runs that will run.
+mapfile -t ALL_SUITES < <(sed -n 's/^suite //p' "$PKG/harness/SUITES.txt")
+runs_of() { awk -F'\t' 'NR > 1 && $2 != "" {print $2}' "$PKG/harness/$1/runs.tsv"; }
+kind_of() { awk -F'\t' -v r="$2" 'NR > 1 && $2 == r {print $1}' "$PKG/harness/$1/runs.tsv"; }
+selected() { tr ',' '\n' <<<"${SELECT[$1]}" | grep -qxF -- "$2"; }
 SUITES=(); declare -A SELECT
 for a in "$@"; do
-  case "$a" in
-    -*) echo "usage: ./check.sh [suite[:run[,run...]]...]" >&2; exit 2 ;;
-    *) s="${a%%:*}"; [ -d "$PKG/harness/$s" ] || fail usage "no suite $s"; SUITES+=("$s")
-       [ "$a" = "$s" ] || SELECT[$s]="${a#*:}" ;;
-  esac
+  case "$a" in -*) usage "no options" ;; esac
+  s="${a%%:*}"
+  printf '%s\n' "${ALL_SUITES[@]}" | grep -qxF -- "$s" || usage "no suite '$s' in harness/SUITES.txt (${ALL_SUITES[*]})"
+  [ -z "${SELECT[$s]+x}" ] || usage "suite $s named twice"
+  SUITES+=("$s")
+  if [ "$a" = "$s" ]; then SELECT[$s]="$(runs_of "$s" | paste -sd,)"; continue; fi
+  want="${a#*:}"; [ -n "$want" ] || usage "suite $s: no run after the colon"
+  for r in $(tr ',' ' ' <<<"$want"); do
+    [ -n "$(kind_of "$s" "$r")" ] || usage "suite $s has no run '$r' (runs: $(runs_of "$s" | paste -sd' '))"
+  done
+  [ "$(tr ',' '\n' <<<"$want" | sort | uniq -d)" = "" ] || usage "suite $s: a run named twice"
+  b="$(awk -F'\t' 'NR > 1 && $1 == "build" {print $2}' "$PKG/harness/$s/runs.tsv")"
+  for r in $(tr ',' ' ' <<<"$want"); do [ "$(kind_of "$s" "$r")" = prove ] && [ -n "$b" ] && want="$want,$b"; done
+  SELECT[$s]="$(runs_of "$s" | grep -xF -f <(tr ',' '\n' <<<"$want") | paste -sd,)"
 done
-[ ${#SUITES[@]} -gt 0 ] || mapfile -t SUITES < <(sed -n 's/^suite //p' "$PKG/harness/SUITES.txt")
+if [ ${#SUITES[@]} -eq 0 ]; then
+  SUITES=("${ALL_SUITES[@]}"); for s in "${SUITES[@]}"; do SELECT[$s]="$(runs_of "$s" | paste -sd,)"; done
+fi
+SPEC=(); for s in "${SUITES[@]}"; do SPEC+=("$s:${SELECT[$s]}"); done
+# The inventory of every suite (runs.tsv, EXPECTED.tsv and the mutants agree) before any tool runs.
+python3 "$PKG/scripts/compare.py" --inventory "$PKG/EXPECTED.tsv" - "${ALL_SUITES[@]}" || fail inventory "see the INVENTORY lines above"
+echo "selection: ${SPEC[*]}"
 T="$(mktemp -d "${TMPDIR:-/tmp}/contract-kontrol.XXXXXX")"
 trap 'rm -rf "$T"' EXIT
 
@@ -77,9 +103,13 @@ SOLC="$(readlink -f "$SOLC")"
 "$SOLC" --version 2>/dev/null | grep -qF "Version: $solc_ver" || fail tools "solc $SOLC is not $solc_ver"
 binpin solc "$SOLC" "$solc_sha"
 export SOLC
-# Halmos is needed only when a selected suite has a halmos row (poseidon-frame).
-NEED_HALMOS=0
-for s in "${SUITES[@]}"; do grep -q $'^halmos\t' "$PKG/harness/$s/runs.tsv" && NEED_HALMOS=1; done
+# Halmos is needed only when a halmos run is selected (poseidon-frame); Docker only when a build is.
+NEED_HALMOS=0; NEED_DOCKER=0
+for s in "${SUITES[@]}"; do
+  for r in $(tr ',' ' ' <<<"${SELECT[$s]}"); do
+    case "$(kind_of "$s" "$r")" in halmos) NEED_HALMOS=1 ;; build) NEED_DOCKER=1 ;; esac
+  done
+done
 if [ "$NEED_HALMOS" = 1 ]; then
   # As contract-halmos/check.sh: scripts/pyenv-check.py checks the environment against
   # requirements-halmos.txt and the RECORD pins of PINS.txt, and Halmos runs as <python> -I -m halmos.
@@ -115,9 +145,6 @@ if [ "$NEED_HALMOS" = 1 ]; then
   echo "tools: halmos $(pin halmos_version) ($HPY -I -m halmos, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES)"
 fi
 IMAGE="$(pin kontrol_image)@$(pin kontrol_image_digest)"
-# Docker is needed only when a selected suite has a Kontrol build.
-NEED_DOCKER=0
-for s in "${SUITES[@]}"; do grep -q $'^build\t' "$PKG/harness/$s/runs.tsv" && NEED_DOCKER=1; done
 if [ "$NEED_DOCKER" = 1 ]; then
 command -v docker >/dev/null || fail tools "docker not found"
 if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
@@ -212,14 +239,14 @@ for s in "${SUITES[@]}"; do
   while IFS=$'\t' read -r kind run abi cmd; do
     [ "$kind" = kind ] && continue
     [ -n "$kind" ] || continue
-    if [ "$kind" = prove ] && [ -n "${SELECT[$s]:-}" ] && ! grep -qx "$run" <<<"$(tr ',' '\n' <<<"${SELECT[$s]}")"; then
-      echo "suite $s run $run: not selected"; continue
-    fi
+    selected "$s" "$run" || { echo "suite $s run $run: not selected"; continue; }
     t0=$SECONDS
     case "$kind" in
       build)
-        CPUSET="${BUILD_CPUSET:-0-1}" bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
-        if grep -q "^BUILD_EXIT=0$" "$L/$run.txt" || { grep -q "Kontrol project built" "$L/$run.txt" && grep -q "^COMMAND_EXIT=0$" "$L/$run.txt"; }; then built=1; fi
+        CPUSET="${BUILD_CPUSET:-0-1}" bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"; rrc=$?
+        # Built: the runner and the container shell exit 0 and kontrol build printed BUILD_EXIT=0.
+        [ "$rrc" = 0 ] && [ "$(grep -c '^BUILD_EXIT=' "$L/$run.txt")" = 1 ] && grep -qx 'BUILD_EXIT=0' "$L/$run.txt" \
+          && grep -qx 'COMMAND_EXIT=0' "$L/$run.txt" && built=1
         want_abi="$(pin "kevm_abi_${abi}_sha256")"
         grep -q "^$want_abi " "$L/$run.txt" || { echo "suite $s: the container did not see the $abi abi.md"; built=0; }
         printf '%s\t%s\t%s\t%s\t-\t-\t%ss\n' "$s" "$run" build "$([ $built = 1 ] && echo BUILT || echo BUILD-FAILED)" "$((SECONDS - t0))" >> "$L/results.tsv"
@@ -227,6 +254,7 @@ for s in "${SUITES[@]}"; do
         [ $built = 1 ] || break ;;
       prove)
         [ $built = 1 ] || { echo "suite $s run $run: no build"; continue; }
+        # compare.py checks the runner and command exits on the RUN end line of the log.
         CPUSET="${PROVE_CPUSET:-0-5}" bash "$PKG/scripts/kontrol-run.sh" "$L/$run.txt" "$W/kontrol" "$abi" "$cmd"
         python3 "$PKG/scripts/kverdicts.py" "$s" "$run" "$L/$run.txt" "$W/kontrol/contracts/out/proofs" > "$L/$run.tsv"
         [ -s "$L/$run.tsv" ] || printf '%s\t%s\t-\tNO-VERDICT\t-\t-\t-\n' "$s" "$run" > "$L/$run.tsv"
@@ -235,6 +263,7 @@ for s in "${SUITES[@]}"; do
       forge)
         (cd "$W/replay" && FOUNDRY_OFFLINE=true FOUNDRY_SOLC="$SOLC" FOUNDRY_LINT_LINT_ON_BUILD=false \
           "$FORGE" test --match-path "contracts/test/$s/$cmd" -vv) > "$L/$run.txt" 2>&1
+        echo "HOST_EXIT=$?" >> "$L/$run.txt"
         python3 - "$s" "$run" "$L/$run.txt" >> "$L/results.tsv" <<'PY'
 import re, sys
 s, run, log = sys.argv[1:4]
@@ -254,7 +283,7 @@ PY
         mkdir -p "$T/bin"; ln -sf "$FORGE" "$T/bin/forge"; ln -sf "$CAST" "$T/bin/cast"
         (cd "$W/$cmd" && PATH="$T/bin:$PATH" FOUNDRY_SOLC="$SOLC" FOUNDRY_LINT_LINT_ON_BUILD=false python3 tools/run.py \
           && PATH="$T/bin:$PATH" ZKKIT_DIR="$W/zk-kit" POSEIDON_DIR="$T/soldeer/poseidon-solidity-0.0.5" python3 tools/check_witnesses.py) > "$L/$run.txt" 2>&1
-        crc=$?
+        crc=$?; echo "HOST_EXIT=$crc" >> "$L/$run.txt"
         python3 - "$s" "$run" "$W/$cmd/logs/results.json" "$crc" >> "$L/results.tsv" <<'PY'
 import json, os, sys
 s, run, res, crc = sys.argv[1:5]
@@ -265,14 +294,14 @@ if os.path.exists(res):
             print(f"{s}\t{run}-{part}\t{x['test']}\t{v}\t-\t-\t-")
 print(f"{s}\t{run}\tall-checks\t{'PASS' if crc == '0' else 'FAIL'}\t-\t-\t-")
 PY
-        echo "suite $s $run: $(tail -1 "$L/$run.txt"), exit $crc, $((SECONDS - t0))s" ;;
+        echo "suite $s $run: $(tail -2 "$L/$run.txt" | head -1), exit $crc, $((SECONDS - t0))s" ;;
       halmos)
         # The PoseidonT3 frame checks (Halmos on the host, see README.md): a copy of harness/<suite>.
         rm -rf "$W/$cmd"; cp -a "$PKG/harness/$s" "$W/$cmd"
         mkdir -p "$T/bin"; ln -sf "$FORGE" "$T/bin/forge"; ln -sf "$CAST" "$T/bin/cast"
         (cd "$W/$cmd" && PATH="$T/bin:$PATH" HALMOS="$HALMOS" YICES="$YICES" POSEIDON_DIR="$T/soldeer/poseidon-solidity-0.0.5" \
           SOLC="$SOLC" FOUNDRY_SOLC="$SOLC" FOUNDRY_OFFLINE=true FOUNDRY_LINT_LINT_ON_BUILD=false python3 scripts/verify.py) > "$L/$run.txt" 2>&1
-        crc=$?
+        crc=$?; echo "HOST_EXIT=$crc" >> "$L/$run.txt"
         python3 - "$s" "$run" "$W/$cmd/results" "$crc" >> "$L/results.tsv" <<'PY'
 import json, os, re, sys
 s, run, res, crc = sys.argv[1:5]
@@ -295,11 +324,15 @@ for log, part in [("deployment.log", "deployment"), ("concrete-replay.log", "rep
             if m and suite: print(f"{s}\t{run}-{part}\t{suite}.{m.group(2)}\t{m.group(1)}\t-\t-\t-"); suite = None
 print(f"{s}\t{run}\tall-checks\t{'PASS' if crc == '0' else 'FAIL'}\t-\t-\t-")
 PY
-        echo "suite $s $run: $(tail -1 "$L/$run.txt"), exit $crc, $((SECONDS - t0))s" ;;
+        echo "suite $s $run: $(tail -2 "$L/$run.txt" | head -1), exit $crc, $((SECONDS - t0))s" ;;
     esac
   done < "$PKG/harness/$s/runs.tsv"
 done
-python3 "$PKG/scripts/compare.py" "$PKG/EXPECTED.tsv" "$WORK" "${SUITES[@]}"; rc=$?
+python3 "$PKG/scripts/compare.py" "$PKG/EXPECTED.tsv" "$WORK" "${SPEC[@]}"; rc=$?
 echo "check.sh: ${#SUITES[@]} suites, ${SECONDS}s, work $WORK, started $STAMP${UNPINNED:+ (unpinned build:$UNPINNED)}"
-[ $rc -eq 0 ] && echo "CHECK PASS: ${#SUITES[@]} suites, ${SECONDS}s${UNPINNED:+ (unpinned build:$UNPINNED)}" || echo "CHECK FAIL: see the CHECK lines above"
+case $rc in
+  0) echo "CHECK PASS: ${#SUITES[@]} suites (${SUITES[*]}), every run, ${SECONDS}s${UNPINNED:+ (unpinned build:$UNPINNED)}" ;;
+  3) echo "CHECK PARTIAL (${SPEC[*]}): every selected run matched; the CHECK PARTIAL lines above name the runs not selected${UNPINNED:+ (unpinned build:$UNPINNED)}" ;;
+  *) rc=1; echo "CHECK FAIL: see the CHECK, RUN and INVENTORY lines above" ;;
+esac
 exit $rc
