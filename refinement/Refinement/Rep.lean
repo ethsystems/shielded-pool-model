@@ -45,7 +45,7 @@ structure RepCore (H : Nat → Nat → Nat) (E : Enc P) (sup : P.Token → Prop)
   nullifiers : ∀ w, σ.nullifiers w = true ↔ w ∈ st.nullifiers.map E.nf
   /-- `supportedTokens ⊆ sup`. -/
   supported : ∀ t, σ.supportedTokens (E.tok t) = true → sup t
-  /-- The model's supported set is `sup` (frozen, CLAUSEMAP simplification 10). -/
+  /-- The model's supported set is `sup` (frozen, SPEC-MAP simplification 10). -/
   supported_eq : st.supported = sup
   /-- `historicalRootIndex < 100`. -/
   ringIndex_lt : σ.ringIndex < 100
