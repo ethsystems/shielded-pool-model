@@ -1,12 +1,12 @@
 # Rename map: earlier name -> name in this package.
 #
-# The proofs were first written with working names, and the frozen reports and the claim board in
-# evidence/ cite them. This map gives each earlier run label, file, contract, test, mutant and K
+# The proofs were first written with working names, and the earlier reports (not in this
+# repository) and the claim board (../BOARD.md) cite them. This map gives each earlier run label, file, contract, test, mutant and K
 # module the name it has here, so that those reports can be read against these files. Contract,
 # test and mutant names changed; the bodies, the error names (and so the error selectors) and the
 # proof options did not. Each line: kind, earlier name, ->, new name.
 
-# Run labels of the earlier reports (see evidence/README.md, "Contract runs") -> suite:run
+# Run labels of the earlier reports -> suite:run
 run    D4              -> public-inputs:fixed-token (and, as one case of it, withdraw-success:token-above-0x11)
 run    SYMTOK          -> withdraw-success:two-tokens
 run    night-kontrol   -> withdraw-success:token-above-0x11

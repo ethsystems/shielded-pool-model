@@ -1,7 +1,7 @@
 # contract-kontrol: Kontrol proofs about the pool contract at `a04b8b3`
 
 This package holds the symbolic proofs about `ShieldedPool.sol` of ethsystems/pocs (public) at
-`a04b8b3`, and about its libraries, that the claim board in [evidence/](../evidence/README.md)
+`a04b8b3`, and about its libraries, that the claim board ([../BOARD.md](../BOARD.md))
 cites under its contract rows: the rejection guards of deposit, transfer and withdraw, the withdraw
 success path (marking before payout, the payout call, the verifier inputs), canonical public inputs
 and their order, local checks of the tree insertion loop, and the frame of the PoseidonT3 library.
@@ -168,8 +168,8 @@ addresses `0x00` to `0x11`; a symbolic caller. The symbolic-caller form of the s
 the prank splits once per existing account and its unconstrained default branch splits again in the
 same way. No run here selects it. That `withdraw` never reads `msg.sender` is a source reading (the
 pool reads it only in `onlyOwner`, the constructor and `deposit`), not a result of this package.
-A Halmos run of the same body with a symbolic caller is in the frozen
-report [evidence/2026-10-13-halmos-caller](../evidence/2026-10-13-halmos-caller/REPORT.md).
+A Halmos run of the same body with a symbolic caller is the `caller` suite of
+[../contract-halmos/](../contract-halmos/README.md).
 
 The bytes-prefix rule (`lemmas/bytes-prefix.k`, module `BYTES-PREFIX-LEMMAS`, four
 `[simplification]` rules, one fact in four orientations): when `B1` and `B2` are concrete,
