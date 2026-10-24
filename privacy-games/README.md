@@ -228,7 +228,7 @@ pin.
 Install git, bash, python3 (3.11 or later), sha256sum and elan. Make a fresh clone of the
 whole repository: the package compiles three files of the parent directory, and the check
 does not hash the build outputs that an earlier run leaves in `.lake` (see the trust base).
-The first run downloads VCV-io, Mathlib and Mathlib's prebuilt oleans (about 8.3 GB in
+The first run downloads VCV-io, Mathlib and Mathlib's prebuilt oleans (about 8.1 GiB in
 `.lake`).
 
 ```
