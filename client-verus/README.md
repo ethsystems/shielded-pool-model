@@ -18,9 +18,10 @@ report; [FUNCTIONS.md](FUNCTIONS.md) lists them with their lines and their selec
 - **Verus, 96 functions, re-checked here.** For each of them, a selected property holds on a
   reviewed mirror of the function, under the parameter contracts of [TRUSTED.md](TRUSTED.md).
   Verus 0.2026.09.13.671956e verifies the 15 mirror files with `--no-cheating` (312 verified
-  items, no local admission), and each of the 96 functions has at least one negative control of
-  its own; all 241 controls are rejected (two of them at the solver resource limit: see "Trust
-  base").
+  items, no local admission), and each of the 96 functions has a negative control of its own
+  that Verus refutes. Of the 241 controls, 239 are refuted by Verus and 2 stop at the solver's
+  resource limit (rows 65 and 66, which each have a second refuted control); `STRICT=1` counts
+  the two as failures (see "Trust base").
 - **Aeneas, 22 functions, frozen.** The frozen report records Aeneas extraction proofs for 22
   functions. This package does not re-run them (see "The Aeneas half").
 - **Both, 8 functions.** `decode_path`, `DecryptionError::from`,
@@ -179,13 +180,13 @@ here on the Verus route only.
 
 Solver limits. Two controls, `crypto_field/p2-swap-args` and `crypto_field/p4-swap-cd` (the
 `poseidon2` arguments swapped, the last two `poseidon4` arguments swapped), stop at Z3's
-resource limit (`rlimit`) instead of a refuted postcondition. The mutated file does not verify,
-so they count as rejected, and `check.sh` reports them apart; `STRICT=1` requires the recorded
-diagnostic, and then they fail. Their outcome depends on the file name Verus is given (the crate
-name): the same mutated text, under the file names of the earlier run, ends with "postcondition
-not satisfied" (RESULT.md). Rows
-65 and 66 each have a second control (`p2-claim-symmetric`, `p4-claim-ignores-d`) that is refuted
-in either mode.
+resource limit (`rlimit`) instead of a refuted postcondition. Such a stop is not a refutation:
+the mutated file does not verify, but Verus did not show it wrong either. `check.sh` reports the
+two apart and does not fail on them, because rows 65 and 66 each have a second control
+(`p2-claim-symmetric`, `p4-claim-ignores-d`) that Verus refutes; every Verus row must have a
+refuted control of its own. `STRICT=1` counts the two as failures. Their outcome depends on the
+file name Verus is given (the crate name): the same mutated text, under the file names of the
+earlier run, ends with "postcondition not satisfied" (RESULT.md).
 
 ## Pins
 
@@ -242,11 +243,12 @@ match. `VERUS_FETCH=0` forbids the download. `JOBS` sets the number of parallel 
 3. runs `scripts/verus-run.py`: each mirror with `--no-cheating` must verify with 0 errors and
    its recorded count; `probes/async.rs` and `probes/await.rs` must verify and
    `probes/async_trait.rs` must stop with the unsupported-feature diagnostic; each control (its
-   mirror with one replacement) must reach verification, report at least one error, and print
-   its expected diagnostic or stop at the resource limit;
+   mirror with one replacement) is refuted when Verus reaches verification, reports at least
+   one error and prints its expected diagnostic; a stop at the resource limit is reported apart,
+   and any other outcome (it verifies, or fails to compile) fails the check;
 4. runs `scripts/coverage.py`: the route counts (Aeneas 22, Verus 96, both 8, union 110, none
-   0), the mapping of every control to the function it changes (each of the 96 rows has at
-   least one), the eight effect interfaces with 29 and 31 contracts, and FUNCTIONS.md and
+   0), the mapping of every control to the function it changes (each of the 96 rows must have
+   a refuted control of its own), the eight effect interfaces with 29 and 31 contracts, and FUNCTIONS.md and
    TRUSTED.md against their regeneration.
 
 Exit 0 means `CHECK PASS`. Each Verus run writes its log to `work/logs/`, and
@@ -258,7 +260,7 @@ The 131 controls of the 11 domain-core mirrors are those recorded when each file
 checked; 10 of them (in `byte_records.rs`) were reconstructed then from the description of the
 original controls, which were not kept. Six controls were added in this package, two each for
 the three rows that had none (`decode_path`, `DecryptionError::from`,
-`EncryptedTransferNotes::to_bytes`). A control shows that the proof does not accept the changed
+`EncryptedTransferNotes::to_bytes`). A refuted control shows that the proof does not accept the changed
 function or the stronger claim; it does not show that the changed claim is false.
 
 Cost on a Linux laptop (16 threads, 30 GB, btrfs), measured 2026-10-24: `check.sh` 99 s with
@@ -300,7 +302,7 @@ depends on them.
 ## Where it comes from
 
 The frozen report gives the numbers this package re-checks: 110 relevant functions, Verus 96,
-Aeneas 22, both 8, and 104 negative controls for the 38 effect functions, all rejected. The
+Aeneas 22, both 8, and 104 negative controls for the 38 effect functions, all refuted. The
 mirrors here are those files with their comments rewritten (labels, machine names and references
 to files that are not here) and their code unchanged (`scripts/origins.txt`); one file,
 `byte_records.rs`, was written against an earlier commit of the client, and its regions are

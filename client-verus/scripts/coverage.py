@@ -6,7 +6,8 @@ usage: coverage.py [<work dir>/results.json] [--write]
 Counts the routes of source/manifest.json (Aeneas 22, Verus 96, both 8, union 110, none 0),
 maps every control to the mirrored function it changes, and joins the Verus results, so that
 each row says what this package re-checks. With a results file, a Verus row is re-checked when
-its mirror file verified and at least one control of its function was rejected. Generates
+its mirror file verified, at least one control of its function was refuted, and none of its
+controls verified. Generates
 FUNCTIONS.md (the 110 rows) and TRUSTED.md (every trait interface the mirrors take as a
 parameter, verbatim) and compares them with the committed files (--write writes them).
 Prints COVERAGE lines; exit 1 on any failure."""
@@ -73,6 +74,7 @@ if args:
     res = json.loads(Path(args[0]).read_text())
     mirror_ok = {Path(r['label']).name: r['pass'] for r in res['mirrors']}
     control_ok = {r['id']: r['pass'] for r in res['controls']}
+    refuted = {r['id'] for r in res['controls'] if r['outcome'] == 'refuted'}
     rlimit = set(res['summary'].get('controls_rlimit', []))
 
 
@@ -83,13 +85,14 @@ def status(r):
     ids = by_row[r['n']]
     if res is None:
         return f"Verus `{v['mirror']}`, {len(ids)} controls"
-    good = mirror_ok.get(v['mirror']) and all(control_ok.get(i) for i in ids)
+    nref = sum(i in refuted for i in ids)
     rl = sum(i in rlimit for i in ids)
-    s = (f"re-checked: `{v['mirror']}` verifies, {len(ids)} of {len(ids)} controls rejected" if good
+    good = mirror_ok.get(v['mirror']) and all(control_ok.get(i) for i in ids) and nref >= 1
+    s = (f"re-checked: `{v['mirror']}` verifies, {nref} of {len(ids)} controls refuted" if good
          else f"FAIL: `{v['mirror']}` {'verifies' if mirror_ok.get(v['mirror']) else 'does not verify'}, "
-              f"{sum(bool(control_ok.get(i)) for i in ids)} of {len(ids)} controls rejected")
+              f"{nref} of {len(ids)} controls refuted")
     if rl:
-        s += f' ({rl} at the solver resource limit)'
+        s += f', {rl} stopped at the solver resource limit'
     if not ids:
         s += ' (no control of its own: see README)'
     if r['route'] == 'both':
@@ -100,9 +103,14 @@ def status(r):
 if res is not None:
     st = [status(r) for r in rows]
     rechecked = sum(s.startswith('re-checked') for s in st)
-    report(rechecked == verus, f'{rechecked} of {verus} Verus rows re-checked here; {route["Aeneas"]} Aeneas-only rows and the Aeneas half of {route["both"]} rows are frozen')
+    report(rechecked == verus, f'{rechecked} of {verus} Verus rows re-checked here, each with a refuted control of its own; {route["Aeneas"]} Aeneas-only rows and the Aeneas half of {route["both"]} rows are frozen')
+    lim = [r['n'] for r, s_ in zip(rows, st) if 'resource limit' in s_]
+    (Path(args[0]).parent / 'rlimit-rows.json').write_text(json.dumps(lim) + '\n')
+    if lim:
+        print(f"COVERAGE note rows with a control stopped at the solver resource limit: {', '.join(map(str, lim))}; each has another refuted control", flush=True)
     report(res['summary']['pass'], f"Verus run: {res['summary']['mirrors_pass']} of {res['summary']['mirrors']} mirror files, "
-           f"{res['summary']['verified_items']} verified items, {res['summary']['controls_rejected']} of {res['summary']['controls']} controls rejected, "
+           f"{res['summary']['verified_items']} verified items, {res['summary']['controls']} controls: {res['summary']['controls_refuted']} refuted, "
+           f"{len(res['summary']['controls_rlimit'])} stopped at the solver resource limit, {len(res['summary']['controls_failed'])} failed; "
            f"{res['summary']['probes_pass']} of {res['summary']['probes']} probes")
 
 # --- FUNCTIONS.md -----------------------------------------------------------------------------

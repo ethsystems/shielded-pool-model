@@ -8,8 +8,8 @@
 # Env: VERUS_DIR (an unpacked verus-x86-linux release directory; default .deps/verus-x86-linux,
 # unpacked from VERUS_ZIP or downloaded), VERUS_ZIP (the release zip), VERUS_FETCH=0 (never
 # download), POCS (default ./pocs), JOBS (parallel Verus runs; default 4), WORK (default ./work),
-# STRICT=1 (a control must fail with its recorded diagnostic; a solver resource limit does not
-# count), TOOLS_UNPINNED=1 (accept a Verus or rustc build whose hashes differ from the pins; the
+# STRICT=1 (a control must be refuted with its recorded diagnostic; a stop at the solver resource
+# limit counts as a failure), TOOLS_UNPINNED=1 (accept a Verus or rustc build whose hashes differ from the pins; the
 # versions must still match). Relative paths are taken from the caller's directory.
 set -uo pipefail
 CALLER="$(pwd)"
@@ -85,11 +85,12 @@ RUSTUP_TOOLCHAIN="$TC" python3 "$PKG/scripts/verus-run.py" "$VERUS_DIR" "$WORK" 
 python3 "$PKG/scripts/coverage.py" "$WORK/results.json" || fail coverage "see the COVERAGE lines above"
 python3 - "$WORK/results.json" "$SECONDS" "${UNPINNED:-}" <<'PY'
 import json, sys
+from pathlib import Path
 s = json.load(open(sys.argv[1]))['summary']
-rl = len(s['controls_rlimit'])
+rows = json.loads((Path(sys.argv[1]).parent / 'rlimit-rows.json').read_text())
+lim = (f" (rows {' and '.join(map(str, rows))}, which each have a second refuted control)" if rows else '')
 print(f"CHECK PASS: 110 functions (Verus 96 re-checked, Aeneas 22 frozen, both 8); "
       f"{s['mirrors']} mirror files, {s['verified_items']} verified items; "
-      f"{s['controls_rejected']} of {s['controls']} controls rejected"
-      + (f" ({rl} at the solver resource limit)" if rl else '')
+      f"{s['controls']} controls: {s['controls_refuted']} refuted by Verus, {len(s['controls_rlimit'])} stopped at the solver's resource limit{lim}"
       + f"; {s['probes']} probes; {sys.argv[2]}s" + (f"; unpinned build:{sys.argv[3]}" if sys.argv[3] else ''))
 PY

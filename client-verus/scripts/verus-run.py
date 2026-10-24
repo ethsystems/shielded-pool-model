@@ -8,12 +8,12 @@ usage: verus-run.py <verus dir> <work dir> [jobs]
 - probes/async.rs and probes/await.rs must verify; probes/async_trait.rs must stop with the
   unsupported-feature diagnostic (async functions in traits are outside this Verus release).
 - Each control in controls/controls.json is its mirror with one replacement. It counts as
-  rejected only if Verus reaches verification (prints its results line), reports at least one
+  refuted only if Verus reaches verification (prints its results line), reports at least one
   error, and prints the expected proof diagnostic ("proof error": any of postcondition,
   precondition, assertion or loop invariant not satisfied). A compile error does not count.
-  A control whose function check stops at the solver resource limit (rlimit) also does not
-  verify; it counts as rejected and is reported apart ("rlimit"), unless STRICT=1, which
-  requires the expected diagnostic.
+  A control whose function check stops at the solver resource limit (rlimit) is not refuted,
+  but it does not verify either: it is reported apart ("rlimit") and does not fail the run,
+  unless STRICT=1, which counts it as a failure.
 Writes <work dir>/results.json and one log per run; prints one VERUS line per run."""
 import json
 import os
@@ -76,7 +76,7 @@ def control_job(c):
     refuted = reached and any(e in d for e in exp for d in r['diagnostics'])
     rlimit = reached and not refuted and any(common.RLIMIT in d for d in r['diagnostics'])
     r.update(id=c['id'], mirror=c['mirror'], expect=c['expect'],
-             rejected_by='expected diagnostic' if refuted else 'rlimit' if rlimit else None,
+             outcome='refuted' if refuted else 'rlimit' if rlimit else 'not rejected',
              **{'pass': refuted or (rlimit and os.environ.get('STRICT') != '1')})
     return r
 
@@ -102,8 +102,9 @@ summary = dict(
     mirrors=len(results['mirrors']), mirrors_pass=sum(r['pass'] for r in results['mirrors']),
     verified_items=sum(r['verified'] or 0 for r in results['mirrors']),
     probes=len(results['probes']), probes_pass=sum(r['pass'] for r in results['probes']),
-    controls=len(results['controls']), controls_rejected=sum(r['pass'] for r in results['controls']),
-    controls_rlimit=sorted(r['id'] for r in results['controls'] if r['rejected_by'] == 'rlimit'),
+    controls=len(results['controls']), controls_refuted=sum(r['outcome'] == 'refuted' for r in results['controls']),
+    controls_rlimit=sorted(r['id'] for r in results['controls'] if r['outcome'] == 'rlimit'),
+    controls_failed=sorted(r['id'] for r in results['controls'] if not r['pass']),
     strict=os.environ.get('STRICT') == '1',
     wall_s=round(time.monotonic() - t0, 1), verus_sum_s=round(sum(r['wall_s'] for k in results for r in results[k]), 1),
     max_rss_mib=max(r['maxrss_kb'] for k in results for r in results[k]) // 1024, jobs=jobs)
@@ -115,7 +116,7 @@ try:
 except Exception as e:  # no cgroup v2 view: the per-run max RSS above still holds
     summary['cgroup'] = f'unavailable ({e.__class__.__name__})'
 ok = (summary['mirrors_pass'] == summary['mirrors'] and summary['probes_pass'] == summary['probes']
-      and summary['controls_rejected'] == summary['controls'])
+      and not summary['controls_failed'])
 summary['pass'] = ok
 (work / 'results.json').write_text(json.dumps(dict(summary=summary, **results), indent=1) + '\n')
 print('VERUS ' + ('PASS ' if ok else 'FAIL ') + json.dumps(summary), flush=True)
