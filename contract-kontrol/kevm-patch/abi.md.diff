@@ -1,0 +1,5 @@
+--- a/abi.md
++++ b/abi.md
+@@ -456 +456 @@
+-    rule #enc(        #bytes(BS)) => #encBytes(lengthBytes(BS), BS) ensures lengthBytes(BS) <=Int 1073741824
++    rule #enc(        #bytes(BS)) => #encBytes(lengthBytes(BS), BS)

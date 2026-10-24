@@ -1,0 +1,7 @@
+id	base	diff	output	change
+LATE_MARK	pool	ShieldedPool_M_LATE_MARK.diff	ShieldedPool_M_LATE_MARK.sol	withdraw marks the nullifier after the token payout (lines 283, 286)
+SWAP_INPUTS	pool	ShieldedPool_M_SWAP_INPUTS.diff	ShieldedPool_M_SWAP_INPUTS.sol	withdraw passes the nullifier and the root to the verifier in swapped places (lines 267, 271)
+DROP_BIT253	pool	ShieldedPool_M_DROP_BIT253.diff	ShieldedPool_M_DROP_BIT253.sol	withdraw passes the nullifier to the verifier with bit 253 cleared (line 267)
+PAY_CALLER	pool	ShieldedPool_M_PAY_CALLER.diff	ShieldedPool_M_PAY_CALLER.sol	withdraw pays msg.sender instead of the recipient (line 286)
+FIXED_TOKEN	pool	ShieldedPool_M_FIXED_TOKEN.diff	ShieldedPool_M_FIXED_TOKEN.sol	withdraw pays one fixed token (0xF000...000B) instead of the named token (line 286)
+SKIP_VERIFIER	pool	ShieldedPool_M_SKIP_VERIFIER.diff	ShieldedPool_M_SKIP_VERIFIER.sol	withdraw does not call the verifier (line 278)
