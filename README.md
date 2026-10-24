@@ -43,28 +43,34 @@ collision can lock a note; locked value counts as live.
 Two kinds of units live here: machine-checked model claims and scoped
 implementation evidence with pinned inputs. A unit moves in once its
 claim is stable and its check is self-contained. No unit verifies
-deployed execution: nothing about the verifier's soundness in production,
-the on-chain Merkle tree, field encodings, callers, re-entrancy, arithmetic
-of the deployed contract, governance, or privacy of the real system. The
-separate packages check selected facts about circuits, hash code, verifier
-builds and the bytes of one deployment at one block, not deployed
-execution; no end-to-end implementation proof is claimed anywhere in this
-repo. A model theorem cannot see an
-implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what a deployment
-must satisfy for the model to describe it.
+deployed execution: nothing here covers the verifier's soundness in
+production, the on-chain Merkle tree, field encodings, callers,
+re-entrancy or arithmetic of the deployed contract, governance, or
+privacy of the real system. The separate packages check selected facts
+about circuits, hash code, verifier builds, the bytes of one deployment
+at one block, the contract source at its pin (built with fixed library
+addresses, run against mocks, within stated bounds), client functions
+on reviewed mirrors, and privacy games in models; one states a
+conditional refinement of the contract to the model under named
+premises. None of them checks deployed execution, and no end-to-end
+implementation proof is claimed anywhere in this repo. A model theorem
+cannot see an implementation bug; [SPEC-MAP.md](SPEC-MAP.md) lists what
+a deployment must satisfy for the model to describe it.
 
 Implementation checks whose inputs are public live here as separate
-packages (below). Verus proofs of the shielded-pool
-client's prover input encoders and public-input array builders live on
-a separate branch of the private implementation repository, off master
-on purpose; they are not linked to this model. Nothing is
-claimed here beyond what the units below state.
+packages (below). Verus mirrors of 96 client functions, among them the
+prover-input encoders and the public-input array builders, are the
+separate package [client-verus/](client-verus/README.md); they are not
+linked to this model. Nothing is claimed here beyond what the units
+below state.
 
-[evidence/](evidence/README.md) holds frozen reports from the research
-phase: the deployment checker and its run, the 36-rule claim board, the
-findings register, and the Halmos, Kontrol, client-coverage and privacy
-reports. Each was measured once and is not rerun here; no claim in this
-repo depends on it, and the gate does not read it.
+[BOARD.md](BOARD.md) is the 36-rule obligations board for claim 1 (on-chain
+safety) that the writeup cites. It is a status document: people chose
+its status words, and each evidence cell names the check in this repo
+that backs the row, or says that no package covers it.
+[FINDINGS.md](FINDINGS.md) is the findings register of the campaign, 80
+rows: a record, not a re-check. Neither is a claim of this repo, and the
+gate reads neither.
 
 ## From the writeup
 
@@ -82,14 +88,19 @@ to the units here:
 - The verifier: [verifier-reproduction/](verifier-reproduction/README.md).
 - Privacy: the symbolic k-anonymity extension
   (`LeanShieldedPool/Extensions/KAnonymity.lean`); the conditional
-  hiding bounds the writeup mentions are not in this repo.
+  bounds of the privacy games: [privacy-games/](privacy-games/README.md).
 - The deployment check: [deployment/](deployment/README.md), the Sepolia
   deployment at block 11949456 against a fresh build of `a04b8b3`.
-- The contract checks and the wallet proofs are not in this repo as
-  re-checkable units; their frozen reports are in
-  [evidence/](evidence/README.md) (see Scope; issue #10 tracks the
-  hand-offs below the model, issue #15 the conversion of the reports
-  into packages).
+- The contract checks: [contract-halmos/](contract-halmos/README.md)
+  and [contract-kontrol/](contract-kontrol/README.md); the board that
+  collects them rule by rule, with its counts: [BOARD.md](BOARD.md).
+- The refinement of the contract to the model:
+  [refinement/](refinement/README.md).
+- The wallet proofs, Verus half: [client-verus/](client-verus/README.md);
+  the Aeneas half is counted from the client coverage report of
+  2026-10-01, which is not in this repo.
+- The findings: [FINDINGS.md](FINDINGS.md). Issue #10 tracks the
+  hand-offs below the model.
 
 ## Where it comes from
 
@@ -224,6 +235,64 @@ checksum.
   set match the claim. A check of one chain at one block, against any RPC.
   It trusts the RPC and says nothing about later blocks, token or owner
   behaviour, or soundness.
+- [contract-halmos/](contract-halmos/README.md): bounded symbolic checks
+  of `ShieldedPool.sol` at ethsystems/pocs `a04b8b3` (the submodule
+  `contract-halmos/pocs`) with a pinned Halmos 0.3.3, in nine suites: the
+  guards before the verifier, duplicate leaves and the reentrancy lock,
+  insertion order and token callbacks, the owner functions, the withdraw
+  payout with a symbolic caller, the root ring, the postcondition fields
+  and the root window. A PASS holds only within its suite's scope line
+  (byte lengths, tree depths, mocks, a keccak stub for Poseidon where
+  stated, gas unmodelled), and named mutants must fail. Not a statement
+  about the deployed contract. Separate package, own check and trust
+  base; the gate does not build it.
+- [contract-kontrol/](contract-kontrol/README.md): Kontrol proofs about
+  the bytecode that solc 0.8.37 builds from `ShieldedPool.sol` at
+  `a04b8b3` (the submodule `contract-kontrol/pocs`), in a container
+  pinned by digest: the guards before the verifier for byte lengths up
+  to 2^30 (withdraw below 2^64, with a patched KEVM file), the withdraw
+  success path for a token above 0x11 and a fixed caller, canonical
+  public inputs and their order, and local checks of the tree insertion
+  loop; plus a Halmos check that the PoseidonT3 library is a pure
+  function. Each proof holds in its stated scope, under KEVM's semantics
+  and one trusted bytes-prefix rule, with mock verifiers and tokens;
+  named mutants must fail. Separate package, own check and trust base;
+  the gate does not build it.
+- [refinement/](refinement/README.md): a conditional refinement of the
+  pool contract to the gated model, imported unchanged. Under named
+  contract, circuit, tree and cryptographic premises, every accepted
+  history of an abstract contract refines a model run, so the money
+  theorems apply. Every accepted root is a prefix root of the leaves.
+  The LeanIMT tree matches the circuits' Merkle fold (through
+  `circuits-lampe/` for the field fold). Under token premises, the
+  pool's balance bounds every admitted withdrawal. It also holds the
+  arithmetic of the gas argument. No concrete execution and no premise
+  discharged for the deployment. Separate package, own check and trust
+  base; the gate does not build it.
+- [client-verus/](client-verus/README.md): for 96 of the 110
+  security-relevant functions of the shielded-pool client at
+  ethsystems/pocs `a04b8b3` (the submodule `client-verus/pocs`), a
+  selected property holds on a reviewed Verus mirror of the function,
+  under named parameter contracts. A pinned Verus release checks every
+  mirror with `--no-cheating`, and the diff of each mirror to its
+  hash-pinned source region is checked. Of 241 negative controls, Verus
+  refutes 239; 2 stop at the solver's resource limit (rows 65 and 66,
+  each with a second refuted control). The 22 Aeneas results of the
+  client coverage report of 2026-10-01 are counted, not re-checked.
+  These are mirrors, not the compiled client, and the package says
+  nothing about effects or library behaviour. Separate package, own
+  check and trust base; the gate does not build it.
+- [privacy-games/](privacy-games/README.md): two-world privacy games
+  over the model's guards (VCV-io, pinned by commit), with conditional
+  bounds on the attacker's advantage for the recipient of static
+  transfers and of fixed chains (hiding and spread premises), and for
+  the withdrawn note, the deposit owner and the transfer sender (a
+  random-oracle premise, honest keys). It also has two proved
+  counterexamples and funded toy witnesses. It imports three model
+  files unchanged. No deployed-privacy claim: no Poseidon instantiation,
+  the random-oracle premise is a heuristic, and interactive attackers
+  are open. Separate package, own check and trust base; the gate does
+  not build it.
 
 ## Re-check
 
