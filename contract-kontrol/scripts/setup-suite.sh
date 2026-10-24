@@ -49,10 +49,11 @@ diff "$W/foundry.toml.orig" "$P/foundry.toml" > "$W/foundry.toml.diff" || true
 # 4. The harness and the mutants of this suite. Files named *Replay.t.sol go to the replay project
 #    only: Kontrol never builds them.
 mkdir -p "$P/contracts/test/$SUITE"
+shopt -s nullglob
 for f in "$H"/*.sol; do case "$f" in *Replay.t.sol) ;; *) cp "$f" "$P/contracts/test/$SUITE/" ;; esac; done
 [ ! -d "$PKG/mutants/$SUITE" ] || python3 "$PKG/mutants/make.py" "$SUITE" "$P"
 cp -a "$P" "$W/replay"
-ls "$H"/*Replay.t.sol >/dev/null 2>&1 && cp "$H"/*Replay.t.sol "$W/replay/contracts/test/$SUITE/"
+for f in "$H"/*Replay.t.sol; do cp "$f" "$W/replay/contracts/test/$SUITE/"; done
 # The container runs as another user: it must be able to write the Kontrol project.
 chmod -R a+rwX "$P"
 echo "setup $SUITE: $(wc -l < "$W/export-manifest.txt") files equal their blobs at ${PIN:0:7}; foundry.toml patch; $(ls "$P/contracts/test/$SUITE" | grep -c '\.sol$') harness files; $(ls "$P/contracts/test/$SUITE/mutants" 2>/dev/null | wc -l) mutants"

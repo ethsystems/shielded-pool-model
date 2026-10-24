@@ -51,7 +51,6 @@ binpin() { # name, binary, pinned sha256
   UNPINNED="$UNPINNED $1"
 }
 command -v python3 >/dev/null || fail tools "python3 not found"
-command -v docker >/dev/null || fail tools "docker not found"
 command -v patch >/dev/null || fail tools "patch not found"
 [ -n "$FORGE" ] && [ -x "$FORGE" ] || fail tools "forge not found (set FORGE=/path; $(pin foundry_asset))"
 [ -n "$CAST" ] && [ -x "$CAST" ] || fail tools "cast not found (set CAST=/path; $(pin foundry_asset))"
@@ -78,6 +77,11 @@ SOLC="$(readlink -f "$SOLC")"
 binpin solc "$SOLC" "$solc_sha"
 export SOLC
 IMAGE="$(pin kontrol_image)@$(pin kontrol_image_digest)"
+# Docker is needed only when a selected suite has a Kontrol build.
+NEED_DOCKER=0
+for s in "${SUITES[@]}"; do grep -q $'^build\t' "$PKG/harness/$s/runs.tsv" && NEED_DOCKER=1; done
+if [ "$NEED_DOCKER" = 1 ]; then
+command -v docker >/dev/null || fail tools "docker not found"
 if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
   [ "${PULL:-1}" = 1 ] || fail tools "image $IMAGE not present and PULL=0"
   docker pull "$IMAGE" >/dev/null || fail tools "cannot pull $IMAGE"
@@ -93,7 +97,10 @@ cp "$T/abi.stock" "$T/abi.patched" && patch -s "$T/abi.patched" "$PKG/kevm-patch
 [ "$(sha "$T/abi.patched")" = "$(pin kevm_abi_patched_sha256)" ] && [ "$(sha "$PKG/kevm-patch/abi.md")" = "$(pin kevm_abi_patched_sha256)" ] \
   || fail tools "kevm-patch/abi.md is not the image's abi.md with the pinned deletion"
 [ "$(sha "$PKG/lemmas/bytes-prefix.k")" = "$(pin lemma_sha256)" ] || fail tools "lemmas/bytes-prefix.k differs from its pin"
-echo "tools: Kontrol $(pin kontrol_version) ($IMAGE), abi.md stock $(pin kevm_abi_stock_sha256 | cut -c1-8) and patched $(pin kevm_abi_patched_sha256 | cut -c1-8), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+echo "tools: Kontrol $(pin kontrol_version) ($IMAGE), abi.md stock $(pin kevm_abi_stock_sha256 | cut -c1-8) and patched $(pin kevm_abi_patched_sha256 | cut -c1-8), forge and cast $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+else
+echo "tools: no Kontrol run selected, Docker not used; forge and cast $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+fi
 
 # --- 2. source -----------------------------------------------------------------------
 commit="$(pin pocs_commit)"; dir="$(pin pocs_dir)"
