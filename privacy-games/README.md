@@ -188,6 +188,8 @@ which ones the check enforces and which ones it trusts.
   pinned URLs and commits. The manifest has its pinned SHA-256. Each checkout in
   `.lake/packages` is at its manifest commit, has the manifest URL as origin, and has no
   tracked change, no untracked file and no ignored file outside its own `.lake/` directory.
+  One exception: a lake hash file, `F.hash` next to a tracked file `F` and holding only 16
+  hex digits. The build writes one, ProofWidgets' `widget/package-lock.json.hash`.
   The source at those commits is trusted, and so is git, which reports the state of each
   checkout. On a fresh clone, lake clones the checkouts at the manifest commits and runs
   Mathlib's cache tool before the pins can check them.
@@ -249,7 +251,8 @@ Set `JOBS` to compile several controls at once and `LEAN_NUM_THREADS` (default 2
 4. the rename check (`scripts/check-rename.py`, below);
 5. the fetch: `lake exe cache get`, then the pins again, now on all thirteen checkouts: each
    at its manifest commit and URL, with no tracked change, no untracked file and no ignored
-   file outside its `.lake/`, and VCV-io's own manifest on the same Mathlib;
+   file outside its `.lake/` but lake hash files, and VCV-io's own manifest on the same
+   Mathlib;
 6. the build: `lake build`, with no warning allowed in a package module;
 7. the census (`Census.lean`, `scripts/census.py`): every theorem of the package and of the
    three model modules, auxiliary ones included, depends on a subset of the three axioms; no

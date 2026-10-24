@@ -14,7 +14,9 @@ Checks, in order:
 - each checkout of the manifest under DIR (default .lake/packages) is its own git repository,
   at the manifest rev, with the manifest URL as origin; it has no tracked change, no file
   hidden by assume-unchanged or skip-worktree, no untracked file, and no ignored file outside
-  its .lake/ directory; VCV-io's own manifest pins the same Mathlib. Without --fetched a
+  its .lake/ directory except a lake hash file: F.hash next to a tracked file F, holding only
+  16 hex digits (lake writes ProofWidgets' widget/package-lock.json.hash); VCV-io's own
+  manifest pins the same Mathlib. Without --fetched a
   missing checkout is skipped; with --fetched (after lake exe cache get) it is a failure;
 - the three model files (paths relative to the package, read under --model-root, default the
   package) have their pinned SHA-256.
@@ -61,8 +63,12 @@ def check_checkout(name, p, d):
     dirty = git(d, 'status', '--porcelain', '--untracked-files=all')
     if dirty:
         fail(f'the {name} checkout has changes: {dirty.splitlines()[0]}')
+    tracked = set(git(d, 'ls-files').splitlines())
+    lake_hash = lambda l: (l.endswith('.hash') and l[:-5] in tracked
+                           and re.fullmatch(r'[0-9a-f]{16}\n?', (d / l).read_text()) is not None)
     ignored = [l for l in git(d, 'ls-files', '--others', '--ignored', '--exclude-standard',
-                              '--directory').splitlines() if not l.startswith('.lake/')]
+                              '--directory').splitlines()
+               if not l.startswith('.lake/') and not lake_hash(l)]
     if ignored:
         fail(f'the {name} checkout has an ignored file outside .lake/: {ignored[0]}')
 
@@ -132,7 +138,7 @@ def main():
             fail(f"VCV-io's lake-manifest.json pins Mathlib {vm.get('mathlib')}, not {pin['mathlib_rev']}")
     if checked:
         print(f'pins: {len(checked)} of {len(m)} checkouts are at their manifest revision and URL, with no '
-              'tracked change, no untracked file and no ignored file outside .lake/')
+              'tracked change, no untracked file and no ignored file outside .lake/ but lake hash files')
     else:
         print('pins: no fetched packages yet; checkouts not checked')
 
