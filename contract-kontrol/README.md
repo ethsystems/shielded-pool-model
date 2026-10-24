@@ -418,7 +418,9 @@ nor `.deps/` is tracked.
 - `lemmas/bytes-prefix.k`: the bytes-prefix rule.
 - `kevm-patch/abi.md`, `kevm-patch/abi.md.diff`: the patched KEVM file and its one deletion.
 - `scripts/`: `setup-suite.sh`, `kontrol-run.sh`, `kverdicts.py`, `compare.py`,
-  `soldeer-integrity.py` (as in `deployment/`), `foundry-kontrol.txt`, `rename-map.txt`.
+  `soldeer-integrity.py` (as in `deployment/`), `foundry-kontrol.txt`, `rename-map.txt`, and
+  `klengths.py`, which prints the `bytes` length bounds at the test entry of saved proofs (stock:
+  `<= 2^30` and `< 2^64`; patched: `< 2^64` only), to show from the graph which KEVM a run used.
 - `EXPECTED.tsv`: every expected verdict (suite, run, proof, verdict, failing outputs, and the date
   of the earlier run it comes from, or "new").
 - `PINS.txt`, `RESULT.md`, `pocs/` (the git submodule, ethsystems/pocs at `a04b8b3`).
