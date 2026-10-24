@@ -1,0 +1,8 @@
+id	base	diff	output	change
+NR_D	pool	ShieldedPool_M_NR_D.diff	ShieldedPool_M_NR_D.sol	nonReentrant dropped from deposit (line 144)
+NR_T	pool	ShieldedPool_M_NR_T.diff	ShieldedPool_M_NR_T.sol	nonReentrant dropped from transfer (line 193)
+NR_W	pool	ShieldedPool_M_NR_W.diff	ShieldedPool_M_NR_W.sol	nonReentrant dropped from withdraw (line 253)
+SKIP	pool	ShieldedPool_M_SKIP.diff	ShieldedPool_M_SKIP.sol	deposit inserts only when the commitment is not yet a leaf (line 169)
+ARG	pool	ShieldedPool_M_ARG.diff	ShieldedPool_M_ARG.sol	deposit inserts publicInputs[5] instead of the commitment (line 169)
+DUP	internal-leanimt	InternalLeanIMT_M_DUP.diff	InternalLeanIMT_M_DUP.sol	the library duplicate-leaf check removed (InternalLeanIMT.sol lines 45-47)
+DUP	leanimt	LeanIMT_M_DUP.diff	LeanIMT_M_DUP.sol	wrapper library that calls the DUP copy

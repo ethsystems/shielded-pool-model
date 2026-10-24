@@ -12,7 +12,8 @@
 # into DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), SOLC_FETCH=0 (never
 # download solc), TOOLS_UNPINNED=1 (accept a forge, solc or yices binary whose sha256 is not the
 # pinned Linux x86_64 build; its version must still match), CAP (memory cap per run, default 8G),
-# TLIM (seconds per run, default 900), RUN_SCOPE (auto|1|0, see scripts/run.py), WORK (default ./work).
+# TLIM (seconds per run, default 900), RUN_SCOPE (auto|1|0, see scripts/run.py), WORK (default ./work),
+# STRICT_PATHS=1 (a path count that differs from EXPECTED.tsv fails the check; see scripts/compare.py).
 # Relative paths are taken from the caller's directory.
 set -uo pipefail
 CALLER="$(pwd)"
@@ -157,7 +158,12 @@ for s in "${SUITES[@]}"; do
   python3 "$PKG/scripts/run.py" "$s" "$P" "$L" || fail "run:$s" "the runner stopped"
   echo "suite $s: $((SECONDS - t0))s"
 done
-python3 "$PKG/scripts/compare.py" "$PKG/EXPECTED.tsv" "$WORK" "${SUITES[@]}"; rc=$?
+python3 "$PKG/scripts/compare.py" "$PKG/EXPECTED.tsv" "$WORK" "${SUITES[@]}" | tee "$WORK/compare.txt"; rc=${PIPESTATUS[0]}
+read -r _ total bad pdiff < <(grep '^SUMMARY ' "$WORK/compare.txt") || { total=0; bad=1; pdiff=0; }
 echo "check.sh: ${#SUITES[@]} suites, ${SECONDS}s, work $WORK, started $STAMP${UNPINNED:+ (unpinned build:$UNPINNED)}"
-[ $rc -eq 0 ] && echo "CHECK PASS: ${#SUITES[@]} suites, ${SECONDS}s${UNPINNED:+ (unpinned build:$UNPINNED)}" || echo "CHECK FAIL: see the CHECK lines above"
+if [ $rc -eq 0 ]; then
+  echo "CHECK PASS: ${#SUITES[@]} suites, $total verdicts equal EXPECTED.tsv, $pdiff path counts differ from the frozen runs (PATHS lines), ${SECONDS}s${UNPINNED:+ (unpinned build:$UNPINNED)}"
+else
+  echo "CHECK FAIL: $bad of $total verdicts differ from EXPECTED.tsv (CHECK MISMATCH, CHECK EXTRA${STRICT_PATHS:+, PATHS} lines above)"
+fi
 exit $rc
