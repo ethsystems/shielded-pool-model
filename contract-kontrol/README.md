@@ -1,13 +1,12 @@
 # contract-kontrol: Kontrol proofs about the pool contract at `a04b8b3`
 
 This package holds the symbolic proofs about `ShieldedPool.sol` of ethsystems/pocs (public) at
-`a04b8b3` and its libraries that the claim board in [evidence/](../evidence/README.md) cites under
-its contract rows:
-the rejection guards of deposit, transfer and withdraw, the withdraw success path (marking before
-payout, the payout call, the verifier inputs), canonical public inputs and their order, and local
-checks of the tree insertion loop, and the frame of the PoseidonT3 library. Each Kontrol proof runs
-in Kontrol 1.0.255 (KEVM, the K framework) in a
-Docker image pinned by digest, against the pool source exported from the git submodule `pocs/`.
+`a04b8b3`, and about its libraries, that the claim board in [evidence/](../evidence/README.md)
+cites under its contract rows: the rejection guards of deposit, transfer and withdraw, the withdraw
+success path (marking before payout, the payout call, the verifier inputs), canonical public inputs
+and their order, local checks of the tree insertion loop, and the frame of the PoseidonT3 library.
+Each Kontrol proof runs in Kontrol 1.0.255 (KEVM, the K framework) in a Docker image pinned by
+digest, against the pool source exported from the git submodule `pocs/`.
 Each proof has must-fail siblings (mutants): the same proof against a pool with one change, which
 must fail at a stated output. `check.sh` builds and runs them and compares every verdict with
 `EXPECTED.tsv`; [RESULT.md](RESULT.md) records the runs on this machine.
