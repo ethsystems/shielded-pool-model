@@ -1,0 +1,5 @@
+# control	verdict	first error (line:col: start of the message), for fail controls
+fail_bridge_bad_field_no_range	fail	234:38: Unknown identifier `hL`
+fail_bridge_depth_plus_one	fail	85:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+fail_bridge_direction_flipped	fail	85:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+pass_bridge_unchanged	pass	

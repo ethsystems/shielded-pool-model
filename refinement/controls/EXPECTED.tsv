@@ -1,8 +1,8 @@
 # control	verdict	first error (line:col: start of the message), for fail controls
 fail_balance_without_rollback	fail	14:37: unsolved goals
-fail_imt_fold_direction_flipped	fail	289:4: unsolved goals
-fail_imt_no_carry	fail	60:13: unsolved goals
-fail_imt_proof_left_bit_true	fail	381:6: unsolved goals
+fail_imt_fold_direction_flipped	fail	287:4: unsolved goals
+fail_imt_no_carry	fail	58:13: unsolved goals
+fail_imt_proof_left_bit_true	fail	379:6: unsolved goals
 fail_journey_swapped_words	fail	28:71: unsolved goals
 fail_journey_without_path_tree	fail	38:50: unsolved goals
 fail_prefixroot_drop_leaf	fail	9:9: Application type mismatch: The argument
