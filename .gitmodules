@@ -10,3 +10,6 @@
 [submodule "client-verus/pocs"]
 	path = client-verus/pocs
 	url = https://github.com/ethsystems/pocs
+[submodule "contract-halmos/pocs"]
+	path = contract-halmos/pocs
+	url = https://github.com/ethsystems/pocs
