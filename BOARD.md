@@ -75,9 +75,9 @@ The contract checks were first run between 2026-09-29 and 2026-10-13. `contract-
 (`scripts/rename-map.txt`) give the earlier name of every suite, contract, test and mutant.
 `contract-kontrol/` builds with solc 0.8.37; the first Kontrol runs used solc 0.8.33 (its README,
 "Earlier names"). Its `public-inputs` runs (`canonical`, `order`, `fixed-token`) and the K claims of
-its insertion loop are packaged with their expected values from the run of 2026-10-01 but were not
-rerun in this repository's run of 2026-10-24 (its RESULT.md); the rows below that cite them say
-"packaged, not rerun".
+its insertion loop are packaged with their expected values from the run of 2026-10-01, which used the solc 0.8.33
+build; they were not rerun in this repository's run of 2026-10-24 (its RESULT.md), so they are not
+yet confirmed on the solc 0.8.37 build. The rows below that cite them say "packaged, not rerun".
 
 Scope names used below. Each is the scope line of a package suite; the package README gives it in full.
 
