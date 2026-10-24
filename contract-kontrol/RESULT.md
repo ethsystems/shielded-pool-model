@@ -28,8 +28,10 @@ the wall). Node ids are those of this run; the earlier runs had other ids for th
 | `insert-loop` | `rejections` | yes (run 5) | 6 of 6 as expected; 326 s, 3.86 GB |
 | `insert-loop` | `controls` | yes (run 5; also run 2) | 21 stock tests pass, 20 mutant controls fail at their named postconditions, stub test passes in both, witness audit passes |
 | `insert-loop` | K claims in `k/` | not rerun here; archived claims about the 0.8.33 build (Cancun) | `check.sh` does not run them (README.md) |
-| `public-inputs` | `canonical`, `order`, `fixed-token` | not rerun here; expected verdicts from the 2026-10-01 run on the 0.8.33 build | not started; time budget exhausted. The build and the replays ran (run 6) |
-| `public-inputs` | build, `replay` | yes (run 6) | build passes (143 s, peak 8.59 GB, just under the 8 GiB cap); 36 of 36 replays pass |
+| `public-inputs` | `canonical` | yes (run 8) | 9 of 9 as expected (3 PASSED, 3 mutants FAILED at `0xb9e93ed0`, 3 witnesses FAILED with Panic 0x01); 1,387 s, 7.79 GB |
+| `public-inputs` | `order` | yes (run 8) | 6 of 6 as expected (2 PASSED, 2 mutants FAILED at `0x794445cf`, 2 witnesses FAILED with Panic 0x01); 1,532 s, 7.62 GB |
+| `public-inputs` | `fixed-token` | yes (run 8) | 7 of 7 as expected (stock PASSED, the witness and 5 mutants FAILED at their outputs); 1,543 s, 6.83 GB |
+| `public-inputs` | build, `replay` | yes (run 8; also run 6) | build passes (148 s, 6.33 GB; in run 6 it peaked at 8.59 GB, just under the 8 GiB cap); 36 of 36 replays pass |
 | `poseidon-frame` | `frame` | yes (run 5; also run 4) | 9 of 9 as expected: four real checks PASS with 1, 1, 2 and 132 paths, the mutant witness FAILs with one valid model, the deployment test and the real replay pass, the mutant replay fails |
 
 Runs, each `check.sh` from a `git archive` copy of the package. The commit named is the one in this
@@ -56,6 +58,12 @@ rebase that changed the commit ids, not the package files):
   `0ae5190` came after runs 3 to 6 and changed no proof input: the prove commands spell
   the parallel-process option by its short alias `-j` (one option of the image's `pyk`), and `check.sh` asks the
   image for the path of its `abi.md` in place of a pinned path. Run 7 checks that end to end.
+- run 8, commit `793b038`, `./check.sh public-inputs`, started 15:35Z, 4,619 s: `CHECK PASS suite
+  public-inputs` and last line `CHECK PASS: 1 suites`, all 59 compared lines as expected. It used
+  the checker of that commit, the one of run 7 (the old runner and comparator, before the changes
+  below). Against run 6's commit `77b56e2` it changes no input of this suite: the `-j` alias in
+  `runs.tsv`, the `abi.md` path lookup, `scripts/klengths.py` and documentation. Every container
+  saw the patched `abi.md` (`e249e9e2...7a88`).
 
 Between run 3 and run 5 the harness of `withdraw-success` changed (commit `e9cb2b2`: the probe and
 witness bodies moved out of the mutant siblings, bodies unchanged) and `insert-loop` gained the
@@ -101,9 +109,17 @@ voids their prove runs (runner exit 0, command exit 1, from the old runner) and 
 `EXPECTED.tsv` (all 165 mismatches are verdicts of void runs). On copies of the saved logs with the two
 lines added (the runner exit set to the recorded `COMMAND_EXIT`; `HOST_EXIT=0`, which for controls
 and Halmos is the exit behind the recorded `all-checks PASS` and for the forge replays was not
-recorded), all 170 expected verdicts of runs 3, 5, 6 and 7 match, with `public-inputs` partial. That
-shows the new comparator reads the saved results. It is not a rerun: the Kontrol suites have not yet
-run with the current scripts.
+recorded), all 170 expected verdicts of runs 3, 5, 6 and 7 match, with `public-inputs` partial.
+
+Run 8 also used the old checker (the one of its commit), so the same holds for it. On its saved logs the new comparator voids `canonical`, `order` and `fixed-token`
+(runner exit 0, command exit 1) and `replay` (no `HOST_EXIT` line); the build passes its status
+check; no recorded verdict differs (`SUMMARY 59 expected verdicts, 58 mismatches`, all of them
+verdicts of void runs). With the two lines added, `public-inputs` ends `CHECK PASS suite
+public-inputs`, `SUMMARY 59 expected verdicts, 0 mismatches, 0 partial suites`, exit 0. Taking
+`public-inputs` from run 8 and the other five suites from runs 3, 5 and 7, all with the two lines
+added, every suite ends `CHECK PASS`: `SUMMARY 192 expected verdicts, 0 mismatches, 0 partial
+suites`, exit 0. That shows the new comparator reads the saved results. It is not a rerun, and not
+one `check.sh` invocation: the Kontrol suites have not yet run with the current scripts.
 
 The `poseidon-frame` runs 4 and 5 ran Halmos in a Python 3.14.9 environment installed from
 `requirements-halmos.txt`. The new environment check rejects it: the Python is not 3.12, and the
@@ -114,7 +130,7 @@ the same versions). With `TOOLS_UNPINNED=1` the suite passes in it. The rerun be
 ## Runs after the checker changes
 
 Commit `51b7cea`, each `check.sh` from a `git archive` copy of the package, with `POCS`,
-`DEPS_CACHE` and `WORK` set as above. No Kontrol container ran: another Kontrol run held the
+`DEPS_CACHE` and `WORK` set as above. No Kontrol container ran: another Kontrol run (run 8) held the
 machine (one container at a time, and `free -g` showed 8 GiB available, below the 10 GiB gate).
 
 - `./check.sh withdraw-success:replay public-inputs:replay insert-loop:controls`, started 15:57Z,
@@ -138,7 +154,7 @@ added (above), and each ending `CHECK FAIL` with exit 1:
 
 | Fault | Comparator result |
 |---|---|
-| `public-inputs` with every run selected; only the build and the replays recorded (run 6) | `canonical`, `order`, `fixed-token` void (no recorded verdict, no log); 22 mismatches |
+| `public-inputs` with every run selected; only the build and the replays of run 6 recorded (before run 8 existed) | `canonical`, `order`, `fixed-token` void (no recorded verdict, no log); 22 mismatches |
 | `withdraw-success` with the `two-tokens` results and log removed | `two-tokens` void; 7 mismatches |
 | forge replay log ends `HOST_EXIT=1`, every test line PASS | `replay` void (exit 1, expected 0); 23 mismatches |
 | `insert-loop` `rejections` exits 0, although its mutants must fail | void (command exit 0, expected 1); 6 mismatches |
@@ -183,9 +199,8 @@ added (above), and each ending `CHECK FAIL` with exit 1:
   LLVM kompile was killed at the 8 GiB cap. KEVM runs the LLVM and the Haskell kompile in parallel,
   and the earlier runs of this build peaked between 5.9 and 8.6 GB. After the probes moved to their
   own contract the build passed at 7.56 GB.
-- `public-inputs` `canonical`, `order`, `fixed-token`: not started; time budget exhausted. In the 2026-10-01 run
-  `canonical` and `order` (15 proofs) took 4,996 s of wall time; `fixed-token` ran separately
-  there.
+- `public-inputs` `canonical`, `order`, `fixed-token` in run 5: not started; time budget exhausted.
+  Run 8 ran them to the end.
 - An earlier attempt of the `guards-stock` build (run 3) was stopped by me after it started, when I
   reordered the queue; it is not a result.
 
@@ -375,12 +390,40 @@ CHECK PASS suite insert-loop
 
 | Run | Started (UTC) | Wall | Peak memory | Outcome |
 |---|---|---|---|---|
-| build | 2026-10-24T15:18:15Z | 143 s | 8.59 GB | BUILD_EXIT=0 |
+| build | 2026-10-24T15:35:19Z | 148 s | 6.33 GB | BUILD_EXIT=0 |
+| canonical | 2026-10-24T15:37:47Z | 1387 s | 7.79 GB | exit 1, runner 0 |
+| order | 2026-10-24T16:00:54Z | 1532 s | 7.62 GB | exit 1, runner 0 |
+| fixed-token | 2026-10-24T16:26:26Z | 1543 s | 6.83 GB | exit 1, runner 0 |
 | replay | - | - | - | host run |
+
+The tables show run 8. Run 6 gave the same build verdict (143 s, 8.59 GB) and the same 36
+replay results.
 
 | Run | Proof | Verdict | Failing node output | Time |
 |---|---|---|---|---|
-| build | `build` | BUILT | - | 143s |
+| build | `build` | BUILT | - | 148s |
+| canonical | `CanonicalInputs.prove_withdraw_canonical` | PASSED | - | 9m 26s |
+| canonical | `CanonicalInputs.prove_deposit_canonical` | PASSED | - | 3m 48s |
+| canonical | `CanonicalInputs.prove_transfer_canonical` | PASSED | - | 11m 43s |
+| canonical | `CanonicalInputs_M_WITHDRAW_CANONICAL.prove_withdraw_canonical` | FAILED | EVMC_REVERT:b9e93ed0 (node 81) | 9m 20s |
+| canonical | `CanonicalInputs_M_DEPOSIT_CANONICAL.prove_deposit_canonical` | FAILED | EVMC_REVERT:b9e93ed0 (node 44) | 4m 1s |
+| canonical | `CanonicalInputs_M_TRANSFER_CANONICAL.prove_transfer_canonical` | FAILED | EVMC_REVERT:b9e93ed0 (node 62) | 8m 29s |
+| canonical | `CanonicalInputs.prove_witness_withdraw_canonical_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 87) | 8m 41s |
+| canonical | `CanonicalInputs.prove_witness_deposit_canonical_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 46) | 3m 56s |
+| canonical | `CanonicalInputs.prove_witness_transfer_canonical_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 100) | 9m 33s |
+| order | `InputOrder.prove_deposit_order` | PASSED | - | 6m 20s |
+| order | `InputOrder_M_DEPOSIT_SWAP_45.prove_deposit_order` | FAILED | EVMC_REVERT:794445cf (node 59) | 7m 39s |
+| order | `InputOrderWitness.prove_witness_deposit_order_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 53) | 6m 14s |
+| order | `InputOrder.prove_transfer_order` | PASSED | - | 18m 18s |
+| order | `InputOrder_M_TRANSFER_SWAP_45.prove_transfer_order` | FAILED | EVMC_REVERT:794445cf (node 114) | 20m 27s |
+| order | `InputOrderWitness.prove_witness_transfer_order_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 106) | 16m 6s |
+| fixed-token | `FixedTokenWithdraw.prove_success_fixed_token` | PASSED | - | 10m 19s |
+| fixed-token | `FixedTokenWithdraw.prove_witness_fixed_token_mustfail` | FAILED | EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001 (node 110) | 9m 9s |
+| fixed-token | `FixedTokenWithdraw_M_LATE_MARK.prove_success_fixed_token` | FAILED | EVMC_REVERT:e3e0fc25 (node 109) | 9m 10s |
+| fixed-token | `FixedTokenWithdraw_M_SWAP_INPUTS.prove_success_fixed_token` | FAILED | EVMC_REVERT:1987cd34 (node 103) | 8m 56s |
+| fixed-token | `FixedTokenWithdraw_M_DROP_BIT253.prove_success_fixed_token` | FAILED | EVMC_REVERT:1987cd34 (node 101) | 9m 13s |
+| fixed-token | `FixedTokenWithdraw_M_PAY_CALLER.prove_success_fixed_token` | FAILED | EVMC_REVERT:0bc6283d (node 125) | 10m 10s |
+| fixed-token | `FixedTokenWithdraw_M_SKIP_VERIFIER.prove_success_fixed_token` | FAILED | EVMC_REVERT:5b1cfd09 (node 87) | 5m 13s |
 | replay | `CanonicalInputsReplay.test_S1d0_c_noncanonical` | PASS | - | - |
 | replay | `CanonicalInputsReplay.test_S1d0_canonical` | PASS | - | - |
 | replay | `CanonicalInputsReplay.test_S1d0_root_noncanonical` | PASS | - | - |
@@ -418,10 +461,7 @@ CHECK PASS suite insert-loop
 | replay | `InputOrderWitnessReplay.test_S2d0_witness` | PASS | - | - |
 | replay | `InputOrderWitnessReplay.test_S2t0_witness` | PASS | - | - |
 
-CHECK PASS suite public-inputs (partial: not run canonical, order, fixed-token)
-
-
-Runs `canonical`, `order` and `fixed-token`: not started; time budget exhausted. Their expected verdicts in EXPECTED.tsv are results of the 2026-10-01 run on the 0.8.33 build.
+CHECK PASS suite public-inputs
 
 ## poseidon-frame
 
