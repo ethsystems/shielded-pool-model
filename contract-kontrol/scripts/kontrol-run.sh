@@ -8,7 +8,8 @@
 # abi.md. Kills the container after TLIM seconds (default 7200). The log gets the abi.md sha256 seen
 # inside the container, the command output, COMMAND_EXIT, PEAK_BYTES (the container cgroup's
 # memory.peak) and a RUN line (wall seconds, exit, timeout or OOM).
-# Env: IMAGE (default the pinned digest), SOLC (the checked solc 0.8.37 binary; required), CAP,
+# Env: IMAGE (default the pinned digest), SOLC (the checked solc 0.8.37 binary; required), ABI_PATH
+# (the image's abi.md, which check.sh looks up; required), CAP,
 # CPUSET (docker --cpuset-cpus, the CPUs the container sees; unset: all), TLIM, GATE_GIB, GATE_WAIT (seconds to wait for the gate before giving up, default 14400).
 set -uo pipefail
 LOG=$1; P=$2; ABI_MODE=$3; CMD=$4
@@ -17,7 +18,7 @@ pin() { sed -n "s/^$1 \([^ ]*\).*$/\1/p" "$PKG/PINS.txt" | head -1; }
 IMAGE=${IMAGE:-$(pin kontrol_image)@$(pin kontrol_image_digest)}
 CAP=${CAP:-8g}; TLIM=${TLIM:-7200}; GATE_GIB=${GATE_GIB:-10}; GATE_WAIT=${GATE_WAIT:-14400}
 : "${SOLC:?}"
-ABI=$(pin kevm_abi_path)
+ABI=${ABI_PATH:?set ABI_PATH (check.sh does): the path of abi.md in the image}
 MOUNT_ABI=()
 case "$ABI_MODE" in
   patched) MOUNT_ABI=(-v "$PKG/kevm-patch/abi.md:$ABI:ro") ;;

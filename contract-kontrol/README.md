@@ -26,18 +26,18 @@ and the sections below carry the values of the earlier run.
 
 ## Suites
 
-| Suite | Runs | Board rows | Earlier label |
-|---|---|---|---|
-| `guards-stock` | `withdraw`, `deposit`, `transfer` | D1, D2, D3, D6, T1, T5, T6, W1, W6 (rejection), W7, W8 | N5 (and the 13 stock mutants of N5b) |
-| `guards-patched` | `withdraw` | W1, W6 (rejection), W7, W8 below 2^64 | N5b |
-| `withdraw-success` | `token-above-0x11`, `two-tokens`, `replay` | W6, W10, X2 (withdraw half), S2 (withdraw) | night-kontrol, SYMTOK |
-| `public-inputs` | `canonical`, `order`, `fixed-token`, `replay` | S1, S2, W6, W10 | D5, D4 |
-| `insert-loop` | `rejections`, `controls` (and the K claims in `k/`) | D5, T11, T12, X1, X2 (scoped components) | N15c (and N15b) |
-| `poseidon-frame` | `frame` | A5 (D2: the real PoseidonT3 is a pure function) | D2 |
+| Suite | Runs | Board rows |
+|---|---|---|
+| `guards-stock` | `withdraw`, `deposit`, `transfer` | D1, D2, D3, D6, T1, T5, T6, W1, W6 (rejection), W7, W8 |
+| `guards-patched` | `withdraw` | W1, W6 (rejection), W7, W8, below 2^64 |
+| `withdraw-success` | `token-above-0x11`, `two-tokens`, `replay` | W6, W10, X2 (withdraw half), S2 (withdraw) |
+| `public-inputs` | `canonical`, `order`, `fixed-token`, `replay` | S1, S2, W6, W10 |
+| `insert-loop` | `rejections`, `controls` (and the K claims in `k/`) | the duplicate-leaf, fresh-output, marking and ordering rows (scoped components) |
+| `poseidon-frame` | `frame` | A5 (the real PoseidonT3 is a pure function) |
 
-The board is a frozen research document; its rows name these runs by the earlier labels in the last
-column. [scripts/rename-map.txt](scripts/rename-map.txt) maps every earlier file, contract, test,
-mutant and module name to its name here.
+The board is a frozen document; its rows name these runs by earlier run labels.
+[scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier run label to the suite and run
+here, and every earlier file, contract, test, mutant and module name to its name here.
 
 Common to every Kontrol suite unless its section says otherwise ("the common scope"):
 
@@ -90,7 +90,7 @@ guard. It does not show that the verifier becomes reachable.
 Not shown: rejection at lengths above 2^30 (see `guards-patched` for withdraw; the board's
 GAS-LEMMA argues that no transaction under the EIP-7825 gas cap carries one), non-canonical
 calldata, out-of-gas behaviour, anything after the verifier, the canonical-input check (`:163`,
-`:218`, `:275`; the earlier research file also held those checks, they did not close, and this
+`:218`, `:275`; the earlier file also held those checks, they did not close, and this
 package leaves them out; see `public-inputs`).
 
 ### guards-patched: withdraw guards, proof lengths below 2^64
@@ -280,7 +280,7 @@ loop, a general caller frame.
 ### poseidon-frame: the PoseidonT3 library is a pure function
 
 This suite is a Halmos 0.3.3 check, not a Kontrol proof; it is here because the board lists it with
-the Kontrol rows (D2). `harness/poseidon-frame/` is a small Foundry project run on the host.
+the Kontrol rows. `harness/poseidon-frame/` is a small Foundry project run on the host.
 `scripts/rebuild.py` compiles `PoseidonT3.sol` of the pinned poseidon-solidity 0.0.5 package with
 solc 0.8.37 and the settings of the pool build (`inputs/solc-settings.json`: optimizer 100 runs,
 Osaka, the library links and remappings, which enter the metadata) and requires that the runtime,

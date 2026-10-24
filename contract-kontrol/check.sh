@@ -103,7 +103,10 @@ kv="$(docker run --rm --network none "$IMAGE" kontrol version 2>/dev/null | tr -
 [ "$kv" = "Kontrol version: $(pin kontrol_version)" ] || fail tools "the image reports '$kv', pinned Kontrol $(pin kontrol_version)"
 # The KEVM abi.md: the image's file must be the pinned stock file, and kevm-patch/abi.md must be that
 # file with exactly the deletion of kevm-patch/abi.md.diff.
-docker run --rm --network none "$IMAGE" cat "$(pin kevm_abi_path)" > "$T/abi.stock" || fail tools "cannot read abi.md from the image"
+KEVM_DIR="$(docker run --rm --network none "$IMAGE" python3 -c 'import kevm_pyk, os; print(os.path.dirname(kevm_pyk.__file__))' 2>/dev/null)"
+[ -n "$KEVM_DIR" ] || fail tools "cannot find kevm_pyk in the image"
+export ABI_PATH="$KEVM_DIR/$(pin kevm_abi_relpath)"
+docker run --rm --network none "$IMAGE" cat "$ABI_PATH" > "$T/abi.stock" || fail tools "cannot read $ABI_PATH from the image"
 [ "$(sha "$T/abi.stock")" = "$(pin kevm_abi_stock_sha256)" ] || fail tools "the image's abi.md has sha256 $(sha "$T/abi.stock"), pinned $(pin kevm_abi_stock_sha256)"
 cp "$T/abi.stock" "$T/abi.patched" && patch -s "$T/abi.patched" "$PKG/kevm-patch/abi.md.diff" || fail tools "kevm-patch/abi.md.diff does not apply to the image's abi.md"
 [ "$(sha "$T/abi.patched")" = "$(pin kevm_abi_patched_sha256)" ] && [ "$(sha "$PKG/kevm-patch/abi.md")" = "$(pin kevm_abi_patched_sha256)" ] \

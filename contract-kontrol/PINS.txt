@@ -42,14 +42,15 @@ cheats_rev 187b89ad863226afe494caa9f58320997a543bff
 cheats_tree 239b27030758a793676c00ef8b866b06baed5e7e
 
 # Kontrol: the Docker image by digest (Kontrol 1.0.255, KEVM and K inside, forge 1.5.1 inside;
-# check.sh never pulls by tag alone). kevm_abi_path is the KEVM abi.md inside the image;
+# check.sh never pulls by tag alone). kevm_abi_relpath is the KEVM abi.md inside the image, relative
+# to the directory of the image's Python package kevm_pyk (check.sh asks the image for that directory);
 # kevm_abi_stock_sha256 is the image's own file, kevm_abi_patched_sha256 is kevm-patch/abi.md, which
 # is the stock file with the one deletion of kevm-patch/abi.md.diff.
 kontrol_version 1.0.255
 kontrol_image runtimeverificationinc/kontrol
 kontrol_image_tag ubuntu-jammy-1.0.255
 kontrol_image_digest sha256:858f004144d61b005997f56bb8b7cd15673850286c96e0e5ec0502d9c9a9e204
-kevm_abi_path /home/user/.local/lib/python3.10/site-packages/kevm_pyk/kproj/evm-semantics/abi.md
+kevm_abi_relpath kproj/evm-semantics/abi.md
 kevm_abi_stock_sha256 878f77321bd92e42e41754ccf0a4b005bcf375ff4d5eb0acd0d8d94b3c1ef95e
 kevm_abi_patched_sha256 e249e9e2d283f82e7d5f53cf5ec3724875321c8806097e5cde958a37174f7a88
 lemma_sha256 e47301ecc2d1443ed399cce2744ba9dc1f24c6292e4a995a9f22f6837946c6d2 lemmas/bytes-prefix.k
