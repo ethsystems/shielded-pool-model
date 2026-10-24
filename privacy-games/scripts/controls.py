@@ -4,18 +4,21 @@
   controls.py [--jobs N]   run every control and compare with controls/EXPECTED.tsv
   controls.py --record     run them and write controls/EXPECTED.tsv (after a reviewed change)
 
-Twenty planted failures and eight copies that must pass. Eighteen adapt the planted cases of
-the earlier replay of these games (eight altered sources, eight removed headline audits, two
-altered dependency trees); two more cover the pins of this package.
+Twenty-four planted failures and eight copies that must pass. Eighteen adapt the planted cases
+of the earlier replay of these games (eight altered sources, eight removed headline audits, two
+altered dependency trees); six more cover the pins of this package.
 
 - lean (8): a game module cut after a headline theorem, with one change to the theorem's
   statement and none to its proof (scripts/gen-controls.py). It must fail to compile, at the
   theorem, and not by a parse error or an unknown name. Its `same_` copy (8) must compile.
 - census (8): a copy of statements/ with one headline theorem removed or changed; the census
   (scripts/census.py --from build/census.jsonl, so it needs a census run first) must fail.
-- pins (4): a tracked change and an untracked file in the fetched VCV-io checkout (each undone
-  at once), a lake-manifest.json copy that resolves VCV-io to another revision, and a copy of
-  the model files with one byte added; scripts/pins.py must fail.
+- pins (8): a tracked change and an untracked file in the fetched VCV-io checkout, an untracked
+  file and an ignored file (in build/, which its .gitignore covers) in the Batteries checkout,
+  each undone at once; a lake-manifest.json copy that resolves VCV-io to another revision, and
+  one that moves Batteries, an inherited package, to another revision; a lakefile.toml copy
+  with a subDir on the Mathlib require; a copy of the model files with one byte added;
+  scripts/pins.py must fail.
 
 Each failure must be the first one that controls/EXPECTED.tsv names (one line per control:
 name, kind, the first error).
@@ -54,8 +57,9 @@ CENSUS = [
     ('census_drop_raw_chain_rom_collisions', 'RAW.sha256',
      P + 'ChainGame.CommitOnly.advantage_le_rom_collisions', 'drop'),
 ]
-PINS = ['pins_vendor_tracked_change', 'pins_vendor_untracked_file', 'pins_manifest_vcvio_rev',
-        'pins_model_file_changed']
+PINS = ['pins_vendor_tracked_change', 'pins_vendor_untracked_file', 'pins_dependency_untracked_file',
+        'pins_dependency_ignored_file', 'pins_manifest_vcvio_rev', 'pins_manifest_dependency_rev',
+        'pins_lakefile_subdir', 'pins_model_file_changed']
 BAD_KINDS = ('unknown identifier', 'unknown constant', 'unknown namespace', 'unexpected token',
              'unknown module', 'expected')
 
@@ -123,6 +127,7 @@ def pins(*args):
 
 def run_pins(name):
     vc = PKG / '.lake' / 'packages' / 'VCVio'
+    bt = PKG / '.lake' / 'packages' / 'batteries'
     if name == 'pins_vendor_tracked_change':
         f = vc / 'lean-toolchain'
         data = f.read_bytes()
@@ -138,14 +143,38 @@ def run_pins(name):
             code, first, out = pins()
         finally:
             f.unlink(missing_ok=True)
-    elif name == 'pins_manifest_vcvio_rev':
+    elif name == 'pins_dependency_untracked_file':
+        f = bt / 'control-untracked.lean'
+        try:
+            f.write_text('-- planted by scripts/controls.py\n')
+            code, first, out = pins()
+        finally:
+            f.unlink(missing_ok=True)
+    elif name == 'pins_dependency_ignored_file':
+        d = bt / 'build'
+        assert not d.exists(), d
+        try:
+            d.mkdir()
+            (d / 'control-ignored.lean').write_text('-- planted by scripts/controls.py\n')
+            code, first, out = pins()
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+    elif name in ('pins_manifest_vcvio_rev', 'pins_manifest_dependency_rev'):
+        package, rev = (('VCVio', 'f3df0ac18aa5ae72b3e920ad5460492aa039b4f7') if name == 'pins_manifest_vcvio_rev'
+                        else ('batteries', '0000000000000000000000000000000000000000'))
         with tempfile.TemporaryDirectory() as t:
             m = json.loads((PKG / 'lake-manifest.json').read_text())
             for p in m['packages']:
-                if p['name'] == 'VCVio':
-                    p['rev'] = 'f3df0ac18aa5ae72b3e920ad5460492aa039b4f7'
+                if p['name'] == package:
+                    p['rev'] = rev
             (Path(t) / 'lake-manifest.json').write_text(json.dumps(m))
             code, first, out = pins('--manifest', str(Path(t) / 'lake-manifest.json'))
+    elif name == 'pins_lakefile_subdir':
+        with tempfile.TemporaryDirectory() as t:
+            text = (PKG / 'lakefile.toml').read_text()
+            text = text.replace('name = "mathlib"\n', 'name = "mathlib"\nsubDir = "Mathlib"\n', 1)
+            (Path(t) / 'lakefile.toml').write_text(text)
+            code, first, out = pins('--lakefile', str(Path(t) / 'lakefile.toml'))
     else:
         with tempfile.TemporaryDirectory() as t:
             root = Path(t) / 'pkg'

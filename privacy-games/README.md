@@ -171,12 +171,35 @@ trivially.
 
 ## Trust base
 
-- The Lean kernel, and the three axioms `propext`, `Classical.choice` and `Quot.sound`.
-- Mathlib at `0df444a` and VCV-io at `dfc7ff07`, with their dependencies (PolyFun, loom2,
-  cslib, Batteries, Aesop and the others in `lake-manifest.json`), as pinned. The check
-  builds the VCV-io modules that the games import from source and uses Mathlib's prebuilt
-  oleans (`lake exe cache get`).
-- The three model files of the parent, at their pinned hashes.
+This list names every input that the check reads from outside the package sources, and says
+which ones the check enforces and which ones it trusts.
+
+- Trusted: the Lean kernel, and the three axioms `propext`, `Classical.choice` and
+  `Quot.sound`.
+- Trusted: Lean 4.33.1, from elan and the toolchain in elan's user directory. The check
+  compares the version that `lake --version` reports and the line of `lean-toolchain`. It
+  does not hash the compiler, lake or elan.
+- Enforced by hash: the three model files of the parent, by their SHA-256 in
+  [PINS.sha256](PINS.sha256).
+- Enforced by commit: the thirteen dependencies of `lake-manifest.json`, Mathlib at
+  `0df444a` and VCV-io at `dfc7ff07` and the eleven that they need (PolyFun, loom2, cslib,
+  Batteries, Aesop and the others). `lakefile.toml` requires only Mathlib and VCV-io, at the
+  pinned URLs and commits. The manifest has its pinned SHA-256. Each checkout in
+  `.lake/packages` is at its manifest commit, has the manifest URL as origin, and has no
+  tracked change, no untracked file and no ignored file outside its own `.lake/` directory.
+  The source at those commits is trusted, and so is git, which reports the state of each
+  checkout. On a fresh clone, lake clones the checkouts at the manifest commits and runs
+  Mathlib's cache tool before the pins can check them.
+- Trusted: Mathlib's prebuilt oleans, with those of Batteries, Aesop, Qq, ProofWidgets,
+  plausible, importGraph and LeanSearchClient. `lake exe cache get` unpacks them from the
+  user's Mathlib cache and downloads from Mathlib's cache server the ones that are not there.
+  The check does not hash them. The modules of VCV-io, PolyFun, cslib and loom2 that the
+  games import are built from source.
+- Trusted: the build outputs in `.lake/`, of the package and of each checkout. Lake rebuilds a
+  module when its trace does not match, but the check does not hash these files, so an olean
+  that an earlier build left there is used as it is. Only a fresh clone with no `.lake`
+  directory excludes them. The run in RESULT.md started from that state.
+- Trusted: bash, git, python3 and sha256sum of the machine.
 - Not trusted: the game modules, the census, the controls and the scripts. The census and the
   scans are checks against mistakes, not against a hostile package: code that runs during
   elaboration could change what the census prints.
@@ -191,15 +214,19 @@ trivially.
   model and of VCV-io's own manifest).
 - Lean `v4.33.1` (`lean-toolchain`).
 - The SHA-256 of `../LeanShieldedPool/Pool/State.lean`, `Tx.lean` and `Events.lean`.
+- The SHA-256 of `lake-manifest.json`, which fixes all thirteen dependencies at a commit.
 
 `lakefile.toml` requires VCV-io and Mathlib by git at these commits; `lake-manifest.json`
-records the resolved dependencies.
+records the resolved dependencies. A change to any dependency needs a new manifest and a new
+pin.
 
 ## Re-check
 
-Install git, bash, python3 (3.10 or later), sha256sum and elan. Clone the whole repository:
-the package compiles three files of the parent directory. The first run downloads VCV-io,
-Mathlib and Mathlib's prebuilt oleans (about 8.3 GB in `.lake`).
+Install git, bash, python3 (3.11 or later), sha256sum and elan. Make a fresh clone of the
+whole repository: the package compiles three files of the parent directory, and the check
+does not hash the build outputs that an earlier run leaves in `.lake` (see the trust base).
+The first run downloads VCV-io, Mathlib and Mathlib's prebuilt oleans (about 8.3 GB in
+`.lake`).
 
 ```
 cd privacy-games
@@ -212,15 +239,16 @@ Set `JOBS` to compile several controls at once and `LEAN_NUM_THREADS` (default 2
 `scripts/check.sh` runs, in order:
 
 1. the tools: Lean 4.33.1 through lake, python3, git;
-2. the pins (`scripts/pins.py`): `lean-toolchain`; VCV-io and Mathlib in `lakefile.toml`
-   and `lake-manifest.json`; the SHA-256 of the three model files;
+2. the pins (`scripts/pins.py`): `lean-toolchain`; the requires of `lakefile.toml`;
+   `lake-manifest.json`, its entries and its SHA-256; the checkouts that are already there;
+   the SHA-256 of the three model files;
 3. a source scan of every Lean file of the package for `sorry`, `admit`, `native_decide`,
    `axiom`, `opaque`, `extern`, `implemented_by`, `unsafe` and `skipKernelTC`, and of
    `lakefile.toml` for kernel options;
 4. the rename check (`scripts/check-rename.py`, below);
-5. the fetch: `lake exe cache get`, then the pins again, now also on the fetched checkouts:
-   VCV-io and Mathlib at their commits, VCV-io's own manifest on the same Mathlib, and no
-   change or untracked file in the VCV-io tree;
+5. the fetch: `lake exe cache get`, then the pins again, now on all thirteen checkouts: each
+   at its manifest commit and URL, with no tracked change, no untracked file and no ignored
+   file outside its `.lake/`, and VCV-io's own manifest on the same Mathlib;
 6. the build: `lake build`, with no warning allowed in a package module;
 7. the census (`Census.lean`, `scripts/census.py`): every theorem of the package and of the
    three model modules, auxiliary ones included, depends on a subset of the three axioms; no
@@ -230,7 +258,8 @@ Set `JOBS` to compile several controls at once and `LEAN_NUM_THREADS` (default 2
    prints the counts of modules, declarations and theorems;
 8. the controls (`scripts/controls.py`): `scripts/gen-controls.py` must reproduce the Lean
    controls of `controls/`; each planted failure must fail with the first error in
-   `controls/EXPECTED.tsv`; each unchanged copy must compile.
+   `controls/EXPECTED.tsv`; each unchanged copy must compile;
+9. the pins of the checkouts once more, after the build and the controls.
 
 ## The census counts
 
@@ -246,7 +275,7 @@ counts 2,079 theorems with the auxiliary ones; 959 of them are listed in the inv
 
 ## The controls
 
-[controls/EXPECTED.tsv](controls/EXPECTED.tsv) lists 20 planted failures and 8 copies that
+[controls/EXPECTED.tsv](controls/EXPECTED.tsv) lists 24 planted failures and 8 copies that
 must compile. Eighteen adapt the planted cases of the earlier replay of these games, which
 altered one source byte of eight modules, removed eight headline theorems from the audit
 lists, and changed the VCV-io tree twice:
@@ -260,8 +289,11 @@ lists, and changed the VCV-io tree twice:
 - two pin controls: a tracked change and an untracked file in the VCV-io checkout, each
   undone at once; the pins must fail.
 
-Two more pin controls are new: a manifest that resolves VCV-io to another commit, and a copy
-of the model files with one byte added. A failing control shows that the checks reject that
+Six more pin controls are new: an untracked file and an ignored file (in `build/`, which its
+`.gitignore` covers) in the Batteries checkout; a manifest that resolves VCV-io to another
+commit; a manifest that moves Batteries, an inherited dependency, to another commit (the
+manifest hash rejects it); a `lakefile.toml` with a `subDir` on the Mathlib require; and a
+copy of the model files with one byte added. A failing control shows that the checks reject that
 change. It does not show that the changed statement is false.
 
 ## Layout

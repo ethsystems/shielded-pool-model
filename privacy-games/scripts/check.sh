@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Check for privacy-games (see README.md). Needs bash, git, python3 (3.10 or later), sha256sum
+# Check for privacy-games (see README.md). Needs bash, git, python3 (3.11 or later), sha256sum
 # and elan; lake picks the toolchain from lean-toolchain. The first run fetches VCV-io, Mathlib
 # and their dependencies, and Mathlib's prebuilt oleans (lake exe cache get); it builds VCV-io's
 # modules that the games import from source.
@@ -9,10 +9,10 @@
 # Env: JOBS (controls compiled at once; default 1), LEAN_NUM_THREADS (default 2; lake also
 # runs this many jobs at once).
 #
-# Stages, in order: tools; pins (lakefile, manifest, model files); source scan; the rename
-# check; fetch (lake exe cache get) and the pins of the fetched checkouts; build (lake build,
-# no warning allowed in a package module); census against statements/; controls against
-# controls/EXPECTED.tsv.
+# Stages, in order: tools; pins (lakefile, manifest, model files, and the checkouts already
+# fetched); source scan; the rename check; fetch (lake exe cache get) and the pins of every
+# fetched checkout; build (lake build, no warning allowed in a package module); census against
+# statements/; controls against controls/EXPECTED.tsv; the pins of the checkouts once more.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONDONTWRITEBYTECODE=1 LEAN_NUM_THREADS="${LEAN_NUM_THREADS:-2}"
@@ -24,7 +24,7 @@ mkdir -p build
 step tools
 lv="$(lake --version 2>/dev/null)" || fail tools "lake not found (install elan)"
 grep -q "Lean version 4.33.1" <<<"$lv" || fail tools "lake is '$lv', want Lean 4.33.1"
-python3 -c 'import sys; assert sys.version_info >= (3, 10)' || fail tools "python3 3.10 or later needed"
+python3 -c 'import sys; assert sys.version_info >= (3, 11)' || fail tools "python3 3.11 or later needed"
 git --version > /dev/null || fail tools "git not found"
 echo "tools: $lv"
 
@@ -46,7 +46,7 @@ python3 scripts/check-rename.py || fail rename "a module differs from its first 
 step fetch
 lake exe cache get > build/cache.log 2>&1 || { tail -5 build/cache.log; fail fetch "lake exe cache get (build/cache.log)"; }
 echo "fetch: $(tail -1 build/cache.log)"
-python3 scripts/pins.py || fail pins "see above"
+python3 scripts/pins.py --fetched || fail pins "see above"
 
 step build
 t0=$SECONDS
@@ -69,6 +69,9 @@ python3 scripts/controls.py --jobs "$JOBS" > build/controls.log 2>&1; ec=$?
 grep '^CONTROL BAD' build/controls.log | head -20; tail -1 build/controls.log
 [ "$ec" -eq 0 ] || fail controls "see build/controls.log, build/controls/ and controls/EXPECTED.tsv"
 echo "controls: $((SECONDS - t0))s"
+
+step "pins after the build and the controls"
+python3 scripts/pins.py --fetched || fail pins "see above"
 
 counts="$(sed -n 's/^CENSUS PASS: \([0-9]*\) modules, \([0-9]*\) declarations, \([0-9]*\) theorems written.*/\1 modules, \2 declarations, \3 theorems/p' <<<"$census")"
 ctl="$(tail -1 build/controls.log | sed -n 's/^CONTROLS PASS: \([0-9]*\) planted.*/\1 planted failures rejected/p')"
