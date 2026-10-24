@@ -27,7 +27,7 @@ Every row cited at least one evidence path in the research phase, checked to exi
 | F11 | 2026-09-16 | The client started deposit and withdraw proofs without checking that the amount is nonzero and below 2^128. | client | reading, Aeneas | client defect | deposit fixed upstream (PR #12); withdraw documented only, still no guard at a04b8b3 | 2026-09-16, 2026-09-29 | no, contract and circuit enforce it |
 | F12 | 2026-09-16 | Concurrent proof calls share one Prover.toml and one target directory per circuit, so one call can overwrite another's witness or proof. | client | reading | client defect | fixed upstream: PR #12 proves in a per-call temp package; removal after an error or a cancel is best effort, and a process killed by a signal leaves its directory | 2026-09-16 | no, fixed upstream, outside claim 1 |
 | F13 | 2026-09-16 | The prover writes the spending key and note secrets to Prover.toml in plaintext and never removes them. | client | reading | client defect | fixed upstream: PR #12 writes the key only into the per-call temp package and removes it after success; the F12 caveats apply | 2026-09-16 | no, fixed upstream, outside claim 1 |
-| F14 | 2026-09-16 | Withheld from this copy. | withheld | withheld | hygiene | withheld | 2026-09-16 | withheld |
+| F14 | 2026-09-16 | Withheld from this copy. | withheld | withheld | withheld | withheld | 2026-09-16 | withheld |
 | F15 | 2026-09-16 | `ChannelRegistry::register` returns a channel wired to an empty registry clone, so its sends return RecipientNotFound. | client | reading; Verus example on 2026-10-01 | client defect | fixed upstream: the private implementation repository's PR #16, merged 2026-10-08 (shared map); our proofs still target a04b8b3 | 2026-10-01, 2026-10-02; `client-verus/` (`registered_channel_cannot_send` in `mirrors/channel.rs`) | yes, latent API defect, fixed upstream |
 | F16 | 2026-09-16 | The attestation adapter reads the leaf count before it sends, so a concurrent insert gives the caller the wrong leaf index. | client | reading | client defect | documented only | 2026-09-16 | no, client hygiene, outside claim 1 |
 | F17 | 2026-09-16 | Witness and Merkle constructors keep invalid field combinations, and the prover helpers silently truncate long vectors. | client | reading | client defect | documented only | 2026-09-16 | no, the circuit rejects them later |
@@ -46,7 +46,7 @@ Every row cited at least one evidence path in the research phase, checked to exi
 | F30 | 2026-09-17 | Halmos's symbolic-storage flag keeps setUp-written slots concrete, so our "arbitrary storage" results covered one reached state. | our claims (contract) | must-fail probes | claim error | patched locally: claims narrowed; the tool works as intended | 2026-09-17 | yes, every all-clear needs a witness |
 | F31 | 2026-09-17 | NAVe's falsification queries with 128-bit range constraints ran the solver out of memory (the conservation mirror with ranges passed in about a second), its PASS also holds with ranges removed, and it cannot read the deployed beta.21 artifact. | tool: NAVe | NAVe runs; Astra row 5 judge | tool limit | documented only: tool dropped | 2026-09-17 | no, dropped tool, one line |
 | F32 | 2026-09-17 | The game's legality check admitted worlds no model run can produce, and its publisher emitted logs that the model's guards reject. | our claims (privacy) | Lean (proved negation) | claim error | patched locally: game v2 runs the model's guards | 2026-09-17 | yes, a game must run guards |
-| F33 | 2026-09-17 | Withheld from this copy. | withheld | withheld | claim error | withheld | 2026-09-16 | withheld |
+| F33 | 2026-09-17 | Withheld from this copy. | withheld | withheld | withheld | withheld | 2026-09-16 | withheld |
 | F34 | 2026-09-18 | Noir beta.21 swapped Array's type arguments; Lampe's Rust extractor still compiled, and only Lean elaboration caught it. | tool: Lampe | Lean elaboration | tool defect | patched locally in our port | 2026-09-18 | yes, types caught silent mistranslation |
 | F35 | 2026-09-18 | Lampe's extractor turned inclusive loops into exclusive loops without an error. | tool: Lampe | source audit, failing regression | tool defect | patched locally: inclusive loops now rejected | 2026-09-18 | yes, silent extraction hazard, now loud |
 | F36 | 2026-09-18 | Lampe's beta.21 standard library proofs used native computation (102 native axiom names), which our gate bans. | tool: Lampe | axiom audit | tool limit | patched locally: replaced with kernel proofs | 2026-09-18 | no, one line in lesson 12 |
@@ -60,7 +60,7 @@ Every row cited at least one evidence path in the research phase, checked to exi
 | F44 | 2026-09-29 | From 2026-09-17 to 2026-09-29 one model family judged every landing, and every verdict was a pass. | process | Astra re-read (F40) | process | patched locally: a cross-family judge reads before status moves | 2026-09-29 | yes, pay for review before status |
 | F45 | 2026-09-29 | A nullifier premise that ignores the public key held at error zero, yet the attacker still won with advantage 1/4. | our claims (privacy) | Lean (proved negation); three Claude judges | claim error | patched locally: random-oracle games (stage 5) | 2026-09-29 | yes, premises must name observed values |
 | F46 | 2026-09-29 | The full-table nullifier premise cannot hold below error 1/2 for any short-key hash such as Poseidon2 (hand count, not Lean). | our claims (privacy) | Claude judge | claim error | documented only: now called an ideal-table premise | 2026-09-29 | no, told together with F49 |
-| F47 | 2026-09-29 | Withheld from this copy. | withheld | withheld | tool defect [?] | withheld | 2026-09-29 | withheld |
+| F47 | 2026-09-29 | Withheld from this copy. | withheld | withheld | withheld | withheld | 2026-09-29 | withheld |
 | F48 | 2026-09-29 | Verus cannot specify `U256::ZERO` or `ne`, and gives `[u8; 20] ==` no usable postcondition. | tool: Verus | Verus runs | tool limit | documented only: trusted helper and a verified loop workaround | 2026-09-16, 2026-09-29 | no, workarounds exist |
 | F49 | 2026-09-30 | Poseidon4 with a one-field-element salt is not known to be statistically hiding: about 0.52 distance under a random-function heuristic for a salt uniform over the full field (near one for the client's 216-bit salt), so bounds that start at 2n*epsHiding exceed 1/2. | our claims (privacy) | Claude judge, hand estimate | claim error | documented only: a heuristic; commit moved into the random-oracle games | 2026-09-29 | yes, why the hiding route failed |
 | F50 | 2026-09-30 | Our whole-body root premise for the Yul proofs excluded every storage-changing insert; Lean proved the conflict. | our claims (contract) | Lean (`rootHyp_insert_conflict`) | claim error | patched locally: new premise in step 5 | 2026-09-29 | no, internal premise detail |
@@ -101,7 +101,7 @@ Every row cited at least one evidence path in the research phase, checked to exi
 - Mechanism (F8): before PR #12, `_insertCommitment` banked the current root, when nonzero, into `validRoots` and the 100-slot ring before it inserted. A transfer calls it twice, so its second call banked the root between the two outputs, although no operation ends there.
 - Spec 4.4 admits only the root after an operation's final insertion (spec 2 at the pin `4d4dce1`, `specs/2/README.md`, section 4.4). The model pushes one root per operation, so the chain was more permissive. Each transfer used two ring slots, so in a run of transfers only, the ring held roots for as few as 50 transfers; the current root is accepted separately.
 - Found on 2026-09-16 by Halmos: `check_P4v1_postTxRootsOnly_expectFail` returned the mid-transfer root after leaf 3 in 0.13 s. That root is a real prefix root, so membership against it stays sound; no theft path was found, and the check does not prove there is none.
-- Fix: the private implementation repository's PR #12, merged as a04b8b3 on 2026-09-22. It removes `_insertCommitment`. Deposit and transfer call `_tree.insert` directly, then one `_recordRoot` after the last insert, so the window holds 100 post-operation roots. The same PR fixed the compliance pool.
+- Fix: the private implementation repository's PR #12, merged as a04b8b3 on 2026-09-22. It removes `_insertCommitment`. Deposit and transfer call `_tree.insert` directly, then one `_recordRoot` after the last insert, so the ring records one final root per deposit or transfer in its 100 slots; exact acceptance and retention have the F64 exceptions. The same PR fixed the compliance pool.
 - Re-check: the counterexample is gone on the PR branch and the merged code (2026-09-22), and Lean over via-IR Yul shows the ring slot gets the root after both inserts (LEDGER row 7Y; not in this repository).
 - In this repository: on `a04b8b3` the same assertion (`check_P4v1_postTxRootsOnly`) and the prefix-root form pass (`contract-halmos`, suite `root-window`), and the mutant M1, which records the mid-transfer root again, fails the ring check (suite `ring-funding`). The pre-fix contract is not public, so the counterexample of 2026-09-16 is not reproducible here.
 
@@ -113,7 +113,6 @@ Every row cited at least one evidence path in the research phase, checked to exi
 - F36 Lampe stdlib native computation and F37 unmodelled `asWitness` (limits): patched locally; not filed.
 - F23 evm-smith axioms (defect): filed as leonardoalt/evm-smith #4 on 2026-09-17; open on 2026-10-06; the route is parked.
 - F66 Kontrol SafeERC20 branch (limit): patched locally with the NIGHT-LEMMAS rule; not filed; CLAIM1 scope applied on 2026-10-13.
-- F47 (defect [?]): withheld from this copy.
 - F38 Aeneas decoders (limit): minimal repros written, not run, not filed; the ruint and recursion walls are known upstream (#1221, #1264).
 - Documented only, no upstream action: F25, F26, F31, F48, F61, F67, F75, F78 (limits) and F55 (defect, unused by the circuits).
 - Not tool defects, after checking: F29 (our log filter) and F30 (Halmos works as documented).
@@ -149,12 +148,13 @@ Every row cited at least one evidence path in the research phase, checked to exi
 |---|---|
 | pool bug | 1 |
 | spec question | 6 |
-| tool defect (unsound or silently wrong result; F47 shape only [?]) | 7 |
+| tool defect (unsound or silently wrong result) | 6 |
 | tool limit (unsupported feature, resource limit, packaging, our native-computation policy) | 12 |
 | client defect | 11 |
-| claim error | 29 |
+| claim error | 28 |
 | process | 11 |
-| hygiene (PoC files and docs, not code) | 3 |
+| hygiene (PoC files and docs, not code) | 2 |
+| withheld (F14, F33, F47) | 3 |
 | total | 80 |
 
 ## Words and labels

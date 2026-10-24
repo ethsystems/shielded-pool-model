@@ -43,10 +43,11 @@ collision can lock a note; locked value counts as live.
 Two kinds of units live here: machine-checked model claims and scoped
 implementation evidence with pinned inputs. A unit moves in once its
 claim is stable and its check is self-contained. No unit verifies
-deployed execution: nothing here covers the verifier's soundness in
-production, the on-chain Merkle tree, field encodings, callers,
-re-entrancy or arithmetic of the deployed contract, governance, or
-privacy of the real system. The separate packages check selected facts
+deployed execution: nothing here establishes the verifier's soundness
+in production, the on-chain Merkle tree as deployed, governance, or
+privacy of the real system, and the contract checks of field encodings,
+callers, re-entrancy and arithmetic hold only within their stated
+bounds, mocks and depths. The separate packages check selected facts
 about circuits, hash code, verifier builds, the bytes of one deployment
 at one block, the contract source at its pin (built with fixed library
 addresses, run against mocks, within stated bounds), client functions
@@ -217,8 +218,8 @@ checksum.
   patched Lampe (a fork pinned by commit), the hash-bound rules hold for
   every accepting execution: the commitment and nullifier equations, the
   one owner key, and the Merkle roots as folds with depth bounds 20, 32
-  and 32; the extracted Poseidon permutations compute their pure
-  functions. Statements about the program as Lampe reads it, not the
+  and 32 (transfer input 1 is checked only when its amount is nonzero);
+  the extracted Poseidon permutations compute their pure functions. Statements about the program as Lampe reads it, not the
   compiled constraints; the Noir compiler stays trusted on this route.
   Separate package, own check and trust base; the gate does not build it.
 - [verifier-reproduction/](verifier-reproduction/README.md): rebuilds the
