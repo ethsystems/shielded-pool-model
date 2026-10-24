@@ -1,0 +1,15 @@
+suite	run	check	verdict	paths	assertion
+caller	stock	check_withdraw	PASS	154	-
+caller	stock	check_witnessHigh	FAIL	62	-
+caller	stock	check_witnessLow	FAIL	62	-
+caller	loop4	check_withdraw	PASS	64	-
+caller	loop8	check_withdraw	PASS	64	-
+caller	alias-debug	check_withdraw	PASS	34	-
+caller	mutant-LATE_MARK	check_withdraw	FAIL	17	NotMarkedAtPayout
+caller	mutant-PAY_CALLER	check_withdraw	FAIL	17	PayoutArgs
+caller	replay	WithdrawCallerReplay.test_stock_point	PASS	-	-
+caller	replay	WithdrawCallerReplay.test_stock_otherCaller	PASS	-	-
+caller	replay	WithdrawCallerReplay_LATE_MARK.test_replay_fails	PASS	-	-
+caller	replay	WithdrawCallerReplay_LATE_MARK.test_replay_kind	PASS	-	-
+caller	replay	WithdrawCallerReplay_PAY_CALLER.test_replay_fails	PASS	-	-
+caller	replay	WithdrawCallerReplay_PAY_CALLER.test_replay_kind	PASS	-	-

@@ -1,0 +1,3 @@
+id	base	diff	output	change
+LATE_MARK	pool	ShieldedPool_M_LATE_MARK.diff	ShieldedPool_M_LATE_MARK.sol	withdraw marks the nullifier after the token payout (lines 283, 286)
+PAY_CALLER	pool	ShieldedPool_M_PAY_CALLER.diff	ShieldedPool_M_PAY_CALLER.sol	withdraw pays msg.sender instead of the recipient (line 286)
