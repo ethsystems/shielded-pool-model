@@ -76,6 +76,18 @@ SOLC="$(readlink -f "$SOLC")"
 "$SOLC" --version 2>/dev/null | grep -qF "Version: $solc_ver" || fail tools "solc $SOLC is not $solc_ver"
 binpin solc "$SOLC" "$solc_sha"
 export SOLC
+# Halmos is needed only when a selected suite has a halmos row (poseidon-frame).
+NEED_HALMOS=0
+for s in "${SUITES[@]}"; do grep -q $'^halmos\t' "$PKG/harness/$s/runs.tsv" && NEED_HALMOS=1; done
+if [ "$NEED_HALMOS" = 1 ]; then
+  [ -n "${HALMOS:-}" ] || HALMOS="$PKG/.venv/bin/halmos"
+  HALMOS="$(rel "$HALMOS")"
+  [ -x "$HALMOS" ] || fail tools "halmos not found: python3 -m venv .venv && .venv/bin/pip install --require-hashes --no-deps -r requirements-halmos.txt (or set HALMOS)"
+  [ "$("$HALMOS" --version 2>/dev/null)" = "halmos $(pin halmos_version)" ] || fail tools "halmos is '$("$HALMOS" --version 2>/dev/null)', pinned $(pin halmos_version)"
+  YICES="$(dirname "$HALMOS")/yices-smt2"
+  "$YICES" --version 2>/dev/null | head -1 | grep -qx "Yices $(pin yices_version)" || fail tools "$YICES is not Yices $(pin yices_version)"
+  echo "tools: halmos $(pin halmos_version) ($HALMOS), yices $(pin yices_version)"
+fi
 IMAGE="$(pin kontrol_image)@$(pin kontrol_image_digest)"
 # Docker is needed only when a selected suite has a Kontrol build.
 NEED_DOCKER=0
@@ -222,6 +234,36 @@ if os.path.exists(res):
         for x in r["results"]:
             v = x["status"] + (":" + x["reason"].replace(" ", "_") if x["reason"] else "")
             print(f"{s}\t{run}-{part}\t{x['test']}\t{v}\t-\t-\t-")
+print(f"{s}\t{run}\tall-checks\t{'PASS' if crc == '0' else 'FAIL'}\t-\t-\t-")
+PY
+        echo "suite $s $run: $(tail -1 "$L/$run.txt"), exit $crc, $((SECONDS - t0))s" ;;
+      halmos)
+        # The PoseidonT3 frame checks (Halmos on the host, see README.md): a copy of harness/<suite>.
+        rm -rf "$W/$cmd"; cp -a "$PKG/harness/$s" "$W/$cmd"
+        mkdir -p "$T/bin"; ln -sf "$FORGE" "$T/bin/forge"; ln -sf "$CAST" "$T/bin/cast"
+        (cd "$W/$cmd" && PATH="$T/bin:$PATH" HALMOS="$HALMOS" YICES="$YICES" POSEIDON_DIR="$T/soldeer/poseidon-solidity-0.0.5" \
+          SOLC="$SOLC" FOUNDRY_SOLC="$SOLC" FOUNDRY_OFFLINE=true FOUNDRY_LINT_LINT_ON_BUILD=false python3 scripts/verify.py) > "$L/$run.txt" 2>&1
+        crc=$?
+        python3 - "$s" "$run" "$W/$cmd/results" "$crc" >> "$L/results.tsv" <<'PY'
+import json, os, re, sys
+s, run, res, crc = sys.argv[1:5]
+for label in ["real-final", "short-calldata", "mutant-witness"]:
+    f = os.path.join(res, label + ".json")
+    if not os.path.exists(f):
+        continue
+    for rows in json.load(open(f))["test_results"].values():
+        for r in rows:
+            v = "PASS" if r["exitcode"] == 0 else "FAIL"
+            print(f"{s}\t{run}-{label}\t{r['name'].split('(')[0]}\t{v}\tpaths={r['num_paths'][0]},models={r.get('num_models', 0)},bounded={r['num_bounded_loops']}\t-\t-")
+for log, part in [("deployment.log", "deployment"), ("concrete-replay.log", "replay")]:
+    f = os.path.join(res, log)
+    if os.path.exists(f):
+        suite = None
+        for l in open(f, errors="replace"):
+            m = re.match(r"Ran \d+ tests? for \S+:(\S+)", l)
+            if m: suite = m.group(1)
+            m = re.match(r"\[(PASS|FAIL)[^\]]*\] (\w+)\(", l)
+            if m and suite: print(f"{s}\t{run}-{part}\t{suite}.{m.group(2)}\t{m.group(1)}\t-\t-\t-"); suite = None
 print(f"{s}\t{run}\tall-checks\t{'PASS' if crc == '0' else 'FAIL'}\t-\t-\t-")
 PY
         echo "suite $s $run: $(tail -1 "$L/$run.txt"), exit $crc, $((SECONDS - t0))s" ;;

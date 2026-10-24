@@ -36,7 +36,7 @@ def main() -> None:
             if es != suite or run not in runs_ran:
                 continue
             v, failing, nodes, t = got.pop((run, proof), ("MISSING", "-", "-", "-"))
-            ok = v == want and (want != "FAILED" or failing == wfail)
+            ok = v == want and (want != "FAILED" or failing == wfail) and (not wfail.startswith("paths=") or failing == wfail)
             bad += not ok
             print(f"CHECK {'ok  ' if ok else 'DIFF'} {suite} {run} {proof}: {v}"
                   + (f" {failing} (nodes {nodes})" if v == "FAILED" else "")

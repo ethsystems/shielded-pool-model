@@ -1,4 +1,7 @@
-# Suites in run order: suite <name>. Each has harness/<name>/ (Kontrol harness, replay tests, runs.tsv).
+# Suites in run order: suite <name>. Each has harness/<name>/ with runs.tsv (see README.md).
 suite withdraw-success
 suite guards-patched
 suite guards-stock
+suite public-inputs
+suite insert-loop
+suite poseidon-frame

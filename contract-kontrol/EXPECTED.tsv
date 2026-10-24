@@ -175,3 +175,12 @@ insert-loop	controls-mutants	test_source_exact_M2_depth2	FAIL:loop-exact:_sideNo
 insert-loop	controls-mutants	test_source_exact_M2_depth4	FAIL:loop-exact:_sideNodes_mismatch	-	2026-10-02
 insert-loop	controls-mutants	test_stub_matches_archived_runtime	PASS	-	2026-10-02
 insert-loop	controls	all-checks	PASS	-	2026-10-02
+poseidon-frame	frame-real-final	check_call_context_same_result	PASS	paths=1,models=0,bounded=0	2026-10-01
+poseidon-frame	frame-real-final	check_frame_equal_inputs	PASS	paths=1,models=0,bounded=0	2026-10-01
+poseidon-frame	frame-real-final	check_wrong_selector	PASS	paths=2,models=0,bounded=0	2026-10-01
+poseidon-frame	frame-short-calldata	check_short_calldata	PASS	paths=132,models=0,bounded=0	2026-10-01
+poseidon-frame	frame-mutant-witness	check_mutant_witness	FAIL	paths=1,models=1,bounded=0	2026-10-01
+poseidon-frame	frame-deployment	DeploymentTest.test_constructor_runtime	PASS	-	2026-10-01
+poseidon-frame	frame-replay	RealReplay.test_concrete_frame	PASS	-	2026-10-01
+poseidon-frame	frame-replay	MutantReplay.test_concrete_frame	FAIL	-	2026-10-01
+poseidon-frame	frame	all-checks	PASS	-	2026-10-01

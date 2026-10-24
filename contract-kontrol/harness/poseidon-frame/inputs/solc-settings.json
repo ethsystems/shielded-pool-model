@@ -1,0 +1,28 @@
+{
+  "remappings": [
+    "@openzeppelin-contracts-5.6.0-rc.1/=dependencies/@openzeppelin-contracts-5.6.0-rc.1/",
+    "@openzeppelin-contracts/=dependencies/@openzeppelin-contracts-5.6.0-rc.1/",
+    "@zk-kit/=dependencies/zk-kit-v1/",
+    "forge-std-1.14.0/=dependencies/forge-std-1.14.0/src/",
+    "forge-std/=dependencies/forge-std-1.14.0/",
+    "poseidon-solidity-0.0.5/=dependencies/poseidon-solidity-0.0.5/",
+    "poseidon-solidity/=dependencies/poseidon-solidity-0.0.5/",
+    "zk-kit-v1/=dependencies/zk-kit-v1/"
+  ],
+  "optimizer": {
+    "enabled": true,
+    "runs": 100
+  },
+  "metadata": {
+    "bytecodeHash": "ipfs"
+  },
+  "evmVersion": "osaka",
+  "libraries": {
+    "dependencies/poseidon-solidity-0.0.5/PoseidonT3.sol": {
+      "PoseidonT3": "0x00000000000000000000000000000000000a1002"
+    },
+    "dependencies/zk-kit-v1/packages/lean-imt/contracts/LeanIMT.sol": {
+      "LeanIMT": "0x00000000000000000000000000000000000a1001"
+    }
+  }
+}

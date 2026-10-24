@@ -65,3 +65,7 @@ foundry_asset https://github.com/foundry-rs/foundry/releases/download/v1.8.3/fou
 solc_version 0.8.37+commit.f401782d
 solc_sha256 5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a
 solc_url https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.8.37+commit.f401782d
+
+# Halmos, for the PoseidonT3 frame suite only (requirements-halmos.txt pins every package by sha256).
+halmos_version 0.3.3
+yices_version 2.6.4
