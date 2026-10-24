@@ -245,8 +245,12 @@ match. `VERUS_FETCH=0` forbids the download. `JOBS` sets the number of parallel 
    its recorded count; `probes/async.rs` and `probes/await.rs` must verify and
    `probes/async_trait.rs` must stop with the unsupported-feature diagnostic; each control (its
    mirror with one replacement) is refuted when Verus reaches verification, reports at least
-   one error and prints its expected diagnostic; a stop at the resource limit is reported apart,
-   and any other outcome (it verifies, or fails to compile) fails the check;
+   one error, reports no compiler error, and prints its expected diagnostic at a location
+   inside the control's target function. The target is the function that the replacement
+   changes; one control, `key_wrappers/enc-drop-seal-premise`, weakens a trait contract and
+   names its caller `encrypt_note` as its target. An expected diagnostic in another function
+   does not count. A stop at the resource limit in the target is reported apart, and any other
+   outcome (it verifies, fails to compile, or fails only outside its target) fails the check;
 4. runs `scripts/coverage.py`: the route counts (Aeneas 22, Verus 96, both 8, union 110, none
    0), the mapping of every control to the function it changes (each of the 96 rows must have
    a refuted control of its own), the eight effect interfaces with 29 and 31 contracts, and FUNCTIONS.md and
@@ -280,7 +284,8 @@ the 486 MB zip when `check.sh` downloads it; `work/` about 5 MB. Neither is trac
   and `byte_records.rs` (58 rows).
 - `probes/`: three Verus feature probes (async, await, async trait).
 - `controls/controls.json`: the 241 controls, each a mirror, one text replacement and the
-  expected diagnostic.
+  expected diagnostic; a control of an effect mirror also names its function, and one control
+  names a `target` (step 3 above).
 - `source/manifest.json`: the 110 rows: function, file, lines, region sha256, route, the mirror
   file and the marker that finds the mirrored function, the selected property.
 - `diffs/`: the 96 source-to-mirror diffs, named by row number.

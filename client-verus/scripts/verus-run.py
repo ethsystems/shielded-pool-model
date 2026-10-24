@@ -9,9 +9,12 @@ usage: verus-run.py <verus dir> <work dir> [jobs]
   unsupported-feature diagnostic (async functions in traits are outside this Verus release).
 - Each control in controls/controls.json is its mirror with one replacement. It counts as
   refuted only if Verus reaches verification (prints its results line), reports at least one
-  error, and prints the expected proof diagnostic ("proof error": any of postcondition,
-  precondition, assertion or loop invariant not satisfied). A compile error does not count.
-  A control whose function check stops at the solver resource limit (rlimit) is not refuted,
+  error, reports no error other than a verification error (a compiler error fails the
+  control), and reports the expected proof diagnostic ("proof error": any of postcondition,
+  precondition, assertion or loop invariant not satisfied) at a location inside the control's
+  target function (common.control_target: the function the control changes, or the function
+  its `target` names). An expected diagnostic elsewhere in the file does not count.
+  A control whose target function stops at the solver resource limit (rlimit) is not refuted,
   but it does not verify either: it is reported apart ("rlimit") and does not fail the run,
   unless STRICT=1, which counts it as a failure.
 Writes <work dir>/results.json and one log per run; prints one VERUS line per run."""
@@ -46,7 +49,23 @@ def verus_run(path, label):
     m = re.search(r'verification results:: (\d+) verified, (\d+) errors', out)
     return dict(label=label, exit=p.returncode, wall_s=round(time.monotonic() - t, 3), maxrss_kb=ru.ru_maxrss,
                 verified=int(m[1]) if m else None, errors=int(m[2]) if m else None,
-                diagnostics=sorted(set(re.findall(r'^error(?:\[\w+\])?: (.*)$', out, re.M))), out=out)
+                diagnostics=sorted(set(re.findall(r'^error(?:\[\w+\])?: (.*)$', out, re.M))),
+                located=located(out, path), out=out)
+
+
+def located(out, path):
+    """Each error of a run except the closing count: [message, error code or None, line of its
+    first location if that location is in `path`, else None]."""
+    lines = out.splitlines()
+    res = []
+    for i, line in enumerate(lines):
+        m = re.match(r'^error(?:\[(\w+)\])?: (.*)$', line)
+        if not m or m[2].startswith('aborting due to'):
+            continue
+        n = re.match(r'^\s*--> (.*):(\d+):\d+$', lines[i + 1]) if i + 1 < len(lines) else None
+        at = int(n[2]) if n and Path(n[1]).resolve() == Path(path).resolve() else None
+        res.append([m[2], m[1], at])
+    return res
 
 
 def mirror_job(path):
@@ -69,14 +88,20 @@ def probe_job(path):
 
 def control_job(c):
     path = work / 'controls' / (c['id'].replace('/', '__') + '.rs')
-    path.write_text(common.apply_control(c))
+    mutated = common.apply_control(c)
+    path.write_text(mutated)
+    first, last, name = common.control_target(c, mutated)
     r = verus_run(path, 'control/' + c['id'])
     exp = common.PROOF_ERRORS if c['expect'] == 'proof error' else (c['expect'],)
     reached = r['exit'] != 0 and r['verified'] is not None and (r['errors'] or 0) >= 1
-    refuted = reached and any(e in d for e in exp for d in r['diagnostics'])
-    rlimit = reached and not refuted and any(common.RLIMIT in d for d in r['diagnostics'])
-    r.update(id=c['id'], mirror=c['mirror'], expect=c['expect'],
-             outcome='refuted' if refuted else 'rlimit' if rlimit else 'not rejected',
+    other = [msg for msg, code, _ in r['located'] if code or not any(v in msg for v in common.VERIFY_ERRORS)]
+    inside = [msg for msg, _, at in r['located'] if at is not None and first <= at <= last]
+    refuted = reached and not other and any(e in msg for e in exp for msg in inside)
+    rlimit = reached and not other and not refuted and any(common.RLIMIT in msg for msg in inside)
+    outcome = ('refuted' if refuted else 'rlimit' if rlimit else 'compiler error' if other
+               else 'not rejected in its target' if r['located'] else 'not rejected')
+    r.update(id=c['id'], mirror=c['mirror'], expect=c['expect'], target=[name, first, last], outcome=outcome,
+             outside=[[msg, at] for msg, _, at in r['located'] if at is None or not first <= at <= last],
              **{'pass': refuted or (rlimit and os.environ.get('STRICT') != '1')})
     return r
 
@@ -91,7 +116,7 @@ with ThreadPoolExecutor(jobs) as ex:
         for r in results[kind]:
             note = (f"{r['verified']} verified, {r['errors']} errors" if r['verified'] is not None else 'no results line')
             if kind == 'controls':
-                note += f"; {'; '.join(d for d in r['diagnostics'] if not d.startswith('aborting'))}"
+                note += f"; {'; '.join(d for d in r['diagnostics'] if not d.startswith('aborting'))} (target {r['target'][0]}: {r['outcome']})"
             print(f"VERUS {'ok' if r['pass'] else 'FAIL'} {r['label']}: {note}, {r['wall_s']} s, {r['maxrss_kb'] // 1024} MiB", flush=True)
             if not r['pass']:
                 print(r['out'][-3000:], flush=True)

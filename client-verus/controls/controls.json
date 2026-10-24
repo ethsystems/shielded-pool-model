@@ -893,7 +893,8 @@
   "old": "        ensures\n            r is Ok,\n            r->Ok_0 == Self::sealed(*pk, *note, aad@, old(rng).seed@);\n",
   "new": "        ensures\n            r is Ok ==> r->Ok_0 == Self::sealed(*pk, *note, aad@, old(rng).seed@);\n",
   "expect": "precondition not satisfied",
-  "kind": "weakened premise"
+  "kind": "weakened premise",
+  "target": "pub fn encrypt_note<"
  },
  {
   "id": "key_wrappers/rcpt-default-one",

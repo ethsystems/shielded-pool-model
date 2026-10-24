@@ -8,6 +8,8 @@ PROOF_ERRORS = ('postcondition not satisfied', 'assertion failed', 'precondition
                 'invariant not satisfied')
 RLIMIT = 'Resource limit (rlimit) exceeded'
 UNSUPPORTED = 'Verus does not yet support Opaque types in trait def'
+# The messages of verification errors; any other error of a control run is a compiler error.
+VERIFY_ERRORS = PROOF_ERRORS + ('unable to prove post-condition of closure', 'possible arithmetic underflow/overflow', RLIMIT)
 
 
 def pins():
@@ -101,3 +103,57 @@ def control_offset(c):
         a, b = strength_body(text, c['function'])
         return a + text[a:b].index(c['old'])
     return text.index(c['old'])
+
+
+ANY_FN = re.compile(r'^\s*(?:pub(?:\([a-z]+\))?\s+)?(?:(?:open|closed)\s+)?(?:(?:spec|proof|exec)\s+)?'
+                    r'(?:async\s+)?fn\s+(\w+)')
+
+
+def fn_spans(text):
+    """Every function with a body, of any mode: (first line, last line, name), 1-based and
+    inclusive. A declaration that ends with `;` before any `{` has no body and no span."""
+    lines = text.splitlines(True)
+    out = []
+    for a, line in enumerate(lines):
+        m = ANY_FN.match(line)
+        if not m:
+            continue
+        s = None
+        for i in range(a, len(lines)):
+            t = lines[i].rstrip()
+            if lines[i].lstrip().startswith('{') or t.endswith('{'):
+                s = i
+                break
+            if t.endswith(';'):
+                break
+        if s is None:
+            continue
+        depth = 0
+        for b in range(s, len(lines)):
+            depth += lines[b].count('{') - lines[b].count('}')
+            if depth == 0:
+                break
+        out.append((a + 1, b + 1, m[1]))
+    return out
+
+
+def control_target(c, mutated):
+    """The function of the mutated file in which the control's diagnostic must lie:
+    (first line, last line, name). It is the function whose first line holds the control's
+    `target` text, if it names one (a control that weakens a contract fails in its caller);
+    else the function of its `// STRENGTH` marker; else the innermost function that holds the
+    change."""
+    spans = fn_spans(mutated)
+    lines = mutated.splitlines(True)
+    if 'target' in c:
+        hit = [s for s in spans if c['target'] in lines[s[0] - 1]]
+    elif 'function' in c:
+        marker = '// STRENGTH ' + c['function'] + '\n'
+        assert mutated.count(marker) == 1, (c['id'], 'marker')
+        line = mutated[:mutated.index(marker)].count('\n') + 1
+        hit = sorted((s for s in spans if s[0] <= line <= s[1]), key=lambda s: s[1] - s[0])[:1]
+    else:
+        line = mutated[:control_offset(c)].count('\n') + 1
+        hit = sorted((s for s in spans if s[0] <= line <= s[1]), key=lambda s: s[1] - s[0])[:1]
+    assert len(hit) == 1, (c['id'], 'target', hit)
+    return hit[0]
