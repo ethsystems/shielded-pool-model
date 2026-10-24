@@ -302,29 +302,69 @@ hypothesis `hne`) and `fail_bridge_bad_field_no_range` (the range hypothesis `hL
 
 ## Trust base
 
-- The Lean kernel and the three standard axioms; Mathlib at `0df444a` (tag `v4.33.1`), the
-  parent's pin.
-- The gated model files the package imports (pinned in `PINS.sha256`); whether they say what
-  spec 2 says is the parent's human reading (`../REVIEW.md`).
+What the results rest on:
+
+- The Lean kernel and the three standard axioms (the census checks that no theorem uses another).
+- The gated model files the package imports; whether they say what spec 2 says is the parent's
+  human reading (`../REVIEW.md`).
 - For the fold bridge only: the trust base of `../circuits-lampe/` (the Lampe fork at its pinned
   commit, its stdlib, the extractor that produced the committed Lean sources).
 - Not trusted: the proof modules, the census, the scans and the controls. They are checks
   against mistakes, not against a hostile package: code that runs during elaboration could change
   what the census prints.
 
-## Pins
+The check reads these inputs from outside the package. Each one is either checked by hash or
+commit, or trusted.
 
-[PINS.sha256](PINS.sha256) holds the sha256 of every file outside the package that the results
-rest on: the 13 model modules the package imports (directly or through each other), the parent's
-`lakefile.toml`, `lake-manifest.json` and `lean-toolchain`, this package's toolchain and manifest,
-and for the fold bridge the four `circuits-lampe` modules it imports with that package's
-`lakefile.toml` and `PINS.sha256` (which pin Lampe and the extracted circuits).
-`scripts/pins.py` checks them and that the pinned model modules are exactly the import closure.
-`lakefile.toml` shares the parent's dependency checkouts (`packagesDir = "../.lake/packages"`).
+Checked by hash (`PINS.sha256`, `scripts/pins.py`), at the start and again at the end:
+
+- the 13 model modules the package imports, which must be exactly that import closure;
+- the parent's `lakefile.toml`, `lake-manifest.json` and `lean-toolchain`, and this package's
+  manifest and toolchain;
+- for the fold bridge: every `.lean` file of `../circuits-lampe` that the bridge imports,
+  directly or through each other (423 proof modules and the extracted sources they reach), which
+  must be exactly that closure; all 28 sources and the lakefile of each of the five extracted
+  packages; that package's `lakefile.toml`, `lake-manifest.json` and `lean-toolchain`;
+- the `../circuits-lampe` scripts this package runs or reads: `scripts/build.py`,
+  `scripts/rename.py` and `scripts/rename-map.txt`.
+
+`scripts/pins.py` also checks that each `[[require]]` of the three lakefiles matches its manifest
+entry (git URL, rev and subDir, or path), that Mathlib and its dependencies have the same commits
+in the parent's manifest and in that of `../circuits-lampe`, and that the three toolchain files
+are equal.
+
+Checked by commit (`scripts/pins.py --deps`), after each fetch and again at the end: every git
+package of the three manifests (Mathlib and its eight dependencies in `../.lake/packages` and in
+`../circuits-lampe/.lake/packages`, the Lampe fork and its stdlib in the latter) is a git
+checkout at its manifest rev, with the manifest URL as `origin`, no difference from that commit
+and no untracked file. This package shares the parent's checkouts
+(`packagesDir = "../.lake/packages"` in `lakefile.toml`).
+
+Build outputs:
+
+- `lake build` of the package uses lake's own traces.
+- `../circuits-lampe/scripts/build.py` skips a proof module whose source and imports are
+  unchanged. `scripts/build-fold-bridge.py` removes its cache files when the Lean githash or a
+  pinned lakefile, manifest, toolchain or extracted source differs from its last run, so every
+  proof module is compiled again.
+- The bridge modules, and the model and tree modules they import, are compiled from source on
+  every run. No module of this repository may also have an olean in the `../circuits-lampe`
+  workspace.
+
+Trusted, not checked by hash:
+
+- The Lean toolchain that elan installs. The check requires `Lean version 4.33.1` and prints the
+  githash; it does not hash the binaries.
+- The prebuilt oleans of Mathlib and its dependencies that `lake exe cache get` downloads, and
+  the oleans of earlier runs that lake's traces and the cache keys above accept.
+- Files that a dependency checkout's `.gitignore` excludes (its build outputs).
+- `lake exe cache get` and lake run code of the dependency checkouts (Mathlib's cache tool, the
+  `lakefile.lean` files) before the commit check of that run.
+- git, bash and python3.
 
 ## Re-check
 
-Install git, bash, python3 (3.10 or later), sha256sum and elan. The first run downloads
+Install git, bash, python3 (3.11 or later) and elan. The first run downloads
 Mathlib's checkout and prebuilt oleans into `../.lake/packages` (about 7.5 GB, shared with the
 parent package); the fold-bridge stage also downloads the Lampe fork and builds part of
 `../circuits-lampe` (see its README).
@@ -340,25 +380,30 @@ compile at once; each circuit module takes up to about 4.6 GB of memory.
 
 `scripts/check.sh` runs, in order:
 
-1. the tools: Lean 4.33.1 through lake, python3;
-2. the pins (`scripts/pins.py`);
+1. the tools: Lean 4.33.1 through lake (the githash is printed), python3;
+2. the pins (`scripts/pins.py`, see Trust base);
 3. a source scan (`scripts/scan.py`) of every Lean file of the package for `sorry`, `admit`,
    `native_decide`, `axiom`, `opaque`, `extern`, `implemented_by`, `unsafe` and `skipKernelTC`, of
    the pinned model files' code for the same, and of the lakefiles for kernel options;
 4. the rename check (`scripts/check-rename.py`, below);
 5. regeneration: the generated controls must equal the output of `scripts/gen-controls.py`;
-6. the build: `lake build` of the five libraries `Refinement`, `Tree`, `Balance`, `Journey`
-   and `Gas` (and of the parent modules they import);
+6. the build: `lake exe cache get`, the commit check of the dependency checkouts
+   (`scripts/pins.py --deps main`), `lake build` of the five libraries `Refinement`, `Tree`,
+   `Balance`, `Journey` and `Gas` (and of the parent modules they import), then the pins and
+   the checkouts again;
 7. the census (`Census.lean`, `scripts/census.py`): every theorem of every package module,
    auxiliary ones included, depends on a subset of the three axioms; no package module declares
    an axiom or an opaque constant; the census imports every module; and the theorems, their
    printed statements and the SHA-256 of their raw types equal `statements/INVENTORY.md` and
    `statements/RAW.sha256`;
 8. the controls (`scripts/controls.py`) against `controls/EXPECTED.tsv`;
-9. the fold bridge: `scripts/build-fold-bridge.py` (the circuits-lampe build steps, then the
-   bridge with the model and tree modules it imports, compiled from source into
-   `build/fold-bridge/lib`), its census (`fold-bridge/Census.lean`, `statements/FOLD-BRIDGE.md`,
-   `statements/FOLD-BRIDGE.sha256`) and its controls (`fold-bridge/controls/EXPECTED.tsv`).
+9. the fold bridge: `scripts/build-fold-bridge.py` (the circuits-lampe build steps with the
+   commit check of its dependency checkouts, then the bridge with the model and tree modules it
+   imports, compiled from source into `build/fold-bridge/lib`), its census
+   (`fold-bridge/Census.lean`, `statements/FOLD-BRIDGE.md`, `statements/FOLD-BRIDGE.sha256`) and
+   its controls (`fold-bridge/controls/EXPECTED.tsv`);
+10. the pins and every dependency checkout again, so that a fetch or a build that changed a
+   pinned file or a checkout fails the check.
 
 [RESULT.md](RESULT.md) records a run: counts, times and peak memory.
 
