@@ -2,9 +2,9 @@
 
 This package states privacy as games over the model of the parent directory and proves
 conditional bounds on the attacker's advantage in them. It replaces the privacy report of
-2026-10-06, a research-phase report that this repository no longer carries ("the frozen
-report" below): the games, bounds, counterexamples and funded examples of that report are the
-Lean theorems here, and `scripts/check.sh` rebuilds them and checks their axioms. The package is separate
+2026-10-06, not included in this repository, a report of the research phase: the games,
+bounds, counterexamples and funded examples of that report are the Lean theorems here, and
+`scripts/check.sh` rebuilds them and checks their axioms. The package is separate
 from the gated model: it has its own lakefile, uses the same toolchain (Lean 4.33.1, Mathlib
 `0df444a`) and adds VCV-io (`dfc7ff07`) for oracle computations and probability. It imports
 three model files of the parent unchanged (below) and changes nothing in them. Nothing here
@@ -39,8 +39,8 @@ primitives. A modeled execution is not a refinement result about an implementati
 
 In the random-oracle games, the hash uses that the game names are independent uniform
 functions, and the attacker can query them a bounded number of times. This premise (A8 in
-the frozen report) is a heuristic. It is stronger than collision resistance. The Merkle-node
-use of Poseidon2 is outside these games.
+the privacy report of 2026-10-06, not included in this repository) is a heuristic. It is
+stronger than collision resistance. The Merkle-node use of Poseidon2 is outside these games.
 
 ## Notation
 
@@ -68,8 +68,9 @@ All names below start with `LeanShieldedPool.`.
 | Static transfers, commit-only | the recipient of n transfers | `RecipientGame.CommitOnly.advantage_le_queryBound`, `RecipientGame.CommitOnly.advantage_le_rom_collisions`, `RecipientGame.CommitOnly.advantage_le_birthday` | H + R/2; R <= H0 + D + V | the random-oracle premise for the commitment only; `derivePub` and `nullify` fixed; uniform sampling | proved; V has a birthday bound under `ValidOn`; a useful bound with an explicit nullifier-collision charge is open |
 | Chains, commit-only | the recipient along a funded chain | `ChainGame.CommitOnly.advantage_le_queryBound`, `ChainGame.CommitOnly.advantage_le_rom_collisions` | H + R/2; R <= V3 + B3 + E3 | as above, plus `commit` injective in the salt at or above the cap, and `nullify` injective for each key | proved; vacuous unless C > U(U-1)/2, so not for production parameters |
 
-The seventh row of the frozen report, symbolic k-anonymity, is the gated extension
-`LeanShieldedPool/Extensions/KAnonymity.lean` of the parent, not part of this package.
+The seventh row of the privacy report of 2026-10-06 (not included in this repository),
+symbolic k-anonymity, is the gated extension `LeanShieldedPool/Extensions/KAnonymity.lean` of
+the parent, not part of this package.
 
 Three reading rules:
 
@@ -267,11 +268,12 @@ The census counts the declarations written in the source (a `def`, `abbrev`, `th
 `lemma`, `structure`, `inductive` or `instance`; not the constructors, projections and other
 names that Lean generates) and the theorems among them. The run in RESULT.md gives 82
 modules, 1,450 declarations and 775 theorems, and 48 declarations in the three model files.
-The frozen report counted 1,487 declarations and 769 theorems with a different method: a
-list of the named declarations of the same sources, with the 48 of the model files, without
-the five anonymous instances of `SenderGame/`, and without the six `FundedWorlds` theorems,
-which were outside that list. 1,487 - 48 + 5 + 6 = 1,450, and 769 + 6 = 775. The census also
-counts 2,079 theorems with the auxiliary ones; 959 of them are listed in the inventory.
+The privacy report of 2026-10-06 (not included in this repository) counted 1,487
+declarations and 769 theorems with a different method: a list of the named declarations of
+the same sources, with the 48 of the model files, without the five anonymous instances of
+`SenderGame/`, and without the six `FundedWorlds` theorems, which were outside that list.
+1,487 - 48 + 5 + 6 = 1,450, and 769 + 6 = 775. The census also counts 2,079 theorems with
+the auxiliary ones; 959 of them are listed in the inventory.
 
 ## The controls
 
