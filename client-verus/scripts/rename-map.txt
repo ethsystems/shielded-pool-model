@@ -1,12 +1,12 @@
 # Earlier names and the names in this package.
-# The frozen report (evidence/2026-10-01-client-coverage/REPORT.md) and the earlier runs it
+# The client coverage report of 2026-10-01 (not in this repository) and the earlier runs it
 # cites used working labels. This map is the only file in the package that names them.
 #
 # Labels of the earlier runs
-N3                         the 38 rows of the effect mirrors (rpc.rs, channel.rs, prover_effects.rs, tree.rs); "class C" in the frozen report
+N3                         the 38 rows of the effect mirrors (rpc.rs, channel.rs, prover_effects.rs, tree.rs); "class C" in the 2026-10-01 report
 bd-01d                     the first mirrors of the domain core: guards.rs, note_key.rs, public_inputs.rs, hash_param.rs
 bd-81i                     the second round: crypto_field.rs, prover_fmt.rs, misc_domain.rs, merkle_proofs.rs, key_wrappers.rs, serde_wrappers.rs
-bd-3uk                     the byte-record mirrors (the "Verus detour" of the frozen table): byte_records.rs
+bd-3uk                     the byte-record mirrors (the "Verus detour" of the 2026-10-01 report): byte_records.rs
 bd-ka7                     the Aeneas extraction of validate_amounts and sum at a04b8b3 (frozen; not part of this package)
 L6                         the Aeneas extraction route (frozen; not part of this package)
 "58 inherited"             the 58 Verus rows of the 11 domain-core mirror files above

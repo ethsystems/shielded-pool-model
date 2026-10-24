@@ -1,9 +1,10 @@
 # client-verus: selected properties of the 110 client functions at `a04b8b3`
 
 This package re-checks the Verus half of the client coverage report of 2026-10-01 from public
-inputs. That report is a research-phase report that this repository no longer carries ("the
-frozen report" below); [FUNCTIONS.md](FUNCTIONS.md) keeps its selected property for each of the
-110 functions. The client is the Rust library of the shielded pool in ethsystems/pocs (public) at
+inputs. That report is not in this repository ("the 2026-10-01 report" below). Its figures are
+historical: this package reproduces only those that it re-checks, and says so for each.
+[FUNCTIONS.md](FUNCTIONS.md) keeps the report's selected property for each of the 110
+functions. The client is the Rust library of the shielded pool in ethsystems/pocs (public) at
 `a04b8b38969dfc2ee64de47edee7e396454204a8`, `pocs/private-payment/shielded-pool/src/lib/`, read
 from the git submodule `pocs/`. `check.sh` pins the 110 source regions by hash, compares each
 mirrored function with its region, runs Verus on every mirror and every negative control, and
@@ -13,18 +14,19 @@ parent README. [RESULT.md](RESULT.md) records the run.
 
 ## The claim
 
-The client at `a04b8b3` has 110 security-relevant functions (the denominator of the frozen
+The client at `a04b8b3` has 110 security-relevant functions (the denominator of the 2026-10-01
 report; [FUNCTIONS.md](FUNCTIONS.md) lists them with their lines and their selected property).
 
 - **Verus, 96 functions, re-checked here.** For each of them, a selected property holds on a
   reviewed mirror of the function, under the parameter contracts of [TRUSTED.md](TRUSTED.md).
   Verus 0.2026.09.13.671956e verifies the 15 mirror files with `--no-cheating` (312 verified
   items, no local admission), and each of the 96 functions has a negative control of its own
-  that Verus refutes. Of the 241 controls, 239 are refuted by Verus and 2 stop at the solver's
-  resource limit (rows 65 and 66, which each have a second refuted control); `STRICT=1` counts
-  the two as failures (see "Trust base").
-- **Aeneas, 22 functions, frozen.** The frozen report records Aeneas extraction proofs for 22
-  functions. This package does not re-run them (see "The Aeneas half").
+  that Verus refutes inside that function. Of the 241 controls, 239 are refuted by Verus and 2
+  stop at the solver's resource limit (rows 65 and 66, which each have a second refuted
+  control); `STRICT=1` counts the two as failures (see "Trust base").
+- **Aeneas, 22 functions, frozen.** The 2026-10-01 report records Aeneas extraction proofs for
+  22 functions. This package does not re-run them, and the count is historical (see "The Aeneas
+  half"). "Frozen" means taken from that report and not re-checked here.
 - **Both, 8 functions.** `decode_path`, `DecryptionError::from`,
   `EncryptedTransferNotes::to_bytes`, `DepositProof::public_inputs_as_array`,
   `WithdrawProof::public_inputs_as_array`, `TransferWitness::validate_amounts`,
@@ -36,7 +38,8 @@ report; [FUNCTIONS.md](FUNCTIONS.md) lists them with their lines and their selec
   `EncryptedTransferNotes::new` and `TransferProof::public_inputs_as_array`) have no result that
   this package re-checks.
 
-So of the 110 rows, 96 are re-checked here and 14 rest on the frozen report alone.
+So of the 110 rows, 96 are re-checked here and 14 rest on the 2026-10-01 report alone, which is
+not in this repository.
 
 ## What a mirror is
 
@@ -82,7 +85,7 @@ chosen for that function, not its full functional correctness. Depth differs by 
   tree wrappers `CommitmentTree::insert`, `CommitmentTree::root`, `AttestationTree::insert` and
   `AttestationTree::root` (rows 49, 50, 52, 53) forward one call to lean-imt under an abstract
   successor-and-root contract; no insertion, hashing or root semantics is proved. They count as
-  breadth, not assurance. By the earlier classification, 13 more rows are thin wrappers (the
+  breadth, not assurance. By the classification of the 2026-10-01 report, 13 more rows are thin wrappers (the
   viewing-key and SEC1 wrappers, the serde wrappers, `P2pMessage::new`, `convert_receipt`,
   `b256_to_bytes`, `bytes_to_b256`).
 
@@ -142,7 +145,7 @@ The package never says "the client is verified". It says "for these 96 functions
 property holds on the reviewed mirror under the stated contracts, and the mirror differs from the
 source as recorded".
 
-Some properties record client behaviour that a reader may not expect, as the frozen report did:
+Some properties record client behaviour that a reader may not expect, as the 2026-10-01 report also recorded:
 `ChannelRegistry::register` returns a `Channel` that holds an empty clone of the registry, so
 that channel's `send_note` finds no recipient (`registered_channel_cannot_send` in
 `channel.rs`); `prove_withdraw` has no client amount guard, and the full amount reaches the prover;
@@ -153,13 +156,14 @@ count before it submits, and nothing ties that count to the eventual insertion.
 ## The Aeneas half
 
 The 22 Aeneas rows were already "inherited extraction proofs with replacements; not rerun" in the
-frozen report: Charon and Aeneas extracted the real function bodies against plain-Rust stand-ins
+2026-10-01 report: Charon and Aeneas extracted the real function bodies against plain-Rust stand-ins
 for the library types, and Lean proofs over the extraction gave the selected property. Those
 extraction projects are not part of this repository. They used an Aeneas nightly
 (2026.09.15-505b6ca), Charon 0.1.254, a nightly rustc and Lean libraries ported for it, and
 several of them were written against an earlier commit of the client. This package does not
-re-run them: the Aeneas counts (22, of which 14 Aeneas-only and 8 both) are taken from the frozen
-report, and FUNCTIONS.md marks each Aeneas-only row "(frozen)". The 8 "both" rows are re-checked
+re-run them: the Aeneas counts (22, of which 14 Aeneas-only and 8 both) are historical figures
+from the 2026-10-01 report, not reproduced here, and FUNCTIONS.md marks each Aeneas-only row
+"(frozen)". The 8 "both" rows are re-checked
 here on the Verus route only.
 
 ## Trust base
@@ -185,9 +189,9 @@ stops when the input differs from its pin; "trusted" means the run reads it as i
 - The Verus release, from a zip (`VERUS_ZIP`, or the download into `.deps/`). Hash: the sha256
   of the zip, which covers every file in it. The download itself is trusted only to arrive.
 - The Verus release, from a directory (`VERUS_DIR`, or a `.deps/verus-x86-linux` left by an
-  earlier run). Hash: `verus`, `rust_verify`, `vstd.vir` and `z3`; the version and commit in
-  `version.json` and the Z3 version must match. Trusted: every other file in the directory (the
-  vstd and builtin libraries, the macro libraries).
+  earlier `check.sh` run). Hash: `verus`, `rust_verify`, `vstd.vir` and `z3`; the version and
+  commit in `version.json` and the Z3 version must match. Trusted: every other file in the
+  directory (the vstd and builtin libraries, the macro libraries).
 - The Rust toolchain that rustup installed. Hash: `librustc_driver`; the commit that `rustc -vV`
   reports must match. Trusted: rustup and the rest of the toolchain (the standard library).
   `check.sh` sets `RUSTUP_TOOLCHAIN`, so a rustup toolchain file in a parent directory does not
@@ -210,8 +214,8 @@ the mutated file does not verify, but Verus did not show it wrong either. `check
 two apart and does not fail on them, because rows 65 and 66 each have a second control
 (`p2-claim-symmetric`, `p4-claim-ignores-d`) that Verus refutes; every Verus row must have a
 refuted control of its own. `STRICT=1` counts the two as failures. Their outcome depends on the
-file name Verus is given (the crate name): the same mutated text, under the file names of the
-earlier run, ends with "postcondition not satisfied" (RESULT.md).
+file name Verus is given (the crate name): the same mutated text, under the working file names of
+the first runs (`scripts/rename-map.txt`), ends with "postcondition not satisfied" (RESULT.md).
 
 ## Pins
 
@@ -288,8 +292,8 @@ The 131 controls of the 11 domain-core mirrors are those recorded when each file
 checked; 10 of them (in `byte_records.rs`) were reconstructed then from the description of the
 original controls, which were not kept. Six controls were added in this package, two each for
 the three rows that had none (`decode_path`, `DecryptionError::from`,
-`EncryptedTransferNotes::to_bytes`). A refuted control shows that the proof does not accept the changed
-function or the stronger claim; it does not show that the changed claim is false.
+`EncryptedTransferNotes::to_bytes`). A refuted control shows that the proof does not accept the
+changed function or the stronger claim; it does not show that the changed claim is false.
 
 Cost on a Linux laptop (16 threads, 30 GB, btrfs), measured 2026-10-24: `check.sh` 103 s with
 `JOBS=4`, of which about 10 s unpack the zip and 90 s are the 259 Verus runs (356 s summed).
@@ -320,8 +324,9 @@ the 486 MB zip when `check.sh` downloads it; `work/` about 5 MB. Neither is trac
 ## Earlier names
 
 The mirrors were first written and checked in three earlier runs under working file names and
-labels, which the frozen report uses. [scripts/rename-map.txt](scripts/rename-map.txt) maps each
-earlier label, file name and control id to its name here. Three earlier mirror files are not
+labels, which the 2026-10-01 report (not in this repository) uses.
+[scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier label, file name and control
+id to its name here. Three earlier mirror files are not
 carried over: two `u128` mirrors of the public-input serializers, superseded by
 `public_inputs.rs` over the full `U256` domain, and a mirror of the transfer guard before
 ethsystems/pocs PR #12, which is not the body at `a04b8b3`. A variant of `validate_amount` with
@@ -330,11 +335,13 @@ depends on them.
 
 ## Where it comes from
 
-The frozen report gives the numbers this package re-checks: 110 relevant functions, Verus 96,
-Aeneas 22, both 8, and 104 negative controls for the 38 effect functions, all refuted. The
-mirrors here are those files with their comments rewritten (labels, machine names and references
-to files that are not here) and their code unchanged (`scripts/origins.txt`); one file,
-`byte_records.rs`, was written against an earlier commit of the client, and its regions are
-byte-identical at `a04b8b3`. The frozen report's verified count for the effect mirrors (64) and
-its 104 controls are reproduced here; the 58 domain-core rows, "inherited, not rerun" there, are
-re-run here, with their own controls.
+The 2026-10-01 report, which is not in this repository, gave these figures: 110 relevant
+functions, Verus 96, Aeneas 22, both 8, 64 verified items in the four effect mirrors, and 104
+negative controls for the 38 effect functions, all failing with proof errors. They are
+historical. This package reproduces the route arithmetic, the 96 Verus rows, the 64 verified
+items and the 104 controls (all refuted); it does not reproduce the Aeneas figures. The 58
+domain-core rows, "inherited, not rerun" in that report, are re-run here with their own
+controls. The mirrors here are the files behind that report with their comments rewritten
+(labels, and references to files that are not here) and their code unchanged
+(`scripts/origins.txt`). One file, `byte_records.rs`, was written against an earlier commit of
+the client; its regions are byte-identical at `a04b8b3`.
