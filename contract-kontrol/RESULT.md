@@ -49,7 +49,7 @@ Runs, each `check.sh` from a `git archive` copy of the package:
 - run 7, commit `939e653`, `./check.sh insert-loop`, started 15:24Z, 439 s: `CHECK PASS` (all 50
   lines; build 7.25 GB, `rejections` 299 s at 3.71 GB, failing nodes 22, 25 and 29). Commit
   `939e653` came after runs 3 to 6 and changed no proof input: the prove commands spell
-  `--workers` as its alias `-j` (both are one option of the image's `pyk`), and `check.sh` asks the
+  the parallel-process option by its short alias `-j` (one option of the image's `pyk`), and `check.sh` asks the
   image for the path of its `abi.md` in place of a pinned path. Run 7 checks that end to end.
 
 Between run 3 and run 5 the harness of `withdraw-success` changed (commit `a8586b7`: the probe and
