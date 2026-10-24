@@ -164,20 +164,44 @@ here on the Verus route only.
 
 ## Trust base
 
-- Verus 0.2026.09.13.671956e (commit `671956ec`), the x86-64 Linux release asset, with its vstd
-  and its bundled Z3 4.16.0: the verifier and the solver. `check.sh` checks the sha256 of the
-  release zip (when it unpacks one) and of `verus`, `rust_verify`, `vstd.vir` and `z3`.
+What the result rests on, and that no proof checks:
+
+- Verus 0.2026.09.13.671956e (commit `671956ec`), with its vstd and its bundled Z3 4.16.0: the
+  verifier and the solver.
 - Rust 1.98.1 (`48a229cea`), the toolchain this Verus release names: `rust_verify` is built
-  against its compiler driver, whose sha256 `check.sh` checks.
-- The mirrors' stand-ins and the trait contracts (A3, above), which no proof checks.
-- The source: ethsystems/pocs at `a04b8b3`, as the submodule `pocs/`. `scripts/source-check.py`
-  requires the 13 client files at that commit to have the pinned blob ids and reads every region
-  from those blobs, never from the working tree.
-- Not trusted for the result, but used: python3, git, sha256sum, unzip, curl. The scripts are
-  checks against mistakes, not against a hostile package.
+  against its compiler driver.
+- The mirrors' stand-ins and the trait contracts (A3, above).
 - `--no-cheating` and the admission scan exclude local admissions; they do not exclude a
   specification that is weaker than its row's one-line summary. FUNCTIONS.md summarises; the
   `ensures` clauses in `mirrors/` are the statements.
+
+Every input from outside this repository, and how `check.sh` treats it. "Hash" means the run
+stops when the input differs from its pin; "trusted" means the run reads it as it is.
+
+- The source (`POCS`, default the submodule `pocs/`), a git object store. Hash: the commit must
+  exist, the 13 client files at that commit must have the pinned blob ids, and the 110 regions,
+  read from those blobs and never from the working tree, must have their pinned sha256.
+  Trusted: git's object store returns the objects that the ids name.
+- The Verus release, from a zip (`VERUS_ZIP`, or the download into `.deps/`). Hash: the sha256
+  of the zip, which covers every file in it. The download itself is trusted only to arrive.
+- The Verus release, from a directory (`VERUS_DIR`, or a `.deps/verus-x86-linux` left by an
+  earlier run). Hash: `verus`, `rust_verify`, `vstd.vir` and `z3`; the version and commit in
+  `version.json` and the Z3 version must match. Trusted: every other file in the directory (the
+  vstd and builtin libraries, the macro libraries).
+- The Rust toolchain that rustup installed. Hash: `librustc_driver`; the commit that `rustc -vV`
+  reports must match. Trusted: rustup and the rest of the toolchain (the standard library).
+  `check.sh` sets `RUSTUP_TOOLCHAIN`, so a rustup toolchain file in a parent directory does not
+  choose another toolchain.
+- The work directory (`WORK`, default `work/`). `check.sh` deletes and recreates it, then writes
+  the controls, logs and results there and reads them back. Trusted: nothing else writes there
+  during the run.
+- `/proc/self/cgroup` and the cgroup's `memory.max` and `memory.peak`. Read only for the memory
+  figures of the summary; they do not change pass or fail.
+- The host tools: bash, python3, git, sha256sum, unzip, curl and coreutils. Trusted, not hashed.
+
+`TOOLS_UNPINNED=1` turns the Verus and driver hash checks into notes on the result line; the
+versions must still match. The scripts are checks against mistakes, not against a hostile
+package or host.
 
 Solver limits. Two controls, `crypto_field/p2-swap-args` and `crypto_field/p4-swap-cd` (the
 `poseidon2` arguments swapped, the last two `poseidon4` arguments swapped), stop at Z3's
@@ -199,8 +223,7 @@ earlier run, ends with "postcondition not satisfied" (RESULT.md).
   sha256 (lines `line..end`, joined with newlines, plus one trailing newline).
 - Verus: the release URL, the zip sha256 `08c85b96…` (the digest GitHub lists for the asset) and
   size, the version and commit, and the sha256 of `verus`, `rust_verify`, `vstd.vir` and `z3`.
-- Rust: the toolchain name, the rustc commit, the sha256 of `librustc_driver`, and the rustc dist
-  tarball URL and sha256 of the channel manifest (for reference).
+- Rust: the toolchain name, the rustc commit and the sha256 of `librustc_driver`.
 - `mirrors/VERIFIED.txt`: the verified count of each mirror file, as recorded when the file was
   first checked, and of the two passing probes.
 - `scripts/origins.txt`: for each mirror and probe, the sha256 of the file as first checked and of

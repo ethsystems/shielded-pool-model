@@ -31,5 +31,3 @@ z3_version 4.16.0
 rust_toolchain 1.98.1-x86_64-unknown-linux-gnu
 rustc_commit 48a229ceaefd4985c50990b14116b6d856af0985
 rustc_driver_sha256 96218b68a4a569c06c6fea5ee95b9052ce61c7316ac265a7963e7fea90e985d2
-rustc_dist_url https://static.rust-lang.org/dist/2026-09-03/rustc-1.98.1-x86_64-unknown-linux-gnu.tar.gz
-rustc_dist_sha256 a6e35741daaac7978e7f485b564a783d13b6740a1ecf3e80c2e71696ca5cabb2
