@@ -5,7 +5,7 @@ import Refinement.Rep
 
 Each structure is a `Prop` whose fields are per-entry facts about the contract, the circuits or
 the tree. Each field docstring names the row of the claim board
-(`evidence/2026-10-13-claim-board/CLAIM1-board.md`) it stands for; the board gives the row's
+(`BOARD.md` at the repository root) it stands for; the board gives the row's
 evidence and status. None is an axiom: the refinement theorems take them as hypotheses.
 
 Scope: every contract premise quantifies only over states reachable in the pinned deployment

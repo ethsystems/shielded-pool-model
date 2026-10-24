@@ -207,8 +207,8 @@ output, and future changes to gas prices. No EVM execution is formalised.
 ## The premises
 
 Each premise is a `Prop` the theorems take as a hypothesis; none is an axiom, and none is
-discharged here for the deployment. The board rows are those of
-`../evidence/2026-10-13-claim-board/CLAIM1-board.md`.
+discharged here for the deployment. The board rows are those of the claim board,
+[../BOARD.md](../BOARD.md).
 
 | Premise | Meaning | Board rows |
 |---|---|---|
@@ -385,7 +385,7 @@ compile at once; each circuit module takes up to about 4.6 GB of memory.
 
 ## Claim board rows
 
-The rows of `../evidence/2026-10-13-claim-board/CLAIM1-board.md` whose Lean evidence this package
+The rows of the claim board, [../BOARD.md](../BOARD.md), whose Lean evidence this package
 holds:
 
 - T1, W1: root provenance (`accepted_root_provenance`, `transfer_root_provenance`,

@@ -1,10 +1,10 @@
 # privacy-games: two-world privacy games over the shielded-pool model
 
 This package states privacy as games over the model of the parent directory and proves
-conditional bounds on the attacker's advantage in them. It replaces the frozen report
-[evidence/2026-10-06-privacy-games/privacy.md](../evidence/2026-10-06-privacy-games/privacy.md):
-the games, bounds, counterexamples and funded examples of that report are the Lean theorems
-here, and `scripts/check.sh` rebuilds them and checks their axioms. The package is separate
+conditional bounds on the attacker's advantage in them. It replaces the privacy report of
+2026-10-06, a research-phase report that this repository no longer carries ("the frozen
+report" below): the games, bounds, counterexamples and funded examples of that report are the
+Lean theorems here, and `scripts/check.sh` rebuilds them and checks their axioms. The package is separate
 from the gated model: it has its own lakefile, uses the same toolchain (Lean 4.33.1, Mathlib
 `0df444a`) and adds VCV-io (`dfc7ff07`) for oracle computations and probability. It imports
 three model files of the parent unchanged (below) and changes nothing in them. Nothing here

@@ -1,8 +1,9 @@
 # client-verus: selected properties of the 110 client functions at `a04b8b3`
 
-This package re-checks the Verus half of the client coverage report
-([evidence/2026-10-01-client-coverage/](../evidence/2026-10-01-client-coverage/REPORT.md)) from
-public inputs. The client is the Rust library of the shielded pool in ethsystems/pocs (public) at
+This package re-checks the Verus half of the client coverage report of 2026-10-01 from public
+inputs. That report is a research-phase report that this repository no longer carries ("the
+frozen report" below); [FUNCTIONS.md](FUNCTIONS.md) keeps its selected property for each of the
+110 functions. The client is the Rust library of the shielded pool in ethsystems/pocs (public) at
 `a04b8b38969dfc2ee64de47edee7e396454204a8`, `pocs/private-payment/shielded-pool/src/lib/`, read
 from the git submodule `pocs/`. `check.sh` pins the 110 source regions by hash, compares each
 mirrored function with its region, runs Verus on every mirror and every negative control, and

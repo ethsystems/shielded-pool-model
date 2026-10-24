@@ -10,7 +10,7 @@ are a whole-identifier substitution, longest name first: an identifier character
 digit, `_` or `'`, and a name does not match right after a `.`, so only the first components of
 a qualified name are renamed (the full dotted forms have their own entries). "control" entries
 only document the earlier names of the controls, and "label" entries the working labels of
-reports and of the claim board (evidence/2026-10-13-claim-board/); neither is applied.
+reports and of the claim board (BOARD.md at the repository root); neither is applied.
 """
 import re
 import sys

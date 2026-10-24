@@ -119,8 +119,8 @@ md = ['# The 110 client functions at a04b8b3', '',
       '`check.sh` regenerates it and requires it unchanged. Line numbers are those of '
       '`pocs/private-payment/shielded-pool/src/lib/` at ethsystems/pocs `a04b8b3`. "Verus" names the '
       'mirror file in `mirrors/` and the number of negative controls that change that function; '
-      'RESULT.md gives the run. "Aeneas" rows are taken from the frozen report '
-      '(`evidence/2026-10-01-client-coverage/`) and are not re-checked here.', '',
+      'RESULT.md gives the run. "Aeneas" rows are taken from the client coverage report of '
+      '2026-10-01 (not in this repository) and are not re-checked here.', '',
       f"Aeneas {aeneas}, Verus {verus}, both {route['both']}, Aeneas only {route['Aeneas']}, "
       f"Verus only {route['Verus']}, union {union}, none {110 - union}.", '',
       '| # | Function | File:lines | Route | Verus mirror | Controls | Selected property |', '|---|---|---|---|---|---|---|']

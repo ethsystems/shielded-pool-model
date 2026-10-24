@@ -230,10 +230,9 @@ keys, such as `comment`.
 
 ## Where it comes from
 
-The three scripts were first written and run on 2026-10-07 against a local test chain; the
-frozen report and the copies are in
-[evidence/2026-10-07-deploy-check/](../evidence/2026-10-07-deploy-check/REPORT.md). The
-scripts here start from those copies (the first commit of this package adds them unchanged).
+The three scripts were first written and run on 2026-10-07 against a local test chain, with
+three planted deviations; that run and its report are not in this repository. The scripts
+here start from the scripts of that run (the first commit of this package adds them unchanged).
 The changes are for a public chain and for running from this package: CHAIN and CHAIN-END
 accept a chain head above the claimed block, the pool logs can start at `logsFromBlock` in
 windows with the guard above, RPC calls send their own user-agent and retry rate limits, forge
