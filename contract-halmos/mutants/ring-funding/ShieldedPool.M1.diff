@@ -1,0 +1,10 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool.M1.inplace
+@@ -228,6 +228,7 @@
+ 
+         // Add new commitments
+         _tree.insert(uint256(outputCommitments[0]));
++        _recordRoot(); // mutant M1: also records the mid-transfer root
+         _tree.insert(uint256(outputCommitments[1]));
+         _recordRoot();
+ 

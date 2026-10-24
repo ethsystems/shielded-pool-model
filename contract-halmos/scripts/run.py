@@ -92,6 +92,9 @@ def main() -> None:
         m = re.search(r"^SCOPE rc=(\d+)(?: peak_bytes=(\d+) oom_kill=(\d+))?", text, re.M)
         peak = m.group(2) if m and m.group(2) else str(resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * 1024) + "~rss"
         oom = m.group(3) if m and m.group(3) else "-"
+        if use_scope and not m:
+            # No SCOPE line: systemd stopped the scope (an OOM kill stops the whole unit).
+            oom = "killed"
         if kind == "halmos":
             found = [(n, v, p, t) for v, n, p, t in VERDICT.findall(text)]
         else:

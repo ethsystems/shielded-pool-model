@@ -1,0 +1,16 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	reached	PoolSymbolicStubTest	^check_(P1_nullifierMonotone_symStorage_withdraw|P2_|P3_|P3b_|P4|W_P1_transferSucceeds|W_P2_|W_P3_|W_P3b_)	8	-	-	-
+halmos	probes	PoolSymbolicStubTest	^check_(PROBE_|F40PROBE_)	44	-	-	-
+halmos	fresh-depth40	PoolSymbolicStubTest	^check_F40_(P1|P5|W)_(withdraw|addSupportedToken|removeSupportedToken|setVerifier|setAttestationRegistry|transferOwnership)(_expectFail)?\(	44	-	-	-
+halmos	depth-cap	PoolSymbolicStubTest	^check_R256i?_(deposit|transfer)\(	8	-	-	-
+halmos	cap-witness-deposit-255	PoolSymbolicStubTest	^check_RWc_deposit_expectFail\(	260	-	CAPW_D=255	-
+halmos	cap-witness-deposit-64	PoolSymbolicStubTest	^check_RWc_deposit_expectFail\(	68	-	CAPW_D=64	-
+halmos	cap-witness-transfer-64	PoolSymbolicStubTest	^check_RWc_transfer_expectFail\(	68	-	CAPW_D=64	-
+halmos	cap-witness-transfer-255	PoolSymbolicStubTest	^check_RWc_transfer_expectFail\(	260	-	CAPW_D=255	-
+halmos	band8-P5-deposit	PoolSymbolicStubTest	^check_B_P5_deposit\(	12	-	BAND_LO=0,BAND_HI=8	-
+halmos	band8-P1-deposit	PoolSymbolicStubTest	^check_B_P1_deposit\(	12	-	BAND_LO=0,BAND_HI=8	-
+halmos	band8-witness-deposit	PoolSymbolicStubTest	^check_B_W_deposit_expectFail\(	12	-	BAND_LO=0,BAND_HI=8	-
+halmos	band4-P5-transfer	PoolSymbolicStubTest	^check_B_P5_transfer\(	8	-	BAND_LO=0,BAND_HI=4	-
+halmos	band4-P1-transfer	PoolSymbolicStubTest	^check_B_P1_transfer\(	8	-	BAND_LO=0,BAND_HI=4	-
+halmos	band4-witness-transfer	PoolSymbolicStubTest	^check_B_W_transfer_expectFail\(	8	-	BAND_LO=0,BAND_HI=4	-
+forge	replay	-	P3bConcreteReplay.t.sol	-	-	-	-

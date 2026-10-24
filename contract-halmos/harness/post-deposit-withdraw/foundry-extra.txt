@@ -1,0 +1,2 @@
+ast = true
+dynamic_test_linking = false

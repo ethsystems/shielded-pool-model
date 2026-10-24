@@ -1,0 +1,29 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	payout	OwnerPayoutTest	^check_(W10_|WIT_withdraw)	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	probe	OwnerPayoutTest	^check_PROBE_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	owner-guard	OwnerPayoutTest	^check_G1(core)?_(addToken|removeToken|setVerifier|setRegistry|transferOwnership)_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	owner-effect	OwnerPayoutTest	^check_G1_(addToken|removeToken|setVerifier|setRegistry|transferOwnership)_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+halmos	sweep	OwnerPayoutTest	^check_(G1_sweep|WIT_sweep)	8	0,65	BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	-
+halmos	mutant-PAY_SENDER	OwnerPayoutMut_PAY_SENDERTest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PAY_AMT1	OwnerPayoutMut_PAY_AMT1Test	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PAY_TOK	OwnerPayoutMut_PAY_TOKTest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PAY_TWICE	OwnerPayoutMut_PAY_TWICETest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PAY_RCP_HI	OwnerPayoutMut_PAY_RCP_HITest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_TOK	OwnerPayoutMut_PI_TOKTest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_AMT	OwnerPayoutMut_PI_AMTTest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_RCP	OwnerPayoutMut_PI_RCPTest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_NUL_HI	OwnerPayoutMut_PI_NUL_HITest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_TOK_HI	OwnerPayoutMut_PI_TOK_HITest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_RCP_HI	OwnerPayoutMut_PI_RCP_HITest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-PI_ROOT_HI	OwnerPayoutMut_PI_ROOT_HITest	^check_W10_	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-OO_ADD	OwnerPayoutMut_OO_ADDTest	^check_G1(core)?_addToken_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-OO_REM	OwnerPayoutMut_OO_REMTest	^check_G1(core)?_removeToken_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-OO_SETV	OwnerPayoutMut_OO_SETVTest	^check_G1(core)?_setVerifier_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-OO_SETR	OwnerPayoutMut_OO_SETRTest	^check_G1(core)?_setRegistry_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-OO_OWN	OwnerPayoutMut_OO_OWNTest	^check_G1(core)?_transferOwnership_nonOwner	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	-
+halmos	mutant-EFF_ADD	OwnerPayoutMut_EFF_ADDTest	^check_G1_addToken_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+halmos	mutant-EFF_REM	OwnerPayoutMut_EFF_REMTest	^check_G1_removeToken_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+halmos	mutant-EFF_SETV	OwnerPayoutMut_EFF_SETVTest	^check_G1_setVerifier_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+halmos	mutant-EFF_SETR	OwnerPayoutMut_EFF_SETRTest	^check_G1_setRegistry_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+halmos	mutant-EFF_OWN	OwnerPayoutMut_EFF_OWNTest	^check_G1_transferOwnership_ownerEffect	8	0,65	BAND_LO=0,BAND_HI=0,POSEIDON_STUB=0	--storage-layout generic
+forge	events-fuzz	-	OwnerEvents.t.sol	-	-	-	--fuzz-runs 5000

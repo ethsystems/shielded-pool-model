@@ -1,0 +1,15 @@
+id	base	diff	output	change
+W_amount_ne_zero	pool	M_W_amount_ne_zero.diff	M_W_amount_ne_zero.sol	withdraw: the zero-amount guard removed
+W_unspent	pool	M_W_unspent.diff	M_W_unspent.sol	withdraw: the spent-nullifier guard removed
+W_known_root	pool	M_W_known_root.diff	M_W_known_root.sol	withdraw: the known-root guard removed
+W_verified	pool	M_W_verified.diff	M_W_verified.sol	withdraw: public input 3 (recipient) has bit 129 flipped
+W_guarded	pool	M_W_guarded.diff	M_W_guarded.sol	withdraw: nonReentrant removed
+W_token_calls	pool	M_W_token_calls.diff	M_W_token_calls.sol	withdraw pays the caller
+W_post	pool	M_W_post.diff	M_W_post.sol	withdraw also writes historicalRoots[37]
+D_amount_ne_zero	pool	M_D_amount_ne_zero.diff	M_D_amount_ne_zero.sol	deposit: the zero-amount guard removed
+D_supported	pool	M_D_supported.diff	M_D_supported.sol	deposit: the supported-token guard removed
+D_fresh_leaf	pool	M_D_fresh_leaf.diff	M_D_fresh_leaf.sol	deposit clears leafIndex[c] before the insertion
+D_verified	pool	M_D_verified.diff	M_D_verified.sol	deposit: public input 3 (funding address) has bit 129 flipped
+D_guarded	pool	M_D_guarded.diff	M_D_guarded.sol	deposit: nonReentrant removed
+D_token_calls	pool	M_D_token_calls.diff	M_D_token_calls.sol	deposit sends transferFrom to the funder
+D_post	pool	M_D_post.diff	M_D_post.sol	deposit also writes historicalRoots[37]

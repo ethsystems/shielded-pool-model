@@ -8,7 +8,7 @@
 #   --venv  create .venv/ with python3 -m venv and install requirements.txt with pip
 #           --require-hashes (downloads from PyPI); without it check.sh never installs anything and
 #           takes halmos from HALMOS, else .venv/bin/halmos, else PATH.
-# Env: HALMOS, FORGE (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download
+# Env: HALMOS, PYTHON (the Python 3.12 that --venv uses; default python3.12 from PATH), FORGE (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download
 # into DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), SOLC_FETCH=0 (never
 # download solc), TOOLS_UNPINNED=1 (accept a forge, solc or yices binary whose sha256 is not the
 # pinned Linux x86_64 build; its version must still match), CAP (memory cap per run, default 8G),
@@ -53,7 +53,9 @@ binpin() { # name, binary, pinned sha256
 command -v python3 >/dev/null || fail tools "python3 not found"
 if [ "$VENV" = 1 ]; then
   [ -x "$PKG/.venv/bin/halmos" ] || {
-    python3 -m venv "$PKG/.venv" && "$PKG/.venv/bin/pip" install -q --require-hashes --no-deps -r "$PKG/requirements.txt" \
+    PY="${PYTHON:-$(command -v "python$(pin python_version)" || true)}"
+    [ -n "$PY" ] && [ -x "$PY" ] || fail tools "no python$(pin python_version) found for the venv (set PYTHON=/path/to/python$(pin python_version))"
+    "$PY" -m venv "$PKG/.venv" && "$PKG/.venv/bin/pip" install -q --require-hashes --no-deps -r "$PKG/requirements.txt" \
       || fail tools "cannot install requirements.txt into .venv/"; }
   HALMOS="$PKG/.venv/bin/halmos"
 fi
@@ -64,6 +66,11 @@ fi
 # The python of the halmos environment: the venv's own, else the script's interpreter line.
 HPY="$(dirname "$HALMOS")/python"; [ -x "$HPY" ] || HPY="$(head -1 "$HALMOS" | sed -n 's/^#!//p')"
 [ -x "$HPY" ] || fail tools "cannot find the python of $HALMOS"
+pyv="$("$HPY" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null)"
+if [ "$pyv" != "$(pin python_version)" ]; then
+  [ "${TOOLS_UNPINNED:-0}" = 1 ] || fail tools "the halmos environment runs Python '$pyv', pinned $(pin python_version) (TOOLS_UNPINNED=1 accepts another; see README.md, Trust base)"
+  UNPINNED="$UNPINNED python$pyv"
+fi
 hv="$("$HALMOS" --version 2>/dev/null)"
 [ "$hv" = "halmos $(pin halmos_version)" ] || fail tools "halmos is '$hv', pinned $(pin halmos_version)"
 z3v="$("$HPY" -c 'import z3; print(z3.get_version_string())' 2>/dev/null)"
@@ -94,7 +101,7 @@ binpin solc "$SOLC" "$solc_sha"
 # Halmos calls forge by name: put the checked forge first on PATH.
 mkdir -p "$T/bin" && ln -s "$FORGE" "$T/bin/forge"
 export PATH="$T/bin:$PATH" SOLC HALMOS YICES
-echo "tools: halmos $(pin halmos_version) ($HALMOS), z3 $z3v, yices $(pin yices_version) ($YICES), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+echo "tools: halmos $(pin halmos_version) ($HALMOS, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
 
 # --- 2. source -----------------------------------------------------------------------
 commit="$(pin pocs_commit)"; dir="$(pin pocs_dir)"

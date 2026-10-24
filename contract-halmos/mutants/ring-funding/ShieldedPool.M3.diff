@@ -1,0 +1,11 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool.M3.inplace
+@@ -312,7 +312,7 @@
+     /// @return True if the root is valid
+     function isKnownRoot(bytes32 root) public view returns (bool) {
+         if (root == commitmentRoot()) return true;
+-        return validRoots[root];
++        return !validRoots[root]; // mutant M3: inverted lookup
+     }
+ 
+     /// @notice Update the verifier address

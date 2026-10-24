@@ -1,0 +1,15 @@
+id	base	diff	output	change
+NR_D	pool	ShieldedPool_M_NR_D.diff	ShieldedPool_M_NR_D.sol	nonReentrant dropped from deposit (line 144)
+NR_T	pool	ShieldedPool_M_NR_T.diff	ShieldedPool_M_NR_T.sol	nonReentrant dropped from transfer (line 193)
+NR_W	pool	ShieldedPool_M_NR_W.diff	ShieldedPool_M_NR_W.sol	nonReentrant dropped from withdraw (line 253)
+ORD_D	pool	ShieldedPool_M_ORD_D.diff	ShieldedPool_M_ORD_D.sol	deposit: tree insert and root record (lines 169-170) moved after the token call (line 178)
+ORD_W	pool	ShieldedPool_M_ORD_W.diff	ShieldedPool_M_ORD_W.sol	withdraw: spent-marking (line 283) moved after the token call (line 286)
+INS_D	pool	ShieldedPool_M_INS_D.diff	ShieldedPool_M_INS_D.sol	deposit inserts publicInputs[5] instead of the commitment (line 169)
+SWAP_T	pool	ShieldedPool_M_SWAP_T.diff	ShieldedPool_M_SWAP_T.sol	transfer inserts its two outputs in the other order (lines 230-231)
+DUP	internal-leanimt	InternalLeanIMT_M_DUP.diff	InternalLeanIMT_M_DUP.sol	the library duplicate-leaf check removed (InternalLeanIMT.sol lines 45-47)
+DUP	leanimt	LeanIMT_M_DUP.diff	LeanIMT_M_DUP.sol	wrapper library that calls the DUP copy
+D6	pool	ShieldedPool_M_D6.diff	ShieldedPool_M_D6.sol	deposit pulls the tokens from the pool, not the funding address (line 178)
+D6_CALLER	pool	ShieldedPool_M_D6_CALLER.diff	ShieldedPool_M_D6_CALLER.sol	the caller/funder guard removed (line 149)
+M1	pool	ShieldedPool.M1.diff	ShieldedPool.M1.inplace	transfer also records the root after its first insert (the mid-transfer root); used in place of ShieldedPool.sol
+M2	pool	ShieldedPool.M2.diff	ShieldedPool.M2.inplace	_recordRoot no longer deletes the evicted root from validRoots; used in place of ShieldedPool.sol
+M3	pool	ShieldedPool.M3.diff	ShieldedPool.M3.inplace	isKnownRoot returns the negated validRoots lookup; used in place of ShieldedPool.sol

@@ -1,3 +1,10 @@
 # Suites in run order: suite <name>. Each has harness/<name>/ (Foundry test files and runs.tsv).
 suite caller
 suite duplicate-lock
+suite insert-callback
+suite owner-payout
+suite guards
+suite ring-funding
+suite post-deposit-withdraw
+suite post-transfer-admin
+suite root-window

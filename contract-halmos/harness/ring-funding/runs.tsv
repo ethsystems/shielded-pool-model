@@ -1,0 +1,14 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	ring-deposit	RootWindowStubTest	^check_FRW_deposit_index	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic
+halmos	ring-transfer	RootWindowStubTest	^check_FRW_transfer_index	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic
+halmos	ring-witnesses	RootWindowStubTest	^check_FRW_W_	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	deposit-order	FundingInsertTest	^check_X2_deposit	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic
+halmos	funding-call	FundingInsertTest	^check_D6_successBinding	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic
+halmos	mutant-D6	FundingInsertMut_D6Test	^check_D6_successBinding	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	mutant-D6_CALLER	FundingInsertMut_D6_CALLERTest	^check_D6_successBinding	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	mutant-ORD_D	FundingInsertMut_ORD_DTest	^check_X2_deposit	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	funding-witness	FundingInsertTest	^check_D6_successWitness	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	reached-roots	RootWindowTest	^check_RW_postOpRootsOnly	8	0,65	SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic
+halmos	mutant-M1	RootWindowStubTest	^check_FRW_transfer_index	8	0,65	PROJECT=M1,SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	mutant-M2	RootWindowStubTest	^check_FRW_(deposit|transfer)_index	8	0,65	PROJECT=M2,SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
+halmos	mutant-M3	RootWindowTest	^check_RW_postOpRootsOnly	8	0,65	PROJECT=M3,SYMBOLIC_INDEX=1,ROOT_INDEX=0,BAND_LO=0,BAND_HI=4,POSEIDON_STUB=1	--storage-layout generic --early-exit
