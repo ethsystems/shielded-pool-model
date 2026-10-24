@@ -29,7 +29,7 @@ the suite's section.
 | `guards-patched` | `withdraw` | W1, W6 (rejection), W7, W8 below 2^64 | N5b |
 | `withdraw-success` | `token-above-0x11`, `two-tokens`, `replay` | W6, W10, X2 (withdraw half), S2 (withdraw) | night-kontrol, SYMTOK |
 | `public-inputs` | `canonical`, `order`, `fixed-token`, `replay` | S1, S2, W6, W10 | D5, D4 |
-| `insert-loop` | `controls` (and the K claims in `k/`) | D5, T11, T12, X1, X2 (scoped components) | N15c (and N15b) |
+| `insert-loop` | `rejections`, `controls` (and the K claims in `k/`) | D5, T11, T12, X1, X2 (scoped components) | N15c (and N15b) |
 | `poseidon-frame` | `frame` | A5 (D2: the real PoseidonT3 is a pure function) | D2 |
 
 The board is a frozen research document; its rows name these runs by the earlier labels in the last
@@ -224,6 +224,19 @@ verifier swapped by `setVerifier`; tree insertion.
 
 ### insert-loop: the tree insertion loop
 
+Run `rejections` (Kontrol, stock KEVM; `TreeRejections.t.sol`, `TreeHarness.sol`). A minimal
+harness owns one `LeanIMTData` at slot 0, as the pool's tree, and calls the real LeanIMT library
+code at its linked address. From fully symbolic tree storage (any size, any depth, any `sideNodes`
+and `leaves`), `insert(leaf)` reverts with `LeafGreaterThanSnarkScalarField` for `leaf >= P`, with
+`LeafCannotBeZero` for 0, and with `LeafAlreadyExists` when `leaves[leaf] != 0` and `0 < leaf < P`.
+Mutants (`mutants/insert-loop/`): each removes one of the three checks from a copy of
+`InternalLeanIMT.sol` (and points a renamed copy of `LeanIMT.sol` at it; the copy imports
+`Constants.sol` by its package path); each must fail with Panic 0x01. As with the pool guards, a
+mutant fails because a later check fires (for the zero and field checks, `LeafAlreadyExists` when
+`leaves[leaf] != 0`; for the duplicate check, an arithmetic panic at size `2^256 - 1`). Scope line
+(exact): one call of the harness's `insert` with zero value, symbolic tree storage, PoseidonT3
+replaced by a keccak stub at `0xA1002` (no rejection path hashes), gas off, KEVM keccak lemmas.
+
 Run `controls` (a Foundry project, `harness/insert-loop/controls/`, run on the host, no Kontrol).
 Concrete controls for the K claims about the zk-kit LeanIMT `_insert` loop (below): six witnesses,
 two depths for each of three one-byte mutants of the library runtime (`M1`: pc 2158 KECCAK256 to
@@ -253,10 +266,6 @@ covers, pruning a graph, resuming with another implication check) that no script
 They are packaged so they can be read and rerun by hand. Errata of the earlier report apply: the
 post-loop claim writes `INDEX + 1` to slot 0 and `leaves[LEAF]` (count growth needs an extra entry
 relation), and `loop-frame2` preserves one mapping key, not every unvisited entry.
-
-The earlier run also proved three `insert` rejections from fully symbolic tree storage (leaf `>= P`,
-leaf 0, leaf already present); that harness needs mutant libraries at their own addresses and is not
-in this package yet.
 
 Not shown: entry relations, the depth update, whole-call composition, the real PoseidonT3 in the
 loop, a general caller frame.
@@ -314,7 +323,7 @@ Trust: Halmos 0.3.3 and its solvers (yices 2.6.4, z3 4.12.6, installed from
   file.
 - The bytes-prefix rule (`lemmas/bytes-prefix.k`) for `withdraw-success` (all its runs), with the
   soundness argument above.
-- Kontrol's settings: gas off, `<stackChecks>` as Kontrol sets them, fail-fast on, default
+- Kontrol's settings: gas off, fail-fast on (a proof stops at its first failing node), default
   iteration and depth bounds except where `runs.tsv` names them.
 - solc 0.8.37 (forge's compiler inside the container, mounted read-only and pinned by sha256) and
   forge 1.5.1 inside the image (it drives the build); forge and cast 1.8.3 on the host for the
@@ -439,7 +448,6 @@ solc for a comparison.
 ## Open
 
 - `poseidon-frame` is a Halmos check; it could move to the Halmos package.
-- The K claims of the insertion loop are packaged but not run by `check.sh`, and the three `insert`
-  rejection proofs are not packaged.
+- The K claims of the insertion loop are packaged but not run by `check.sh`.
 - The per-node feasibility evaluation of the earlier runs (every constraint of a failing node true
   at one point) is not carried; the replays are.
