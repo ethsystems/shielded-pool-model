@@ -334,8 +334,9 @@ cd refinement
 scripts/check.sh      # expect the last line: CHECK PASS: ...
 ```
 
-`FOLD_BRIDGE=0 scripts/check.sh` skips the fold-bridge stages (a few minutes instead of about
-an hour from a fresh copy). `JOBS` sets how many controls and circuit modules compile at once.
+`FOLD_BRIDGE=0 scripts/check.sh` skips the fold-bridge stages (about 2.5 minutes instead of
+about 30 from a fresh copy, see RESULT.md). `JOBS` sets how many controls and circuit modules
+compile at once; each circuit module takes up to about 4.6 GB of memory.
 
 `scripts/check.sh` runs, in order:
 
