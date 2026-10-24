@@ -44,6 +44,11 @@ done
 T="$(mktemp -d "${TMPDIR:-/tmp}/contract-halmos.XXXXXX")"
 trap 'rm -rf "$T"' EXIT
 
+# --- 0. inventory: runs and expected verdicts agree (scripts/compare.py) ----------------------
+python3 "$PKG/scripts/compare.py" --inventory "$PKG/EXPECTED.tsv" "$WORK" "${SUITES[@]}" > "$T/inventory.txt" \
+  || { cat "$T/inventory.txt"; fail inventory "runs.tsv and EXPECTED.tsv disagree (INVENTORY FAIL lines above)"; }
+cat "$T/inventory.txt"
+
 # --- 1. tools ------------------------------------------------------------------------
 binpin() { # name, binary, pinned sha256
   [ "$(sha "$2")" = "$3" ] && return 0
@@ -171,6 +176,6 @@ echo "check.sh: ${#SUITES[@]} suites, ${SECONDS}s, work $WORK, started $STAMP${U
 if [ $rc -eq 0 ]; then
   echo "CHECK PASS: ${#SUITES[@]} suites, $total verdicts equal EXPECTED.tsv, $pdiff path counts differ from the frozen runs (PATHS lines), ${SECONDS}s${UNPINNED:+ (unpinned build:$UNPINNED)}"
 else
-  echo "CHECK FAIL: $bad of $total verdicts differ from EXPECTED.tsv (CHECK MISMATCH, CHECK EXTRA${STRICT_PATHS:+, PATHS} lines above)"
+  echo "CHECK FAIL: $bad mismatches in $total verdicts (INVENTORY FAIL, CHECK MISMATCH, CHECK DUPLICATE, CHECK EXTRA${STRICT_PATHS:+, PATHS} lines above)"
 fi
 exit $rc

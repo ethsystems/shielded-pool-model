@@ -43,8 +43,9 @@ Every suite shares these lines; each suite below adds its own.
   overwrite one of these (stated per suite). Halmos models mapping slots as injective in their keys.
 - **Loop bound.** `--loop L` per run. Halmos applies the bound only to branches on a symbolic
   condition. A PASS counts only if no path reached the bound: `scripts/compare.py` treats a
-  loop-bound warning, a solver "unknown" or an OOM kill in the log as a mismatch for every PASS of
-  that run.
+  loop-bound warning or a solver "unknown" in the log as a mismatch for every PASS of that run. A
+  run that was killed, timed out, crashed or exited with an unexpected status counts as a
+  mismatch for every verdict (Re-check, step 6).
 - **Hash.** Where a suite says "stub", `PoseidonT3.hash` is replaced by `keccak256` of the inputs
   reduced into the field, etched at the library address. A result under the stub says nothing about
   Poseidon values; it covers control flow, the storage writes and the call order. Without the stub,
@@ -293,6 +294,8 @@ solc from `SOLC`, an svm copy, or a checked download into `.deps/` (`SOLC_FETCH=
 `TOOLS_UNPINNED=1` accepts another build of the pinned versions (for example macOS), and the last
 line says so. In order, `check.sh`:
 
+0. checks the inventory (`scripts/compare.py --inventory`): every run of `runs.tsv` has rows in
+   `EXPECTED.tsv` and the reverse, and no run or expected verdict is named twice;
 1. checks that the halmos environment runs Python 3.12, halmos 0.3.3, the z3 module 4.12.6, yices 2.6.4 and its sha256, forge 1.8.3 at the pinned
    commit and sha256, and solc 0.8.37 and its sha256;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
@@ -307,9 +310,15 @@ line says so. In order, `check.sh`:
 5. `scripts/run.py` runs every row of `harness/<suite>/runs.tsv`, each Halmos process in its own
    `systemd-run --user --scope` with `MemoryMax=8G` (`CAP`) when the user bus answers, killed after
    900 s (`TLIM`), and the forge replays;
-6. `scripts/compare.py` compares every verdict with `EXPECTED.tsv`, names the failing assertion of
-   the caller mutants, scans each log for loop-bound warnings, unknowns and OOM kills, and prints
-   one `CHECK` line per verdict, a `PATHS` line per differing path count, and the last line.
+6. `scripts/compare.py` checks the inventory again, then compares every verdict with
+   `EXPECTED.tsv` and names the failing assertion of the caller mutants. A verdict recorded twice
+   is a mismatch, and so is a run of `runs.tsv` without verdicts. A run is void, and every
+   verdict of it a mismatch, if its log shows a kill, a `[TIMEOUT]`, a Python traceback or no
+   single `SCOPE` line, if its exit status is not the expected one, or if Halmos's result lines do
+   not count its verdicts. The expected exit status is 0 when every expected verdict of the run
+   is PASS and 1 otherwise: Halmos 0.3.3 and forge exit 1 when any check fails. A loop-bound
+   warning or a solver "unknown" makes every PASS of the run a mismatch. It prints one `CHECK`
+   line per verdict, a `PATHS` line per differing path count, and the last line.
 
 Exit 0 means every verdict equals `EXPECTED.tsv`. Path counts are compared too, but a different
 count alone does not fail the check: Halmos decides branch feasibility with a 1 ms solver timeout
