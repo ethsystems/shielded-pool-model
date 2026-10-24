@@ -78,6 +78,9 @@ The contract checks were first run between 2026-09-29 and 2026-10-13. `contract-
 its insertion loop are packaged with their expected values from the run of 2026-10-01, which used the solc 0.8.33
 build; they were not rerun in this repository's run of 2026-10-24 (its RESULT.md), so they are not
 yet confirmed on the solc 0.8.37 build. The rows below that cite them say "packaged, not rerun".
+A `contract-kontrol/check.sh` command that names single runs (as several "Check:" cells below do)
+ends with `CHECK PARTIAL` and exit 3 when every selected run matched; `CHECK PASS` needs whole
+suites.
 
 Scope names used below. Each is the scope line of a package suite; the package README gives it in full.
 
