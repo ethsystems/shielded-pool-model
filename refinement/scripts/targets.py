@@ -6,8 +6,9 @@ Gas/ over the gated model of the parent directory). `lake env lean` from the pac
 `fold-bridge`: the modules of fold-bridge/, compiled in the workspace of ../circuits-lampe (Lampe
 at its pinned fork, its stdlib, the extracted circuits and the circuits-lampe proof modules),
 with the model and refinement modules they import compiled again from their sources into
-build/fold-bridge/lib by build-fold-bridge.py. `lake -d <circuits-lampe> env lean`, with that
-directory as LEAN_PATH (lake appends it after its own entries).
+build/fold-bridge/lib by build-fold-bridge.py. `lake -d ../circuits-lampe env lean`, with that
+directory as LEAN_PATH (lake appends it after its own entries). The circuits-lampe directory is
+fixed: scripts/pins.py pins and checks exactly that directory.
 """
 import os
 from dataclasses import dataclass, field
@@ -15,14 +16,11 @@ from pathlib import Path
 
 PKG = Path(__file__).resolve().parent.parent
 ROOT = PKG.parent
+CL = ROOT / 'circuits-lampe'
 FB = PKG / 'fold-bridge'
 FB_OUT = PKG / 'build' / 'fold-bridge' / 'lib'
 FB_FLAGS = ['-M8192', '--tstack=65536', '-DElab.async=false', '-DmaxRecDepth=10000',
             '-DmaxHeartbeats=4000000']
-
-
-def circuits_lampe():
-    return Path(os.environ.get('CIRCUITS_LAMPE', ROOT / 'circuits-lampe')).resolve()
 
 
 @dataclass
@@ -55,7 +53,7 @@ def fold_bridge():
     return Target('fold-bridge', FB, FB_FLAGS, ['FoldBridge'], 'Census.lean',
                   PKG / 'statements' / 'FOLD-BRIDGE.md', PKG / 'statements' / 'FOLD-BRIDGE.sha256',
                   FB / 'controls', 'Inventory of the theorems of the fold bridge (fold-bridge/)',
-                  lake_dir=circuits_lampe(), env_extra={'LEAN_PATH': str(FB_OUT)})
+                  lake_dir=CL, env_extra={'LEAN_PATH': str(FB_OUT)})
 
 
 def target(name):
