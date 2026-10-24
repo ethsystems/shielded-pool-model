@@ -46,9 +46,20 @@ def imports(path):
 
 
 def checkout_state(d):
-    """The commit and the uncommitted changes of a git checkout (or of its enclosing repo)."""
-    g = lambda *a: subprocess.run(['git', '-C', str(d), *a], capture_output=True).stdout
-    return g('rev-parse', 'HEAD') + g('diff', 'HEAD', '--', '.') + g('status', '--porcelain', '--', '.')
+    """The commit, the uncommitted changes and the untracked files, with their contents, of a git
+    checkout (or of its enclosing repo). A git failure stops the build: an unknown state must
+    not be cached."""
+    def g(*a):
+        r = subprocess.run(['git', '-C', str(d), *a], capture_output=True)
+        if r.returncode:
+            sys.exit(f'git {a[0]} failed in {d}: {r.stderr.decode().strip()}')
+        return r.stdout
+    state = g('rev-parse', 'HEAD') + g('diff', 'HEAD', '--', '.')
+    for rel in g('ls-files', '--others', '--exclude-standard', '-z', '--', '.').split(b'\0'):
+        if rel:
+            p = d / rel.decode()
+            state += rel + (hashlib.sha256(p.read_bytes()).digest() if p.is_file() else b'')
+    return state
 
 
 def fingerprint():

@@ -49,7 +49,7 @@ else
 fi
 rev="$(pin lampe_rev)"; repo="$(pin lampe_repo)"
 form="$(python3 - "$rev" "$repo" <<'PY'
-import json, sys, tomllib
+import json, pathlib, sys, tomllib
 rev, repo = sys.argv[1:]
 want = {'Lampe': 'Lampe', 'std-1.0.0-beta.21': 'stdlib/lampe'}
 req = {r['name']: r for r in tomllib.load(open('lakefile.toml', 'rb')).get('require', [])}
@@ -65,6 +65,8 @@ for name, sub in want.items():
         forms.add('git')
     else:
         assert r.get('path') == f'.lampe/{sub}', f'lakefile.toml {name}: {r}'
+        assert m['type'] == 'path' and pathlib.Path(m['dir']).resolve() == pathlib.Path('.lampe', sub).resolve(), \
+            f'lake-manifest.json {name}: {m} does not resolve to .lampe/{sub}'
         forms.add('path')
 assert len(forms) == 1, 'Lampe and the stdlib are required in different forms'
 print(forms.pop())
