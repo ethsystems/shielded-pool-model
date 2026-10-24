@@ -265,9 +265,9 @@ The package never says "the contract is correct" or "verified". It says "within 
 
 [PINS.txt](PINS.txt) holds every pin `check.sh` reads: the pocs commit, the 14 blob ids of the
 exported files and the pool's sha256, the three dependency zips and the zk-kit commit and tree,
-forge, solc, halmos and the solver versions and hashes. [requirements.txt](requirements.txt) pins
-every Python package of the Halmos environment by version and sha256 (from
-`uv pip compile --generate-hashes`).
+forge, solc, halmos and the solver versions and hashes, and one RECORD digest per installed Python
+package. [requirements.txt](requirements.txt) pins every Python package of the Halmos environment
+by version and sha256 (from `uv pip compile --generate-hashes`).
 
 ## Re-check
 
@@ -283,13 +283,15 @@ Install forge 1.8.3 as [deployment/README.md](../deployment/README.md) shows. Th
 
 ```
 cd contract-halmos
-PYTHON=/path/to/python3.12 ./check.sh --venv   # creates .venv/ from requirements.txt (pip --require-hashes)
+PYTHON=/path/to/python3.12 ./check.sh --venv   # creates .venv/ from requirements.txt (pip --require-hashes) unless it exists
 # expect the last line: CHECK PASS: 9 suites, <n> verdicts equal EXPECTED.tsv, ...
 ./check.sh caller guards     # only the named suites
 ```
 
 Without `--venv`, `check.sh` installs nothing: it takes halmos from `HALMOS`, else `.venv/bin/halmos`,
-else `PATH`, and the solver `yices-smt2` from the same directory. forge comes from `FORGE` or `PATH`;
+else `PATH`, and the solver `yices-smt2` from the same directory. With `--venv` and an existing
+`.venv/`, it does not reinstall. Either way it checks the environment it uses (step 1); if that
+check fails, remove `.venv/` and run `--venv` again. forge comes from `FORGE` or `PATH`;
 solc from `SOLC`, an svm copy, or a checked download into `.deps/` (`SOLC_FETCH=0` forbids it).
 `TOOLS_UNPINNED=1` accepts another build of the pinned versions (for example macOS), and the last
 line says so.
@@ -304,9 +306,11 @@ probe stop the check; `RUN_SCOPE=0` skips the scope. In order, `check.sh`:
 0. checks the inventory (`scripts/compare.py --inventory`): every run of `runs.tsv` has rows in
    `EXPECTED.tsv` and the reverse, no run or expected verdict is named twice, and every mutant of
    `MUTANTS.tsv` is checked as its last column says (below);
-1. checks that the runner can run (the probe above), that the halmos environment runs Python 3.12,
-   halmos 0.3.3, the z3 module 4.12.6, yices 2.6.4 and its sha256, forge 1.8.3 at the pinned commit
-   and sha256, and solc 0.8.37 and its sha256;
+1. checks that the runner can run (the probe above), that the halmos environment runs Python 3.12
+   and holds exactly the packages of `requirements.txt`, each file equal to its RECORD and each
+   RECORD equal to its pin (`scripts/pyenv-check.py`), then halmos 0.3.3, the z3 module 4.12.6,
+   yices 2.6.4 and its sha256, forge 1.8.3 at the pinned commit and sha256, and solc 0.8.37 and
+   its sha256;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
 3. fetches the three soldeer zips by the pinned lock (cached in `.deps/` by sha256), checks their
    sha256 and soldeer integrity, and fetches zk-kit.solidity at the lock rev and checks its tree id;
@@ -360,8 +364,8 @@ every run.
   suites in run order.
 - `mutants/<suite>/`: one unified diff per mutant file, `MUTANTS.tsv` (id, base file, diff, output,
   change, checked by) and `MUTANTS.sha256`; `mutants/make.py` applies them.
-- `scripts/`: `setup-suite.sh`, `run.py`, `compare.py`, `locate.py`, `soldeer-integrity.py` (from
-  `deployment/`), `foundry-libraries.txt`, `rename-map.txt`.
+- `scripts/`: `setup-suite.sh`, `run.py`, `compare.py`, `locate.py`, `pyenv-check.py`,
+  `soldeer-integrity.py` (from `deployment/`), `foundry-libraries.txt`, `rename-map.txt`.
 - `EXPECTED.tsv`: suite, run, check, verdict, path count, assertion.
 - `PINS.txt`, `requirements.txt`, `RESULT.md`.
 - `pocs/`: the git submodule, ethsystems/pocs at `a04b8b3`.

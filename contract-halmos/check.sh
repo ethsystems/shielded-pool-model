@@ -7,12 +7,15 @@
 #                                    Halmos check and mutant of harness/<suite>/runs.tsv and the
 #                                    forge replays, compare with EXPECTED.tsv; last line CHECK PASS|FAIL
 #   --venv  create .venv/ with python3 -m venv and install requirements.txt with pip
-#           --require-hashes (downloads from PyPI); without it check.sh never installs anything and
-#           takes halmos from HALMOS, else .venv/bin/halmos, else PATH.
+#           --require-hashes (downloads from PyPI), unless .venv/ exists; without it check.sh never
+#           installs anything and takes halmos from HALMOS, else .venv/bin/halmos, else PATH.
+#           Either way scripts/pyenv-check.py checks the environment against requirements.txt and
+#           the RECORD pins of PINS.txt, and Halmos runs as <its python> -I -m halmos.
 # Env: HALMOS, PYTHON (the Python 3.12 that --venv uses; default python3.12 from PATH), FORGE (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download
 # into DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), SOLC_FETCH=0 (never
 # download solc), TOOLS_UNPINNED=1 (accept a forge, solc or yices binary whose sha256 is not the
-# pinned Linux x86_64 build; its version must still match), CAP (memory cap per run, default 8G),
+# pinned Linux x86_64 build, or a Python environment whose RECORD digests differ from PINS.txt; its
+# versions must still match), CAP (memory cap per run, default 8G),
 # TLIM (seconds per run, default 900), RUN_SCOPE (auto|1|0, see scripts/run.py), WORK (default ./work),
 # STRICT_PATHS=1 (a path count that differs from EXPECTED.tsv fails the check; see scripts/compare.py).
 # Relative paths are taken from the caller's directory.
@@ -59,6 +62,7 @@ binpin() { # name, binary, pinned sha256
 command -v python3 >/dev/null || fail tools "python3 not found"
 python3 "$PKG/scripts/run.py" --preflight > "$T/runner.txt" || fail tools "the runner cannot run here (FAIL runner line above; see README.md, Re-check)"
 if [ "$VENV" = 1 ]; then
+  [ ! -x "$PKG/.venv/bin/halmos" ] || echo "venv: .venv/ exists, not reinstalled; checked below"
   [ -x "$PKG/.venv/bin/halmos" ] || {
     PY="${PYTHON:-$(command -v "python$(pin python_version)" || true)}"
     [ -n "$PY" ] && [ -x "$PY" ] || fail tools "no python$(pin python_version) found for the venv (set PYTHON=/path/to/python$(pin python_version))"
@@ -78,12 +82,26 @@ if [ "$pyv" != "$(pin python_version)" ]; then
   [ "${TOOLS_UNPINNED:-0}" = 1 ] || fail tools "the halmos environment runs Python '$pyv', pinned $(pin python_version) (TOOLS_UNPINNED=1 accepts another; see README.md, Trust base)"
   UNPINNED="$UNPINNED python$pyv"
 fi
+"$HPY" -I "$PKG/scripts/pyenv-check.py" "$PKG/requirements.txt" "$PKG/PINS.txt" > "$T/pyenv.txt"; prc=$?
+cat "$T/pyenv.txt"
+case $prc in
+  0) ;;
+  3) [ "${TOOLS_UNPINNED:-0}" = 1 ] || fail tools "the halmos environment holds other builds of the pinned versions (UNPINNED pyenv lines above; TOOLS_UNPINNED=1 accepts them)"
+     UNPINNED="$UNPINNED pyenv" ;;
+  *) fail tools "the halmos environment differs from requirements.txt (FAIL pyenv lines above; remove .venv/ and run ./check.sh --venv)" ;;
+esac
+# Halmos runs as <python> -I -m halmos: no script in bin/, no PYTHON* variable, no user site, and
+# bytecode only from a fresh cache under $T (never a __pycache__ inside the environment).
+HBIN="$(dirname "$HALMOS")"
+mkdir -p "$T/bin" "$T/pyc"
+printf '#!/bin/sh\nexec "%s" -I -X pycache_prefix="%s" -m halmos "$@"\n' "$HPY" "$T/pyc" > "$T/bin/halmos" && chmod +x "$T/bin/halmos"
+HALMOS="$T/bin/halmos"
 hv="$("$HALMOS" --version 2>/dev/null)"
 [ "$hv" = "halmos $(pin halmos_version)" ] || fail tools "halmos is '$hv', pinned $(pin halmos_version)"
-z3v="$("$HPY" -c 'import z3; print(z3.get_version_string())' 2>/dev/null)"
+z3v="$("$HPY" -I -X pycache_prefix="$T/pyc" -c 'import z3; print(z3.get_version_string())' 2>/dev/null)"
 [ "$z3v" = "$(pin z3_version)" ] || fail tools "z3 python module is '$z3v', pinned $(pin z3_version)"
-YICES="$(dirname "$HALMOS")/yices-smt2"
-[ -x "$YICES" ] || fail tools "no yices-smt2 next to $HALMOS (the yices-solver package installs it)"
+YICES="$HBIN/yices-smt2"
+[ -x "$YICES" ] || fail tools "no yices-smt2 in $HBIN (the yices-solver package installs it)"
 "$YICES" --version 2>/dev/null | head -1 | grep -qx "Yices $(pin yices_version)" || fail tools "$YICES is not Yices $(pin yices_version)"
 binpin yices "$YICES" "$(pin yices_sha256)"
 [ -n "$FORGE" ] && [ -x "$FORGE" ] || fail tools "forge not found (set FORGE=/path; $(pin foundry_asset))"
@@ -106,9 +124,9 @@ fi
 "$SOLC" --version 2>/dev/null | grep -qF "Version: $solc_ver" || fail tools "solc $SOLC is not $solc_ver"
 binpin solc "$SOLC" "$solc_sha"
 # Halmos calls forge by name: put the checked forge first on PATH.
-mkdir -p "$T/bin" && ln -s "$FORGE" "$T/bin/forge"
+ln -s "$FORGE" "$T/bin/forge"
 export PATH="$T/bin:$PATH" SOLC HALMOS YICES
-echo "tools: halmos $(pin halmos_version) ($HALMOS, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+echo "tools: halmos $(pin halmos_version) ($HPY -I -m halmos, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES), forge $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
 cat "$T/runner.txt"
 
 # --- 2. source -----------------------------------------------------------------------
