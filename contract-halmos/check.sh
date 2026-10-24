@@ -55,7 +55,7 @@ if [ "$VENV" = 1 ]; then
   [ -x "$PKG/.venv/bin/halmos" ] || {
     PY="${PYTHON:-$(command -v "python$(pin python_version)" || true)}"
     [ -n "$PY" ] && [ -x "$PY" ] || fail tools "no python$(pin python_version) found for the venv (set PYTHON=/path/to/python$(pin python_version))"
-    "$PY" -m venv "$PKG/.venv" && "$PKG/.venv/bin/pip" install -q --require-hashes --no-deps -r "$PKG/requirements.txt" \
+    "$PY" -m venv "$PKG/.venv" && PIP_DISABLE_PIP_VERSION_CHECK=1 "$PKG/.venv/bin/pip" install -q --require-hashes --no-deps -r "$PKG/requirements.txt" \
       || fail tools "cannot install requirements.txt into .venv/"; }
   HALMOS="$PKG/.venv/bin/halmos"
 fi

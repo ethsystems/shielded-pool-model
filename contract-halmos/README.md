@@ -319,8 +319,11 @@ load, and `--early-exit` runs stop at the first counterexample while other paths
 its fresh rerun differed. `STRICT_PATHS=1` makes any difference fail. RESULT.md lists
 every difference of the recorded run.
 
-Cost on a Linux laptop (16 threads, 30 GB), measured 2026-10-24: see RESULT.md for the time and the
-peak memory of every run.
+Cost on a Linux laptop (16 threads, 30 GB), measured 2026-10-24: 81 minutes for all nine suites
+from a fresh clone, venv install included; insert-callback (21 min), post-deposit-withdraw (16 min)
+and post-transfer-admin (15 min) take most of it, caller takes 36 s. The highest memory peak of a
+run was 3.0 GiB. `work/` takes 1.5 GB and `.venv/` 200 MB. RESULT.md has the time and the peak of
+every run.
 
 ## Layout
 
