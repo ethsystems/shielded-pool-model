@@ -11,7 +11,8 @@
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
 # Linux x86_64 build; its version must still match), PULL=0 (never pull the image), CAP (container
-# memory cap, default 8g), BUILD_CPUSET and PROVE_CPUSET (docker --cpuset-cpus for kontrol build
+# memory cap, default 8g), HALMOS (the halmos of a Python 3.12 environment installed from
+# requirements-halmos.txt; default .venv/bin/halmos), BUILD_CPUSET and PROVE_CPUSET (docker --cpuset-cpus for kontrol build
 # and kontrol prove, default 0-1 and 0-5: fewer CPUs keep the kompile below the cap), TLIM (seconds per container, default 7200), GATE_GIB (available memory
 # before each container starts, default 10).
 # Relative paths are taken from the caller's directory.
@@ -80,13 +81,38 @@ export SOLC
 NEED_HALMOS=0
 for s in "${SUITES[@]}"; do grep -q $'^halmos\t' "$PKG/harness/$s/runs.tsv" && NEED_HALMOS=1; done
 if [ "$NEED_HALMOS" = 1 ]; then
+  # As contract-halmos/check.sh: scripts/pyenv-check.py checks the environment against
+  # requirements-halmos.txt and the RECORD pins of PINS.txt, and Halmos runs as <python> -I -m halmos.
   [ -n "${HALMOS:-}" ] || HALMOS="$PKG/.venv/bin/halmos"
   HALMOS="$(rel "$HALMOS")"
-  [ -x "$HALMOS" ] || fail tools "halmos not found: python3 -m venv .venv && .venv/bin/pip install --require-hashes --no-deps -r requirements-halmos.txt (or set HALMOS)"
-  [ "$("$HALMOS" --version 2>/dev/null)" = "halmos $(pin halmos_version)" ] || fail tools "halmos is '$("$HALMOS" --version 2>/dev/null)', pinned $(pin halmos_version)"
+  [ -x "$HALMOS" ] || fail tools "halmos not found: python$(pin python_version) -m venv .venv && .venv/bin/pip install --require-hashes --no-deps -r requirements-halmos.txt (or set HALMOS)"
+  HPY="$(dirname "$HALMOS")/python"; [ -x "$HPY" ] || HPY="$(head -1 "$HALMOS" | sed -n 's/^#!//p')"
+  [ -x "$HPY" ] || fail tools "cannot find the python of $HALMOS"
+  pyv="$("$HPY" -I -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null)"
+  if [ "$pyv" != "$(pin python_version)" ]; then
+    [ "${TOOLS_UNPINNED:-0}" = 1 ] || fail tools "the halmos environment runs Python '$pyv', pinned $(pin python_version) (TOOLS_UNPINNED=1 accepts another)"
+    UNPINNED="$UNPINNED python$pyv"
+  fi
+  "$HPY" -I "$PKG/scripts/pyenv-check.py" "$PKG/requirements-halmos.txt" "$PKG/PINS.txt" > "$T/pyenv.txt"; prc=$?
+  cat "$T/pyenv.txt"
+  case $prc in
+    0) ;;
+    3) [ "${TOOLS_UNPINNED:-0}" = 1 ] || fail tools "the halmos environment holds other builds of the pinned versions (UNPINNED pyenv lines above; TOOLS_UNPINNED=1 accepts them)"
+       UNPINNED="$UNPINNED pyenv" ;;
+    *) fail tools "the halmos environment differs from requirements-halmos.txt (FAIL pyenv lines above)" ;;
+  esac
+  # No script in bin/, no PYTHON* variable, no user site, bytecode only from a fresh cache under $T.
+  mkdir -p "$T/bin" "$T/pyc"
   YICES="$(dirname "$HALMOS")/yices-smt2"
+  printf '#!/bin/sh\nexec "%s" -I -X pycache_prefix="%s" -m halmos "$@"\n' "$HPY" "$T/pyc" > "$T/bin/halmos" && chmod +x "$T/bin/halmos"
+  HALMOS="$T/bin/halmos"
+  [ "$("$HALMOS" --version 2>/dev/null)" = "halmos $(pin halmos_version)" ] || fail tools "halmos is '$("$HALMOS" --version 2>/dev/null)', pinned $(pin halmos_version)"
+  z3v="$("$HPY" -I -X pycache_prefix="$T/pyc" -c 'import z3; print(z3.get_version_string())' 2>/dev/null)"
+  [ "$z3v" = "$(pin z3_version)" ] || fail tools "z3 python module is '$z3v', pinned $(pin z3_version)"
+  [ -x "$YICES" ] || fail tools "no yices-smt2 next to $HALMOS (the yices-solver package installs it)"
   "$YICES" --version 2>/dev/null | head -1 | grep -qx "Yices $(pin yices_version)" || fail tools "$YICES is not Yices $(pin yices_version)"
-  echo "tools: halmos $(pin halmos_version) ($HALMOS), yices $(pin yices_version)"
+  binpin yices "$YICES" "$(pin yices_sha256)"
+  echo "tools: halmos $(pin halmos_version) ($HPY -I -m halmos, Python $pyv), z3 $z3v, yices $(pin yices_version) ($YICES)"
 fi
 IMAGE="$(pin kontrol_image)@$(pin kontrol_image_digest)"
 # Docker is needed only when a selected suite has a Kontrol build.
