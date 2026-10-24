@@ -257,8 +257,10 @@ checksum.
   loop; plus a Halmos check that the PoseidonT3 library is a pure
   function. Each proof holds in its stated scope, under KEVM's semantics
   and one trusted bytes-prefix rule, with mock verifiers and tokens;
-  named mutants must fail. Separate package, own check and trust base;
-  the gate does not build it.
+  named mutants must fail. The `public-inputs` runs and the insertion-loop
+  K claims are packaged with their expected values but were not rerun in
+  the recorded run (its RESULT.md). Separate package, own check and trust
+  base; the gate does not build it.
 - [refinement/](refinement/README.md): a conditional refinement of the
   pool contract to the gated model, imported unchanged. Under named
   contract, circuit, tree and cryptographic premises, every accepted
