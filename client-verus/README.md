@@ -19,7 +19,8 @@ report; [FUNCTIONS.md](FUNCTIONS.md) lists them with their lines and their selec
   reviewed mirror of the function, under the parameter contracts of [TRUSTED.md](TRUSTED.md).
   Verus 0.2026.09.13.671956e verifies the 15 mirror files with `--no-cheating` (312 verified
   items, no local admission), and each of the 96 functions has at least one negative control of
-  its own; all 241 controls are rejected.
+  its own; all 241 controls are rejected (two of them at the solver resource limit: see "Trust
+  base").
 - **Aeneas, 22 functions, frozen.** The frozen report records Aeneas extraction proofs for 22
   functions. This package does not re-run them (see "The Aeneas half").
 - **Both, 8 functions.** `decode_path`, `DecryptionError::from`,
