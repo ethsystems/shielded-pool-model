@@ -1,10 +1,10 @@
-# Earlier names -> names in this package. The frozen reports in ../evidence/ and the claim board
-# (../evidence/2026-10-13-claim-board/CLAIM1-board.md) cite the research run labels and the earlier
-# test, contract and file names; this map connects them to the suites here. Only names changed;
+# Earlier names -> names in this package. The claim board (../BOARD.md) and the research-phase
+# reports (not in this repository) cite the earlier run labels and the earlier test, contract and
+# file names; this map connects them to the suites here. Only names changed;
 # check bodies are unchanged. One line per name: <earlier> <TAB> <here> <TAB> <kind>.
 # This file is the one place in the package that carries the research labels.
 
-# Research run labels (see the glossary in ../evidence/README.md) -> suites
+# Earlier run labels -> suites
 halmos-caller	caller	run
 D5X1	duplicate-lock	run
 N9b	owner-payout	run
@@ -15,7 +15,7 @@ N12	post-deposit-withdraw	run
 N14	post-transfer-admin	run
 row 6 Halmos checks on the merged contract (2026-09-29)	root-window	run
 
-# caller (frozen report: ../evidence/2026-10-13-halmos-caller/REPORT.md)
+# caller (the withdraw-caller report of 2026-10-13)
 Caller.t.sol	WithdrawCaller.t.sol	file
 Replay.t.sol	WithdrawCallerReplay.t.sol	file
 D4Base	WithdrawCallerBase	contract

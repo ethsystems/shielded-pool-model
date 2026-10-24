@@ -15,10 +15,10 @@ package imports nothing from the model, and the model gate (`scripts/gate.sh`) n
 Nothing here changes the claim in the parent README.
 
 The checks were first written and run between 2026-09-29 and 2026-10-13, before this repository
-existed. [evidence/2026-10-13-halmos-caller/](../evidence/2026-10-13-halmos-caller/REPORT.md) and
-[evidence/2026-09-16-halmos-root-window/](../evidence/2026-09-16-halmos-root-window/REPORT.md) are
-frozen copies of two of those reports. This package reruns the first runs that target the public
-contract; "Where it comes from" below lists what is included and what is not.
+existed. The reports of those runs (the withdraw-caller report of 2026-10-13 and the root-window
+report of 2026-09-16 among them) are research-phase reports that this repository does not carry.
+This package reruns the first runs that target the public contract; "Where it comes from" below
+lists what is included and what is not.
 
 ## Common scope
 
@@ -58,7 +58,7 @@ Every suite shares these lines; each suite below adds its own.
 ## The suites
 
 Check names carry the claim-board row they bear on where the first harness used one (`D5`, `X1`,
-`T11`, `G1`, `W10`; the board is [evidence/2026-10-13-claim-board/](../evidence/2026-10-13-claim-board/CLAIM1-board.md)).
+`T11`, `G1`, `W10`; the board is [../BOARD.md](../BOARD.md)).
 `P1` to `P5` are the properties of the 2026-09-16 root-window report. Witnesses (`check_WIT_…`,
 `check_W_…`, `…_expectFail`) must FAIL: each shows that the premises of the checks next to it admit
 a successful call, so those PASS results are not vacuous.
@@ -346,27 +346,27 @@ every run.
 
 The harnesses, the mutants and the expected verdicts come from nine Halmos runs made between
 2026-09-29 and 2026-10-13 on the pool at `a04b8b3`, the same file this package exports. Names were
-changed: [scripts/rename-map.txt](scripts/rename-map.txt) gives the run label of each suite, as the
-glossary of [evidence/README.md](../evidence/README.md) and the claim board cite it, and maps each
+changed: [scripts/rename-map.txt](scripts/rename-map.txt) gives the run label of each suite, as
+the claim board ([../BOARD.md](../BOARD.md)) and the research-phase reports cite it, and maps each
 earlier contract, test, mutant and run name to its name here. Check bodies are unchanged. Import
 paths changed where the one-directory-per-suite layout moved a file, and the mutants were
 regenerated from the public source with the same changes and new comments.
 
-| Suite | First run | Frozen report |
-|---|---|---|
-| caller | 2026-10-13 | [evidence/2026-10-13-halmos-caller/](../evidence/2026-10-13-halmos-caller/REPORT.md) |
-| duplicate-lock | 2026-10-06 | none |
-| owner-payout | 2026-10-01 | none |
-| post-deposit-withdraw | 2026-10-01 | none |
-| post-transfer-admin | 2026-10-01 | none |
-| ring-funding | 2026-09-30 (the pool checks of that run) | none |
-| guards | 2026-09-30 | none |
-| insert-callback | 2026-09-30 | none |
-| root-window | 2026-09-29 (rerun on the fixed contract) | none |
+| Suite | First run |
+|---|---|
+| caller | 2026-10-13 (the withdraw-caller report of that date) |
+| duplicate-lock | 2026-10-06 |
+| owner-payout | 2026-10-01 |
+| post-deposit-withdraw | 2026-10-01 |
+| post-transfer-admin | 2026-10-01 |
+| ring-funding | 2026-09-30 (the pool checks of that run) |
+| guards | 2026-09-30 |
+| insert-callback | 2026-09-30 |
+| root-window | 2026-09-29 (rerun on the fixed contract) |
 
 Not included:
 
-- The first root-window run of 2026-09-16 ([frozen report](../evidence/2026-09-16-halmos-root-window/REPORT.md)),
+- The first root-window run of 2026-09-16 (its report is not in this repository),
   and the depth-band and depth-40 runs of 2026-09-17 and 2026-09-18. They ran on the contract
   before its fix (one root per operation), a commit that is not public, so their input cannot be
   exported here. The counterexample of 2026-09-16 (a valid mid-transfer root) is therefore not
