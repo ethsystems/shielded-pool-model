@@ -239,6 +239,8 @@ The package never says "the contract is correct" or "verified". It says "within 
 
 ## Trust base
 
+What a PASS rests on:
+
 - Halmos 0.3.3 (`halmos-0.3.3-py3-none-any.whl`, sha256 `3967291b…`), its EVM semantics, its
   symbolic storage model (injective mapping keys), its calldata generator and its loop handling,
   run on Python 3.12 (the first runs used 3.12.14). On Python 3.14 the same checks gave the same
@@ -254,12 +256,43 @@ The package never says "the contract is correct" or "verified". It says "within 
 - The mocks, the stub and the harnesses in `harness/`: each check is only as good as its assertion
   and its mocks; the mutants and witnesses are controls against mistakes, not a proof that the
   assertion says what the scope line says.
-- The pool sources: ethsystems/pocs at `a04b8b38969dfc2ee64de47edee7e396454204a8`, the submodule
-  `pocs/`, exported with `git archive` of that commit, never from the working tree; every exported
-  file must hash to its pinned blob id. The Solidity dependencies by the pinned `soldeer.lock`:
-  three zips by sha256 and soldeer integrity, zk-kit.solidity by commit and tree id.
-- Python 3 (3.11 or later), bash, git, curl, sha256sum, tar, and `systemd-run --user` when
-  available (each run then gets its own scope with a memory cap; without it the runs are uncapped).
+
+Every input that `check.sh` reads from outside this repository falls in one of three groups.
+
+Checked by hash on every run (`check.sh` stops on a difference):
+
+- The pool sources in `pocs/` (or `POCS`): the commit id `a04b8b3`, the 14 blob ids of PINS.txt
+  and the pool's sha256. The export is `git archive` of the commit, never the working tree, and
+  each suite's export is checked again.
+- The three soldeer zips (downloaded once, cached in `.deps/zips/`): sha256 of each zip, and
+  soldeer integrity of the unpacked files.
+- zk-kit.solidity (fetched once, cached in `.deps/`): commit id and tree id.
+- forge (`FORGE` or `PATH`): binary sha256, version and commit.
+- solc (`SOLC`, an svm copy, or a download into `.deps/`): binary sha256 and version.
+- `yices-smt2` next to halmos: binary sha256 and version.
+- The Python packages of the halmos environment (`.venv/` or the one of `HALMOS`): each version,
+  each file against its RECORD, and each RECORD against its `pyenv_record_sha256` pin; no module
+  or `.pth` file outside a RECORD (`scripts/pyenv-check.py`).
+
+Not used, so not checked:
+
+- The console scripts and bytecode caches of that environment: Halmos runs as
+  `<python> -I -X pycache_prefix=<fresh dir> -m halmos`.
+- pip of the venv: it installs with `--require-hashes`; the runs do not import it.
+
+Trusted, not hashed:
+
+- The Python interpreter of the halmos environment and its standard library (version 3.12 is
+  checked), and the `python3` (3.11 or later) that runs the scripts of `check.sh`.
+- Git, bash, GNU coreutils (`timeout`, `sha256sum`, `cut`), tar and curl.
+- The Linux kernel, `/proc`, the cgroup v2 files and `systemd-run --user`: they enforce the time
+  limit and the memory cap and report the peaks and OOM kills.
+- `work/`, `.deps/`, `.venv/` and the temporary directory while a run is in progress: `check.sh`
+  rebuilds or re-hashes them on each run, but it does not detect another process that writes
+  there during the run.
+
+`TOOLS_UNPINNED=1` drops the binary sha256 and RECORD digest checks (versions are still checked),
+and the last line names what was accepted.
 
 ## Pins
 
@@ -349,11 +382,11 @@ load, and `--early-exit` runs stop at the first counterexample while other paths
 its fresh rerun differed. `STRICT_PATHS=1` makes any difference fail. RESULT.md lists
 every difference of the recorded run.
 
-Cost on a Linux laptop (16 threads, 30 GB), measured 2026-10-24: 81 minutes for all nine suites
-from a fresh clone, venv install included; insert-callback (21 min), post-deposit-withdraw (16 min)
-and post-transfer-admin (15 min) take most of it, caller takes 36 s. The highest memory peak of a
-run was 3.0 GiB. `work/` takes 1.5 GB and `.venv/` 200 MB. RESULT.md has the time and the peak of
-every run.
+Cost on a Linux laptop (16 threads, 30 GB), measured 2026-10-24: about 80 minutes for all nine
+suites; insert-callback, post-deposit-withdraw and post-transfer-admin take most of it, caller
+takes about a minute. The venv install takes under a minute with a warm pip cache, and the
+environment check about one second. The highest memory peak of a run was about 3 GiB. `work/` takes
+1.5 GB and `.venv/` 200 MB. RESULT.md has the time and the peak of every run.
 
 ## Layout
 
