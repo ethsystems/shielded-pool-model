@@ -13,3 +13,6 @@
 [submodule "contract-halmos/pocs"]
 	path = contract-halmos/pocs
 	url = https://github.com/ethsystems/pocs
+[submodule "contract-kontrol/pocs"]
+	path = contract-kontrol/pocs
+	url = https://github.com/ethsystems/pocs
