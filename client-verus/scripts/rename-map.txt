@@ -4,10 +4,10 @@
 #
 # Labels of the earlier runs
 N3                         the 38 rows of the effect mirrors (rpc.rs, channel.rs, prover_effects.rs, tree.rs); "class C" in the 2026-10-01 report
-bd-01d                     the first mirrors of the domain core: guards.rs, note_key.rs, public_inputs.rs, hash_param.rs
-bd-81i                     the second round: crypto_field.rs, prover_fmt.rs, misc_domain.rs, merkle_proofs.rs, key_wrappers.rs, serde_wrappers.rs
-bd-3uk                     the byte-record mirrors (the "Verus detour" of the 2026-10-01 report): byte_records.rs
-bd-ka7                     the Aeneas extraction of validate_amounts and sum at a04b8b3 (frozen; not part of this package)
+"domain core, round 1"     the first mirrors of the domain core: guards.rs, note_key.rs, public_inputs.rs, hash_param.rs
+"domain core, round 2"     the second round: crypto_field.rs, prover_fmt.rs, misc_domain.rs, merkle_proofs.rs, key_wrappers.rs, serde_wrappers.rs
+"byte records"             the byte-record mirrors (the "Verus detour" of the 2026-10-01 report): byte_records.rs
+"Aeneas extraction"        the Aeneas extraction of validate_amounts and sum at a04b8b3 (frozen; not part of this package)
 L6                         the Aeneas extraction route (frozen; not part of this package)
 "58 inherited"             the 58 Verus rows of the 11 domain-core mirror files above
 "38 new"                   the 38 Verus rows of the four effect mirror files
