@@ -1,0 +1,667 @@
+import Refinement.Post
+import Mathlib.Data.Vector.Basic
+
+/-!
+# The LeanIMT tree against the circuit's Merkle fold (structural core of A9a)
+
+For an abstract hash `H` (no cryptographic claim):
+
+* `sub H l M` is the LeanIMT root of a subtree of height `l` over the leaves `M`: a node with no
+  right child carries its left child up unchanged.
+* `rootOf_eq_sub`: the contract model `imtInsert` (`Refinement/Storage.lean`) computes
+  `sub H depth L` for every leaf list `L` inserted from the empty tree.
+* `merkleRoot` restates `Merkle.Fold.merkleRoot` / `Merkle.Fold.level` of `circuits-lampe/` (the
+  extracted `binary_merkle_root<N>` as a pure fold) over `Nat`.
+* `complete`: every inserted leaf has a compressed proof `(proof_length, indices, path)` with
+  `merkleRoot H leaf proof_length indices path = rootOf H L`.
+* `binding`: if `merkleRoot H leaf d indices path = rootOf H L`, then `leaf` is a leaf of `L`
+  (or `L = []` and `leaf = 0`), or the fold exhibits an `H` collision against a tree node, or one
+  of two structural cases: the leaf is an internal node value, or a fold output equals a leaf.
+* `treeLink`: the refinement's `TreeLink` holds for the real fold at every depth, with a concrete
+  bad event.
+-/
+
+namespace LeanShieldedPool.Refine.LeanImt
+
+open LeanShieldedPool.Refine
+
+/-! ## The LeanIMT specification -/
+
+/-- Root of a LeanIMT subtree of height `l` over the leaves `M` (`M.length ≤ 2 ^ l`). The left
+child holds the first `2 ^ (l - 1)` leaves. A node with no right child is its left child. At
+height 0 the node is the leaf (0 for the empty tree). -/
+def sub (H : Nat → Nat → Nat) : Nat → List Nat → Nat
+  | 0, M => M.headD 0
+  | l + 1, M =>
+    if M.length ≤ 2 ^ l then sub H l M
+    else H (sub H l (M.take (2 ^ l))) (sub H l (M.drop (2 ^ l)))
+
+/-- The complete left block at level `l` of a tree with `L.length` leaves, when bit `l` of
+`L.length` is set: the `2 ^ l` leaves that end where the last partial block starts. -/
+def blk (l : Nat) (L : List Nat) : List Nat :=
+  (L.drop ((L.length / 2 ^ l - 1) * 2 ^ l)).take (2 ^ l)
+
+/-- The invariant of the contract tree slots after inserting `L`. `side` is the LeanIMT fact the
+`_insert` loop reads: at every level whose bit of `size` is set, `sideNodes[level]` is the root of
+the complete left block. -/
+structure Inv (H : Nat → Nat → Nat) (L : List Nat) (t : Imt) : Prop where
+  size : t.size = L.length
+  cap : L.length ≤ 2 ^ t.depth
+  tight : t.depth = 0 ∨ 2 ^ (t.depth - 1) < L.length
+  side : ∀ l, (L.length >>> l) % 2 = 1 → t.side l = sub H l (blk l L)
+  root : L ≠ [] → t.side t.depth = sub H t.depth L
+
+theorem sub_zero_nil (H : Nat → Nat → Nat) : ∀ l, sub H l [] = 0
+  | 0 => rfl
+  | l + 1 => by simp only [sub, List.length_nil, zero_le, ↓reduceIte, sub_zero_nil H l]
+
+theorem inv_empty (H : Nat → Nat → Nat) : Inv H [] Imt.empty where
+  size := rfl
+  cap := by simp only [List.length_nil, Imt.empty, pow_zero, zero_le]
+  tight := Or.inl rfl
+  side := fun l h => by simp only [List.length_nil, Nat.zero_shiftRight, Nat.zero_mod,
+      zero_ne_one] at h
+  root := fun h => absurd rfl h
+
+/-- The loop state after levels `0 .. k-1` of `_insert` at index `n = L.length`. -/
+def LoopInv (H : Nat → Nat → Nat) (L : List Nat) (c : Nat) (side : Nat → Nat) (k : Nat)
+    (r : Nat × (Nat → Nat)) : Prop :=
+  r.1 = sub H k ((L ++ [c]).drop (L.length / 2 ^ k * 2 ^ k)) ∧
+  (∀ l, k ≤ l → r.2 l = side l) ∧
+  (∀ l, l < k → (L.length >>> l) % 2 = 1 → r.2 l = side l) ∧
+  (∀ l, l < k → (L.length >>> l) % 2 = 0 →
+    r.2 l = sub H l ((L ++ [c]).drop (L.length / 2 ^ l * 2 ^ l)))
+
+theorem pow_pos' (l : Nat) : 0 < 2 ^ l := by positivity
+
+theorem loop (H : Nat → Nat → Nat) (L : List Nat) (c : Nat) (side : Nat → Nat)
+    (hside : ∀ l, (L.length >>> l) % 2 = 1 → side l = sub H l (blk l L)) :
+    ∀ k, LoopInv H L c side k ((List.range k).foldl (imtStep H L.length) (c, side)) := by
+  intro k
+  induction k with
+  | zero =>
+    refine ⟨?_, fun _ _ => rfl, fun _ h => absurd h (Nat.not_lt_zero _),
+      fun _ h => absurd h (Nat.not_lt_zero _)⟩
+    simp only [List.range_zero, List.foldl_nil, sub, pow_zero, Nat.div_one, mul_one,
+        List.drop_left', List.headD_eq_head?_getD, List.head?_cons, Option.getD_some]
+  | succ k ih =>
+    rw [List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
+    generalize (List.range k).foldl (imtStep H L.length) (c, side) = r at ih ⊢
+    obtain ⟨h1, h2, h3, h4⟩ := ih
+    set n := L.length with hn
+    have hP := pow_pos' k
+    set P := 2 ^ k with hPdef
+    have hsh : n >>> k = n / P := Nat.shiftRight_eq_div_pow n k
+    set q := n / P with hq
+    have hA : q * P ≤ n := Nat.div_mul_le_self n P
+    have hA' : n < q * P + P := Nat.lt_div_mul_add hP
+    have hdiv : n / 2 ^ (k + 1) * 2 ^ (k + 1) = q / 2 * 2 * P := by
+      rw [Nat.pow_succ, ← Nat.div_div_eq_div_mul]; ring
+    unfold imtStep
+    by_cases hb : (n >>> k) % 2 = 1
+    · rw [if_pos hb]
+      have hqo : q % 2 = 1 := by rw [← hsh]; exact hb
+      have hq1 : q / 2 * 2 = q - 1 := by omega
+      have hq0 : 1 ≤ q := by omega
+      have hPA : P ≤ q * P := Nat.le_mul_of_pos_left P hq0
+      have hsub1 : (q - 1) * P = q * P - P := Nat.sub_one_mul q P
+      refine ⟨?_, fun l hl => h2 l (by omega), ?_, ?_⟩
+      · show H (r.2 k) r.1 = _
+        rw [h2 k le_rfl, hside k hb, h1, hdiv, hq1, hsub1]
+        have hlen : P < ((L ++ [c]).drop (q * P - P)).length := by
+          simp only [List.length_drop, List.length_append, List.length_singleton]; omega
+        rw [sub, if_neg (by omega)]
+        congr 2
+        · rw [blk, ← hn, ← hq, hsub1, List.drop_append_of_le_length (by omega),
+            List.take_append_of_le_length (by simp; omega)]
+        · rw [List.drop_drop]; congr 2; omega
+      · intro l hl hbl
+        rcases Nat.lt_succ_iff_lt_or_eq.1 hl with hl | rfl
+        · exact h3 l hl hbl
+        · exact h2 _ le_rfl
+      · intro l hl hbl
+        rcases Nat.lt_succ_iff_lt_or_eq.1 hl with hl | rfl
+        · exact h4 l hl hbl
+        · exfalso; rw [← hn] at hbl; omega
+    · rw [if_neg hb]
+      have hb0 : (n >>> k) % 2 = 0 := by omega
+      have hqe : q % 2 = 0 := by rw [← hsh]; exact hb0
+      have hq2 : q / 2 * 2 = q := by omega
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · show r.1 = _
+        rw [h1, hdiv, hq2]
+        have hlen : ((L ++ [c]).drop (q * P)).length ≤ P := by
+          simp only [List.length_drop, List.length_append, List.length_singleton]; omega
+        rw [sub, if_pos hlen]
+      · intro l hl
+        show Function.update r.2 k r.1 l = side l
+        rw [Function.update_of_ne (by omega)]; exact h2 l (by omega)
+      · intro l hl hbl
+        show Function.update r.2 k r.1 l = side l
+        rcases Nat.lt_succ_iff_lt_or_eq.1 hl with hl | rfl
+        · rw [Function.update_of_ne (by omega)]; exact h3 l hl hbl
+        · exfalso; rw [← hn] at hbl; omega
+      · intro l hl hbl
+        show Function.update r.2 k r.1 l = _
+        rcases Nat.lt_succ_iff_lt_or_eq.1 hl with hl | rfl
+        · rw [Function.update_of_ne (by omega)]; exact h4 l hl hbl
+        · rw [Function.update_self, h1]
+
+theorem inv_insert (H : Nat → Nat → Nat) {L : List Nat} {t : Imt} (hI : Inv H L t) (c : Nat) :
+    Inv H (L ++ [c]) (imtInsert H t c) := by
+  obtain ⟨hs, hcap, htight, hside, _⟩ := hI
+  unfold imtInsert
+  dsimp only
+  rw [hs]
+  have hD := pow_pos' t.depth
+  generalize hd : (if 2 ^ t.depth < L.length + 1 then t.depth + 1 else t.depth) = d
+  have hcap' : L.length + 1 ≤ 2 ^ d := by
+    subst hd; split_ifs with h
+    · rw [Nat.pow_succ]; omega
+    · omega
+  have htight' : d = 0 ∨ 2 ^ (d - 1) < L.length + 1 := by
+    subst hd; split_ifs with h
+    · right; simpa using h
+    · rcases htight with h0 | h0
+      · left; exact h0
+      · right; omega
+  have hl := loop H L c t.side (fun l h => hside l h) d
+  generalize (List.range d).foldl (imtStep H L.length) (c, t.side) = r at hl ⊢
+  obtain ⟨h1, _, h3, h4⟩ := hl
+  have hnd : L.length / 2 ^ d = 0 := Nat.div_eq_of_lt (by omega)
+  rw [hnd, Nat.zero_mul, List.drop_zero] at h1
+  have hlen : (L ++ [c]).length = L.length + 1 := by simp only [List.length_append,
+      List.length_cons, List.length_nil, zero_add]
+  refine ⟨by simp, by simpa [hlen] using hcap', by simpa [hlen] using htight', ?_, ?_⟩
+  · intro l hbl
+    dsimp only at hbl ⊢
+    rw [hlen] at hbl
+    have hsh' : (L.length + 1) >>> l = (L.length + 1) / 2 ^ l := Nat.shiftRight_eq_div_pow _ l
+    rw [hsh'] at hbl
+    have hP := pow_pos' l
+    rcases lt_trichotomy l d with hld | rfl | hld
+    · rw [Function.update_of_ne (by omega)]
+      have hsh : L.length >>> l = L.length / 2 ^ l := Nat.shiftRight_eq_div_pow _ l
+      obtain ⟨q, hq⟩ : ∃ q, L.length / 2 ^ l = q := ⟨_, rfl⟩
+      have hA : q * 2 ^ l ≤ L.length := hq ▸ Nat.div_mul_le_self _ _
+      have hA' : L.length < q * 2 ^ l + 2 ^ l := hq ▸ Nat.lt_div_mul_add hP
+      have hsucc : (L.length + 1) / 2 ^ l = q + if 2 ^ l ∣ L.length + 1 then 1 else 0 := by
+        rw [← hq]; exact Nat.succ_div
+      by_cases hb : (L.length >>> l) % 2 = 1
+      · rw [h3 l hld hb, hside l hb]
+        have hqo : q % 2 = 1 := by rw [← hq, ← hsh]; exact hb
+        have hndv : ¬ 2 ^ l ∣ L.length + 1 := by
+          intro hdv; rw [hsucc, if_pos hdv] at hbl; omega
+        have hq' : (L.length + 1) / 2 ^ l = q := by rw [hsucc, if_neg hndv]; rfl
+        have hq0 : 1 ≤ q := by omega
+        have hPA : 2 ^ l ≤ q * 2 ^ l := Nat.le_mul_of_pos_left _ hq0
+        have hsub1 : (q - 1) * 2 ^ l = q * 2 ^ l - 2 ^ l := Nat.sub_one_mul q _
+        congr 1
+        rw [blk, blk, hlen, hq', hq, hsub1, List.drop_append_of_le_length (by omega),
+          List.take_append_of_le_length (by simp; omega)]
+      · have hb0 : (L.length >>> l) % 2 = 0 := by omega
+        rw [h4 l hld hb0, hq]
+        have hqe : q % 2 = 0 := by rw [← hq, ← hsh]; exact hb0
+        have hdv : 2 ^ l ∣ L.length + 1 := by
+          by_contra hdv; rw [hsucc, if_neg hdv] at hbl; omega
+        have hq' : (L.length + 1) / 2 ^ l = q + 1 := by rw [hsucc, if_pos hdv]
+        have hmul : L.length + 1 = (q + 1) * 2 ^ l := by
+          rw [← hq']; exact (Nat.div_mul_cancel hdv).symm
+        have hmul' : L.length + 1 = q * 2 ^ l + 2 ^ l := by rw [hmul, Nat.add_mul, Nat.one_mul]
+        have hdl : ((L ++ [c]).drop (q * 2 ^ l)).length ≤ 2 ^ l := by
+          rw [List.length_drop, hlen]; omega
+        congr 1
+        rw [blk, hlen, hq', Nat.add_sub_cancel, List.take_of_length_le hdl]
+    · rw [Function.update_self, h1]
+      congr 1
+      have hle : (L.length + 1) / 2 ^ l ≤ 1 := Nat.div_le_of_le_mul (by omega)
+      have hq1 : (L.length + 1) / 2 ^ l = 1 :=
+        Nat.le_antisymm hle (Nat.pos_of_ne_zero (fun h => by rw [h] at hbl; simp only [Nat.zero_mod,
+            zero_ne_one] at hbl))
+      rw [blk, hlen, hq1, Nat.sub_self, Nat.zero_mul, List.drop_zero,
+        List.take_of_length_le (by rw [hlen]; exact hcap')]
+    · exfalso
+      have hlt : 2 ^ d < 2 ^ l := Nat.pow_lt_pow_right (by decide) hld
+      have h0 : (L.length + 1) / 2 ^ l = 0 := Nat.div_eq_of_lt (by omega)
+      rw [h0] at hbl; simp only [Nat.zero_mod, zero_ne_one] at hbl
+  · intro _
+    dsimp only
+    rw [Function.update_self]
+    exact h1
+
+theorem inv_imtOf (H : Nat → Nat → Nat) (L : List Nat) : Inv H L (imtOf H L) := by
+  induction L using List.reverseRecOn with
+  | nil => exact inv_empty H
+  | append_singleton L c ih => rw [imtOf_append]; exact inv_insert H ih c
+
+/-- **The contract tree computes the LeanIMT specification.** For every leaf list inserted from
+the constructor's tree, `commitmentRoot()` is `sub H depth L`. -/
+theorem rootOf_eq_sub (H : Nat → Nat → Nat) (L : List Nat) :
+    rootOf H L = sub H (imtOf H L).depth L := by
+  rcases L.eq_nil_or_concat with rfl | ⟨L', c, rfl⟩
+  · rfl
+  · exact (inv_imtOf H _).root (by simp)
+
+/-- The tree depth is the least `d` with `L.length ≤ 2 ^ d`. -/
+theorem depth_le (H : Nat → Nat → Nat) (L : List Nat) (N : Nat) (hN : L.length ≤ 2 ^ N) :
+    (imtOf H L).depth ≤ N := by
+  rcases (inv_imtOf H L).tight with h | h
+  · omega
+  · have : 2 ^ ((imtOf H L).depth - 1) < 2 ^ N := by omega
+    have := (Nat.pow_lt_pow_iff_right (by decide : 1 < 2)).1 this
+    omega
+
+/-! ## The circuit fold: `N1Merkle.level` and `N1Merkle.merkleRoot` over `Nat` -/
+
+/-- One iteration of the extracted loop at position `i` (`N1Merkle.level`). Bit `false`: node on
+the left, `H node sibling`; bit `true`: node on the right, `H sibling node`. Positions at or
+above `depth` keep the node. -/
+def level (H : Nat → Nat → Nat) (depth : Nat) (indices : List Bool) (path : List Nat)
+    (node i : Nat) : Nat :=
+  if i < depth then
+    if indices.getD i false then H (path.getD i 0) node else H node (path.getD i 0)
+  else node
+
+/-- The extracted `binary_merkle_root<n>` as a fold over the positions `0 .. n-1`
+(`N1Merkle.merkleRoot`; `depth` is `proof_length.toNat`). -/
+def merkleRoot (H : Nat → Nat → Nat) {n : Nat} (leaf depth : Nat)
+    (indices : List.Vector Bool n) (path : List.Vector Nat n) : Nat :=
+  (List.range n).foldl (level H depth indices.toList path.toList) leaf
+
+theorem foldRoot_snoc (H : Nat → Nat → Nat) (x : Nat) (p : List (Bool × Nat)) (bs : Bool × Nat) :
+    foldRoot H x (p ++ [bs]) =
+      if bs.1 then H bs.2 (foldRoot H x p) else H (foldRoot H x p) bs.2 := by
+  simp only [foldRoot, List.foldl_append, List.foldl_cons, List.foldl_nil]
+
+theorem fold_level_prefix (H : Nat → Nat → Nat) (d : Nat) (I : List Bool) (P : List Nat)
+    (x : Nat) (p : List (Bool × Nat)) (hp : p.length ≤ d)
+    (hIP : ∀ i b s, p[i]? = some (b, s) → I.getD i false = b ∧ P.getD i 0 = s) :
+    (List.range p.length).foldl (level H d I P) x = foldRoot H x p := by
+  induction p using List.reverseRecOn with
+  | nil => rfl
+  | append_singleton p a ih =>
+    simp only [List.length_append, List.length_singleton] at hp ⊢
+    rw [List.range_succ, List.foldl_append, ih (by omega), foldRoot_snoc]
+    · obtain ⟨hI, hP⟩ := hIP p.length a.1 a.2 (by simp)
+      simp only [List.foldl_cons, List.foldl_nil, level, if_pos (show p.length < d by omega), hI,
+          hP]
+    · intro i b s h
+      apply hIP
+      rw [List.getElem?_append_left (List.getElem?_eq_some_iff.1 h).1]; exact h
+
+theorem fold_level_ext (H : Nat → Nat → Nat) (d : Nat) (I : List Bool) (P : List Nat) (x : Nat)
+    (k : Nat) (hd : d ≤ k) : ∀ m, k ≤ m →
+    (List.range m).foldl (level H d I P) x = (List.range k).foldl (level H d I P) x := by
+  intro m hm
+  induction m with
+  | zero => rw [Nat.le_zero.1 hm]
+  | succ m ih =>
+    rcases Nat.lt_or_ge m k with h | h
+    · rw [show k = m + 1 by omega]
+    · rw [List.range_succ, List.foldl_append, ih h]
+      simp only [List.foldl_cons, List.foldl_nil, level, if_neg (show ¬ m < d by omega)]
+
+/-- The active part of a circuit path: the (bit, sibling) pairs at positions `0 .. min d n - 1`. -/
+def activePath (d : Nat) (I : List Bool) (P : List Nat) (n : Nat) : List (Bool × Nat) :=
+  (List.range (min d n)).map (fun i => (I.getD i false, P.getD i 0))
+
+theorem merkleRoot_eq_foldRoot (H : Nat → Nat → Nat) {n : Nat} (x d : Nat)
+    (I : List.Vector Bool n) (P : List.Vector Nat n) :
+    merkleRoot H x d I P = foldRoot H x (activePath d I.toList P.toList n) := by
+  unfold merkleRoot
+  have hlen : (activePath d I.toList P.toList n).length = min d n := by simp only [activePath,
+      List.getD_eq_getElem?_getD, List.length_map, List.length_range]
+  have hpre := fold_level_prefix H d I.toList P.toList x (activePath d I.toList P.toList n)
+    (by rw [hlen]; exact Nat.min_le_left d n) (by
+      intro i b s h
+      simp only [activePath, List.getElem?_map] at h
+      rcases Option.map_eq_some_iff.1 h with ⟨j, hj, hj'⟩
+      obtain ⟨_, rfl⟩ := List.getElem?_eq_some_iff.1 hj
+      simp only [List.getElem_range, Prod.mk.injEq] at hj'
+      exact hj')
+  rw [hlen] at hpre
+  rw [← hpre]
+  by_cases hdn : d ≤ n
+  · rw [Nat.min_eq_left hdn]; exact fold_level_ext H d _ _ x d le_rfl n hdn
+  · rw [Nat.min_eq_right (by omega)]
+
+/-! ## Completeness -/
+
+/-- The LeanIMT compressed proof of the leaf at index `i` of a subtree of height `l` over `M`:
+(bit, sibling) pairs from the leaf up, one per level where the node has a sibling. Levels where
+the node has no right sibling are skipped (the node is carried up). -/
+def proof (H : Nat → Nat → Nat) : Nat → List Nat → Nat → List (Bool × Nat)
+  | 0, _, _ => []
+  | l + 1, M, i =>
+    if M.length ≤ 2 ^ l then proof H l M i
+    else if i < 2 ^ l then proof H l (M.take (2 ^ l)) i ++ [(false, sub H l (M.drop (2 ^ l)))]
+    else proof H l (M.drop (2 ^ l)) (i - 2 ^ l) ++ [(true, sub H l (M.take (2 ^ l)))]
+
+theorem proof_length (H : Nat → Nat → Nat) : ∀ l M i, (proof H l M i).length ≤ l := by
+  intro l
+  induction l with
+  | zero => intro M i; simp only [proof, List.length_nil, Std.le_refl]
+  | succ l ih =>
+    intro M i
+    simp only [proof]
+    split_ifs
+    · exact Nat.le_succ_of_le (ih M i)
+    · simp only [List.length_append, List.length_singleton]; exact Nat.succ_le_succ (ih _ _)
+    · simp only [List.length_append, List.length_singleton]; exact Nat.succ_le_succ (ih _ _)
+
+theorem fold_proof (H : Nat → Nat → Nat) : ∀ l (M : List Nat) i leaf, M.length ≤ 2 ^ l →
+    M[i]? = some leaf → foldRoot H leaf (proof H l M i) = sub H l M := by
+  intro l
+  induction l with
+  | zero =>
+    intro M i leaf hM h
+    match M, i, hM, h with
+    | [a], 0, _, h =>
+      simp only [List.getElem?_cons_zero, Option.some.injEq] at h
+      subst h; rfl
+    | [_], _ + 1, _, h => simp only [List.length_cons, List.length_nil, zero_add, Order.lt_one_iff,
+        Nat.add_eq_zero_iff, one_ne_zero, and_false, not_false_eq_true, getElem?_neg,
+        reduceCtorEq] at h
+    | _ :: _ :: _, _, hM, _ => simp only [List.length_cons, pow_zero, add_le_iff_nonpos_left,
+        nonpos_iff_eq_zero, Nat.add_eq_zero_iff, List.length_eq_zero_iff, one_ne_zero,
+        and_false] at hM
+  | succ l ih =>
+    intro M i leaf hM h
+    have hP := pow_pos' l
+    rw [Nat.pow_succ] at hM
+    simp only [proof, sub]
+    by_cases h1 : M.length ≤ 2 ^ l
+    · rw [if_pos h1, if_pos h1]; exact ih M i leaf h1 h
+    · rw [if_neg h1, if_neg h1]
+      by_cases h2 : i < 2 ^ l
+      · rw [if_pos h2, foldRoot_snoc]
+        simp only [Bool.false_eq_true, if_false]
+        rw [ih (M.take (2 ^ l)) i leaf (by simp) (by rw [List.getElem?_take_of_lt h2]; exact h)]
+      · rw [if_neg h2, foldRoot_snoc]
+        simp only [if_true]
+        rw [ih (M.drop (2 ^ l)) (i - 2 ^ l) leaf (by simp; omega)
+          (by rw [List.getElem?_drop, Nat.add_sub_cancel' (by omega)]; exact h)]
+
+/-- Padded circuit vectors of a (bit, sibling) list. -/
+def padI (p : List (Bool × Nat)) (n : Nat) (h : p.length ≤ n) : List.Vector Bool n :=
+  ⟨p.map Prod.fst ++ List.replicate (n - p.length) false, by simp; omega⟩
+
+def padP (p : List (Bool × Nat)) (n : Nat) (h : p.length ≤ n) : List.Vector Nat n :=
+  ⟨p.map Prod.snd ++ List.replicate (n - p.length) 0, by simp; omega⟩
+
+theorem merkleRoot_pad (H : Nat → Nat → Nat) (x : Nat) (p : List (Bool × Nat)) (n : Nat)
+    (h : p.length ≤ n) : merkleRoot H x p.length (padI p n h) (padP p n h) = foldRoot H x p := by
+  unfold merkleRoot
+  rw [fold_level_ext H p.length _ _ x p.length le_rfl n h]
+  apply fold_level_prefix H p.length _ _ x p le_rfl
+  intro i b s hi
+  have hlt : i < p.length := (List.getElem?_eq_some_iff.1 hi).1
+  simp only [padI, padP, List.Vector.toList_mk, List.getD_eq_getElem?_getD,
+    List.getElem?_append_left (by simpa using hlt : i < (p.map Prod.fst).length),
+    List.getElem?_append_left (by simpa using hlt : i < (p.map Prod.snd).length),
+    List.getElem?_map, hi, Option.map_some, Option.getD_some, and_self]
+
+/-- **Completeness.** For every leaf list `L` inserted from the constructor's tree with
+`L.length ≤ 2 ^ N`, and every index `i` of `L` holding `leaf`, the compressed proof
+`p = proof H depth L i` gives `proof_length = p.length ≤ depth ≤ N`, `indices` = its bits padded
+with `false`, `path` = its siblings padded with `0`, and the circuit fold returns the contract
+root. Bit convention: `indices[k] = false` puts the node on the left (`H node path[k]`). -/
+theorem complete (H : Nat → Nat → Nat) (L : List Nat) (N : Nat) (hN : L.length ≤ 2 ^ N)
+    (i leaf : Nat) (hi : L[i]? = some leaf) :
+    ∃ (len : Nat) (I : List.Vector Bool N) (P : List.Vector Nat N),
+      len ≤ (imtOf H L).depth ∧ len ≤ N ∧ merkleRoot H leaf len I P = rootOf H L := by
+  set D := (imtOf H L).depth
+  set p := proof H D L i
+  have hpD : p.length ≤ D := proof_length H D L i
+  have hDN : D ≤ N := depth_le H L N hN
+  refine ⟨p.length, padI p N (by omega), padP p N (by omega), hpD, by omega, ?_⟩
+  rw [merkleRoot_pad, rootOf_eq_sub]
+  exact fold_proof H D L i leaf (inv_imtOf H L).cap hi
+
+/-- Completeness for members, circuit width 32 (`verify_merkle_proof<32>`). -/
+theorem complete_mem (H : Nat → Nat → Nat) (L : List Nat) (hN : L.length ≤ 2 ^ 32)
+    (leaf : Nat) (hm : leaf ∈ L) :
+    ∃ (len : Nat) (I : List.Vector Bool 32) (P : List.Vector Nat 32),
+      len ≤ 32 ∧ merkleRoot H leaf len I P = rootOf H L := by
+  obtain ⟨i, hi, rfl⟩ := List.getElem_of_mem hm
+  obtain ⟨len, I, P, -, h2, h3⟩ := complete H L 32 hN i L[i] (List.getElem?_eq_getElem hi)
+  exact ⟨len, I, P, h2, h3⟩
+
+/-! ## Binding (reduction form) -/
+
+/-- The hash input pair of one fold step: bit `false` gives `(node, sibling)`, bit `true` gives
+`(sibling, node)`. -/
+def stepPair (node : Nat) (bs : Bool × Nat) : Nat × Nat :=
+  if bs.1 then (bs.2, node) else (node, bs.2)
+
+/-- The hash input pairs of the fold from `x` along `p`, bottom up. -/
+def foldPairs (H : Nat → Nat → Nat) : Nat → List (Bool × Nat) → List (Nat × Nat)
+  | _, [] => []
+  | x, bs :: p => stepPair x bs :: foldPairs H (H (stepPair x bs).1 (stepPair x bs).2) p
+
+/-- The hash input pairs of the internal nodes of the subtree of height `l` over `M`: each pair is
+(left child root, right child root). -/
+def pairs (H : Nat → Nat → Nat) : Nat → List Nat → List (Nat × Nat)
+  | 0, _ => []
+  | l + 1, M =>
+    if M.length ≤ 2 ^ l then pairs H l M
+    else (sub H l (M.take (2 ^ l)), sub H l (M.drop (2 ^ l))) ::
+      (pairs H l (M.take (2 ^ l)) ++ pairs H l (M.drop (2 ^ l)))
+
+/-- A height-0 value of the tree: a leaf, or 0 for the empty tree. -/
+def Atom (M : List Nat) (a : Nat) : Prop := a ∈ M ∨ (M = [] ∧ a = 0)
+
+/-- What a fold that reaches the root of the subtree `(l, M)` from `leaf` along `p` implies. -/
+inductive Outcome (H : Nat → Nat → Nat) (l : Nat) (M : List Nat) (leaf : Nat)
+    (p : List (Bool × Nat)) : Prop where
+  /-- The leaf is a leaf of the tree (or the tree is empty and the leaf is 0). -/
+  | member : Atom M leaf → Outcome H l M leaf p
+  /-- An `H` collision: a fold input pair differs from the children pair of a tree node and
+  both hash to the same value. -/
+  | collision (x y u v : Nat) : (x, y) ∈ foldPairs H leaf p → (u, v) ∈ pairs H l M →
+      (x, y) ≠ (u, v) → H x y = H u v → Outcome H l M leaf p
+  /-- Structural case 1: the leaf is the value of an internal tree node (the proof stops
+  below the root of the tree's leaves). -/
+  | nodeAsLeaf (u v : Nat) : (u, v) ∈ pairs H l M → leaf = H u v → Outcome H l M leaf p
+  /-- Structural case 2: a fold output is a leaf of the tree, or 0 for the empty tree (the proof
+  continues past a leaf). -/
+  | leafAsNode (x y : Nat) : (x, y) ∈ foldPairs H leaf p → Atom M (H x y) → Outcome H l M leaf p
+
+theorem foldRoot_cons (H : Nat → Nat → Nat) (x : Nat) (bs : Bool × Nat) (p : List (Bool × Nat)) :
+    foldRoot H x (bs :: p) = foldRoot H (H (stepPair x bs).1 (stepPair x bs).2) p := by
+  obtain ⟨b, s⟩ := bs
+  cases b <;> rfl
+
+theorem foldRoot_snoc' (H : Nat → Nat → Nat) (x : Nat) (p : List (Bool × Nat))
+    (bs : Bool × Nat) :
+    foldRoot H x (p ++ [bs]) =
+      H (stepPair (foldRoot H x p) bs).1 (stepPair (foldRoot H x p) bs).2 := by
+  rw [foldRoot_snoc]
+  obtain ⟨b, s⟩ := bs
+  cases b <;> rfl
+
+theorem foldPairs_snoc (H : Nat → Nat → Nat) (p : List (Bool × Nat)) (bs : Bool × Nat) :
+    ∀ x, foldPairs H x (p ++ [bs]) = foldPairs H x p ++ [stepPair (foldRoot H x p) bs] := by
+  induction p with
+  | nil => intro x; rfl
+  | cons a p ih =>
+    intro x
+    simp only [List.cons_append, foldPairs, ih, foldRoot_cons, List.cons_append]
+
+theorem Outcome.mono_pairs {H : Nat → Nat → Nat} {l l' : Nat} {M : List Nat} {leaf : Nat}
+    {p : List (Bool × Nat)} (o : Outcome H l' M leaf p)
+    (hP : ∀ q ∈ pairs H l' M, q ∈ pairs H l M) : Outcome H l M leaf p := by
+  cases o with
+  | member h => exact .member h
+  | collision x y u v h1 h2 h3 h4 => exact .collision x y u v h1 (hP _ h2) h3 h4
+  | nodeAsLeaf u v h1 h2 => exact .nodeAsLeaf u v (hP _ h1) h2
+  | leafAsNode x y h1 h2 => exact .leafAsNode x y h1 h2
+
+theorem Outcome.lift {H : Nat → Nat → Nat} {l l' : Nat} {M M' : List Nat} {leaf : Nat}
+    {p p' : List (Bool × Nat)} (o : Outcome H l' M' leaf p') (hne : M' ≠ [])
+    (hM : ∀ a ∈ M', a ∈ M) (hP : ∀ q ∈ pairs H l' M', q ∈ pairs H l M)
+    (hF : ∀ q ∈ foldPairs H leaf p', q ∈ foldPairs H leaf p) : Outcome H l M leaf p := by
+  have hA : ∀ a, Atom M' a → Atom M a := fun a h => by
+    rcases h with h | ⟨h, _⟩
+    · exact Or.inl (hM a h)
+    · exact absurd h hne
+  cases o with
+  | member h => exact .member (hA _ h)
+  | collision x y u v h1 h2 h3 h4 => exact .collision x y u v (hF _ h1) (hP _ h2) h3 h4
+  | nodeAsLeaf u v h1 h2 => exact .nodeAsLeaf u v (hP _ h1) h2
+  | leafAsNode x y h1 h2 => exact .leafAsNode x y (hF _ h1) (hA _ h2)
+
+theorem atom_sub_zero (H : Nat → Nat → Nat) (M : List Nat) (hM : M.length ≤ 2 ^ 0) :
+    Atom M (sub H 0 M) := by
+  match M, hM with
+  | [], _ => exact Or.inr ⟨rfl, rfl⟩
+  | [a], _ => exact Or.inl (List.mem_singleton_self a)
+  | _ :: _ :: _, hM => simp only [List.length_cons, pow_zero, add_le_iff_nonpos_left,
+      nonpos_iff_eq_zero, Nat.add_eq_zero_iff, List.length_eq_zero_iff, one_ne_zero,
+      and_false] at hM
+
+/-- **Binding for a subtree (reduction form).** If the fold from `leaf` along `p` returns the
+root of the subtree `(l, M)`, then `leaf` is a leaf of `M` (or `M = []` and `leaf = 0`), or an
+`H` collision between a fold input pair and a tree children pair, or a structural case. -/
+theorem bind (H : Nat → Nat → Nat) (leaf : Nat) (p : List (Bool × Nat)) :
+    ∀ (l : Nat) (M : List Nat), M.length ≤ 2 ^ l → foldRoot H leaf p = sub H l M →
+      Outcome H l M leaf p := by
+  induction p using List.reverseRecOn with
+  | nil =>
+    intro l
+    induction l with
+    | zero =>
+      intro M hM h
+      have h' : leaf = sub H 0 M := h
+      exact .member (h' ▸ atom_sub_zero H M hM)
+    | succ l ih =>
+      intro M hM h
+      by_cases h1 : M.length ≤ 2 ^ l
+      · have h' : foldRoot H leaf [] = sub H l M := by rw [h, sub, if_pos h1]
+        exact (ih M h1 h').mono_pairs (by intro q hq; rw [pairs, if_pos h1]; exact hq)
+      · refine .nodeAsLeaf (sub H l (M.take (2 ^ l))) (sub H l (M.drop (2 ^ l)))
+          (by rw [pairs, if_neg h1]; exact List.mem_cons_self) ?_
+        have h' : leaf = sub H (l + 1) M := h
+        rw [h', sub, if_neg h1]
+  | append_singleton p bs ihp =>
+    intro l
+    have hF : ∀ q ∈ foldPairs H leaf p, q ∈ foldPairs H leaf (p ++ [bs]) := by
+      intro q hq; rw [foldPairs_snoc]; exact List.mem_append_left _ hq
+    have hlast : stepPair (foldRoot H leaf p) bs ∈ foldPairs H leaf (p ++ [bs]) := by
+      rw [foldPairs_snoc]; exact List.mem_append_right _ (List.mem_singleton_self _)
+    induction l with
+    | zero =>
+      intro M hM h
+      rw [foldRoot_snoc'] at h
+      exact .leafAsNode _ _ hlast (h ▸ atom_sub_zero H M hM)
+    | succ l ihl =>
+      intro M hM h
+      have hP := pow_pos' l
+      rw [Nat.pow_succ] at hM
+      by_cases h1 : M.length ≤ 2 ^ l
+      · have h' : foldRoot H leaf (p ++ [bs]) = sub H l M := by rw [h, sub, if_pos h1]
+        exact (ihl M h1 h').mono_pairs (by intro q hq; rw [pairs, if_pos h1]; exact hq)
+      · rw [foldRoot_snoc', sub, if_neg h1] at h
+        have hmem : (sub H l (M.take (2 ^ l)), sub H l (M.drop (2 ^ l))) ∈ pairs H (l + 1) M := by
+          rw [pairs, if_neg h1]; exact List.mem_cons_self
+        by_cases hxy : stepPair (foldRoot H leaf p) bs =
+            (sub H l (M.take (2 ^ l)), sub H l (M.drop (2 ^ l)))
+        · obtain ⟨b, s⟩ := bs
+          cases b
+          · have hf : foldRoot H leaf p = sub H l (M.take (2 ^ l)) := by
+              simp only [stepPair, Bool.false_eq_true, if_false, Prod.mk.injEq] at hxy
+              exact hxy.1
+            have o := ihp l (M.take (2 ^ l)) (by simp) hf
+            refine o.lift ?_ (fun a ha => List.mem_of_mem_take ha) ?_ hF
+            · intro he; have := congrArg List.length he
+              rw [List.length_take, List.length_nil] at this; omega
+            · intro q hq; rw [pairs, if_neg h1]
+              exact List.mem_cons_of_mem _ (List.mem_append_left _ hq)
+          · have hf : foldRoot H leaf p = sub H l (M.drop (2 ^ l)) := by
+              simp only [stepPair, if_true, Prod.mk.injEq] at hxy
+              exact hxy.2
+            have o := ihp l (M.drop (2 ^ l)) (by simp; omega) hf
+            refine o.lift ?_ (fun a ha => List.mem_of_mem_drop ha) ?_ hF
+            · intro he; have := congrArg List.length he
+              rw [List.length_drop, List.length_nil] at this; omega
+            · intro q hq; rw [pairs, if_neg h1]
+              exact List.mem_cons_of_mem _ (List.mem_append_right _ hq)
+        · exact .collision _ _ _ _ hlast hmem (by rw [Prod.mk.eta]; exact hxy) h
+
+/-- **Binding for the contract tree (reduction form).** If the circuit fold of `leaf` along
+`(d, indices, path)` returns `commitmentRoot()` of the tree built by `imtInsert` from `L`, then
+`leaf ∈ L` (or `L = []` and `leaf = 0`), or the fold exhibits an `H` collision against a tree
+node, or one of the two structural cases. -/
+theorem binding (H : Nat → Nat → Nat) (L : List Nat) (leaf d : Nat) {n : Nat}
+    (I : List.Vector Bool n) (P : List.Vector Nat n) (h : merkleRoot H leaf d I P = rootOf H L) :
+    Outcome H (imtOf H L).depth L leaf (activePath d I.toList P.toList n) :=
+  bind H leaf _ _ L (inv_imtOf H L).cap (by rw [← merkleRoot_eq_foldRoot, h, rootOf_eq_sub])
+
+/-! ## The refinement's tree link, instantiated -/
+
+/-- The bad event of an outcome: a collision or one of the two structural cases. -/
+def Bad (H : Nat → Nat → Nat) (l : Nat) (M : List Nat) (leaf : Nat) (p : List (Bool × Nat)) :
+    Prop :=
+  (∃ x y u v, (x, y) ∈ foldPairs H leaf p ∧ (u, v) ∈ pairs H l M ∧ (x, y) ≠ (u, v) ∧
+      H x y = H u v) ∨
+    (∃ u v, (u, v) ∈ pairs H l M ∧ leaf = H u v) ∨
+    (∃ x y, (x, y) ∈ foldPairs H leaf p ∧ Atom M (H x y))
+
+theorem Outcome.member_or_bad {H : Nat → Nat → Nat} {l : Nat} {M : List Nat} {leaf : Nat}
+    {p : List (Bool × Nat)} (o : Outcome H l M leaf p) : Atom M leaf ∨ Bad H l M leaf p := by
+  cases o with
+  | member h => exact Or.inl h
+  | collision x y u v h1 h2 h3 h4 => exact Or.inr (Or.inl ⟨x, y, u, v, h1, h2, h3, h4⟩)
+  | nodeAsLeaf u v h1 h2 => exact Or.inr (Or.inr (Or.inl ⟨u, v, h1, h2⟩))
+  | leafAsNode x y h1 h2 => exact Or.inr (Or.inr (Or.inr ⟨x, y, h1, h2⟩))
+
+/-- **Per-path form (the form a witness-carrying X3 premise can use).** For a nonzero leaf and
+the specific circuit path `(d, indices, path)`: the leaf is in `L`, or `Bad` holds for this path. -/
+theorem binding_mem_or_bad (H : Nat → Nat → Nat) (L : List Nat) (leaf d : Nat) {n : Nat}
+    (I : List.Vector Bool n) (P : List.Vector Nat n) (hne : leaf ≠ 0)
+    (h : merkleRoot H leaf d I P = rootOf H L) :
+    leaf ∈ L ∨ Bad H (imtOf H L).depth L leaf (activePath d I.toList P.toList n) := by
+  rcases (binding H L leaf d I P h).member_or_bad with hm | hb
+  · rcases hm with hm | ⟨_, h0⟩
+    · exact Or.inl hm
+    · exact absurd h0 hne
+  · exact Or.inr hb
+
+/-- The circuit's Merkle relation (`verify_merkle_proof<32>` after `Merkle.Fold.bmr_fwd` of `circuits-lampe/`): some
+`proof_length ≤ 32`, `indices` and `path` fold `leaf` to `root`. -/
+def InclC (H : Nat → Nat → Nat) (leaf root : Nat) : Prop :=
+  ∃ (d : Nat) (I : List.Vector Bool 32) (P : List.Vector Nat 32),
+    d ≤ 32 ∧ merkleRoot H leaf d I P = root
+
+/-- The concrete bad event for the refinement's `Coll`: some circuit path folds `leaf` to the root of the
+tree of `L` and exhibits a collision or a structural case against that tree. -/
+def CollC (H : Nat → Nat → Nat) (L : List Nat) (leaf : Nat) : Prop :=
+  ∃ (d : Nat) (I : List.Vector Bool 32) (P : List.Vector Nat 32),
+    merkleRoot H leaf d I P = rootOf H L ∧
+      Bad H (imtOf H L).depth L leaf (activePath d I.toList P.toList 32)
+
+/-- **The refinement's `TreeLink` holds for the real fold at every depth**, for every hash, leaf list and
+word list, with `Incl := InclC H` and `Coll := CollC H`. -/
+theorem treeLink (H : Nat → Nat → Nat) (G W : List Nat) : TreeLink H (InclC H) (CollC H) G W where
+  reduction := fun L _ leaf _ hne ⟨d, I, P, _, h⟩ => by
+    rcases (binding H L leaf d I P h).member_or_bad with hm | hb
+    · rcases hm with hm | ⟨_, h0⟩
+      · exact Or.inl hm
+      · exact absurd h0 hne
+    · exact Or.inr ⟨d, I, P, h, hb⟩
+
+/-- `InclC` is not vacuous: every leaf of a tree with at most `2 ^ 32` leaves is included. -/
+theorem inclC_of_mem (H : Nat → Nat → Nat) (L : List Nat) (hN : L.length ≤ 2 ^ 32) (leaf : Nat)
+    (hm : leaf ∈ L) : InclC H leaf (rootOf H L) :=
+  complete_mem H L hN leaf hm
+
+/-- **Scope limit of an existential `Incl` (checked).** If some left input makes `H` hit every
+value, `InclC` holds for every leaf and root with a one-level path. So `InclC` alone carries no
+membership; the membership content is in `Coll`, which is where `TreeHyp.no_bad` puts it. -/
+theorem inclC_of_onto (H : Nat → Nat → Nat) (hH : ∀ x r, ∃ s, H x s = r) (leaf root : Nat) :
+    InclC H leaf root := by
+  obtain ⟨s, hs⟩ := hH leaf root
+  refine ⟨1, List.Vector.replicate 32 false, ⟨s :: List.replicate 31 0, by simp⟩, by decide, ?_⟩
+  exact hs
+
+end LeanShieldedPool.Refine.LeanImt
