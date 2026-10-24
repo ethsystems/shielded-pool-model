@@ -410,7 +410,7 @@ cd contract-kontrol
 ./check.sh withdraw-success:token-above-0x11 # one prove run and its build: CHECK PARTIAL
 ./check.sh public-inputs:replay              # the forge replays only, no Docker: CHECK PARTIAL
 # expect a RUN line per run, a CHECK line per verdict, "CHECK PASS suite <name>" per suite,
-# and the last line CHECK PASS: ...
+# and the last line CHECK PASS: ... (CHECK PARTIAL (...) when the selection names single runs)
 ```
 
 A selection names runs of `harness/<suite>/runs.tsv`; a selected prove run brings its suite's build.

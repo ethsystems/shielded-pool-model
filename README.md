@@ -258,8 +258,8 @@ checksum.
   function. Each proof holds in its stated scope, under KEVM's semantics
   and one trusted bytes-prefix rule, with mock verifiers and tokens;
   named mutants must fail. The `public-inputs` runs and the insertion-loop
-  K claims are packaged with the expected values of their first run, on
-  the solc 0.8.33 build; they were not rerun in the recorded run (its
+  K claims are packaged with the expected values of their first run
+  (2026-10-01), on the solc 0.8.33 build; they were not rerun in the recorded run (its
   RESULT.md), so they are not yet confirmed on the 0.8.37 build. Separate package, own check and trust
   base; the gate does not build it.
 - [refinement/](refinement/README.md): a conditional refinement of the

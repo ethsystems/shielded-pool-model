@@ -53,6 +53,7 @@ for a in "$@"; do
   SUITES+=("$s")
   if [ "$a" = "$s" ]; then SELECT[$s]="$(runs_of "$s" | paste -sd,)"; continue; fi
   want="${a#*:}"; [ -n "$want" ] || usage "suite $s: no run after the colon"
+  case ",$want," in *,,*) usage "suite $s: an empty run name in '$want'";; esac
   for r in $(tr ',' ' ' <<<"$want"); do
     [ -n "$(kind_of "$s" "$r")" ] || usage "suite $s has no run '$r' (runs: $(runs_of "$s" | paste -sd' '))"
   done

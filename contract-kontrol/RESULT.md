@@ -63,7 +63,7 @@ witness bodies moved out of the mutant siblings, bodies unchanged) and `insert-l
 
 ## Checker changes after these runs
 
-Commits `5273313` and `be4ab83` changed the checker after the runs above. They changed
+Commits `2ff286b` and `51b7cea` changed the checker after the runs above. They changed
 `check.sh`, `scripts/compare.py` and `scripts/kontrol-run.sh`, added `scripts/pyenv-check.py`, and
 added the Halmos environment pins to `PINS.txt`. No harness, mutant, lemma, `abi.md`, prove command
 or line of `EXPECTED.tsv` changed.
@@ -113,7 +113,7 @@ the same versions). With `TOOLS_UNPINNED=1` the suite passes in it. The rerun be
 
 ## Runs after the checker changes
 
-Commit `be4ab83`, each `check.sh` from a `git archive` copy of the package, with `POCS`,
+Commit `51b7cea`, each `check.sh` from a `git archive` copy of the package, with `POCS`,
 `DEPS_CACHE` and `WORK` set as above. No Kontrol container ran: another Kontrol run held the
 machine (one container at a time, and `free -g` showed 8 GiB available, below the 10 GiB gate).
 
