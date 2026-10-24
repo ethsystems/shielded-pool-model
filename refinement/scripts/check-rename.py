@@ -14,7 +14,8 @@ docstrings), trailing spaces removed and blank lines dropped.
 
 The modules of fold-bridge/ were first written against the earlier module names of
 circuits-lampe; for them the map of ../circuits-lampe/scripts/rename-map.txt is applied
-backwards too, after this package's map.
+backwards too, after this package's map. That map and ../circuits-lampe/scripts/rename.py, which
+applies it, are outside this package: PINS.sha256 pins both, and scripts/pins.py runs first.
 """
 import difflib
 import hashlib
