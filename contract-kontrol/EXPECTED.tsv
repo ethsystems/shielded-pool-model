@@ -184,3 +184,10 @@ poseidon-frame	frame-deployment	DeploymentTest.test_constructor_runtime	PASS	-	2
 poseidon-frame	frame-replay	RealReplay.test_concrete_frame	PASS	-	2026-10-01
 poseidon-frame	frame-replay	MutantReplay.test_concrete_frame	FAIL	-	2026-10-01
 poseidon-frame	frame	all-checks	PASS	-	2026-10-01
+insert-loop	build	build	BUILT	-	2026-10-01
+insert-loop	rejections	TreeRejections.prove_reject_field	PASSED	-	2026-10-01
+insert-loop	rejections	TreeRejections.prove_reject_zero	PASSED	-	2026-10-01
+insert-loop	rejections	TreeRejections.prove_reject_duplicate	PASSED	-	2026-10-01
+insert-loop	rejections	TreeRejections_M_FIELD.prove_reject_field	FAILED	EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001	2026-10-01
+insert-loop	rejections	TreeRejections_M_ZERO.prove_reject_zero	FAILED	EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001	2026-10-01
+insert-loop	rejections	TreeRejections_M_DUP.prove_reject_duplicate	FAILED	EVMC_REVERT:4e487b710000000000000000000000000000000000000000000000000000000000000001	2026-10-01

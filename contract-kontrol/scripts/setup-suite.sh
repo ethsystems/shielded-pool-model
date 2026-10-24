@@ -42,8 +42,15 @@ mkdir "$P/dependencies/kontrol-cheatcodes"; git -C "$CHEATS_GIT" archive "$(pin 
 cp "$P/foundry.toml" "$W/foundry.toml.orig"
 sed -i '/^optimizer_runs = 100$/r '"$PKG/scripts/foundry-kontrol.txt" "$P/foundry.toml"
 sed -i 's#^    "forge-std/=dependencies/forge-std-1.14.0",$#&\n    "kontrol-cheatcodes/=dependencies/kontrol-cheatcodes/src/",#' "$P/foundry.toml"
+# A suite whose harness links more libraries (insert-loop: the mutant LeanIMT copies) lists them in
+# harness/<suite>/foundry-libraries.txt; they go after the PoseidonT3 line.
+EXTRA=0
+if [ -f "$H/foundry-libraries.txt" ]; then
+  sed -i '/PoseidonT3.sol:PoseidonT3:0x00000000000000000000000000000000000A1002",$/r '"$H/foundry-libraries.txt" "$P/foundry.toml"
+  EXTRA=$(wc -l < "$H/foundry-libraries.txt")
+fi
 diff "$W/foundry.toml.orig" "$P/foundry.toml" > "$W/foundry.toml.diff" || true
-[ "$(grep -c '^> ' "$W/foundry.toml.diff")" -eq "$(( $(wc -l < "$PKG/scripts/foundry-kontrol.txt") + 1 ))" ] \
+[ "$(grep -c '^> ' "$W/foundry.toml.diff")" -eq "$(( $(wc -l < "$PKG/scripts/foundry-kontrol.txt") + 1 + EXTRA ))" ] \
   && [ "$(grep -c '^< ' "$W/foundry.toml.diff")" -eq 0 ] || { cat "$W/foundry.toml.diff"; echo "foundry.toml patch not as documented"; exit 1; }
 
 # 4. The harness and the mutants of this suite. Files named *Replay.t.sol go to the replay project

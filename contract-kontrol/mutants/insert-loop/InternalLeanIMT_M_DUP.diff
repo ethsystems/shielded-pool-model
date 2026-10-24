@@ -1,0 +1,29 @@
+--- a/InternalLeanIMT.sol
++++ b/InternalLeanIMT_M_DUP.sol
+@@ -2,7 +2,7 @@
+ pragma solidity ^0.8.4;
+ 
+ import {PoseidonT3} from "poseidon-solidity/PoseidonT3.sol";
+-import {SNARK_SCALAR_FIELD} from "./Constants.sol";
++import {SNARK_SCALAR_FIELD} from "@zk-kit/packages/lean-imt/contracts/Constants.sol";
+ 
+ struct LeanIMTData {
+     // Tracks the current number of leaves in the tree.
+@@ -30,7 +30,7 @@
+ /// the node's value becomes that of its left child. Furthermore, rather than utilizing a static tree depth,
+ /// it is updated based on the number of leaves in the tree. This approach
+ /// results in the calculation of significantly fewer hashes, making the tree more efficient.
+-library InternalLeanIMT {
++library InternalLeanIMT_M_DUP {
+     /// @dev Inserts a new leaf into the incremental merkle tree.
+     /// The function ensures that the leaf is valid according to the
+     /// constraints of the tree and then updates the tree's structure accordingly.
+@@ -42,7 +42,7 @@
+             revert LeafGreaterThanSnarkScalarField();
+         } else if (leaf == 0) {
+             revert LeafCannotBeZero();
+-        } else if (_has(self, leaf)) {
++        } else if (false) {
+             revert LeafAlreadyExists();
+         }
+ 

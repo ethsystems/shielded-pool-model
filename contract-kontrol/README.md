@@ -1,10 +1,12 @@
 # contract-kontrol: Kontrol proofs about the pool contract at `a04b8b3`
 
 This package holds the symbolic proofs about `ShieldedPool.sol` of ethsystems/pocs (public) at
-`a04b8b3` that the claim board in [evidence/](../evidence/README.md) cites under its contract rows:
+`a04b8b3` and its libraries that the claim board in [evidence/](../evidence/README.md) cites under
+its contract rows:
 the rejection guards of deposit, transfer and withdraw, the withdraw success path (marking before
 payout, the payout call, the verifier inputs), canonical public inputs and their order, and local
-checks of the tree insertion loop. Each proof runs in Kontrol 1.0.255 (KEVM, the K framework) in a
+checks of the tree insertion loop, and the frame of the PoseidonT3 library. Each Kontrol proof runs
+in Kontrol 1.0.255 (KEVM, the K framework) in a
 Docker image pinned by digest, against the pool source exported from the git submodule `pocs/`.
 Each proof has must-fail siblings (mutants): the same proof against a pool with one change, which
 must fail at a stated output. `check.sh` builds and runs them and compares every verdict with
@@ -28,6 +30,7 @@ the suite's section.
 | `withdraw-success` | `token-above-0x11`, `two-tokens`, `replay` | W6, W10, X2 (withdraw half), S2 (withdraw) | night-kontrol, SYMTOK |
 | `public-inputs` | `canonical`, `order`, `fixed-token`, `replay` | S1, S2, W6, W10 | D5, D4 |
 | `insert-loop` | `controls` (and the K claims in `k/`) | D5, T11, T12, X1, X2 (scoped components) | N15c (and N15b) |
+| `poseidon-frame` | `frame` | A5 (D2: the real PoseidonT3 is a pure function) | D2 |
 
 The board is a frozen research document; its rows name these runs by the earlier labels in the last
 column. [scripts/rename-map.txt](scripts/rename-map.txt) maps every earlier file, contract, test,
@@ -43,6 +46,7 @@ Common to every Kontrol suite unless its section says otherwise ("the common sco
 - Fixed code: the pool (or one mutant), the real LeanIMT library code at its linked address
   `0xA1001`, and the mocks of the suite. No PoseidonT3 runs on any path checked here (every path
   stops at or before the verifier, or is a withdraw, which does not hash).
+- Code compiled by solc 0.8.37 for the Prague EVM (forge 1.5.1's default), optimizer 100 runs.
 - Mocks that record and move no balances: verifiers that compare or trip, a registry with a
   symbolic root, recording tokens. Token movement (A10) stays an assumption.
 - Gas not modelled (Kontrol's default, no `--use-gas`). A call that runs out of gas is not covered.
@@ -162,7 +166,8 @@ addresses `0x00` to `0x11`; a symbolic caller. The symbolic-caller form of the s
 the prank splits once per existing account and its unconstrained default branch splits again in the
 same way. No run here selects it. That `withdraw` never reads `msg.sender` is a source reading (the
 pool reads it only in `onlyOwner`, the constructor and `deposit`), not a result of this package.
-The Halmos package checks the same body with a symbolic caller.
+A Halmos run of the same body with a symbolic caller is in the frozen
+report [evidence/2026-10-13-halmos-caller](../evidence/2026-10-13-halmos-caller/REPORT.md).
 
 The bytes-prefix rule (`lemmas/bytes-prefix.k`, module `BYTES-PREFIX-LEMMAS`, four
 `[simplification]` rules, one fact in four orientations): when `B1` and `B2` are concrete,
@@ -256,10 +261,42 @@ in this package yet.
 Not shown: entry relations, the depth update, whole-call composition, the real PoseidonT3 in the
 loop, a general caller frame.
 
-### poseidon-frame (D2)
+### poseidon-frame: the PoseidonT3 library is a pure function
 
-Not in this package. The board's D2 (the real PoseidonT3 library is a pure function for canonical
-68-byte delegatecalls) is a Halmos 0.3.3 check, not a Kontrol proof; see "Open" below.
+This suite is a Halmos 0.3.3 check, not a Kontrol proof; it is here because the board lists it with
+the Kontrol rows (D2). `harness/poseidon-frame/` is a small Foundry project run on the host.
+`scripts/rebuild.py` compiles `PoseidonT3.sol` of the pinned poseidon-solidity 0.0.5 package with
+solc 0.8.37 and the settings of the pool build (`inputs/solc-settings.json`: optimizer 100 runs,
+Osaka, the library links and remappings, which enter the metadata) and requires that the runtime,
+with the library address `0xA1002` in its call-protection slot, equals the bytes the tests etch,
+byte for byte (16,466 bytes), and that the creation code equals the one of `test/Deployment.t.sol`.
+`scripts/scan.py` decodes the executable instructions (up to the compiler's INVALID fence; no valid
+jump destination after it) and requires none of SSTORE, SLOAD, TSTORE, TLOAD, any call, create or
+self-destruct, any LOG, and none of the caller, origin, balance, block or gas reads; one ADDRESS (the
+library's call-protection check).
+
+Halmos, on the real bytecode with generic symbolic storage of the caller and the library, all
+inputs `x`, `y` over every uint256:
+
+| Check | Expected | Says |
+|---|---|---|
+| `check_frame_equal_inputs` | PASS, 1 path | two delegatecalls succeed, return 32 bytes each, agree; an arbitrary slot and the whole modelled state are unchanged |
+| `check_call_context_same_result` | PASS, 1 path | a direct call and a delegatecall return the same word and change no state |
+| `check_wrong_selector` | PASS, 2 paths | every other selector reverts with empty data, at calldata length 68 |
+| `check_short_calldata` | PASS, 132 paths | symbolic calldata of every length 0 to 67 reverts with empty data |
+| `check_mutant_witness` (mutant) | FAIL, 1 valid model | a copy that adds `sstore(0, not(sload(0)))` fails the frame assertion at `x = y = slot = 0` |
+
+Forge replays: the real runtime keeps slot 0 at a concrete call, the mutant changes it to all ones
+(`MutantReplay` must fail); `DeploymentTest` deploys the creation code and checks the runtime.
+
+Scope line (exact): calls `0x561558fe || uint256(x) || uint256(y)`, zero value, enough gas and call
+depth, normal fresh memory; the pinned runtime at `0xA1002`. Not shown: Poseidon's arithmetic or
+any hash property (Halmos abstracts some multiplications and remainders by deterministic
+functions); gas exhaustion; calldata longer than 68 bytes; the use of this rule inside the
+insertion-loop claims, which still run with a keccak stub (A5). The earlier fully symbolic mutant
+runs hit memory limits and are not results; the mutant control is the fixed-point witness above.
+Trust: Halmos 0.3.3 and its solvers (yices 2.6.4, z3 4.12.6, installed from
+`requirements-halmos.txt`, every package pinned by sha256), forge and solc.
 
 ## Trust base
 
@@ -283,6 +320,7 @@ Not in this package. The board's D2 (the real PoseidonT3 library is a pure funct
   forge 1.5.1 inside the image (it drives the build); forge and cast 1.8.3 on the host for the
   replays and the controls. A compiler bug affects the proofs and the deployment alike.
 - The mocks and harnesses: what they record and compare is what the proofs check.
+- For `poseidon-frame`: Halmos 0.3.3, yices 2.6.4 and z3 4.12.6 (`requirements-halmos.txt`).
 - Not trusted: the scripts of this package (they read verdicts; a wrong script makes `check.sh`
   report wrongly, not a proof pass).
 
@@ -307,7 +345,8 @@ git submodule update --init contract-kontrol/pocs
 ```
 
 You need Docker (the right to run containers), bash, git, python3, curl, sha256sum, tar, patch,
-forge and cast 1.8.3 and solc 0.8.37 (as [deployment/](../deployment/README.md) installs them;
+forge and cast 1.8.3 and solc 0.8.37 and, for `poseidon-frame`, Halmos (`python3 -m venv .venv &&
+.venv/bin/pip install --require-hashes --no-deps -r requirements-halmos.txt`; or set `HALMOS`) (as [deployment/](../deployment/README.md) installs them;
 `check.sh` downloads solc into `.deps/` if it finds none). Pull the image once:
 
 ```
@@ -336,7 +375,8 @@ In order, `check.sh`:
    against its blob), adds the dependencies, applies the documented `foundry.toml` patch
    (`scripts/foundry-kontrol.txt` and one remapping), copies the harness and generates the mutants;
    then runs each row of `harness/<suite>/runs.tsv`: `build` and `prove` rows in the container
-   (`scripts/kontrol-run.sh`), `forge` rows (replays) and `controls` rows on the host;
+   (`scripts/kontrol-run.sh`), `forge` rows (replays), `controls` rows and `halmos` rows on the
+   host;
 5. reads every verdict and every failing node's output (`scripts/kverdicts.py`, from Kontrol's
    output and the saved proof graph) and compares them with `EXPECTED.tsv` (`scripts/compare.py`).
 
@@ -353,7 +393,8 @@ Cost, from the earlier runs (cap 8 GiB): a build takes 1.5 to 5 minutes and peak
 (a kompile with more CPUs can hit the cap; `BUILD_CPUS=2` lowers the peak); `withdraw-success`
 `token-above-0x11` took 2,288 s at 6.52 GB; `two-tokens` about 1,800 s; `public-inputs` `canonical`
 and `order` together 4,996 s; `fixed-token` about 30 minutes; each guard 3 to 9 minutes and each
-guard mutant 4 to 12 minutes of prover time; `insert-loop` `controls` a few seconds. RESULT.md has
+guard mutant 4 to 12 minutes of prover time; `insert-loop` `controls` a few seconds;
+`poseidon-frame` about 30 seconds. RESULT.md has
 the times measured here. `work/` takes about 0.5 GB per suite (saved proof graphs); neither `work/`
 nor `.deps/` is tracked.
 
@@ -379,16 +420,25 @@ The proofs were first written with working names, which the frozen reports and t
 [scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier run label, file, contract, test,
 mutant and module to its name here. Only names and comments changed. The proof bodies, the error
 names (so the error selectors in `EXPECTED.tsv` equal those of the earlier reports), the mutated
-lines and the prover options are those of the earlier runs, with three exceptions, each stated in
+lines and the prover options are those of the earlier runs, with these exceptions, each stated in
 its suite's section: `guards-stock` leaves out the stalled canonical-input checks;
 `guards-patched` keeps only the withdraw test contract (the deposit and transfer contracts did not
-close) and adds three mutant siblings; `withdraw-success` `two-tokens` now runs with the
-bytes-prefix rule loaded.
+close) and adds three mutant siblings; in `withdraw-success` the probe and non-vacuity bodies moved
+to a contract `WithdrawSuccessProbes` that the mutant siblings do not inherit (two builds of the
+earlier layout hit the 8 GiB cap here), and `two-tokens` now runs with the bytes-prefix rule
+loaded; `poseidon-frame` rebuilds the library from the pinned package with the recorded settings in
+place of the earlier build inputs.
+
+The compiler differs from the earlier Kontrol runs: they let the image's forge 1.5.1 choose solc,
+and it chose 0.8.33 (Prague EVM target, from the saved build information). This package pins solc
+0.8.37, the compiler of the deployment check, and keeps forge 1.5.1's Prague target (the deployment
+builds for Osaka). So the bytecode under proof here is the 0.8.37 build, not the 0.8.33 build of the
+earlier runs; a verdict reproduced here is a verdict about the 0.8.37 build. `SOLC` selects another
+solc for a comparison.
 
 ## Open
 
-- D2 (PoseidonT3 purity) is a Halmos check and is not packaged here; it belongs with the Halmos
-  proofs.
+- `poseidon-frame` is a Halmos check; it could move to the Halmos package.
 - The K claims of the insertion loop are packaged but not run by `check.sh`, and the three `insert`
   rejection proofs are not packaged.
 - The per-node feasibility evaluation of the earlier runs (every constraint of a failing node true
