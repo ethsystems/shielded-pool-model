@@ -1,0 +1,60 @@
+name = "privacy-games"
+defaultTargets = ["PoolGame", "GameCorrespondence", "RecipientGame", "ChainGame", "ChosenWorldGame", "WithdrawGame", "OwnerGame", "SenderGame", "PrivacyTools", "CommitROM"]
+
+# Mathlib at the commit that VCV-io pins (the tag v4.33.1); `lake exe cache get` fetches its oleans.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "0df444a360eaa60ab8c11dca51a86af692955474"
+
+# VCV-io (oracle computations, probability semantics, cryptographic experiments), by commit.
+[[require]]
+name = "VCVio"
+git = "https://github.com/dtumad/VCV-io"
+rev = "dfc7ff078f3dbca0e71c40e289b9db175ab7ce16"
+
+# The three model files of the gated model, compiled from the parent directory as they are.
+# scripts/check.sh checks their hashes against PINS.sha256.
+[[lean_lib]]
+name = "Model"
+srcDir = ".."
+roots = ["LeanShieldedPool.Pool.State", "LeanShieldedPool.Pool.Tx", "LeanShieldedPool.Pool.Events"]
+
+[[lean_lib]]
+name = "PoolGame"
+globs = ["PoolGame.+"]
+
+[[lean_lib]]
+name = "GameCorrespondence"
+
+[[lean_lib]]
+name = "RecipientGame"
+globs = ["RecipientGame.+"]
+
+[[lean_lib]]
+name = "ChainGame"
+globs = ["ChainGame.+"]
+
+[[lean_lib]]
+name = "ChosenWorldGame"
+globs = ["ChosenWorldGame.+"]
+
+[[lean_lib]]
+name = "WithdrawGame"
+globs = ["WithdrawGame.+"]
+
+[[lean_lib]]
+name = "OwnerGame"
+globs = ["OwnerGame.+"]
+
+[[lean_lib]]
+name = "SenderGame"
+globs = ["SenderGame.+"]
+
+[[lean_lib]]
+name = "PrivacyTools"
+globs = ["PrivacyTools.+"]
+
+[[lean_lib]]
+name = "CommitROM"
+globs = ["CommitROM.+"]

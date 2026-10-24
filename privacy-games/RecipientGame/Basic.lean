@@ -1,0 +1,574 @@
+import GameCorrespondence
+import PoolGame.Averaging
+
+/-!
+A guarded challenger with fair rejection of the whole experiment.
+The common setup and sampled transfers use the frozen guards and post-states.
+The observer receives a full accepted run or is never invoked.
+-/
+
+set_option autoImplicit false
+set_option relaxedAutoImplicit false
+
+open OracleComp OracleSpec ENNReal
+
+namespace LeanShieldedPool.RecipientGame
+
+open GameCorrespondence
+
+variable {P : LeanShieldedPool.PrimSpec}
+
+noncomputable def stepChecked (st : St P) : Tx P → Option (St P) := by
+  classical
+  exact fun tx => match tx with
+    | .deposit d => if d.guard st then some (d.post st) else none
+    | .transfer d => if d.guard st then some (d.post st) else none
+    | .withdraw d => if d.guard st then some (d.post st) else none
+
+noncomputable def runChecked : St P → List (Tx P) → Option (St P)
+  | st, [] => some st
+  | st, tx :: txs => (stepChecked st tx).bind (fun st' => runChecked st' txs)
+
+theorem stepChecked_sound {st st' : St P} {tx : Tx P}
+    (h : stepChecked st tx = some st') : Step st tx st' := by
+  classical
+  cases tx with
+  | deposit d =>
+    simp only [stepChecked] at h
+    split at h <;> simp_all
+    subst st'
+    exact Step.deposit ‹_›
+  | transfer d =>
+    simp only [stepChecked] at h
+    split at h <;> simp_all
+    subst st'
+    exact Step.transfer ‹_›
+  | withdraw d =>
+    simp only [stepChecked] at h
+    split at h <;> simp_all
+    subst st'
+    exact Step.withdraw ‹_›
+
+theorem runChecked_sound {sup : P.Token → Prop} (txs : List (Tx P))
+    {pref : List (Tx P)} {st st' : St P} (run : Run sup pref st)
+    (h : runChecked st txs = some st') : Run sup (pref ++ txs) st' := by
+  induction txs generalizing pref st with
+  | nil => simp only [runChecked, Option.some.injEq] at h; subst st'; simpa using run
+  | cons tx txs ih =>
+    simp only [runChecked, Option.bind_eq_some_iff] at h
+    obtain ⟨next, hs, hr⟩ := h
+    simpa [List.append_assoc] using
+      ih (Run.step run (stepChecked_sound hs)) hr
+
+/-- Failure is internal. The experiment returns a fresh fair win bit. -/
+noncomputable def guardedLog (sup : P.Token → Prop) (txs : List (Tx P)) :
+    Option (List (PoolGame.Event (gamePrim P))) :=
+  (runChecked (St.empty P sup) txs).map (fun _ => observerView txs)
+
+theorem guardedLog_realizable {sup : P.Token → Prop} {txs : List (Tx P)}
+    {log : List (PoolGame.Event (gamePrim P))} (h : guardedLog sup txs = some log) :
+    ∃ st, ∃ run : Run sup txs st, runObserverView run = log := by
+  obtain ⟨st, hs, hv⟩ := Option.map_eq_some_iff.mp h
+  exact ⟨st, by simpa using runChecked_sound txs Run.empty hs, hv⟩
+
+theorem guardedLog_bad_event {sup : P.Token → Prop} {txs : List (Tx P)}
+    (e : PoolGame.Event (gamePrim P)) (he : e ∈ observerView txs)
+    (bad : ¬ EventGuard e) : guardedLog sup txs = none := by
+  cases h : guardedLog sup txs with
+  | none => rfl
+  | some log =>
+    obtain ⟨st, run, _⟩ := guardedLog_realizable h
+    exact False.elim (bad (run_events_guard run e he))
+
+/-- Output salts in the template are placeholders and are always replaced. -/
+def withSalts (d : TransferData P) (s1 s2 : P.Salt) : TransferData P :=
+  { d with out1 := { d.out1 with salt := s1 }, out2 := { d.out2 with salt := s2 } }
+
+def sampleWorld [SampleableType P.Salt] :
+    List (TransferData P) → ProbComp (List (TransferData P))
+  | [] => pure []
+  | d :: ds => do
+    let s1 ← $ᵗ P.Salt
+    let s2 ← $ᵗ P.Salt
+    let rest ← sampleWorld ds
+    return withSalts d s1 s2 :: rest
+
+def projectWorld (ds : List (TransferData P)) := ds.map transferWitness
+
+/-- This is only the recipient restriction. Execution separately enforces every model guard. -/
+def RecipientPair (ds₀ ds₁ : List (TransferData P)) : Prop :=
+  PoolGame.LegalChallenge (projectWorld ds₀) (projectWorld ds₁)
+
+/-- Setup is common to both worlds and also passes through the executor. -/
+noncomputable def publish2 [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (ds : List (TransferData P)) :
+    ProbComp (Option (List (PoolGame.Event (gamePrim P)))) := do
+  let sampled ← sampleWorld ds
+  return guardedLog sup (setup ++ sampled.map Tx.transfer)
+
+theorem publish2_realizable [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (ds : List (TransferData P))
+    (log : List (PoolGame.Event (gamePrim P)))
+    (h : some log ∈ support (publish2 sup setup ds)) :
+    ∃ sampled ∈ support (sampleWorld ds), ∃ st,
+      ∃ run : Run sup (setup ++ sampled.map Tx.transfer) st,
+        runObserverView run = log := by
+  simp [publish2] at h
+  obtain ⟨sampled, hs, hl⟩ := h
+  obtain ⟨st, run, hv⟩ := guardedLog_realizable hl
+  exact ⟨sampled, hs, st, run, hv⟩
+
+structure Adversary (P : LeanShieldedPool.PrimSpec) where
+  State : Type
+  chooseWorlds : ProbComp (List (TransferData P) × List (TransferData P) × State)
+  distinguish : State → OracleComp (PoolGame.observerSpec (gamePrim P)) Bool
+
+noncomputable def challengeExp [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) (ds₀ ds₁ : List (TransferData P))
+    (state : adv.State) : ProbComp Bool := by
+  classical
+  exact if RecipientPair ds₀ ds₁ then do
+    let b ← $ᵗ Bool
+    let result ← publish2 sup setup (if b then ds₁ else ds₀)
+    match result with
+    | none => $ᵗ Bool
+    | some log => do
+      let guess ← simulateQ (PoolGame.observerImpl log) (adv.distinguish state)
+      return b == guess
+  else $ᵗ Bool
+
+noncomputable def experiment [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) : ProbComp Bool := do
+  let (ds₀, ds₁, state) ← adv.chooseWorlds
+  challengeExp sup setup adv ds₀ ds₁ state
+
+noncomputable def advantage [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) : ℝ :=
+  |(Pr[= true | experiment sup setup adv]).toReal - 1 / 2|
+
+theorem advantage_nonneg [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) : 0 ≤ advantage sup setup adv := abs_nonneg _
+
+theorem duplicate_input_rejected (sup : P.Token → Prop) (pref suffix : List (Tx P))
+    (d : TransferData P) (hdup : d.in1.cm = d.in2.cm) (s1 s2 : P.Salt) :
+    guardedLog sup (pref ++ Tx.transfer (withSalts d s1 s2) :: suffix) = none := by
+  apply guardedLog_bad_event (gameEvent (Tx.event (.transfer (withSalts d s1 s2))))
+  · simp [observerView, events]
+  · simp [EventGuard, gameEvent, Tx.event, withSalts, TransferData.nf1,
+      TransferData.nf2, Note.nf, hdup]
+
+theorem output_collision_rejected (sup : P.Token → Prop) (pref suffix : List (Tx P))
+    (d : TransferData P) (hcollision : d.out1.cm = d.out2.cm) :
+    guardedLog sup (pref ++ Tx.transfer d :: suffix) = none := by
+  apply guardedLog_bad_event (gameEvent (Tx.event (.transfer d)))
+  · simp [observerView, events]
+  · simp [EventGuard, gameEvent, Tx.event, hcollision]
+
+theorem salt_collision_rejected (sup : P.Token → Prop) (pref suffix : List (Tx P))
+    (d : TransferData P) (ht : d.out1.token = d.out2.token)
+    (ha : d.out1.amount = d.out2.amount) (hp : d.out1.ownerPubkey = d.out2.ownerPubkey)
+    (s : P.Salt) :
+    guardedLog sup (pref ++ Tx.transfer (withSalts d s s) :: suffix) = none := by
+  apply output_collision_rejected
+  simp [withSalts, Note.cm, ht, ha, hp]
+
+theorem correspondence_collision_rejected :
+    guardedLog (fun _ => True)
+      [Tx.deposit SaltCollision.deposit, Tx.transfer (withSalts SaltCollision.transfer 2 2)] = none := by
+  exact output_collision_rejected (fun _ => True) [Tx.deposit SaltCollision.deposit] [] _ rfl
+
+theorem sampleWorld_observer_bind [SampleableType P.Salt] {α : Type}
+    (ds : List (TransferData P)) (f : List (PoolGame.Event (gamePrim P)) → ProbComp α) :
+    (do let sampled ← sampleWorld ds; f (observerView (sampled.map Tx.transfer))) =
+      (do let log ← PoolGame.publish (projectWorld ds); f log) := by
+  induction ds generalizing f with
+  | nil => simp [sampleWorld, projectWorld, PoolGame.publish, observerView, events]
+  | cons d ds ih =>
+    simp only [sampleWorld, projectWorld, List.map_cons, PoolGame.publish, bind_assoc]
+    apply bind_congr
+    intro s1
+    apply bind_congr
+    intro s2
+    simp only [pure_bind]
+    convert ih (fun log => f ((transferWitness d).toEvent s1 s2 :: log)) using 1
+    · apply bind_congr
+      intro sampled
+      rfl
+    · rfl
+
+/-- Insert the common public setup into every observer reply. -/
+def prependObserver (setup : List (Tx P)) :
+    QueryImpl (PoolGame.observerSpec (gamePrim P))
+      (OracleComp (PoolGame.observerSpec (gamePrim P))) :=
+  fun _ => do
+    let log ← query (spec := PoolGame.observerSpec (gamePrim P)) ()
+    return observerView setup ++ log
+
+def projectAdversary (setup : List (Tx P)) (adv : Adversary P) :
+    PoolGame.TransferIndAdv (gamePrim P) where
+  State := adv.State
+  chooseWorlds := do
+    let (ds₀, ds₁, state) ← adv.chooseWorlds
+    return (projectWorld ds₀, projectWorld ds₁, state)
+  distinguish := fun state => simulateQ (prependObserver setup) (adv.distinguish state)
+
+theorem prependObserver_simulate (setup : List (Tx P))
+    (log : List (PoolGame.Event (gamePrim P)))
+    (oa : OracleComp (PoolGame.observerSpec (gamePrim P)) Bool) :
+    simulateQ (PoolGame.observerImpl log) (simulateQ (prependObserver setup) oa) =
+      simulateQ (PoolGame.observerImpl (observerView setup ++ log)) oa := by
+  rw [← QueryImpl.simulateQ_compose]
+  congr 1
+
+abbrev Draw (adv : Adversary P) := Option (adv.State × Bool × List (Tx P))
+
+noncomputable def draws [SampleableType P.Salt] (setup : List (Tx P))
+    (adv : Adversary P) : ProbComp (Draw adv) := by
+  classical
+  exact do
+    let (ds₀, ds₁, state) ← adv.chooseWorlds
+    if RecipientPair ds₀ ds₁ then do
+      let b ← $ᵗ Bool
+      let sampled ← sampleWorld (if b then ds₁ else ds₀)
+      return some (state, b, setup ++ sampled.map Tx.transfer)
+    else pure none
+
+def idealResponse (adv : Adversary P) : Draw adv → ProbComp Bool
+  | none => $ᵗ Bool
+  | some (state, b, txs) => do
+      let guess ← simulateQ (PoolGame.observerImpl (observerView txs)) (adv.distinguish state)
+      return b == guess
+
+noncomputable def rejected (sup : P.Token → Prop) {adv : Adversary P} : Draw adv → Bool
+  | none => false
+  | some (_, _, txs) => (runChecked (St.empty P sup) txs).isNone
+
+noncomputable def checkedResponse (sup : P.Token → Prop) (adv : Adversary P)
+    (draw : Draw adv) : ProbComp Bool :=
+  if rejected sup draw then $ᵗ Bool else idealResponse adv draw
+
+noncomputable def rejectionProbability [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) : ℝ :=
+  (Pr[= true | do let draw ← draws setup adv; pure (rejected sup draw)]).toReal
+
+theorem experiment_eq_draws [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) :
+    experiment sup setup adv = (draws setup adv >>= checkedResponse sup adv) := by
+  classical
+  simp only [experiment, draws, bind_assoc]
+  apply bind_congr
+  intro a
+  rcases a with ⟨ds₀, ds₁, state⟩
+  by_cases h : RecipientPair ds₀ ds₁
+  · simp only [challengeExp, h, if_pos, publish2, bind_assoc]
+    apply bind_congr
+    intro b
+    apply bind_congr
+    intro sampled
+    simp only [pure_bind, checkedResponse, rejected, guardedLog]
+    rcases Option.eq_none_or_eq_some
+      (runChecked (St.empty P sup) (setup ++ sampled.map Tx.transfer)) with hn | ⟨st, hs⟩
+    · simp [hn]
+    · simp [hs, idealResponse]
+  · simp [challengeExp, h, checkedResponse, rejected, idealResponse]
+
+theorem observerView_append (xs ys : List (Tx P)) :
+    observerView (xs ++ ys) = observerView xs ++ observerView ys := by
+  simp [observerView, events]
+
+theorem ideal_eq_v1 [SampleableType P.Salt]
+    (setup : List (Tx P)) (adv : Adversary P) :
+    (draws setup adv >>= idealResponse adv) =
+      PoolGame.transferIndExp (projectAdversary setup adv) := by
+  classical
+  simp only [draws, PoolGame.transferIndExp, projectAdversary, bind_assoc, pure_bind]
+  apply bind_congr
+  intro a
+  rcases a with ⟨ds₀, ds₁, state⟩
+  by_cases h : RecipientPair ds₀ ds₁
+  · simp only [h, if_pos, PoolGame.transferChallengeExp, show
+        PoolGame.LegalChallenge (projectWorld ds₀) (projectWorld ds₁) from h,
+        bind_assoc, pure_bind]
+    apply bind_congr
+    intro b
+    simp only [idealResponse, observerView_append, prependObserver_simulate]
+    cases b with
+    | false =>
+      simpa using sampleWorld_observer_bind ds₀
+        (fun log => do
+          let guess ← simulateQ (PoolGame.observerImpl (observerView setup ++ log))
+            (adv.distinguish state)
+          return (false == guess))
+    | true =>
+      simpa using sampleWorld_observer_bind ds₁
+        (fun log => do
+          let guess ← simulateQ (PoolGame.observerImpl (observerView setup ++ log))
+            (adv.distinguish state)
+          return (true == guess))
+  · simp [h, PoolGame.transferChallengeExp, show
+        ¬ PoolGame.LegalChallenge (projectWorld ds₀) (projectWorld ds₁) from h,
+        idealResponse]
+
+/-- Replacing any win experiment with a fair win bit changes its probability by at most half. -/
+theorem fair_distance_le_half (p : ProbComp Bool) :
+    ($ᵗ Bool).boolDistAdvantage p ≤ 1 / 2 := by
+  have hlo : 0 ≤ (Pr[= true | p]).toReal := ENNReal.toReal_nonneg
+  have hhi : (Pr[= true | p]).toReal ≤ 1 := by
+    simpa using ENNReal.toReal_mono ENNReal.one_ne_top
+      (probOutput_le_one (mx := p) (x := true))
+  simp only [ProbComp.boolDistAdvantage]
+  have hf : (Pr[= true | ($ᵗ Bool : ProbComp Bool)]).toReal = 1 / 2 := by simp
+  rw [hf, abs_le]
+  constructor <;> linarith
+
+/-- A common sample couples execution and publication. Only rejected draws can differ. -/
+theorem rejection_distance_le {α : Type} (pref : ProbComp α)
+    (reject : α → Bool) (f : α → ProbComp Bool) :
+    (pref >>= fun a => if reject a then $ᵗ Bool else f a).boolDistAdvantage
+      (pref >>= f) ≤
+        (Pr[= true | do let a ← pref; pure (reject a)]).toReal / 2 := by
+  let g := fun a => if reject a then ($ᵗ Bool : ProbComp Bool) else f a
+  let r := fun a => (pure (reject a) : ProbComp Bool)
+  have point (a : α) : (g a).boolDistAdvantage (f a) ≤
+      (Pr[= true | r a]).toReal / 2 := by
+    cases hr : reject a <;> simp [g, r, hr, ProbComp.boolDistAdvantage]
+    simpa [ProbComp.boolDistAdvantage] using fair_distance_le_half (f a)
+  have hd : Summable (fun a => (Pr[= a | pref]).toReal *
+      (g a).boolDistAdvantage (f a)) := by
+    have ht := ((PoolGame.Averaging.weighted_output_summable pref g).sub
+      (PoolGame.Averaging.weighted_output_summable pref f)).abs
+    simpa only [← mul_sub, abs_mul, abs_of_nonneg ENNReal.toReal_nonneg,
+      ProbComp.boolDistAdvantage] using ht
+  refine (PoolGame.Averaging.boolDistAdvantage_bind_le pref g f).trans ?_
+  calc
+    _ ≤ ∑' a, (Pr[= a | pref]).toReal * ((Pr[= true | r a]).toReal / 2) := by
+      apply Summable.tsum_le_tsum _ hd
+        ((PoolGame.Averaging.weighted_output_summable pref r).div_const 2 |>.congr
+          (fun _ => by ring))
+      intro a
+      exact mul_le_mul_of_nonneg_left (point a) ENNReal.toReal_nonneg
+    _ = _ := by
+      rw [PoolGame.Averaging.probOutput_bind_toReal]
+      simp only [r, ← mul_div_assoc, tsum_div_const]
+
+theorem advantage_le_v1_add_rejection [SampleableType P.Salt]
+    (sup : P.Token → Prop) (setup : List (Tx P)) (adv : Adversary P) :
+    advantage sup setup adv ≤
+      PoolGame.transferIndAdvantage (projectAdversary setup adv) +
+        rejectionProbability sup setup adv / 2 := by
+  have hd := rejection_distance_le (draws setup adv) (rejected sup) (idealResponse adv)
+  change (draws setup adv >>= checkedResponse sup adv).boolDistAdvantage
+    (draws setup adv >>= idealResponse adv) ≤ rejectionProbability sup setup adv / 2 at hd
+  rw [← experiment_eq_draws, ideal_eq_v1] at hd
+  have ht := abs_sub_le (Pr[= true | experiment sup setup adv]).toReal
+    (Pr[= true | PoolGame.transferIndExp (projectAdversary setup adv)]).toReal (1 / 2)
+  unfold advantage PoolGame.transferIndAdvantage
+  unfold ProbComp.boolDistAdvantage at hd
+  linarith
+
+/-- All conditions for transporting the frozen privacy bound are named fields. -/
+structure BoundAssumptions [SampleableType P.Salt] [DecidableEq P.Commitment]
+    [SampleableType P.Nullifier] (adv : Adversary P) (n : Nat) where
+  primitives : PoolGame.PoolAssumptions (gamePrim P)
+  hiding_nonneg : 0 ≤ primitives.εHiding
+  length_bound : ∀ a ∈ support adv.chooseWorlds, a.1.length ≤ n
+
+theorem projectAdversary_length [SampleableType P.Salt] [DecidableEq P.Commitment]
+    [SampleableType P.Nullifier] (setup : List (Tx P)) (adv : Adversary P) (n : Nat)
+    (H : BoundAssumptions adv n) :
+    PoolGame.Averaging.LengthBound (projectAdversary setup adv) n := by
+  intro a ha
+  simp [projectAdversary] at ha
+  obtain ⟨a, ha, rfl⟩ := ha
+  simpa [projectWorld] using H.length_bound a ha
+
+theorem advantage_le [SampleableType P.Salt] [DecidableEq P.Commitment]
+    [SampleableType P.Nullifier] (sup : P.Token → Prop) (setup : List (Tx P))
+    (adv : Adversary P) (n : Nat) (H : BoundAssumptions adv n) :
+    advantage sup setup adv ≤ 2 * n * H.primitives.εHiding +
+      rejectionProbability sup setup adv / 2 := by
+  have htransport := advantage_le_v1_add_rejection sup setup adv
+  have hbound := PoolGame.Averaging.transferIndAdvantage_le H.primitives H.hiding_nonneg
+    (projectAdversary setup adv) n (projectAdversary_length setup adv n H)
+  linarith
+
+/-- A small rejection rate is a separate obligation, not a cryptographic consequence. -/
+structure RejectionBound [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) where
+  δ : ℝ
+  rejection_le : rejectionProbability sup setup adv ≤ δ
+
+theorem advantage_le_of_rejection_bound [SampleableType P.Salt] [DecidableEq P.Commitment]
+    [SampleableType P.Nullifier] (sup : P.Token → Prop) (setup : List (Tx P))
+    (adv : Adversary P) (n : Nat) (H : BoundAssumptions adv n)
+    (R : RejectionBound sup setup adv) :
+    advantage sup setup adv ≤ 2 * n * H.primitives.εHiding + R.δ / 2 := by
+  have hbound := advantage_le sup setup adv n H
+  have hr := R.rejection_le
+  linarith
+
+theorem stepChecked_complete {st st' : St P} {tx : Tx P}
+    (h : Step st tx st') : stepChecked st tx = some st' := by
+  cases h <;> simp [stepChecked, *]
+
+theorem runChecked_append (st : St P) (xs ys : List (Tx P)) :
+    runChecked st (xs ++ ys) = (runChecked st xs).bind (fun mid => runChecked mid ys) := by
+  induction xs generalizing st with
+  | nil => rfl
+  | cons tx xs ih => simp [runChecked, ih, Option.bind_assoc]
+
+theorem runChecked_complete {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (run : Run sup txs st) : runChecked (St.empty P sup) txs = some st := by
+  induction run with
+  | empty => rfl
+  | step run step ih =>
+    rw [runChecked_append, ih]
+    simp [runChecked, stepChecked_complete step]
+
+theorem guardedLog_of_run {sup : P.Token → Prop} {txs : List (Tx P)} {st : St P}
+    (run : Run sup txs st) : guardedLog sup txs = some (runObserverView run) := by
+  simp [guardedLog, runChecked_complete run, runObserverView]
+
+def duplicateTemplate (d : TransferData P) : TransferData P := { d with in2 := d.in1 }
+
+theorem duplicateTemplate_projection (d : TransferData P) :
+    transferWitness (duplicateTemplate d) = duplicateInput (transferWitness d) := rfl
+
+theorem duplicate_publish_no_log [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (d : TransferData P) (log : List (PoolGame.Event (gamePrim P))) :
+    some log ∉ support (publish2 sup setup [duplicateTemplate d]) := by
+  intro h
+  simp [publish2, sampleWorld] at h
+  obtain ⟨s1, s2, h⟩ := h
+  have hr := duplicate_input_rejected sup setup [] (duplicateTemplate d) rfl s1 s2
+  simp [hr] at h
+
+theorem correspondence_good_draw_accepted :
+    guardedLog (fun _ => True) [Tx.deposit SaltCollision.deposit, Tx.transfer (withSalts SaltCollision.transfer 2 3)] =
+      some [.deposit 0, SaltCollision.world.toEvent 2 3] := by
+  exact guardedLog_of_run SaltCollision.accepted_run
+
+theorem illegal_challenge_fair [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) (ds₀ ds₁ : List (TransferData P))
+    (state : adv.State) (h : ¬ RecipientPair ds₀ ds₁) :
+    challengeExp sup setup adv ds₀ ds₁ state = $ᵗ Bool := by
+  simp [challengeExp, h]
+
+theorem rejectionProbability_bounds [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (adv : Adversary P) :
+    0 ≤ rejectionProbability sup setup adv ∧ rejectionProbability sup setup adv ≤ 1 := by
+  refine ⟨ENNReal.toReal_nonneg, ?_⟩
+  exact (ENNReal.toReal_mono ENNReal.one_ne_top probOutput_le_one).trans_eq ENNReal.toReal_one
+
+theorem sampleWorld_project [SampleableType P.Salt] (ds : List (TransferData P))
+    (sampled : List (TransferData P)) (h : sampled ∈ support (sampleWorld ds)) :
+    projectWorld sampled = projectWorld ds := by
+  induction ds generalizing sampled with
+  | nil =>
+    simp [sampleWorld] at h
+    subst sampled
+    rfl
+  | cons d ds ih =>
+    simp [sampleWorld] at h
+    obtain ⟨s1, s2, rest, hr, rfl⟩ := h
+    change transferWitness (withSalts d s1 s2) :: projectWorld rest =
+      transferWitness d :: projectWorld ds
+    rw [ih rest hr]
+    rfl
+
+theorem publish2_realizes_chosen_world [SampleableType P.Salt] (sup : P.Token → Prop)
+    (setup : List (Tx P)) (ds : List (TransferData P))
+    (log : List (PoolGame.Event (gamePrim P)))
+    (h : some log ∈ support (publish2 sup setup ds)) :
+    ∃ sampled ∈ support (sampleWorld ds), projectWorld sampled = projectWorld ds ∧
+      ∃ st, ∃ run : Run sup (setup ++ sampled.map Tx.transfer) st,
+        runObserverView run = log := by
+  obtain ⟨sampled, hs, st, run, hv⟩ := publish2_realizable sup setup ds log h
+  exact ⟨sampled, hs, sampleWorld_project ds sampled hs, st, run, hv⟩
+
+theorem correspondence_collision_rejection_in_support :
+    none ∈ support (publish2 (fun _ => True) [Tx.deposit SaltCollision.deposit] [SaltCollision.transfer]) := by
+  simp [publish2, sampleWorld]
+  exact ⟨2, 2, correspondence_collision_rejected⟩
+
+theorem correspondence_collision_rejection_positive :
+    0 < Pr[= none | publish2 (fun _ => True) [Tx.deposit SaltCollision.deposit] [SaltCollision.transfer]] :=
+  (probOutput_pos_iff _ _).mpr correspondence_collision_rejection_in_support
+
+theorem correspondence_good_log_in_support :
+    some [.deposit 0, SaltCollision.world.toEvent 2 3] ∈
+      support (publish2 (fun _ => True) [Tx.deposit SaltCollision.deposit] [SaltCollision.transfer]) := by
+  simp [publish2, sampleWorld]
+  exact ⟨2, 3, correspondence_good_draw_accepted⟩
+
+end LeanShieldedPool.RecipientGame
+
+#print axioms LeanShieldedPool.RecipientGame.stepChecked
+#print axioms LeanShieldedPool.RecipientGame.runChecked
+#print axioms LeanShieldedPool.RecipientGame.stepChecked_sound
+#print axioms LeanShieldedPool.RecipientGame.runChecked_sound
+#print axioms LeanShieldedPool.RecipientGame.guardedLog
+#print axioms LeanShieldedPool.RecipientGame.guardedLog_realizable
+#print axioms LeanShieldedPool.RecipientGame.guardedLog_bad_event
+#print axioms LeanShieldedPool.RecipientGame.withSalts
+#print axioms LeanShieldedPool.RecipientGame.sampleWorld
+#print axioms LeanShieldedPool.RecipientGame.projectWorld
+#print axioms LeanShieldedPool.RecipientGame.RecipientPair
+#print axioms LeanShieldedPool.RecipientGame.publish2
+#print axioms LeanShieldedPool.RecipientGame.publish2_realizable
+#print axioms LeanShieldedPool.RecipientGame.Adversary
+#print axioms LeanShieldedPool.RecipientGame.challengeExp
+#print axioms LeanShieldedPool.RecipientGame.experiment
+#print axioms LeanShieldedPool.RecipientGame.advantage
+#print axioms LeanShieldedPool.RecipientGame.advantage_nonneg
+#print axioms LeanShieldedPool.RecipientGame.duplicate_input_rejected
+#print axioms LeanShieldedPool.RecipientGame.output_collision_rejected
+#print axioms LeanShieldedPool.RecipientGame.salt_collision_rejected
+#print axioms LeanShieldedPool.RecipientGame.correspondence_collision_rejected
+#print axioms LeanShieldedPool.RecipientGame.sampleWorld_observer_bind
+#print axioms LeanShieldedPool.RecipientGame.prependObserver
+#print axioms LeanShieldedPool.RecipientGame.projectAdversary
+#print axioms LeanShieldedPool.RecipientGame.prependObserver_simulate
+#print axioms LeanShieldedPool.RecipientGame.Draw
+#print axioms LeanShieldedPool.RecipientGame.draws
+#print axioms LeanShieldedPool.RecipientGame.idealResponse
+#print axioms LeanShieldedPool.RecipientGame.rejected
+#print axioms LeanShieldedPool.RecipientGame.checkedResponse
+#print axioms LeanShieldedPool.RecipientGame.rejectionProbability
+#print axioms LeanShieldedPool.RecipientGame.experiment_eq_draws
+#print axioms LeanShieldedPool.RecipientGame.observerView_append
+#print axioms LeanShieldedPool.RecipientGame.ideal_eq_v1
+#print axioms LeanShieldedPool.RecipientGame.fair_distance_le_half
+#print axioms LeanShieldedPool.RecipientGame.rejection_distance_le
+#print axioms LeanShieldedPool.RecipientGame.advantage_le_v1_add_rejection
+#print axioms LeanShieldedPool.RecipientGame.BoundAssumptions
+#print axioms LeanShieldedPool.RecipientGame.projectAdversary_length
+#print axioms LeanShieldedPool.RecipientGame.advantage_le
+#print axioms LeanShieldedPool.RecipientGame.RejectionBound
+#print axioms LeanShieldedPool.RecipientGame.advantage_le_of_rejection_bound
+#print axioms LeanShieldedPool.RecipientGame.stepChecked_complete
+#print axioms LeanShieldedPool.RecipientGame.runChecked_append
+#print axioms LeanShieldedPool.RecipientGame.runChecked_complete
+#print axioms LeanShieldedPool.RecipientGame.guardedLog_of_run
+#print axioms LeanShieldedPool.RecipientGame.duplicateTemplate
+#print axioms LeanShieldedPool.RecipientGame.duplicateTemplate_projection
+#print axioms LeanShieldedPool.RecipientGame.duplicate_publish_no_log
+#print axioms LeanShieldedPool.RecipientGame.correspondence_good_draw_accepted
+#print axioms LeanShieldedPool.RecipientGame.illegal_challenge_fair
+#print axioms LeanShieldedPool.RecipientGame.rejectionProbability_bounds
+#print axioms LeanShieldedPool.RecipientGame.sampleWorld_project
+#print axioms LeanShieldedPool.RecipientGame.publish2_realizes_chosen_world
+#print axioms LeanShieldedPool.RecipientGame.correspondence_collision_rejection_in_support
+#print axioms LeanShieldedPool.RecipientGame.correspondence_collision_rejection_positive
+#print axioms LeanShieldedPool.RecipientGame.correspondence_good_log_in_support
+#print axioms LeanShieldedPool.RecipientGame.Adversary.mk
+#print axioms LeanShieldedPool.RecipientGame.Adversary.State
+#print axioms LeanShieldedPool.RecipientGame.Adversary.chooseWorlds
+#print axioms LeanShieldedPool.RecipientGame.Adversary.distinguish
+#print axioms LeanShieldedPool.RecipientGame.BoundAssumptions.mk
+#print axioms LeanShieldedPool.RecipientGame.BoundAssumptions.primitives
+#print axioms LeanShieldedPool.RecipientGame.BoundAssumptions.hiding_nonneg
+#print axioms LeanShieldedPool.RecipientGame.BoundAssumptions.length_bound
+#print axioms LeanShieldedPool.RecipientGame.RejectionBound.mk
+#print axioms LeanShieldedPool.RecipientGame.RejectionBound.δ
+#print axioms LeanShieldedPool.RecipientGame.RejectionBound.rejection_le

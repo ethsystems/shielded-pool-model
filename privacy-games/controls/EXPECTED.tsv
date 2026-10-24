@@ -1,0 +1,29 @@
+# name	kind	first error (or "compiles"); written by scripts/controls.py --record
+recipient_hiding_halved	lean-fail	395:2: linarith failed to find a contradiction
+withdraw_rejection_quartered	lean-fail	279:2: linarith failed to find a contradiction
+sender_hiding_dropped	lean-fail	216:2: linarith failed to find a contradiction
+withdraw_rom_birthday_dropped	lean-fail	119:99: linarith failed to find a contradiction
+sender_rom_salt_term_minus_one	lean-fail	111:2: linarith failed to find a contradiction
+recipient_rom_query_term_halved	lean-fail	92:2: linarith failed to find a contradiction
+chain_commit_only_setup_dropped	lean-fail	80:2: linarith failed to find a contradiction
+chain_rom_collisions_rejection_quartered	lean-fail	163:2: linarith failed to find a contradiction
+same_recipient_hiding_halved	lean-pass	compiles
+same_withdraw_rejection_quartered	lean-pass	compiles
+same_sender_hiding_dropped	lean-pass	compiles
+same_withdraw_rom_birthday_dropped	lean-pass	compiles
+same_sender_rom_salt_term_minus_one	lean-pass	compiles
+same_recipient_rom_query_term_halved	lean-pass	compiles
+same_chain_commit_only_setup_dropped	lean-pass	compiles
+same_chain_rom_collisions_rejection_quartered	lean-pass	compiles
+census_drop_chosen_world_counterexample	census	CENSUS INVENTORY.md: theorem not listed: LeanShieldedPool.ChosenWorldGame.Counterexample.concrete_counterexample
+census_drop_withdraw_transport_bound	census	CENSUS INVENTORY.md: theorem not listed: LeanShieldedPool.WithdrawGame.Transport.advantage_le
+census_drop_sender_bound	census	CENSUS INVENTORY.md: theorem not listed: LeanShieldedPool.SenderGame.advantage_le
+census_drop_sender_rom_bound	census	CENSUS INVENTORY.md: theorem not listed: LeanShieldedPool.SenderGame.ROM.advantage_le_queryBound
+census_edit_sender_rom_commit_bound	census	CENSUS INVENTORY.md: entry of LeanShieldedPool.SenderGame.ROMCommit.advantage_le_queryBound differs
+census_edit_recipient_rom_collisions	census	CENSUS INVENTORY.md: entry of LeanShieldedPool.RecipientGame.ROMCommit.advantage_le_rom_collisions differs
+census_edit_raw_chain_commit_only_bound	census	CENSUS RAW.sha256: entry of LeanShieldedPool.ChainGame.CommitOnly.advantage_le_queryBound differs
+census_drop_raw_chain_rom_collisions	census	CENSUS RAW.sha256: theorem not listed: LeanShieldedPool.ChainGame.CommitOnly.advantage_le_rom_collisions
+pins_vendor_tracked_change	pins	PINS FAIL: the VCV-io checkout has changes: M lean-toolchain
+pins_vendor_untracked_file	pins	PINS FAIL: the VCV-io checkout has changes: ?? control-untracked.txt
+pins_manifest_vcvio_rev	pins	PINS FAIL: lake-manifest.json resolves VCVio to https://github.com/dtumad/VCV-io f3df0ac18aa5ae72b3e920ad5460492aa039b4f7, not https://github.com/dtumad/VCV-io dfc7ff078f3dbca0e71c40e289b9db175ab7ce16
+pins_model_file_changed	pins	PINS FAIL: model file ../LeanShieldedPool/Pool/State.lean has sha256 0af2ffe7b99671c93014adf860044273b2ced2e4b8dbeddc42c247517a693561, not the pinned 50b2e325d1eb1768176ece309661bfaaba7155b4f3be07b8b96bda52db103489
