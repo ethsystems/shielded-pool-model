@@ -7,21 +7,35 @@ success path (marking before payout, the payout call, the verifier inputs), cano
 and their order, local checks of the tree insertion loop, and the frame of the PoseidonT3 library.
 Each Kontrol proof runs in Kontrol 1.0.255 (KEVM, the K framework) in a Docker image pinned by
 digest, against the pool source exported from the git submodule `pocs/`.
-Each proof has must-fail siblings (mutants): the same proof against a pool with one change, which
-must fail at a stated output. `check.sh` builds and runs them and compares every verdict with
-`EXPECTED.tsv`; [RESULT.md](RESULT.md) records the runs on this machine.
+Each Kontrol harness proof (each `prove` run of `harness/<suite>/runs.tsv`) has must-fail siblings
+(mutants): the same proof against a pool or library with one change, which must fail at a stated
+output. Two parts are checked another way. The archived K claims of the insertion loop
+(`harness/insert-loop/k/`) have no must-fail proofs: the mutant verdicts of their earlier run were
+withdrawn, and concrete controls (`insert-loop` run `controls`) replace them. The PoseidonT3 frame
+suite (`poseidon-frame`) is a set of Halmos checks; its mutant is a witness that must fail an
+assertion, not a Kontrol output. `check.sh` runs the selected runs and compares every exit status
+and every verdict with `EXPECTED.tsv`; [RESULT.md](RESULT.md) records the runs on this machine.
 
-These are statements about the EVM bytecode that solc 0.8.37 builds from the pinned source, under
-KEVM's semantics and the trust base below, each inside its own scope. They are not a proof of the
-contract, of any deployment, or of claim 1. The model gate (`scripts/gate.sh`) never runs them and
-nothing here changes the claim in the parent README.
+The parts are about different builds. The Kontrol harness proofs are statements about the EVM
+bytecode that solc 0.8.37 builds from the pinned source for the Prague EVM. The archived K claims
+are statements about the LeanIMT library runtime of an earlier build by solc 0.8.33 (the compiler
+metadata inside the claims says so), under KEVM's Cancun schedule (`<schedule> CANCUN`). Their
+controls run that archived runtime, and copies of the library source that solc 0.8.37 compiles for
+Cancun. The `poseidon-frame` checks are about the PoseidonT3 runtime that solc 0.8.37 builds for
+Osaka. Each holds only under KEVM's or Halmos's semantics and the trust base below, inside its own
+scope. None is a proof of the contract, of any deployment, or of claim 1. The model gate
+(`scripts/gate.sh`) never runs them and nothing here changes the claim in the parent README.
 
-Which numbers this machine reproduced: [RESULT.md](RESULT.md) has one table per suite. On 2026-10-24
-every run of `withdraw-success`, `guards-patched`, `guards-stock`, `insert-loop` (`rejections`,
-`controls`) and `poseidon-frame` was rerun here and gave the expected verdicts and failing outputs.
-**Not rerun here:** the `public-inputs` proof runs (`canonical`, `order`, `fixed-token`; its build
-and replays did run) and the insertion-loop K claims in `insert-loop/k/`. For those, `EXPECTED.tsv`
-and the sections below carry the values of the earlier run.
+Which numbers this machine reproduced: [RESULT.md](RESULT.md) has one table per suite. No single
+`check.sh` invocation of 2026-10-24 ran every suite and ended `CHECK PASS`. The suite comparisons
+that matched come from separate invocations: `guards-patched` (run 3, compared afterwards on its
+work directory); `withdraw-success`, `guards-stock`, `insert-loop` and `poseidon-frame` (run 5,
+whose last line was `CHECK FAIL` because the `public-inputs` build was stopped); the `public-inputs`
+build and replays only (run 6); and `insert-loop` again (run 7). The `check.sh` and `compare.py` of
+those runs predate the stricter checks that RESULT.md lists. **Not rerun here:** the `public-inputs`
+proof runs `canonical`, `order` and `fixed-token`, whose expected verdicts are results of the
+2026-10-01 run on the 0.8.33 build, not yet confirmed on the 0.8.37 build; and the archived K claims
+in `insert-loop/k/`, which `check.sh` does not run.
 
 ## Suites
 
@@ -34,7 +48,6 @@ and the sections below carry the values of the earlier run.
 | `insert-loop` | `rejections`, `controls` (and the K claims in `k/`) | the duplicate-leaf, fresh-output, marking and ordering rows (scoped components) |
 | `poseidon-frame` | `frame` | A5 (the real PoseidonT3 is a pure function) |
 
-The board is a frozen document; its rows name these runs by earlier run labels.
 [scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier run label to the suite and run
 here, and every earlier file, contract, test, mutant and module name to its name here.
 
@@ -48,7 +61,8 @@ Common to every Kontrol suite unless its section says otherwise ("the common sco
 - Fixed code: the pool (or one mutant), the real LeanIMT library code at its linked address
   `0xA1001`, and the mocks of the suite. No PoseidonT3 runs on any path checked here (every path
   stops at or before the verifier, or is a withdraw, which does not hash).
-- Code compiled by solc 0.8.37 for the Prague EVM (forge 1.5.1's default), optimizer 100 runs.
+- Code compiled by solc 0.8.37 for the Prague EVM (forge 1.5.1's default), optimizer 100 runs. (The
+  archived K claims of `insert-loop/k/` are the exception: 0.8.33, Cancun; see `insert-loop`.)
 - Mocks that record and move no balances: verifiers that compare or trip, a registry with a
   symbolic root, recording tokens. Token movement (A10) stays an assumption.
 - Gas not modelled (Kontrol's default, no `--use-gas`). A call that runs out of gas is not covered.
@@ -131,8 +145,10 @@ path. Token argument: any address t with t > 0x11 and t != the cheatcode account
 fixed-code environment: two armed recording tokens, seven other deployed contracts, no code
 elsewhere. Successful withdrawals exist only on the two recording mocks. Fixed caller (the test
 contract). Symbolic n, a, rcp, r, acc at full width. Symbolic pool storage except slot 108, slot
-109 and the reentrancy slot. Proof length < 2^64, content symbolic. Comparison verifier mock.
-Recording token mocks that move no balances. Kontrol 1.0.255, the patched `abi.md`, the
+109 and the reentrancy slot. Proof length < 2^64, content symbolic. Comparison verifier mock; the
+inputs are compared in its decoded body, so a path supplies a comparison only when the verifier
+call reaches that body, which needs `ceil32(proof.length) <= 2^64 - 97` (the bound that BOARD.md
+row S2 states for the same withdraw call). Recording token mocks that move no balances. Kontrol 1.0.255, the patched `abi.md`, the
 bytes-prefix rule, gas off, KEVM keccak lemmas.
 
 Run `two-tokens` (`prove_success_two_tokens`), scope line (exact): the same body, with the token
@@ -190,16 +206,19 @@ integration into Kontrol stays trusted either way.
 Harnesses `harness/public-inputs/PublicInputs.t.sol` and `CanonicalInputs.t.sol`, patched KEVM, one
 build.
 
-Run `canonical` (rule S1). A verifier mock checks every input word: a word `>= P` (the BN254 scalar
-field modulus) reverts `NonCanonical()`, any other input reverts `Reached()`; the pool catches
-neither, and each entry point makes one verifier call. Property: on every path of `deposit`,
-`transfer` and `withdraw` that reaches the verifier, every public input is `< P`. Scope line
-(exact): canonical ABI calls, zero value, caller the test contract (deposit's funding address is
-the test contract), symbolic pool storage with slots 108, 109 and the reentrancy slot pinned,
-registry storage symbolic, token a symbolic address; withdraw proof of symbolic length < 2^64 and
-content; deposit and transfer with an empty proof and a payload of symbolic length < 2^64 and
-content; fixed code; gas off; KEVM keccak lemmas. Mutants: `DEPOSIT_CANONICAL`,
-`TRANSFER_CANONICAL`, `WITHDRAW_CANONICAL` (one canonicality call removed, `:163`, `:218`, `:275`),
+Run `canonical` (rule S1). A verifier mock checks every input word in its decoded body: a word
+`>= P` (the BN254 scalar field modulus) reverts `NonCanonical()`, any other input reverts
+`Reached()`; the pool catches neither, and each entry point makes one verifier call. Property: on
+every path of `deposit`, `transfer` and `withdraw` that reaches the decoded verifier body, every
+public input is `< P`. A call that the mock's ABI decoder rejects, or that reverts before the body
+runs, supplies no input comparison. Scope line (exact): canonical ABI calls, zero value, caller the
+test contract (deposit's funding address is the test contract), symbolic pool storage with slots
+108, 109 and the reentrancy slot pinned, registry storage symbolic, token a symbolic address;
+withdraw proof of symbolic length < 2^64 and content, where only paths with
+`ceil32(proof.length) <= 2^64 - 97` reach the decoded body (the bound that BOARD.md row S2 states
+for the same withdraw call); deposit and transfer with an empty proof and a payload of symbolic
+length < 2^64 and content; inputs observed in the decoded mock body only; fixed code; gas off; KEVM
+keccak lemmas. Mutants: `DEPOSIT_CANONICAL`, `TRANSFER_CANONICAL`, `WITHDRAW_CANONICAL` (one canonicality call removed, `:163`, `:218`, `:275`),
 each failing at `0xb9e93ed0` `S1NonCanonical()`; three witnesses (`prove_witness_*_canonical_mustfail`)
 must fail with Panic 0x01, showing the verifier is reachable with canonical inputs. The boundary
 mutant `BOUND_GT` (`>=` to `>` at `:361`) has no Kontrol verdict; its forge replay fails as
@@ -208,20 +227,21 @@ required.
 Run `order` (rule S2). The comparison verifier must receive exactly
 `[c, t, a, funder, registry.root(), keccak(payload) mod P]` (deposit) or
 `[n0, n1, c0, c1, r, keccak(payload) mod P]` (transfer), the circuits' order. Scope line (exact):
-as `canonical`, deposit and transfer only, empty proof. Mutants `DEPOSIT_SWAP_45` and
-`TRANSFER_SWAP_45` (inputs 4 and 5 swapped) fail at `0x794445cf` `S2Inputs()`; two witnesses must
+as `canonical`, deposit and transfer only, empty proof; the order is observed in the decoded body
+of the comparison mock. Mutants `DEPOSIT_SWAP_45` and `TRANSFER_SWAP_45` (inputs 4 and 5 swapped) fail at `0x794445cf` `S2Inputs()`; two witnesses must
 fail with Panic 0x01.
 
 Run `fixed-token` (rules W6, W10 with one token). The withdraw body of `withdraw-success` in its
 first form: the token is fixed (`0xf000...000b`), a second recording token must get no call
 (`W10OtherToken`), no bytes-prefix rule. Scope line (exact): as `withdraw-success`, with the token
-fixed. Mutants `LATE_MARK`, `SWAP_INPUTS`, `DROP_BIT253`, `PAY_CALLER`, `SKIP_VERIFIER` with the
-outputs of the table above; a witness must fail with Panic 0x01. The `token-above-0x11` run covers
+fixed; the inputs are compared in the decoded body of the comparison mock, which only paths with
+`ceil32(proof.length) <= 2^64 - 97` reach (BOARD.md row S2). Mutants `LATE_MARK`, `SWAP_INPUTS`,
+`DROP_BIT253`, `PAY_CALLER`, `SKIP_VERIFIER` with the outputs of the table above; a witness must fail with Panic 0x01. The `token-above-0x11` run covers
 this token as one case, with a stronger body.
 
-**Not rerun here** (time): the runs `canonical`, `order` and `fixed-token`; their expected values
-are those of the earlier run (2026-10-01). The build (peak 8.59 GB, just under the cap) and the 36
-replays ran here.
+**Not rerun here** (time): the runs `canonical`, `order` and `fixed-token`. Their expected verdicts
+in `EXPECTED.tsv` are results of the 2026-10-01 run on the 0.8.33 build, not yet confirmed on the
+0.8.37 build. The build (peak 8.59 GB, just under the cap) and the 36 replays ran here.
 
 Not shown: deposit and transfer with a nonempty symbolic proof and a symbolic payload together (the
 `*_split` bodies, one `bytes` split at a symbolic index, did not finish in the earlier run and no
@@ -263,15 +283,20 @@ the loop reaches its exit with level = depth and slots 0 and 1 unchanged, for ev
 outside the visited levels), `loop2-spec.k` (loop-exact: storage and node after the loop are
 `#lstore`, `#lnode` of `loop-funcs.k`), `loop5e-spec.k` (post-loop-exact: from the exit to the
 return, `S[0 <- INDEX+1][sideNodes[DEPTH] <- NODE][leaves[LEAF] <- INDEX+1]`), and the mutant
-claims `loop1m`, `loop3m2`, `loop5em3`. The earlier run proved the four claims (`kevm prove` on a
-definition built with `loop-funcs.k`, each final cover re-decided by the Kore implication check
-after the faster booster check had found it); the must-fail verdicts of that run were withdrawn
-because their failing nodes were not feasible, and the controls above replace them. **Not rerun
-here, and `check.sh` does not run the K claims:** the earlier proof needed manual steps (removing
-covers, pruning a graph, resuming with another implication check) that no script reproduces yet.
-They are packaged so they can be read and rerun by hand. Errata of the earlier report apply: the
-post-loop claim writes `INDEX + 1` to slot 0 and `leaves[LEAF]` (count growth needs an extra entry
-relation), and `loop-frame2` preserves one mapping key, not every unvisited entry.
+claims `loop1m`, `loop3m2`, `loop5em3`. They are about the library runtime of the earlier solc
+0.8.33 build (its metadata is in the claims) under KEVM's Cancun schedule, not about the 0.8.37
+Prague build of the Kontrol suites. The earlier run (by 2026-10-01) proved the four claims (`kevm
+prove` on a definition built with `loop-funcs.k`, each final cover re-decided by the Kore
+implication check after the faster booster check had found it); the must-fail verdicts of that run
+were withdrawn because their failing nodes were not feasible, and the controls above replace them.
+**Not rerun here, and `check.sh` does not run the K claims.** They are archived specifications
+without a reproduced proof procedure. Each claim requires `foundry.k`, the K definition that
+`kontrol build` generated for the earlier project; this package neither carries nor regenerates
+it. The earlier proof also needed manual graph steps (removing covers, pruning a graph, resuming
+with another implication check) that no script here records. Two corrections to the earlier
+description of these claims: the post-loop claim writes `INDEX + 1` to slot 0 and `leaves[LEAF]`
+(count growth needs an extra entry relation), and `loop-frame2` preserves one mapping key, not
+every unvisited entry.
 
 Not shown: entry relations, the depth update, whole-call composition, the real PoseidonT3 in the
 loop, a general caller frame.
@@ -311,7 +336,9 @@ functions); gas exhaustion; calldata longer than 68 bytes; the use of this rule 
 insertion-loop claims, which still run with a keccak stub (A5). The earlier fully symbolic mutant
 runs hit memory limits and are not results; the mutant control is the fixed-point witness above.
 Trust: Halmos 0.3.3 and its solvers (yices 2.6.4, z3 4.12.6, installed from
-`requirements-halmos.txt`, every package pinned by sha256), forge and solc.
+`requirements-halmos.txt`, every package pinned by sha256; `check.sh` checks the installed Python
+3.12 environment against the RECORD pins of `PINS.txt` and runs Halmos as `python -I -m halmos`),
+forge and solc.
 
 ## Trust base
 
@@ -336,8 +363,12 @@ Trust: Halmos 0.3.3 and its solvers (yices 2.6.4, z3 4.12.6, installed from
   replays and the controls. A compiler bug affects the proofs and the deployment alike.
 - The mocks and harnesses: what they record and compare is what the proofs check.
 - For `poseidon-frame`: Halmos 0.3.3, yices 2.6.4 and z3 4.12.6 (`requirements-halmos.txt`).
-- Not trusted: the scripts of this package (they read verdicts; a wrong script makes `check.sh`
-  report wrongly, not a proof pass).
+- The orchestration and the verdict extraction: `check.sh`, `scripts/` (`setup-suite.sh`,
+  `kontrol-run.sh`, `kverdicts.py`, `compare.py`, `pyenv-check.py`), `mutants/make.py`, and the
+  scripts of `harness/insert-loop/controls/tools/` and `harness/poseidon-frame/scripts/`. They
+  select and export the source, set the build options, load the lemma and the patched `abi.md`, run
+  every command, and read and accept the verdicts. A wrong script can run a proof on other inputs,
+  or count a wrong verdict as expected.
 
 ## Pins
 
@@ -346,8 +377,9 @@ of the 14 exported files (the pool source `ShieldedPool.sol` has sha256 `8cad561
 three soldeer zips of the pinned `soldeer.lock` by sha256; zk-kit.solidity at `a171c845` and
 kontrol-cheatcodes at `187b89ad` by tree id; the image digest and the Kontrol version; the sha256 of
 the stock and patched `abi.md` and of the lemma file; forge, cast and solc by version and binary
-sha256. The mutants are generated from `mutants/<suite>/*.diff` by `mutants/make.py`, which applies
-each diff strictly to the exported source and requires the sha256 of `MUTANTS.sha256`.
+sha256; for `poseidon-frame`, the Python version, the yices binary and the RECORD digest of each
+package of the Halmos environment. The mutants are generated from `mutants/<suite>/*.diff` by
+`mutants/make.py`, which applies each diff strictly to the exported source and requires the sha256 of `MUTANTS.sha256`.
 
 ## Re-check
 
@@ -360,9 +392,10 @@ git submodule update --init contract-kontrol/pocs
 ```
 
 You need Docker (the right to run containers), bash, git, python3, curl, sha256sum, tar, patch,
-forge and cast 1.8.3 and solc 0.8.37 and, for `poseidon-frame`, Halmos (`python3 -m venv .venv &&
-.venv/bin/pip install --require-hashes --no-deps -r requirements-halmos.txt`; or set `HALMOS`) (as [deployment/](../deployment/README.md) installs them;
-`check.sh` downloads solc into `.deps/` if it finds none). Pull the image once:
+forge and cast 1.8.3 and solc 0.8.37 (as [deployment/](../deployment/README.md) installs them;
+`check.sh` downloads solc into `.deps/` if it finds none) and, for `poseidon-frame`, Halmos in a
+Python 3.12 environment (`python3.12 -m venv .venv && .venv/bin/pip install --require-hashes
+--no-deps -r requirements-halmos.txt`; or set `HALMOS`). Pull the image once:
 
 ```
 docker pull runtimeverificationinc/kontrol@sha256:858f004144d61b005997f56bb8b7cd15673850286c96e0e5ec0502d9c9a9e204
@@ -373,15 +406,24 @@ Then:
 ```
 cd contract-kontrol
 ./check.sh                                   # every suite of harness/SUITES.txt
-./check.sh guards-patched insert-loop        # some suites
-./check.sh withdraw-success:token-above-0x11 # one run of a suite (its build and replays too)
-# expect a CHECK line per proof, "CHECK PASS suite <name>" per suite, and the last line CHECK PASS: ...
+./check.sh guards-patched insert-loop        # every run of some suites
+./check.sh withdraw-success:token-above-0x11 # one prove run and its build: CHECK PARTIAL
+./check.sh public-inputs:replay              # the forge replays only, no Docker: CHECK PARTIAL
+# expect a RUN line per run, a CHECK line per verdict, "CHECK PASS suite <name>" per suite,
+# and the last line CHECK PASS: ...
 ```
+
+A selection names runs of `harness/<suite>/runs.tsv`; a selected prove run brings its suite's build.
+`check.sh` rejects an unknown suite or run.
 
 In order, `check.sh`:
 
-1. checks forge, cast and solc (versions and binary sha256); when a selected suite has a Kontrol
-   build, checks the image id, `kontrol version`, the image's `abi.md` against its pin, that
+0. checks the selection and the inventory of every suite (`scripts/compare.py --inventory`: each
+   run of `runs.tsv` has rows in `EXPECTED.tsv` and each row a run, and each mutant has an expected
+   failing proof or replay);
+1. checks forge, cast and solc (versions and binary sha256); when a `halmos` run is selected, checks
+   the Halmos environment (`scripts/pyenv-check.py`, as in `contract-halmos`); when a build is
+   selected, checks the image id, `kontrol version`, the image's `abi.md` against its pin, that
    `abi.md.diff` turns it into `kevm-patch/abi.md`, and the lemma file;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
 3. fetches the soldeer zips by the pinned lock (checked by sha256 and soldeer's integrity hash),
@@ -389,11 +431,13 @@ In order, `check.sh`:
 4. for each suite: `scripts/setup-suite.sh` exports the pin with `git archive` (every file checked
    against its blob), adds the dependencies, applies the documented `foundry.toml` patch
    (`scripts/foundry-kontrol.txt` and one remapping), copies the harness and generates the mutants;
-   then runs each row of `harness/<suite>/runs.tsv`: `build` and `prove` rows in the container
-   (`scripts/kontrol-run.sh`), `forge` rows (replays), `controls` rows and `halmos` rows on the
-   host;
+   then runs each selected row of `harness/<suite>/runs.tsv`: `build` and `prove` rows in the
+   container (`scripts/kontrol-run.sh`, whose RUN end line holds the command exit and the runner
+   exit), `forge` rows (replays), `controls` rows and `halmos` rows on the host (each log ends with
+   its exit status, `HOST_EXIT=`);
 5. reads every verdict and every failing node's output (`scripts/kverdicts.py`, from Kontrol's
-   output and the saved proof graph) and compares them with `EXPECTED.tsv` (`scripts/compare.py`).
+   output and the saved proof graph) and compares them, and the exit status of every selected run,
+   with `EXPECTED.tsv` (`scripts/compare.py`).
 
 Each container: `--memory 8g --memory-swap 8g` (no swap), core dumps off, no network, one at a time.
 Before each container `kontrol-run.sh` waits until no other Kontrol container runs and `free -g`
@@ -401,8 +445,13 @@ shows at least `GATE_GIB` (default 10) GiB available. Environment: `CAP`, `BUILD
 `0-1`), `PROVE_CPUSET` (default `0-5`), `TLIM` (seconds per container, default 7200), `GATE_GIB`, `FORGE`, `CAST`,
 `SOLC`, `POCS`, `DEPS_CACHE`, `WORK`, `PULL=0`, `SOLC_FETCH=0`, `TOOLS_UNPINNED=1`.
 
-Exit 0 means every compared line was as expected. A run that gives no verdict (a timeout, an OOM
-kill, a crash) is a mismatch, never a pass. A suite run with some runs not selected says "partial".
+The last line is `CHECK PASS` (exit 0) only when every run of every named suite ran, exited with
+the status its expected verdicts give, and gave every expected verdict and failing output. A
+selection that leaves runs of a suite out ends `CHECK PARTIAL (<selection>)` with exit 3, even when
+everything selected matched. Anything else ends `CHECK FAIL` (exit 1; exit 2 for a usage error). A
+selected run with no result, or whose log shows a timeout, a kill, a crash or another exit status
+than its expected verdicts give, is void: each of its expected verdicts is a mismatch, never a
+pass. `scripts/compare.py` lists the rules.
 
 Cost, measured here (cap 8 GiB, CPUs `0-1` for a build and `0-5` for a proof run): each build 2.5
 to 4 minutes at 7.3 to 7.9 GB peak (the `public-inputs` build reached 8.59 GB, just under the cap;
@@ -425,8 +474,8 @@ nor `.deps/` is tracked.
 - `lemmas/bytes-prefix.k`: the bytes-prefix rule.
 - `kevm-patch/abi.md`, `kevm-patch/abi.md.diff`: the patched KEVM file and its one deletion.
 - `scripts/`: `setup-suite.sh`, `kontrol-run.sh`, `kverdicts.py`, `compare.py`,
-  `soldeer-integrity.py` (as in `deployment/`), `foundry-kontrol.txt`, `rename-map.txt`, and
-  `klengths.py`, which prints the `bytes` length bounds at the test entry of saved proofs (stock:
+  `pyenv-check.py` (as in `contract-halmos/`), `soldeer-integrity.py` (as in `deployment/`),
+  `foundry-kontrol.txt`, `rename-map.txt`, and `klengths.py`, which prints the `bytes` length bounds at the test entry of saved proofs (stock:
   `<= 2^30` and `< 2^64`; patched: `< 2^64` only), to show from the graph which KEVM a run used.
 - `EXPECTED.tsv`: every expected verdict (suite, run, proof, verdict, failing outputs, and the date
   of the earlier run it comes from, or "new").
@@ -434,10 +483,12 @@ nor `.deps/` is tracked.
 
 ## Earlier names
 
-The proofs were first written with working names, which the frozen reports and the claim board use.
+The proofs were first written with working names. The claim board and the records of the earlier
+runs (2026-10-01, 2026-10-02, 2026-10-06 and 2026-10-07; those records are not in this repository)
+use them.
 [scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier run label, file, contract, test,
 mutant and module to its name here. Only names and comments changed. The proof bodies, the error
-names (so the error selectors in `EXPECTED.tsv` equal those of the earlier reports), the mutated
+names (so the error selectors in `EXPECTED.tsv` equal those of the earlier runs), the mutated
 lines and the prover options are those of the earlier runs, with these exceptions, each stated in
 its suite's section: `guards-stock` leaves out the stalled canonical-input checks;
 `guards-patched` keeps only the withdraw test contract (the deposit and transfer contracts did not
@@ -451,12 +502,17 @@ The compiler differs from the earlier Kontrol runs: they let the image's forge 1
 and it chose 0.8.33 (Prague EVM target, from the saved build information). This package pins solc
 0.8.37, the compiler of the deployment check, and keeps forge 1.5.1's Prague target (the deployment
 builds for Osaka). So the bytecode under proof here is the 0.8.37 build, not the 0.8.33 build of the
-earlier runs; a verdict reproduced here is a verdict about the 0.8.37 build. `SOLC` selects another
-solc for a comparison.
+earlier runs; a verdict reproduced here is a verdict about the 0.8.37 build. The `public-inputs`
+proofs and the archived K claims were not reproduced (see the opening). `check.sh` requires solc
+0.8.37: `SOLC` can point at another copy of it, and `TOOLS_UNPINNED=1` accepts a build of 0.8.37
+whose sha256 differs from the pinned Linux x86_64 binary. Another compiler version needs other pins
+in `PINS.txt`.
 
 ## Open
 
 - `poseidon-frame` is a Halmos check; it could move to the Halmos package.
-- The K claims of the insertion loop are packaged but not run by `check.sh`.
+- The K claims of the insertion loop are archived, not run by `check.sh`, and have no reproduced
+  proof procedure here.
+- No `check.sh` invocation has yet ended `CHECK PASS` over every suite.
 - The per-node feasibility evaluation of the earlier runs (every constraint of a failing node true
   at one point) is not carried; the replays are.
