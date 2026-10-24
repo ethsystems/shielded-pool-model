@@ -6,7 +6,7 @@ checkouts of Mathlib and its eight dependencies, with Mathlib's prebuilt oleans,
 `../.lake/packages` and `../circuits-lampe/.lake/packages` at the pinned revisions; nothing else
 was built. The run cloned the Lampe fork and built Lampe, its stdlib, the extracted circuits, the
 13 model modules of the parent directory and every module of this package from source. The only
-change after the run is this file, and one later repin: the pins of `circuits-lampe/scripts/build.py`, `rename.py` and `rename-map.txt` were rewritten for the reviewed versions of those helpers (a cache key that covers the dependency checkouts, and comments); no Lean file and no other pin changed.
+change after the run is this file, one comment in `scripts/rename-map.txt` (which the check does not read), and one later repin: the pins of `circuits-lampe/scripts/build.py`, `rename.py` and `rename-map.txt` were rewritten for the reviewed versions of those helpers (a cache key that covers the dependency checkouts, and comments); no Lean file and no other pin changed.
 
 ```
 JOBS=1 LEAN_NUM_THREADS=2 systemd-run --user --scope -p MemoryMax=8G -- scripts/check.sh

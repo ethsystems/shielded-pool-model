@@ -1,7 +1,7 @@
 # Result of a run
 
 Run of `scripts/check.sh` at commit `7eeb0b2`, on 2026-10-24. The commit that records this
-file changes only this file. The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
+file changes only this file; one later commit corrects the `.lake` size in the README (8.1 GiB). The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
 other work running at the same time. Lean 4.33.1 through elan, inside a memory-capped scope
 (`systemd-run --user --scope -p MemoryMax=8G`), with `JOBS=2` and `LEAN_NUM_THREADS=2`.
 

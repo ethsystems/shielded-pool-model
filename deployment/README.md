@@ -241,5 +241,5 @@ and a failed build prints its log tail. Two changes make the comparison stricter
 metadata difference with the same solc is a FAIL, not a WARN, and OWNER requires exactly one
 `OwnershipTransferred` log. The rest of the comparison is unchanged.
 
-The writeup reports a Sepolia run of this check on 2026-10-19 at block 11949456 with a PASS.
+The writeup of 2026-10-27 (not in this repository) reports a Sepolia run of this check on 2026-10-19 at block 11949456 with a PASS.
 This package reproduces that verdict at that block from public inputs (RESULT.md).

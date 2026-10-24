@@ -440,5 +440,5 @@ Not included:
 - The verifier proof-length checks of the 2026-09-30 ring and funding run: they target the three
   Honk verifiers, not `ShieldedPool.sol`.
 - Three extra transfer-band runs of 2026-09-29 (depth 0..7: 5 to 10 minutes and up to 5.6 GB each),
-  and runs the first reports record as stopped or out of reach (a deposit band at depth 0..7 in the
+  and runs that the reports of 2026-09-29 and 2026-09-30 (not in this repository) record as stopped or out of reach (a deposit band at depth 0..7 in the
   insert-callback setup, killed at 600 s).

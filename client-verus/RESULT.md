@@ -3,8 +3,8 @@
 Two runs of `check.sh` at commit `ee58b42cab281afc714d9b1a7e089e7aa0675c3b`, on a Linux laptop
 (x86-64, 16 threads, 30 GB, btrfs). Each ran in its own systemd user scope with `MemoryMax=8G`
 and `MemorySwapMax=0`, with `JOBS=4` (the default) and Rust 1.98.1 from the default rustup home.
-After the runs, only this file changed: the commit that adds it touches RESULT.md alone, and no
-file that `check.sh` reads.
+After the runs, this file changed, and one comment block of `scripts/rename-map.txt` (the labels
+of the earlier mirror rounds, which `check.sh` does not read). No file that `check.sh` reads changed.
 
 The two transcripts below are the complete output of `check.sh`, with one substitution and no
 other edit: the absolute path of the checkout, which names a home directory, is written
