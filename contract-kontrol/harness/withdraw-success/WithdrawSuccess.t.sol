@@ -11,7 +11,8 @@ pragma solidity ^0.8.20;
 //  C `prove_success_token_pick`: a symbolic bit picks one of the two recording tokens, so the token
 //    is concrete on each branch.
 // The caller is the test contract, except in `prove_caller_two_tokens` (vm.prank with a symbolic
-// caller; a probe that does not close in Kontrol 1.0.255).
+// caller; a probe that does not close in Kontrol 1.0.255). Scope C, the probe and the non-vacuity
+// bodies live in WithdrawSuccessProbes, which the mutant siblings do not inherit.
 // Design notes:
 //  - Pool storage is symbolic (kevm.symbolicStorage) with three pins: slot 108 = verifier, slot
 //    109 = registry, reentrancy slot = 1 (NOT_ENTERED). Registry storage is symbolic.
@@ -262,7 +263,13 @@ contract WithdrawSuccess is WithdrawSuccessBase {
         vm.assume(token == TOKEN || token == address(other));
         _body(proof, n, token, a, rcp, r, acc);
     }
+}
 
+/// The probe and the non-vacuity bodies on the original pool only. The mutant siblings below inherit
+/// WithdrawSuccess, not this contract, which keeps the Kontrol definition small enough to build in an
+/// 8 GiB container (the earlier file had these functions in WithdrawSuccess itself; their bodies are
+/// unchanged).
+contract WithdrawSuccessProbes is WithdrawSuccess {
     /// Scope C: a symbolic bit picks one of the two recording tokens (concrete on each branch).
     function prove_success_token_pick(bytes32 n, bool pick, uint256 a, address rcp, bytes32 r, bool acc, bytes calldata proof)
         public

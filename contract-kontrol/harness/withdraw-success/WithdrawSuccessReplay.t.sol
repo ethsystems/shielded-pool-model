@@ -10,7 +10,7 @@ pragma solidity ^0.8.20;
 import "./WithdrawSuccess.t.sol";
 import {stdError} from "forge-std/src/StdError.sol";
 
-abstract contract ConcreteWithdraw is WithdrawSuccess {
+abstract contract ConcreteWithdraw is WithdrawSuccessProbes {
     function _fresh() internal override {
         if (!pool.supportedTokens(TOKEN)) pool.addSupportedToken(TOKEN);
         if (!pool.supportedTokens(address(other))) pool.addSupportedToken(address(other));
