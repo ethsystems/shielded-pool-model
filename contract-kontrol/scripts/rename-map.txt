@@ -1,0 +1,188 @@
+# Rename map: earlier name -> name in this package.
+#
+# The proofs were first written with working names, and the frozen reports and the claim board in
+# evidence/ cite them. This map gives each earlier run label, file, contract, test, mutant and K
+# module the name it has here, so that those reports can be read against these files. Contract,
+# test and mutant names changed; the bodies, the error names (and so the error selectors) and the
+# proof options did not. Each line: kind, earlier name, ->, new name.
+
+# Run labels of the earlier reports (see evidence/README.md, "Contract runs") -> suite:run
+run    D4              -> public-inputs:fixed-token (and, as one case of it, withdraw-success:token-above-0x11)
+run    SYMTOK          -> withdraw-success:two-tokens
+run    night-kontrol   -> withdraw-success:token-above-0x11
+run    N5              -> guards-stock:deposit, guards-stock:transfer, guards-stock:withdraw
+run    N5b             -> guards-patched:withdraw (the patched-KEVM guards); the 13 stock mutants are in guards-stock
+run    D5              -> public-inputs:canonical, public-inputs:order
+run    N15b            -> insert-loop (k/, the loop claims; not run by check.sh, see README.md)
+run    N15c            -> insert-loop:controls
+run    D2              -> poseidon-frame (see README.md)
+
+# Files
+file   D4.t.sol (2026-10-07 form, token argument)  -> harness/withdraw-success/WithdrawSuccess.t.sol
+file   Replay.t.sol (2026-10-07 form)              -> harness/withdraw-success/WithdrawSuccessReplay.t.sol
+file   D4.t.sol (2026-10-01 form, fixed token)     -> harness/public-inputs/PublicInputs.t.sol
+file   Replay.t.sol (2026-10-01 form)              -> harness/public-inputs/PublicInputsReplay.t.sol
+file   D5S1.t.sol                                  -> harness/public-inputs/CanonicalInputs.t.sol
+file   Replay5.t.sol                               -> harness/public-inputs/CanonicalInputsReplay.t.sol
+file   GuardsK.t.sol                               -> harness/guards-stock/RejectGuards.t.sol
+file   GuardsP2.t.sol                              -> harness/guards-patched/LongProofWithdrawGuards.t.sol
+file   night-lemmas.k                              -> lemmas/bytes-prefix.k
+kmod   NIGHT-LEMMAS                                -> BYTES-PREFIX-LEMMAS
+
+# withdraw-success (WithdrawSuccess.t.sol, WithdrawSuccessReplay.t.sol)
+name   D4Base                                   -> WithdrawSuccessBase
+name   D4Withdraw                               -> WithdrawSuccess
+name   D4W_M_W6O                                -> WithdrawSuccess_M_LATE_MARK
+name   D4W_M_PIW                                -> WithdrawSuccess_M_SWAP_INPUTS
+name   D4W_M_NULHI                              -> WithdrawSuccess_M_DROP_BIT253
+name   D4W_M_PAY                                -> WithdrawSuccess_M_PAY_CALLER
+name   D4W_M_SKIPV                              -> WithdrawSuccess_M_SKIP_VERIFIER
+name   D4W_M_TOK                                -> WithdrawSuccess_M_FIXED_TOKEN
+name   ShieldedPool_M_W6O                       -> ShieldedPool_M_LATE_MARK
+name   ShieldedPool_M_PIW                       -> ShieldedPool_M_SWAP_INPUTS
+name   ShieldedPool_M_NULHI                     -> ShieldedPool_M_DROP_BIT253
+name   ShieldedPool_M_PAY                       -> ShieldedPool_M_PAY_CALLER
+name   ShieldedPool_M_SKIPV                     -> ShieldedPool_M_SKIP_VERIFIER
+name   ShieldedPool_M_TOK                       -> ShieldedPool_M_FIXED_TOKEN
+name   prove_W_success                          -> prove_success_token_above_0x11
+name   prove_W2_success                         -> prove_success_two_tokens
+name   prove_Wpick_success                      -> prove_success_token_pick
+name   prove_W2c_success                        -> prove_caller_two_tokens
+name   prove_W_witness_mustfail                 -> prove_witness_any_token_mustfail
+name   prove_W2_witness_mustfail                -> prove_witness_two_tokens_mustfail
+name   prove_W_witness_other_mustfail           -> prove_witness_other_token_mustfail
+name   prove_Wpick_witness_mustfail             -> prove_witness_token_pick_mustfail
+name   ConcreteW                                -> ConcreteWithdraw
+name   Replay_W                                 -> WithdrawSuccessReplay
+name   Replay_W2c                               -> WithdrawSuccessReplay_Caller
+name   Replay_M_PAY_W2c                         -> WithdrawSuccessReplay_M_PAY_CALLER_Caller
+name   Replay_M_W6O                             -> WithdrawSuccessReplay_M_LATE_MARK
+name   Replay_M_PIW                             -> WithdrawSuccessReplay_M_SWAP_INPUTS
+name   Replay_M_NULHI                           -> WithdrawSuccessReplay_M_DROP_BIT253
+name   Replay_M_PAY                             -> WithdrawSuccessReplay_M_PAY_CALLER
+name   Replay_M_SKIPV                           -> WithdrawSuccessReplay_M_SKIP_VERIFIER
+name   Replay_M_TOK                             -> WithdrawSuccessReplay_M_FIXED_TOKEN
+name   test_W2c_success_original_other          -> test_caller_original_other
+name   test_W2c_success_original_token          -> test_caller_original_token
+name   test_WA_success_original_nocode_supported -> test_any_token_original_nocode_supported
+name   test_W2_success_original_low_b           -> test_two_tokens_original_low_b
+name   test_Wpick_success_original_low          -> test_token_pick_original_low
+
+# guards-stock and guards-patched (RejectGuards.t.sol, LongProofWithdrawGuards.t.sol)
+name   GuardsKTest                              -> RejectGuards
+name   GuardsK_M_D1                             -> RejectGuards_M_DEPOSIT_TOKEN
+name   GuardsK_M_D2                             -> RejectGuards_M_DEPOSIT_ZERO_AMOUNT
+name   GuardsK_M_D3c                            -> RejectGuards_M_DEPOSIT_AMOUNT_MAX
+name   GuardsK_M_D6z                            -> RejectGuards_M_DEPOSIT_ZERO_FUNDER
+name   GuardsK_M_D6c                            -> RejectGuards_M_DEPOSIT_FUNDER_CALLER
+name   GuardsK_M_T6                             -> RejectGuards_M_TRANSFER_SAME_NULLIFIERS
+name   GuardsK_M_T5a                            -> RejectGuards_M_TRANSFER_SPENT_FIRST
+name   GuardsK_M_T5b                            -> RejectGuards_M_TRANSFER_SPENT_SECOND
+name   GuardsK_M_T1                             -> RejectGuards_M_TRANSFER_ROOT
+name   GuardsK_M_W7                             -> RejectGuards_M_WITHDRAW_ZERO_AMOUNT
+name   GuardsK_M_W8c                            -> RejectGuards_M_WITHDRAW_AMOUNT_MAX
+name   GuardsK_M_W6                             -> RejectGuards_M_WITHDRAW_SPENT
+name   GuardsK_M_W1                             -> RejectGuards_M_WITHDRAW_ROOT
+name   ShieldedPool_M_D1                        -> ShieldedPool_M_DEPOSIT_TOKEN
+name   ShieldedPool_M_D2                        -> ShieldedPool_M_DEPOSIT_ZERO_AMOUNT
+name   ShieldedPool_M_D3c                       -> ShieldedPool_M_DEPOSIT_AMOUNT_MAX
+name   ShieldedPool_M_D6z                       -> ShieldedPool_M_DEPOSIT_ZERO_FUNDER
+name   ShieldedPool_M_D6c                       -> ShieldedPool_M_DEPOSIT_FUNDER_CALLER
+name   ShieldedPool_M_T6                        -> ShieldedPool_M_TRANSFER_SAME_NULLIFIERS
+name   ShieldedPool_M_T5a                       -> ShieldedPool_M_TRANSFER_SPENT_FIRST
+name   ShieldedPool_M_T5b                       -> ShieldedPool_M_TRANSFER_SPENT_SECOND
+name   ShieldedPool_M_T1                        -> ShieldedPool_M_TRANSFER_ROOT
+name   ShieldedPool_M_W7                        -> ShieldedPool_M_WITHDRAW_ZERO_AMOUNT
+name   ShieldedPool_M_W8c                       -> ShieldedPool_M_WITHDRAW_AMOUNT_MAX
+name   ShieldedPool_M_W6                        -> ShieldedPool_M_WITHDRAW_SPENT
+name   ShieldedPool_M_W1                        -> ShieldedPool_M_WITHDRAW_ROOT
+name   prove_D1                                 -> prove_deposit_token
+name   prove_D2                                 -> prove_deposit_zero_amount
+name   prove_D3c                                -> prove_deposit_amount_max
+name   prove_D6z                                -> prove_deposit_zero_funder
+name   prove_D6c                                -> prove_deposit_funder_caller
+name   prove_T6                                 -> prove_transfer_same_nullifiers
+name   prove_T5a                                -> prove_transfer_spent_first
+name   prove_T5b                                -> prove_transfer_spent_second
+name   prove_T1                                 -> prove_transfer_root
+name   prove_W7                                 -> prove_withdraw_zero_amount
+name   prove_W8c                                -> prove_withdraw_amount_max
+name   prove_W6                                 -> prove_withdraw_spent
+name   prove_W1                                 -> prove_withdraw_root
+name   TripVerifierP2                           -> TripVerifier
+name   SymRegistryP2                            -> SymRegistry
+name   GuardsP2Base                             -> LongProofGuardsBase
+name   GuardsP2Withdraw                         -> LongProofWithdrawGuards
+name   GuardsP2_M_W7                            -> LongProofWithdrawGuards_M_WITHDRAW_ZERO_AMOUNT
+name   prove_S1w_n                              -> prove_noncanonical_nullifier
+name   prove_S1w_r                              -> prove_noncanonical_root
+name   prove_S1w_rest                           -> prove_noncanonical_other
+
+# public-inputs (PublicInputs.t.sol, CanonicalInputs.t.sol and their replays)
+name   D4Base                                   -> PublicInputsBase
+name   D4Withdraw                               -> FixedTokenWithdraw
+name   D4S2                                     -> InputOrder
+name   D4W_M_W6O                                -> FixedTokenWithdraw_M_LATE_MARK
+name   D4W_M_PIW                                -> FixedTokenWithdraw_M_SWAP_INPUTS
+name   D4W_M_NULHI                              -> FixedTokenWithdraw_M_DROP_BIT253
+name   D4W_M_PAY                                -> FixedTokenWithdraw_M_PAY_CALLER
+name   D4W_M_SKIPV                              -> FixedTokenWithdraw_M_SKIP_VERIFIER
+name   D4S2_M_S2D                               -> InputOrder_M_DEPOSIT_SWAP_45
+name   D4S2_M_S2T                               -> InputOrder_M_TRANSFER_SWAP_45
+name   ShieldedPool_M_W6O                       -> ShieldedPool_M_LATE_MARK
+name   ShieldedPool_M_PIW                       -> ShieldedPool_M_SWAP_INPUTS
+name   ShieldedPool_M_NULHI                     -> ShieldedPool_M_DROP_BIT253
+name   ShieldedPool_M_PAY                       -> ShieldedPool_M_PAY_CALLER
+name   ShieldedPool_M_SKIPV                     -> ShieldedPool_M_SKIP_VERIFIER
+name   ShieldedPool_M_S2D                       -> ShieldedPool_M_DEPOSIT_SWAP_45
+name   ShieldedPool_M_S2T                       -> ShieldedPool_M_TRANSFER_SWAP_45
+name   D5Base                                   -> CanonicalBase
+name   D5S1                                     -> CanonicalInputs
+name   D5S2W                                    -> InputOrderWitness
+name   D5S1_M_S1D                               -> CanonicalInputs_M_DEPOSIT_CANONICAL
+name   D5S1_M_S1T                               -> CanonicalInputs_M_TRANSFER_CANONICAL
+name   D5S1_M_S1W                               -> CanonicalInputs_M_WITHDRAW_CANONICAL
+name   D5S1_M_S1GT                              -> CanonicalInputs_M_BOUND_GT
+name   ShieldedPool_M_S1D                       -> ShieldedPool_M_DEPOSIT_CANONICAL
+name   ShieldedPool_M_S1T                       -> ShieldedPool_M_TRANSFER_CANONICAL
+name   ShieldedPool_M_S1W                       -> ShieldedPool_M_WITHDRAW_CANONICAL
+name   ShieldedPool_M_S1GT                      -> ShieldedPool_M_BOUND_GT
+name   prove_W_success                          -> prove_success_fixed_token
+name   prove_W_witness_mustfail                 -> prove_witness_fixed_token_mustfail
+name   prove_S2d                                -> prove_deposit_order_split
+name   prove_S2d_witness_mustfail               -> prove_witness_deposit_order_split_mustfail
+name   prove_S2d0                               -> prove_deposit_order
+name   prove_S2t                                -> prove_transfer_order_split
+name   prove_S2t_witness_mustfail               -> prove_witness_transfer_order_split_mustfail
+name   prove_S2t0                               -> prove_transfer_order
+name   prove_S1d0                               -> prove_deposit_canonical
+name   prove_S1d0_witness_mustfail              -> prove_witness_deposit_canonical_mustfail
+name   prove_S1d                                -> prove_deposit_canonical_split
+name   prove_S1t0                               -> prove_transfer_canonical
+name   prove_S1t0_witness_mustfail              -> prove_witness_transfer_canonical_mustfail
+name   prove_S1t                                -> prove_transfer_canonical_split
+name   prove_S1w                                -> prove_withdraw_canonical
+name   prove_S1w_witness_mustfail               -> prove_witness_withdraw_canonical_mustfail
+name   prove_S2d0_witness_mustfail              -> prove_witness_deposit_order_mustfail
+name   prove_S2t0_witness_mustfail              -> prove_witness_transfer_order_mustfail
+name   ConcreteW                                -> ConcreteFixedTokenWithdraw
+name   ConcreteS                                -> ConcreteInputOrder
+name   ConcreteS1                               -> ConcreteCanonicalInputs
+name   Replay5_S2W                              -> InputOrderWitnessReplay
+name   Replay_W                                 -> FixedTokenWithdrawReplay
+name   Replay_M_W6O                             -> FixedTokenWithdrawReplay_M_LATE_MARK
+name   Replay_M_PIW                             -> FixedTokenWithdrawReplay_M_SWAP_INPUTS
+name   Replay_M_NULHI                           -> FixedTokenWithdrawReplay_M_DROP_BIT253
+name   Replay_M_PAY                             -> FixedTokenWithdrawReplay_M_PAY_CALLER
+name   Replay_M_SKIPV                           -> FixedTokenWithdrawReplay_M_SKIP_VERIFIER
+name   Replay_S                                 -> InputOrderReplay
+name   Replay_M_S2D                             -> InputOrderReplay_M_DEPOSIT_SWAP_45
+name   Replay_M_S2T                             -> InputOrderReplay_M_TRANSFER_SWAP_45
+name   Replay5_original                         -> CanonicalInputsReplay
+name   Replay5_M_S1D                            -> CanonicalInputsReplay_M_DEPOSIT_CANONICAL
+name   Replay5_M_S1T                            -> CanonicalInputsReplay_M_TRANSFER_CANONICAL
+name   Replay5_M_S1W                            -> CanonicalInputsReplay_M_WITHDRAW_CANONICAL
+name   Replay5_M_S1GT                           -> CanonicalInputsReplay_M_BOUND_GT
+
+# insert-loop:controls
+env    N15C_MUTANTS                             -> LOOP_MUTANTS

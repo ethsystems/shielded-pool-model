@@ -9,7 +9,7 @@
 # inside the container, the command output, COMMAND_EXIT, PEAK_BYTES (the container cgroup's
 # memory.peak) and a RUN line (wall seconds, exit, timeout or OOM).
 # Env: IMAGE (default the pinned digest), SOLC (the checked solc 0.8.37 binary; required), CAP,
-# CPUS (docker --cpus; unset: no limit), TLIM, GATE_GIB, GATE_WAIT (seconds to wait for the gate before giving up, default 14400).
+# CPUSET (docker --cpuset-cpus, the CPUs the container sees; unset: all), TLIM, GATE_GIB, GATE_WAIT (seconds to wait for the gate before giving up, default 14400).
 set -uo pipefail
 LOG=$1; P=$2; ABI_MODE=$3; CMD=$4
 PKG=$(cd "$(dirname "$0")/.." && pwd)
@@ -37,7 +37,7 @@ N="contract-kontrol-$$-$(date +%s)"
 T0=$(date +%s)
 echo "RUN start $(date -u +%FT%TZ) image $IMAGE cap $CAP abi $ABI_MODE available $(free -g | awk '/^Mem/{print $7}') GiB" >> "$LOG"
 timeout --signal=TERM --kill-after=30 "$TLIM" docker run --rm --name "$N" --network none \
-  --memory "$CAP" --memory-swap "$CAP" ${CPUS:+--cpus "$CPUS"} --ulimit core=0 \
+  --memory "$CAP" --memory-swap "$CAP" ${CPUSET:+--cpuset-cpus "$CPUSET"} --ulimit core=0 \
   -e KPROFILE_TELEMETRY_DISABLED=true -e FOUNDRY_OFFLINE=true -e FOUNDRY_SOLC=/opt/solc/solc \
   -v "$SOLC:/opt/solc/solc:ro" "${MOUNT_ABI[@]}" -v "$P:/w/proj" -w /w/proj "$IMAGE" \
   bash -c "ulimit -c 0; sha256sum $ABI; $CMD; echo COMMAND_EXIT=\$?; echo PEAK_BYTES=\$(cat /sys/fs/cgroup/memory.peak 2>/dev/null)" >> "$LOG" 2>&1
