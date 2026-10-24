@@ -7,9 +7,10 @@
 
 The map is a whole-identifier substitution, longest name first. An identifier character is a
 letter, a digit, `_` or `'`; a name also does not match right after a `.`, so only the first
-components of a qualified name are renamed. A "prefix" entry renames a Noir path prefix
-(`stage5::` and so on) wherever it starts an identifier. "control" entries only document the
-names of the controls and are not applied.
+components of a qualified name are renamed. A "prefix" entry renames the prefix of the Noir
+paths that the proofs declare with `noir_def`, wherever it starts an identifier. "control" and
+"source" entries are not applied: the first document the names of the controls, the second give
+the earlier file names of the hand-written controls (for scripts/check-rename.py).
 """
 import re
 import sys
@@ -27,7 +28,7 @@ def load(path=HERE / 'rename-map.txt'):
             continue
         kind, old, arrow, new = line.split()
         assert arrow == '->', line
-        if kind == 'control':
+        if kind in ('control', 'source'):
             continue
         rows.append((kind, old, new))
     olds = [r[1] for r in rows]
@@ -54,6 +55,16 @@ def forward_fn(rows=None):
 def inverse_fn(rows=None):
     rows = rows or load()
     return _compile([(n, o, k == 'prefix') for k, o, n in rows])[0]
+
+
+def sources(path=HERE / 'rename-map.txt'):
+    """The "source" entries: new name -> earlier file name, for the hand-written controls."""
+    out = {}
+    for line in path.read_text().splitlines():
+        parts = line.split()
+        if len(parts) == 4 and parts[0] == 'source':
+            out[parts[3]] = parts[1]
+    return out
 
 
 def module_path(module):
