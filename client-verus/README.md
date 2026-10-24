@@ -286,8 +286,13 @@ match. `VERUS_FETCH=0` forbids the download. `JOBS` sets the number of parallel 
 Exit 0 means `CHECK PASS`. Each Verus run writes its log to `work/logs/`, and
 `work/results.json` holds every result. A failing control prints its Verus output.
 
-The 241 controls come in three groups. The 104 controls of the four effect mirrors are two per
-target function: a mutated body and a strengthened postcondition (the `// STRENGTH` markers).
+The 241 controls come in three groups. The 104 controls of the four effect mirrors are 52 pairs,
+each a mutated body and a strengthened postcondition of one function (the `// STRENGTH`
+markers). They change 40 functions. Each of the 38 target functions has at least one pair, and
+eight have more: `prove_circuit` five pairs, `prove_deposit` three, and `get_commitment_root`,
+`deposit`, `approve_token`, `add_attestation`, `prove_transfer` and `prove_withdraw` two each.
+The other two functions have one pair each: `prove_circuit_args`, a helper of `prove_circuit`,
+and `registered_channel_cannot_send`, a composition example.
 The 131 controls of the 11 domain-core mirrors are those recorded when each file was first
 checked; 10 of them (in `byte_records.rs`) were reconstructed then from the description of the
 original controls, which were not kept. Six controls were added in this package, two each for
