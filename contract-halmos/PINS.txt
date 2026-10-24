@@ -44,8 +44,9 @@ solc_version 0.8.37+commit.f401782d
 solc_sha256 5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a
 solc_url https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.8.37+commit.f401782d
 
-# Halmos and its solvers. requirements.txt pins every package by sha256; these lines are what
-# check.sh checks in the environment it runs.
+# Halmos and its solvers. requirements.txt pins every package by sha256 for the install. check.sh
+# reads the versions and yices_sha256 below; the wheel, sdist and package lines record what
+# requirements.txt pins, and the pyenv_record_sha256 lines hold the installed files.
 python_version 3.12 the Python of the halmos environment (the first runs used 3.12.14)
 halmos_version 0.3.3
 halmos_wheel_sha256 3967291bdd4aaac96a4c42dd18bf25bd76215acad53697d98f02b986ac8d3f67 halmos-0.3.3-py3-none-any.whl
