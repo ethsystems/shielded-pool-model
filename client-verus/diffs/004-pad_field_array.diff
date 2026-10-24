@@ -1,0 +1,17 @@
+--- a04b8b3:adapters/bb_prover.rs:49-53
++++ mirrors/prover_fmt.rs
+@@ -1,5 +1,11 @@
+-fn pad_field_array(path: &[B256], max_depth: usize) -> Vec<String> {
+-    let mut padded = path.to_vec();
++fn pad_field_array(path: &[B256], max_depth: usize) -> (r: Vec<String>)
++    ensures
++        r.len() == max_depth,
++        forall|i: int| 0 <= i < max_depth && i < path.len() ==> is_hex_of(#[trigger] r@[i]@, path@[i].0@),
++        forall|i: int| 0 <= i < max_depth && i >= path.len() ==> is_hex_of(#[trigger] r@[i]@, zero_word()),
++{
++    let mut padded = to_vec_b256(path);
+     padded.resize(max_depth, B256::ZERO);
+-    padded.iter().map(|v| format_field(v)).collect()
++    proof { assert(B256::ZERO.0@ =~= zero_word()); }
++    padded.iter().map(|v: &B256| -> (r: String) ensures is_hex_of(r@, v.0@) { format_field(v) }).collect()
+ }

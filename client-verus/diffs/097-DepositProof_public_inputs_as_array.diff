@@ -1,0 +1,16 @@
+--- a04b8b3:domain/proof.rs:57-66
++++ mirrors/public_inputs.rs
+@@ -1,4 +1,12 @@
+-    pub fn public_inputs_as_array(&self) -> [B256; 6] {
++    pub fn public_inputs_as_array(&self) -> (r: [B256; 6])
++        ensures
++            r[0] == self.public_inputs.commitment,
++            is_left_pad(r[1].0@, self.public_inputs.token.0@),
++            is_amount_word(r[2].0@, self.public_inputs.amount),
++            is_left_pad(r[3].0@, self.public_inputs.funding_address.0@),
++            r[4] == self.public_inputs.attestation_root,
++            r[5] == self.public_inputs.payload_hash,
++    {
+         [
+             self.public_inputs.commitment,
+             B256::left_padding_from(self.public_inputs.token.as_slice()),

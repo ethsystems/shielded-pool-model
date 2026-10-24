@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/bb_prover.rs:44-46
++++ mirrors/prover_fmt.rs
+@@ -1,3 +1,5 @@
+-fn format_u256(value: &U256) -> String {
+-    value.to_string()
++fn format_u256(value: &U256) -> (r: String)
++    ensures r@ == dec_str(uval(*value)),
++{
++    fmt_u256_decimal(value)
+ }

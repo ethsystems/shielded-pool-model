@@ -1,0 +1,20 @@
+--- a04b8b3:domain/encrypted.rs:92-101
++++ mirrors/byte_records.rs
+@@ -1,10 +1,14 @@
+-    pub fn to_bytes(&self) -> Vec<u8> {
++    pub fn to_bytes(&self) -> (r: Vec<u8>)
++        requires 4 + self.note_1.bytes.len() + self.note_2.bytes.len() <= usize::MAX,
++        ensures r@ == frame(self.note_1.bytes@, self.note_2.bytes@),
++                be32(r@) == self.note_1.bytes.len() as int % 4294967296,
++    {
+         let bytes_1 = self.note_1.to_bytes();
+         let bytes_2 = self.note_2.to_bytes();
+-
+         let mut bytes = Vec::with_capacity(4 + bytes_1.len() + bytes_2.len());
+-        bytes.extend_from_slice(&(bytes_1.len() as u32).to_be_bytes());
++        bytes.extend_from_slice(&write_be32(bytes_1.len() as u32));
+         bytes.extend_from_slice(&bytes_1);
+         bytes.extend_from_slice(&bytes_2);
++        proof { header_truncation(bytes_1.len() as u64); }
+         bytes
+     }

@@ -1,0 +1,275 @@
+# Earlier names and the names in this package.
+# The frozen report (evidence/2026-10-01-client-coverage/REPORT.md) and the earlier runs it
+# cites used working labels. This map is the only file in the package that names them.
+#
+# Labels of the earlier runs
+N3                         the 38 rows of the effect mirrors (rpc.rs, channel.rs, prover_effects.rs, tree.rs); "class C" in the frozen report
+bd-01d                     the first mirrors of the domain core: guards.rs, note_key.rs, public_inputs.rs, hash_param.rs
+bd-81i                     the second round: crypto_field.rs, prover_fmt.rs, misc_domain.rs, merkle_proofs.rs, key_wrappers.rs, serde_wrappers.rs
+bd-3uk                     the byte-record mirrors (the "Verus detour" of the frozen table): byte_records.rs
+bd-ka7                     the Aeneas extraction of validate_amounts and sum at a04b8b3 (frozen; not part of this package)
+L6                         the Aeneas extraction route (frozen; not part of this package)
+"58 inherited"             the 58 Verus rows of the 11 domain-core mirror files above
+"38 new"                   the 38 Verus rows of the four effect mirror files
+#
+# Files: earlier path -> path here
+deliverable/mirrors/rpc.rs              mirrors/rpc.rs
+deliverable/mirrors/channel.rs          mirrors/channel.rs
+deliverable/mirrors/prover.rs           mirrors/prover_effects.rs
+deliverable/mirrors/tree.rs             mirrors/tree.rs
+deliverable/probes/async.rs             probes/async.rs
+deliverable/probes/await.rs             probes/await.rs
+deliverable/probes/async_trait.rs       probes/async_trait.rs
+archived/mirror.rs                      mirrors/byte_records.rs
+new/guards.rs                           mirrors/guards.rs
+new/note_key.rs                         mirrors/note_key.rs
+new/serializers_u256.rs                 mirrors/public_inputs.rs
+new/hash_param.rs                       mirrors/hash_param.rs
+new/crypto_field.rs                     mirrors/crypto_field.rs
+new/prover_fmt.rs                       mirrors/prover_fmt.rs
+new/misc_domain.rs                      mirrors/misc_domain.rs
+new/merkle_proofs.rs                    mirrors/merkle_proofs.rs
+new/key_wrappers.rs                     mirrors/key_wrappers.rs
+new/serde_wrappers.rs                   mirrors/serde_wrappers.rs
+# Not carried over: archived/pilot.rs and archived/deposit.rs (u128 mirrors of the two
+# public-input serializers, superseded by public_inputs.rs over the full U256 domain),
+# archived/guard.rs (a mirror of the transfer guard before ethsystems/pocs PR #12, not the
+# body at a04b8b3) and trusted/validate_amount_trusted.rs (a variant that needs trusted
+# specifications and fails --no-cheating). No row of the 110 depends on them.
+#
+# Controls: earlier id -> id in controls/controls.json
+detour-note_accept_empty                                 byte_records/note_accept_empty
+detour-note_drop_byte                                    byte_records/note_drop_byte
+detour-transfer_little_endian                            byte_records/transfer_little_endian
+detour-transfer_swap_fields                              byte_records/transfer_swap_fields
+detour-transfer_wrong_error                              byte_records/transfer_wrong_error
+detour-transfer_remove_header_guard                      byte_records/transfer_remove_header_guard
+detour-merkle_zero_elements                              byte_records/merkle_zero_elements
+detour-merkle_zero_indices                               byte_records/merkle_zero_indices
+detour-merkle_wrong_leaf                                 byte_records/merkle_wrong_leaf
+detour-word_swapped_halves                               byte_records/word_swapped_halves
+guards-amount-drop-zero-check                            guards/amount-drop-zero-check
+guards-amount-claim-u64                                  guards/amount-claim-u64
+guards-sum-wrapping-add                                  guards/sum-wrapping-add
+guards-sum-reads-note0-twice                             guards/sum-reads-note0-twice
+guards-amounts-ge                                        guards/amounts-ge
+guards-amounts-unbounded-claim                           guards/amounts-unbounded-claim
+guards-token-wrong-index                                 guards/token-wrong-index
+guards-token-claim-always                                guards/token-claim-always
+notekey-new-nonzero-init                                 note_key/notekey-new-nonzero-init
+notekey-new-fill-offset-4                                note_key/notekey-new-fill-offset-4
+notekey-new-drops-amount                                 note_key/notekey-new-drops-amount
+notekey-new-claim-2p208                                  note_key/notekey-new-claim-2p208
+notekey-zero-max                                         note_key/notekey-zero-max
+notekey-zero-claim-salt-last-zero                        note_key/notekey-zero-claim-salt-last-zero
+notekey-iszero-ne                                        note_key/notekey-iszero-ne
+notekey-iszero-claim                                     note_key/notekey-iszero-claim
+notekey-key-nonzero-init                                 note_key/notekey-key-nonzero-init
+notekey-key-claim-2p208                                  note_key/notekey-key-claim-2p208
+ser-deposit-swap-tail                                    public_inputs/ser-deposit-swap-tail
+ser-deposit-claim-top-byte-zero                          public_inputs/ser-deposit-claim-top-byte-zero
+ser-withdraw-swap-addresses                              public_inputs/ser-withdraw-swap-addresses
+ser-withdraw-claim-top-byte-zero                         public_inputs/ser-withdraw-claim-top-byte-zero
+ser-be16-mask-7f                                         public_inputs/ser-be16-mask-7f
+ser-halves-swapped                                       public_inputs/ser-halves-swapped
+ser-pad-no-offset                                        public_inputs/ser-pad-no-offset
+hash-commitment-swap-owner-salt                          hash_param/commitment-swap-owner-salt
+hash-commitment-claim-extra                              hash_param/commitment-claim-extra
+hash-cnull-swap-args                                     hash_param/cnull-swap-args
+hash-cnull-claim-symmetric                               hash_param/cnull-claim-symmetric
+hash-owner-identity                                      hash_param/owner-identity
+hash-owner-claim-identity                                hash_param/owner-claim-identity
+hash-nnull-commits-salt                                  hash_param/nnull-commits-salt
+hash-deposit-funding-is-attester                         hash_param/deposit-funding-is-attester
+hash-deposit-claim-owner-from-salt                       hash_param/deposit-claim-owner-from-salt
+hash-transfer-swap-nullifiers                            hash_param/transfer-swap-nullifiers
+hash-transfer-claim-cross-index                          hash_param/transfer-claim-cross-index
+hash-withdraw-recipient-is-token                         hash_param/withdraw-recipient-is-token
+hash-withdraw-claim-recipient-token                      hash_param/withdraw-claim-recipient-token
+c81-b256fr-const-word                                    crypto_field/b256fr-const-word
+c81-b256fr-claim-no-reduction                            crypto_field/b256fr-claim-no-reduction
+c81-frb256-raw-repr                                      crypto_field/frb256-raw-repr
+c81-frb256-claim-top-byte-zero                           crypto_field/frb256-claim-top-byte-zero
+c81-p1-wrong-arity                                       crypto_field/p1-wrong-arity
+c81-p1-claim-identity                                    crypto_field/p1-claim-identity
+c81-p2-swap-args                                         crypto_field/p2-swap-args
+c81-p2-claim-symmetric                                   crypto_field/p2-claim-symmetric
+c81-p4-swap-cd                                           crypto_field/p4-swap-cd
+c81-p4-claim-ignores-d                                   crypto_field/p4-claim-ignores-d
+c81-pc-hash-empty                                        crypto_field/pc-hash-empty
+c81-pc-claim-no-reduction                                crypto_field/pc-claim-no-reduction
+c81-ph-swap-children                                     crypto_field/ph-swap-children
+c81-ph-weak-length                                       crypto_field/ph-weak-length
+c81-standin-no-reduce                                    crypto_field/standin-no-reduce
+c81-standin-sub-no-borrow                                crypto_field/standin-sub-no-borrow
+c81-ff-format-zero                                       prover_fmt/ff-format-zero
+c81-ff-claim-no-prefix                                   prover_fmt/ff-claim-no-prefix
+c81-ff-standin-nibble-swap                               prover_fmt/ff-standin-nibble-swap
+c81-ffa-drop-byte                                        prover_fmt/ffa-drop-byte
+c81-ffa-claim-20-bytes                                   prover_fmt/ffa-claim-20-bytes
+c81-pfa-no-resize                                        prover_fmt/pfa-no-resize
+c81-pfa-claim-no-truncation                              prover_fmt/pfa-claim-no-truncation
+c81-pia-pad-one                                          prover_fmt/pia-pad-one
+c81-pia-claim-no-truncation                              prover_fmt/pia-claim-no-truncation
+c81-p2p-zero-commitment                                  misc_domain/p2p-zero-commitment
+c81-p2p-claim-nonempty                                   misc_domain/p2p-claim-nonempty
+c81-dec-wrong-none-error                                 misc_domain/dec-wrong-none-error
+c81-dec-nonempty-aad                                     misc_domain/dec-nonempty-aad
+c81-dec-claim-parse-implies-ok                           misc_domain/dec-claim-parse-implies-ok
+c81-b2b-zero                                             misc_domain/b2b-zero
+c81-b2b-claim-top-zero                                   misc_domain/b2b-claim-top-zero
+c81-by2b-zero                                            misc_domain/by2b-zero
+c81-by2b-claim-last-zero                                 misc_domain/by2b-claim-last-zero
+c81-fu-drop-high-half                                    prover_fmt/fu-drop-high-half
+c81-fu-claim-u128-length                                 prover_fmt/fu-claim-u128-length
+c81-fu-standin-no-carry                                  prover_fmt/fu-standin-no-carry
+c81-dpi-token-is-funding                                 prover_fmt/dpi-token-is-funding
+c81-dpi-wrong-depth                                      prover_fmt/dpi-wrong-depth
+c81-dpi-claim-amount-u128                                prover_fmt/dpi-claim-amount-u128
+c81-tpi-swap-input-amounts                               prover_fmt/tpi-swap-input-amounts
+c81-tpi-path1-from-proof0                                prover_fmt/tpi-path1-from-proof0
+c81-tpi-claim-length-bounded                             prover_fmt/tpi-claim-length-bounded
+c81-wpi-recipient-is-token                               prover_fmt/wpi-recipient-is-token
+c81-wpi-salt-from-nullifier                              prover_fmt/wpi-salt-from-nullifier
+c81-wpi-claim-amount-u128                                prover_fmt/wpi-claim-amount-u128
+c81-gcp-directions-from-leaf-index                       merkle_proofs/gcp-directions-from-leaf-index
+c81-gcp-claim-depth-32                                   merkle_proofs/gcp-claim-depth-32
+c81-gap-zero-leaf-index                                  merkle_proofs/gap-zero-leaf-index
+c81-gap-claim-leaf-index-bits                            merkle_proofs/gap-claim-leaf-index-bits
+c81-gap-weak-no-word-size                                merkle_proofs/gap-weak-no-word-size
+c81-vkr-advanced-rng                                     key_wrappers/vkr-advanced-rng
+c81-vkr-claim-rng-independent                            key_wrappers/vkr-claim-rng-independent
+c81-vkf-empty-input                                      key_wrappers/vkf-empty-input
+c81-vkf-claim-always-ok                                  key_wrappers/vkf-claim-always-ok
+c81-dvp-other-key                                        key_wrappers/dvp-other-key
+c81-dvp-claim-fixed-key                                  key_wrappers/dvp-claim-fixed-key
+c81-vps-empty-input                                      key_wrappers/vps-empty-input
+c81-vps-claim-33-bytes-ok                                key_wrappers/vps-claim-33-bytes-ok
+c81-vpt-uncompressed                                     key_wrappers/vpt-uncompressed
+c81-vpt-claim-33-bytes                                   key_wrappers/vpt-claim-33-bytes
+c81-enc-nonempty-aad                                     key_wrappers/enc-nonempty-aad
+c81-enc-drop-bytes                                       key_wrappers/enc-drop-bytes
+c81-enc-drop-seal-premise                                key_wrappers/enc-drop-seal-premise
+c81-rcpt-default-one                                     key_wrappers/rcpt-default-one
+c81-rcpt-claim-real-block                                key_wrappers/rcpt-claim-real-block
+c81-enn-fresh-buffer                                     serde_wrappers/enn-fresh-buffer
+c81-enn-claim-infallible                                 serde_wrappers/enn-claim-infallible
+c81-den-empty-input                                      serde_wrappers/den-empty-input
+c81-den-claim-infallible                                 serde_wrappers/den-claim-infallible
+c81-ser-uncompressed                                     serde_wrappers/ser-uncompressed
+c81-ser-claim-infallible                                 serde_wrappers/ser-claim-infallible
+c81-des-empty-input                                      serde_wrappers/des-empty-input
+c81-des-claim-any-bytes-ok                               serde_wrappers/des-claim-any-bytes-ok
+c81-toml-deposit-empty-text                              prover_fmt/toml-deposit-empty-text
+c81-toml-deposit-drop-int-bound                          prover_fmt/toml-deposit-drop-int-bound
+c81-toml-deposit-claim-nonempty                          prover_fmt/toml-deposit-claim-nonempty
+c81-toml-transfer-empty-text                             prover_fmt/toml-transfer-empty-text
+c81-toml-transfer-drop-int-bound                         prover_fmt/toml-transfer-drop-int-bound
+c81-toml-transfer-claim-nonempty                         prover_fmt/toml-transfer-claim-nonempty
+c81-toml-withdraw-empty-text                             prover_fmt/toml-withdraw-empty-text
+c81-toml-withdraw-drop-int-bound                         prover_fmt/toml-withdraw-drop-int-bound
+c81-toml-withdraw-claim-nonempty                         prover_fmt/toml-withdraw-claim-nonempty
+rpc_new_body                                             (mirror rpc.rs)   rpc/rpc_new_body
+rpc_new_post                                             (mirror rpc.rs)   rpc/rpc_new_post
+rpc_get_commitment_root_body                             (mirror rpc.rs)   rpc/rpc_get_commitment_root_body
+rpc_get_commitment_root_post                             (mirror rpc.rs)   rpc/rpc_get_commitment_root_post
+rpc_is_nullifier_spent_body                              (mirror rpc.rs)   rpc/rpc_is_nullifier_spent_body
+rpc_is_nullifier_spent_post                              (mirror rpc.rs)   rpc/rpc_is_nullifier_spent_post
+rpc_is_known_root_body                                   (mirror rpc.rs)   rpc/rpc_is_known_root_body
+rpc_is_known_root_post                                   (mirror rpc.rs)   rpc/rpc_is_known_root_post
+rpc_is_token_supported_body                              (mirror rpc.rs)   rpc/rpc_is_token_supported_body
+rpc_is_token_supported_post                              (mirror rpc.rs)   rpc/rpc_is_token_supported_post
+rpc_get_attestation_root_body                            (mirror rpc.rs)   rpc/rpc_get_attestation_root_body
+rpc_get_attestation_root_post                            (mirror rpc.rs)   rpc/rpc_get_attestation_root_post
+rpc_is_authorized_attester_body                          (mirror rpc.rs)   rpc/rpc_is_authorized_attester_body
+rpc_is_authorized_attester_post                          (mirror rpc.rs)   rpc/rpc_is_authorized_attester_post
+rpc_get_token_balance_body                               (mirror rpc.rs)   rpc/rpc_get_token_balance_body
+rpc_get_token_balance_post                               (mirror rpc.rs)   rpc/rpc_get_token_balance_post
+rpc_get_commitment_count_body                            (mirror rpc.rs)   rpc/rpc_get_commitment_count_body
+rpc_get_commitment_count_post                            (mirror rpc.rs)   rpc/rpc_get_commitment_count_post
+rpc_get_attestation_count_body                           (mirror rpc.rs)   rpc/rpc_get_attestation_count_body
+rpc_get_attestation_count_post                           (mirror rpc.rs)   rpc/rpc_get_attestation_count_post
+rpc_get_attestation_leaf_body                            (mirror rpc.rs)   rpc/rpc_get_attestation_leaf_body
+rpc_get_attestation_leaf_post                            (mirror rpc.rs)   rpc/rpc_get_attestation_leaf_post
+rpc_deposit_body                                         (mirror rpc.rs)   rpc/rpc_deposit_body
+rpc_deposit_post                                         (mirror rpc.rs)   rpc/rpc_deposit_post
+rpc_transfer_body                                        (mirror rpc.rs)   rpc/rpc_transfer_body
+rpc_transfer_post                                        (mirror rpc.rs)   rpc/rpc_transfer_post
+rpc_withdraw_body                                        (mirror rpc.rs)   rpc/rpc_withdraw_body
+rpc_withdraw_post                                        (mirror rpc.rs)   rpc/rpc_withdraw_post
+rpc_add_attester_body                                    (mirror rpc.rs)   rpc/rpc_add_attester_body
+rpc_add_attester_post                                    (mirror rpc.rs)   rpc/rpc_add_attester_post
+rpc_add_supported_token_body                             (mirror rpc.rs)   rpc/rpc_add_supported_token_body
+rpc_add_supported_token_post                             (mirror rpc.rs)   rpc/rpc_add_supported_token_post
+rpc_approve_token_body                                   (mirror rpc.rs)   rpc/rpc_approve_token_body
+rpc_approve_token_post                                   (mirror rpc.rs)   rpc/rpc_approve_token_post
+rpc_add_attestation_body                                 (mirror rpc.rs)   rpc/rpc_add_attestation_body
+rpc_add_attestation_post                                 (mirror rpc.rs)   rpc/rpc_add_attestation_post
+rpc_provider_body                                        (mirror rpc.rs)   rpc/rpc_provider_body
+rpc_provider_post                                        (mirror rpc.rs)   rpc/rpc_provider_post
+rpc_deposit_amount_body                                  (mirror rpc.rs)   rpc/rpc_deposit_amount_body
+rpc_deposit_amount_post                                  (mirror rpc.rs)   rpc/rpc_deposit_amount_post
+rpc_approve_spender_body                                 (mirror rpc.rs)   rpc/rpc_approve_spender_body
+rpc_approve_spender_post                                 (mirror rpc.rs)   rpc/rpc_approve_spender_post
+rpc_event_expiry_body                                    (mirror rpc.rs)   rpc/rpc_event_expiry_body
+rpc_event_expiry_post                                    (mirror rpc.rs)   rpc/rpc_event_expiry_post
+registry_clone_body                                      (mirror channel.rs)   channel/registry_clone_body
+registry_clone_post                                      (mirror channel.rs)   channel/registry_clone_post
+registry_register_body                                   (mirror channel.rs)   channel/registry_register_body
+registry_register_post                                   (mirror channel.rs)   channel/registry_register_post
+registry_unregister_body                                 (mirror channel.rs)   channel/registry_unregister_body
+registry_unregister_post                                 (mirror channel.rs)   channel/registry_unregister_post
+registry_send_to_body                                    (mirror channel.rs)   channel/registry_send_to_body
+registry_send_to_post                                    (mirror channel.rs)   channel/registry_send_to_post
+channel_new_body                                         (mirror channel.rs)   channel/channel_new_body
+channel_new_post                                         (mirror channel.rs)   channel/channel_new_post
+channel_send_note_body                                   (mirror channel.rs)   channel/channel_send_note_body
+channel_send_note_post                                   (mirror channel.rs)   channel/channel_send_note_post
+channel_receive_note_body                                (mirror channel.rs)   channel/channel_receive_note_body
+channel_receive_note_post                                (mirror channel.rs)   channel/channel_receive_note_post
+channel_receive_note_blocking_body                       (mirror channel.rs)   channel/channel_receive_note_blocking_body
+channel_receive_note_blocking_post                       (mirror channel.rs)   channel/channel_receive_note_blocking_post
+system_receive_note_body                                 (mirror channel.rs)   channel/system_receive_note_body
+system_receive_note_post                                 (mirror channel.rs)   channel/system_receive_note_post
+system_receive_note_blocking_body                        (mirror channel.rs)   channel/system_receive_note_blocking_body
+system_receive_note_blocking_post                        (mirror channel.rs)   channel/system_receive_note_blocking_post
+system_create_channel_body                               (mirror channel.rs)   channel/system_create_channel_body
+system_create_channel_post                               (mirror channel.rs)   channel/system_create_channel_post
+system_send_note_body                                    (mirror channel.rs)   channel/system_send_note_body
+system_send_note_post                                    (mirror channel.rs)   channel/system_send_note_post
+registered_channel_cannot_send_body                      (mirror channel.rs)   channel/registered_channel_cannot_send_body
+registered_channel_cannot_send_post                      (mirror channel.rs)   channel/registered_channel_cannot_send_post
+prove_deposit_body                                       (mirror prover.rs)   prover_effects/prove_deposit_body
+prove_deposit_post                                       (mirror prover.rs)   prover_effects/prove_deposit_post
+prove_transfer_body                                      (mirror prover.rs)   prover_effects/prove_transfer_body
+prove_transfer_post                                      (mirror prover.rs)   prover_effects/prove_transfer_post
+prove_withdraw_body                                      (mirror prover.rs)   prover_effects/prove_withdraw_body
+prove_withdraw_post                                      (mirror prover.rs)   prover_effects/prove_withdraw_post
+prove_circuit_args_body                                  (mirror prover.rs)   prover_effects/prove_circuit_args_body
+prove_circuit_args_post                                  (mirror prover.rs)   prover_effects/prove_circuit_args_post
+prove_circuit_body                                       (mirror prover.rs)   prover_effects/prove_circuit_body
+prove_circuit_post                                       (mirror prover.rs)   prover_effects/prove_circuit_post
+prove_circuit_cleanup_body                               (mirror prover.rs)   prover_effects/prove_circuit_cleanup_body
+prove_circuit_cleanup_post                               (mirror prover.rs)   prover_effects/prove_circuit_cleanup_post
+deposit_guard_body                                       (mirror prover.rs)   prover_effects/deposit_guard_body
+deposit_guard_post                                       (mirror prover.rs)   prover_effects/deposit_guard_post
+transfer_guard_body                                      (mirror prover.rs)   prover_effects/transfer_guard_body
+transfer_guard_post                                      (mirror prover.rs)   prover_effects/transfer_guard_post
+withdraw_no_guard_body                                   (mirror prover.rs)   prover_effects/withdraw_no_guard_body
+withdraw_no_guard_post                                   (mirror prover.rs)   prover_effects/withdraw_no_guard_post
+prover_circuit_name_body                                 (mirror prover.rs)   prover_effects/prover_circuit_name_body
+prover_circuit_name_post                                 (mirror prover.rs)   prover_effects/prover_circuit_name_post
+process_kill_body                                        (mirror prover.rs)   prover_effects/process_kill_body
+process_kill_post                                        (mirror prover.rs)   prover_effects/process_kill_post
+process_nargo_failure_body                               (mirror prover.rs)   prover_effects/process_nargo_failure_body
+process_nargo_failure_post                               (mirror prover.rs)   prover_effects/process_nargo_failure_post
+process_binary_body                                      (mirror prover.rs)   prover_effects/process_binary_body
+process_binary_post                                      (mirror prover.rs)   prover_effects/process_binary_post
+CommitmentTree_insert_body                               (mirror tree.rs)   tree/CommitmentTree_insert_body
+CommitmentTree_insert_post                               (mirror tree.rs)   tree/CommitmentTree_insert_post
+CommitmentTree_root_body                                 (mirror tree.rs)   tree/CommitmentTree_root_body
+CommitmentTree_root_post                                 (mirror tree.rs)   tree/CommitmentTree_root_post
+AttestationTree_insert_body                              (mirror tree.rs)   tree/AttestationTree_insert_body
+AttestationTree_insert_post                              (mirror tree.rs)   tree/AttestationTree_insert_post
+AttestationTree_root_body                                (mirror tree.rs)   tree/AttestationTree_root_body
+AttestationTree_root_post                                (mirror tree.rs)   tree/AttestationTree_root_post

@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/bb_prover.rs:193-209
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,6 @@
+-    fn from(w: &WithdrawWitness) -> Self {
++    pub fn from(w: &WithdrawWitness) -> (r: Self)
++        ensures withdraw_input_ok(r, *w),
++    {
+         Self {
+             nullifier: format_field(&w.nullifier),
+             token: format_field_from_address(&w.token),

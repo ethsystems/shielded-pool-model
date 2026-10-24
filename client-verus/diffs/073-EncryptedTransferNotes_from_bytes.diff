@@ -1,0 +1,24 @@
+--- a04b8b3:domain/encrypted.rs:104-118
++++ mirrors/byte_records.rs
+@@ -1,15 +1,16 @@
+-    pub fn from_bytes(bytes: &[u8]) -> Result<Self, &'static str> {
++    pub fn from_bytes(bytes: &[u8]) -> (r: Result<Self, &'static str>)
++        requires usize::BITS == 64,
++        ensures transfer_decoded(bytes@, r),
++                r is Ok <==> frame_valid(bytes@),
++    {
+         if bytes.len() < 4 {
+             return Err("Invalid encrypted transfer notes format");
+         }
+-
+-        let len_1 = u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize;
++        let len_1 = read_be32(bytes) as usize;
+         if bytes.len() < 4 + len_1 {
+             return Err("Invalid encrypted transfer notes format");
+         }
+-
+         let note_1 = EncryptedNote::from_bytes(&bytes[4..4 + len_1])?;
+         let note_2 = EncryptedNote::from_bytes(&bytes[4 + len_1..])?;
+-
+         Ok(Self { note_1, note_2 })
+     }

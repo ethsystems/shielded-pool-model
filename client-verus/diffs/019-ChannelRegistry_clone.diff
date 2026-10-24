@@ -1,0 +1,13 @@
+--- a04b8b3:adapters/channel.rs:94-99
++++ mirrors/channel.rs
+@@ -1,6 +1,4 @@
+-    fn clone(&self) -> Self {
+-        // Note: fine for PoC purposes
+-        Self {
+-            channels: RwLock::new(HashMap::new()),
+-        }
+-    }
++pub fn registry_clone<R: RegistryApi>(registry: &R) -> (r: R)
++ ensures r.entries() == Map::<Key,u64>::empty(),
++ // STRENGTH registry_clone
++{R::empty()}

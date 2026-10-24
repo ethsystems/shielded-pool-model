@@ -1,0 +1,11 @@
+--- a04b8b3:domain/commitment.rs:41-44
++++ mirrors/hash_param.rs
+@@ -1,4 +1,6 @@
+-    pub fn nullifier(&self, spending_key: &SpendingKey) -> Nullifier {
+-        let hash = poseidon2(self.0, spending_key.0);
++    pub fn nullifier<H: PoolHash>(&self, spending_key: &SpendingKey) -> (r: Nullifier)
++        ensures r.0 == H::h2(self.0, spending_key.0),
++    {
++        let hash = H::poseidon2(self.0, spending_key.0);
+         Nullifier(hash)
+     }

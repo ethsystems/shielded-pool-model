@@ -1,0 +1,19 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:218-226
++++ mirrors/rpc.rs
+@@ -1,9 +1,7 @@
+-    async fn is_token_supported(&self, token: Address) -> Result<bool, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-        let result = pool
+-            .supportedTokens(token)
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn is_token_supported<A: RpcApi>(&self, token: Address) -> (r: Result<bool,Error>)
++ ensures r == bool_result(A::boolean((Request::Supported(self.provider,self.shielded_pool,token)).view())),
++ // STRENGTH is_token_supported
++{
++ let result = A::call_bool(Request::Supported(self.provider,self.shielded_pool,token));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

@@ -1,0 +1,105 @@
+--- a04b8b3:adapters/bb_prover.rs:281-358
++++ mirrors/prover_effects.rs
+@@ -1,78 +1,24 @@
+-    async fn prove_circuit(
+-        &self,
+-        circuit_name: &str,
+-        prover_toml: &str,
+-    ) -> Result<Vec<u8>, ports::prover::ProverError> {
+-        let circuit_dir = self.circuits_dir.join(circuit_name);
+-
+-        if !circuit_dir.exists() {
+-            return Err(ports::prover::ProverError::IoError(std::io::Error::new(
+-                std::io::ErrorKind::NotFound,
+-                format!("Circuit directory not found: {}", circuit_dir.display()),
+-            )));
+-        }
+-
+-        // 1. Stand-alone package in a private directory, deleted when `work` drops
+-        let work = tempfile::Builder::new()
+-            .prefix("shielded-pool-prove-")
+-            .tempdir_in(&self.work_root)?;
+-        let package_dir = work.path().join(circuit_name);
+-        std::fs::create_dir(&package_dir)?;
+-        std::fs::copy(circuit_dir.join("Nargo.toml"), package_dir.join("Nargo.toml"))?;
+-        std::os::unix::fs::symlink(
+-            std::fs::canonicalize(circuit_dir.join("src"))?,
+-            package_dir.join("src"),
+-        )?;
+-        std::fs::write(package_dir.join("Prover.toml"), prover_toml)?;
+-
+-        // 2. Run nargo execute to compile and generate the witness
+-        let nargo_status = Command::new(&self.nargo_binary)
+-            .args(["execute", "witness"])
+-            .current_dir(&package_dir)
+-            .kill_on_drop(true)
+-            .output()
+-            .await?;
+-
+-        if !nargo_status.status.success() {
+-            let stderr = String::from_utf8_lossy(&nargo_status.stderr);
+-            return Err(ports::prover::ProverError::WitnessError(format!(
+-                "nargo execute failed: {}",
+-                stderr
+-            )));
+-        }
+-
+-        // 3. Run bb prove (bb >= 5.0: `-t evm` selects the keccak/ZK EVM target,
+-        // replacing the removed `--oracle_hash keccak`)
+-        let target_dir = package_dir.join("target");
+-        let bb_status = Command::new(&self.bb_binary)
+-            .args([
+-                "prove",
+-                "-b",
+-                &format!("{}/{circuit_name}.json", target_dir.display()),
+-                "-w",
+-                &format!("{}/witness.gz", target_dir.display()),
+-                "--write_vk",
+-                "-t",
+-                "evm",
+-                "-o",
+-                &format!("{}/", target_dir.display()),
+-            ])
+-            .current_dir(&package_dir)
+-            .kill_on_drop(true)
+-            .output()
+-            .await?;
+-
+-        if !bb_status.status.success() {
+-            let stderr = String::from_utf8_lossy(&bb_status.stderr);
+-            return Err(ports::prover::ProverError::ProofGenerationError(format!(
+-                "bb prove failed: {}",
+-                stderr
+-            )));
+-        }
+-
+-        // 4. Read proof file, then delete the directory and report a failed deletion
+-        let proof = std::fs::read(target_dir.join("proof"))?;
+-        work.close()?;
+-
+-        Ok(proof)
+-    }
++pub async fn prove_circuit<P: Paths,E: Process>(settings: &Settings,circuit_name: &Vec<u8>,prover_toml: &Vec<u8>) -> (r: RunResult)
++ ensures run_view(r) == process_result::<P,E>(*settings,*circuit_name,*prover_toml),
++ // STRENGTH prove_circuit
++{
++ let prefix_bytes=copy_bytes(&[115u8,104,105,101,108,100,101,100,45,112,111,111,108,45,112,114,111,118,101,45]);
++let circuit_dir=P::join_name(settings.circuits_dir,circuit_name);
++if !E::path_exists(circuit_dir) {return RunResult::NotFound;}
++let work=match E::tempdir(settings.work_root,&prefix_bytes) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let package_dir=P::join_name(work,circuit_name);
++let display=P::display_path(P::join_part(package_dir,Part::Target)); let commands=prove_circuit_args(&display,circuit_name);
++let _created=match E::io_exec(Io::Create(package_dir)) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let _copied=match E::io_exec(Io::Copy(P::join_part(circuit_dir,Part::Manifest),P::join_part(package_dir,Part::Manifest))) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let canonical=match E::io_exec(Io::Canonical(P::join_part(circuit_dir,Part::Source))) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let _linked=match E::io_exec(Io::Symlink(canonical,P::join_part(package_dir,Part::Source))) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let _written=match E::io_exec(Io::Write(P::join_part(package_dir,Part::ProverToml),copy_bytes(prover_toml.as_slice()))) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let nargo_status=match E::run(&settings.nargo_binary,&commands.nargo,package_dir,true) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++if !nargo_status.success {return RunResult::Witness(nargo_status.stderr);}
++let target_dir=P::join_part(package_dir,Part::Target);
++let bb_status=match E::run(&settings.bb_binary,&commands.bb,package_dir,true) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++if !bb_status.success {return RunResult::Generation(bb_status.stderr);}
++let proof=match E::read_file(P::join_part(target_dir,Part::Proof)) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++let _closed=match E::io_exec(Io::Close(work)) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};
++RunResult::Proof(proof)
++}

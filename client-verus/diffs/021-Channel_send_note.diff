@@ -1,0 +1,23 @@
+--- a04b8b3:adapters/channel.rs:133-145
++++ mirrors/channel.rs
+@@ -1,13 +1,7 @@
+-    async fn send_note(
+-        &self,
+-        recipient_viewing_pubkey: &ViewingPubkey,
+-        encrypted_note: EncryptedNote,
+-        commitment: Commitment,
+-    ) -> Result<(), P2pError> {
+-        let message =
+-            P2pMessage::new(encrypted_note, commitment, recipient_viewing_pubkey.clone());
+-
+-        self.registry
+-            .send_to(recipient_viewing_pubkey, message)
+-            .await
+-    }
++pub async fn channel_send_note<R: RegistryApi,E: Effects>(channel: &Channel<R>, recipient_viewing_pubkey: Key, encrypted_note: Vec<u8>, commitment: [u8;32]) -> (r: Result<(),Error>)
++ ensures r == sent::<E>(channel.registry.entries(),recipient_viewing_pubkey,Message {encrypted_note,commitment,recipient:recipient_viewing_pubkey}),
++ // STRENGTH channel_send_note
++{
++ let message=Message {encrypted_note,commitment,recipient:recipient_viewing_pubkey};
++ registry_send_to::<R,E>(&channel.registry,recipient_viewing_pubkey,message).await
++}

@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/bb_prover.rs:33-35
++++ mirrors/prover_fmt.rs
+@@ -1,3 +1,5 @@
+-fn format_field(value: &B256) -> String {
+-    format!("{}", value)
++fn format_field(value: &B256) -> (r: String)
++    ensures is_hex_of(r@, value.0@),
++{
++    fmt_display_b256(value)
+ }

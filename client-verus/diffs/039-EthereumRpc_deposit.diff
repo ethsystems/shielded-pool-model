@@ -1,0 +1,45 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:281-313
++++ mirrors/rpc.rs
+@@ -1,33 +1,9 @@
+-    async fn deposit(
+-        &self,
+-        proof: &DepositProof,
+-        commitment: B256,
+-        token: Address,
+-        amount: U256,
+-        funding_address: Address,
+-        encrypted_note: Bytes,
+-    ) -> Result<TxReceipt, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-
+-        let receipt = pool
+-            .deposit(
+-                proof.proof.clone(),
+-                commitment,
+-                token,
+-                amount,
+-                funding_address,
+-                encrypted_note,
+-            )
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted("Deposit reverted".into()));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn deposit<A: RpcApi>(&self, proof: &DepositProof, commitment: Word, token: Address, amount: Word, funding_address: Address, encrypted_note: Vec<u8>) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::Deposit(self.provider,self.shielded_pool,proof.proof,commitment,token,amount,funding_address,encrypted_note)),
++ // STRENGTH deposit
++{
++ let pending=match A::send(Request::Deposit(self.provider,self.shielded_pool,clone_bytes(&proof.proof),commitment,token,amount,funding_address,encrypted_note)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}

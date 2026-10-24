@@ -1,0 +1,46 @@
+--- a04b8b3:adapters/bb_prover.rs:362-385
++++ mirrors/prover_effects.rs
+@@ -1,24 +1,19 @@
+-    async fn prove_deposit(
+-        &self,
+-        witness: &DepositWitness,
+-    ) -> Result<DepositProof, ports::prover::ProverError> {
+-        // Validate witness before proving
+-        if !witness.validate_amount() {
+-            return Err(ports::prover::ProverError::InvalidWitness(
+-                "Deposit amount must be non-zero and fit in u128".to_string(),
+-            ));
+-        }
+-
+-        let prover_toml = Self::format_deposit_prover_toml(witness);
+-        let proof_bytes = self.prove_circuit("deposit", &prover_toml).await?;
+-
+-        Ok(DepositProof::new(
+-            Bytes::from(proof_bytes),
+-            witness.commitment,
+-            witness.token,
+-            witness.amount,
+-            witness.funding_address,
+-            witness.attestation_root,
+-            witness.payload_hash,
+-        ))
+-    }
++pub async fn prove_deposit<E: Effects>(witness: &DepositWitness) -> (r: Result<DepositProof,Error>)
++ requires (deposit_valid(*witness)) ==> deposit_format_ok(*witness),
++ ensures !(deposit_valid(*witness)) ==> r is Err && r->Err_0 == Error::InvalidAmount,
++ (deposit_valid(*witness)) ==> ((r is Ok) == (E::proof(Circuit::Deposit,E::deposit_text(*witness)) is Ok)),
++ (deposit_valid(*witness)) && r is Err ==> r->Err_0 == Error::Effect(E::proof(Circuit::Deposit,E::deposit_text(*witness))->Err_0),
++ r is Ok ==> r->Ok_0.proof@ == E::proof(Circuit::Deposit,E::deposit_text(*witness))->Ok_0,
++ r is Ok ==> r->Ok_0.commitment == witness.commitment,
++ r is Ok ==> r->Ok_0.token == witness.token,
++ r is Ok ==> r->Ok_0.amount == witness.amount,
++ r is Ok ==> r->Ok_0.funding_address == witness.funding_address,
++ r is Ok ==> r->Ok_0.attestation_root == witness.attestation_root,
++ r is Ok ==> r->Ok_0.payload_hash == witness.payload_hash,
++ // STRENGTH prove_deposit
++{
++ if !validate_amount(witness) {return Err(Error::InvalidAmount);}
++ let prover_toml=E::format_deposit(witness);
++ let proof_bytes=match E::prove(Circuit::Deposit,&prover_toml) {Ok(b)=>b,Err(e)=>return Err(Error::Effect(e))};
++ Ok(DepositProof {proof:proof_bytes,commitment:witness.commitment,token:witness.token,amount:witness.amount,funding_address:witness.funding_address,attestation_root:witness.attestation_root,payload_hash:witness.payload_hash})
++}

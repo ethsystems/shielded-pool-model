@@ -1,0 +1,22 @@
+--- a04b8b3:crypto/encryption.rs:55-64
++++ mirrors/key_wrappers.rs
+@@ -1,10 +1,14 @@
+-pub fn encrypt_note(note: &Note, recipient: &ViewingPubkey) -> EncryptedNote {
+-    let envelope = sealring::seal::<K256, NoteDomain>(
++pub fn encrypt_note<P: PublicKeyApi, Z: SealApi<P>>(note: &Note, recipient: &ViewingPubkey<P>, rng: &mut Rng) -> (r: EncryptedNote)
++    ensures r.bytes@ == Z::sealed(recipient.0, *note, Seq::<u8>::empty(), old(rng).seed@).bytes(),
++{
++    let aad: [u8; 0] = [];
++    proof { assert(aad@ =~= Seq::<u8>::empty()); }
++    let envelope = Z::seal(
+         recipient.public_key(),
+         note,
+-        AAD,
+-        &mut rand::rng(),
++        &aad,
++        rng,
+     )
+     .expect("sealing to a valid secp256k1 public key never fails");
+-    EncryptedNote::new(envelope.as_bytes().to_vec())
++    EncryptedNote::new(to_vec_u8(envelope.as_bytes()))
+ }

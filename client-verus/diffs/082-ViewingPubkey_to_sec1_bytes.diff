@@ -1,0 +1,11 @@
+--- a04b8b3:domain/keys.rs:102-105
++++ mirrors/key_wrappers.rs
+@@ -1,4 +1,5 @@
+-    pub fn to_sec1_bytes(&self) -> Vec<u8> {
+-        use k256::elliptic_curve::sec1::ToSec1Point;
+-        self.0.to_sec1_point(true).as_bytes().to_vec()
++    pub fn to_sec1_bytes(&self) -> (r: Vec<u8>)
++        ensures r@ == self.0.sec1(true),
++    {
++        to_vec_u8(self.0.to_sec1_point(true).as_bytes())
+     }

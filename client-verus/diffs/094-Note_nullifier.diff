@@ -1,0 +1,10 @@
+--- a04b8b3:domain/note.rs:86-88
++++ mirrors/hash_param.rs
+@@ -1,3 +1,5 @@
+-    pub fn nullifier(&self, spending_key: &SpendingKey) -> Nullifier {
+-        self.commitment().nullifier(spending_key)
++    pub fn nullifier<H: PoolHash>(&self, spending_key: &SpendingKey) -> (r: Nullifier)
++        ensures nullifier_of::<H>(*self, *spending_key, r.0),
++    {
++        self.commitment::<H>().nullifier::<H>(spending_key)
+     }

@@ -1,0 +1,2058 @@
+[
+ {
+  "id": "byte_records/note_accept_empty",
+  "mirror": "byte_records.rs",
+  "old": "        if bytes.is_empty() {\n            return Err(\"Empty bytes\");",
+  "new": "        if bytes.len() > bytes.len() {\n            return Err(\"Empty bytes\");",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/note_drop_byte",
+  "mirror": "byte_records.rs",
+  "old": "Ok(Self { bytes: copy_range(bytes, 0, bytes.len()) })",
+  "new": "Ok(Self { bytes: copy_range(bytes, 1, bytes.len()) })",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/transfer_little_endian",
+  "mirror": "byte_records.rs",
+  "old": "let len_1 = read_be32(bytes) as usize;",
+  "new": "let len_1 = (bytes[0] as u32 + bytes[1] as u32 * 256 + bytes[2] as u32 * 65536 + bytes[3] as u32 * 16777216) as usize;",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/transfer_swap_fields",
+  "mirror": "byte_records.rs",
+  "old": "Ok(Self { note_1, note_2 })",
+  "new": "Ok(Self { note_1: note_2, note_2: note_1 })",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/transfer_wrong_error",
+  "mirror": "byte_records.rs",
+  "old": "if bytes.len() < 4 + len_1 {",
+  "new": "if bytes.len() <= 4 + len_1 {",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/transfer_remove_header_guard",
+  "mirror": "byte_records.rs",
+  "old": "        if bytes.len() < 4 {\n",
+  "new": "        if bytes.len() < 0 {\n",
+  "expect": "precondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/merkle_zero_elements",
+  "mirror": "byte_records.rs",
+  "old": "{ word_to_be(&e) }",
+  "new": "{ [0u8; 32] }",
+  "expect": "unable to prove post-condition of closure",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/merkle_zero_indices",
+  "mirror": "byte_records.rs",
+  "old": "indices.push((idx & 1) as u8);",
+  "new": "indices.push(0u8);",
+  "expect": "invariant not satisfied at end of loop body",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/merkle_wrong_leaf",
+  "mirror": "byte_records.rs",
+  "old": "Self { path, indices, leaf_index, proof_length }",
+  "new": "Self { path, indices, leaf_index: 0, proof_length }",
+  "expect": "postcondition not satisfied",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "byte_records/word_swapped_halves",
+  "mirror": "byte_records.rs",
+  "old": "out[j] = (x.hi >> ((15 - j) * 8) as u32) as u8;",
+  "new": "out[j] = (x.lo >> ((15 - j) * 8) as u32) as u8;",
+  "expect": "invariant not satisfied at end of loop body",
+  "kind": "reconstructed"
+ },
+ {
+  "id": "guards/amount-drop-zero-check",
+  "mirror": "guards.rs",
+  "old": "self.amount != U256::ZERO && u128::try_from(self.amount).is_ok()",
+  "new": "u128::try_from(self.amount).is_ok()",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "guards/amount-claim-u64",
+  "mirror": "guards.rs",
+  "old": "ensures r == deposit_amount_ok(self),",
+  "new": "ensures r == deposit_amount_ok(self), r ==> value(self.amount) < 0x1_0000_0000_0000_0000,",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "guards/sum-wrapping-add",
+  "mirror": "guards.rs",
+  "old": "            a.checked_add(b)\n",
+  "new": "            Some(a.wrapping_add(b))\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "guards/sum-reads-note0-twice",
+  "mirror": "guards.rs",
+  "old": "let b = u128::try_from(notes[1].amount).ok()?;",
+  "new": "let b = u128::try_from(notes[0].amount).ok()?;",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "guards/amounts-ge",
+  "mirror": "guards.rs",
+  "old": "(Some(input_sum), Some(output_sum)) => input_sum == output_sum,",
+  "new": "(Some(input_sum), Some(output_sum)) => input_sum >= output_sum,",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "guards/amounts-unbounded-claim",
+  "mirror": "guards.rs",
+  "old": "ensures r == transfer_amounts_ok(self),",
+  "new": "ensures r == (in_sum(self) == out_sum(self)),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition (old claim)"
+ },
+ {
+  "id": "guards/token-wrong-index",
+  "mirror": "guards.rs",
+  "old": "            && address_eq(&self.output_notes[1].token, &token)",
+  "new": "            && address_eq(&self.output_notes[0].token, &token)",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "guards/token-claim-always",
+  "mirror": "guards.rs",
+  "old": "ensures r == same_tokens(self),",
+  "new": "ensures r == same_tokens(self), r,",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "note_key/notekey-new-nonzero-init",
+  "mirror": "note_key.rs",
+  "old": "        let mut salt_bytes = [0u8; 32];",
+  "new": "        let mut salt_bytes = [1u8; 32];",
+  "expect": "precondition not satisfied",
+  "kind": "mutated body (fails at the 5-zero-byte lemma premise)"
+ },
+ {
+  "id": "note_key/notekey-new-fill-offset-4",
+  "mirror": "note_key.rs",
+  "old": "rng.fill_from(&mut salt_bytes, 5); // keep within the field",
+  "new": "rng.fill_from(&mut salt_bytes, 4); // keep within the field",
+  "expect": "precondition not satisfied",
+  "kind": "mutated body (fails at the 5-zero-byte lemma premise)"
+ },
+ {
+  "id": "note_key/notekey-new-drops-amount",
+  "mirror": "note_key.rs",
+  "old": "            token,\n            amount,\n            owner_pubkey,\n            salt: B256::from(salt_bytes),",
+  "new": "            token,\n            amount: U256::ZERO,\n            owner_pubkey,\n            salt: B256::from(salt_bytes),",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "note_key/notekey-new-claim-2p208",
+  "mirror": "note_key.rs",
+  "old": "            canonical_field_bytes(r.salt.0@, rng.bytes@),\n    {\n        let mut salt_bytes",
+  "new": "            canonical_field_bytes(r.salt.0@, rng.bytes@),\n            be_value(r.salt.0@) < pow256(26),\n    {\n        let mut salt_bytes",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "note_key/notekey-zero-max",
+  "mirror": "note_key.rs",
+  "old": "Self::new(token, U256::ZERO, owner_pubkey, rng)",
+  "new": "Self::new(token, U256::MAX, owner_pubkey, rng)",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "note_key/notekey-zero-claim-salt-last-zero",
+  "mirror": "note_key.rs",
+  "old": "            canonical_field_bytes(r.salt.0@, rng.bytes@),\n    {\n        Self::new",
+  "new": "            canonical_field_bytes(r.salt.0@, rng.bytes@),\n            r.salt.0@[31] == 0u8,\n    {\n        Self::new",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "note_key/notekey-iszero-ne",
+  "mirror": "note_key.rs",
+  "old": "        self.amount == U256::ZERO\n",
+  "new": "        self.amount != U256::ZERO\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "note_key/notekey-iszero-claim",
+  "mirror": "note_key.rs",
+  "old": "        ensures r == (value(self.amount) == 0),",
+  "new": "        ensures r == (value(self.amount) == 0), r ==> self.amount.lo == 1,",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "note_key/notekey-key-nonzero-init",
+  "mirror": "note_key.rs",
+  "old": "        let mut bytes = [0u8; 32];",
+  "new": "        let mut bytes = [1u8; 32];",
+  "expect": "precondition not satisfied",
+  "kind": "mutated body (fails at the 5-zero-byte lemma premise)"
+ },
+ {
+  "id": "note_key/notekey-key-claim-2p208",
+  "mirror": "note_key.rs",
+  "old": "        ensures canonical_field_bytes(r.0.0@, rng.bytes@),",
+  "new": "        ensures canonical_field_bytes(r.0.0@, rng.bytes@), be_value(r.0.0@) < pow256(26),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "public_inputs/ser-deposit-swap-tail",
+  "mirror": "public_inputs.rs",
+  "old": "            self.public_inputs.attestation_root,\n            self.public_inputs.payload_hash,\n",
+  "new": "            self.public_inputs.payload_hash,\n            self.public_inputs.attestation_root,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "public_inputs/ser-deposit-claim-top-byte-zero",
+  "mirror": "public_inputs.rs",
+  "old": "            r[5] == self.public_inputs.payload_hash,\n",
+  "new": "            r[5] == self.public_inputs.payload_hash,\n            r[2].0@[0] == 0u8,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition (u128-style claim fails on the full domain)"
+ },
+ {
+  "id": "public_inputs/ser-withdraw-swap-addresses",
+  "mirror": "public_inputs.rs",
+  "old": "            B256::left_padding_from(self.public_inputs.token.as_slice()),\n            self.public_inputs.amount.into(),\n            B256::left_padding_from(self.public_inputs.recipient.as_slice()),",
+  "new": "            B256::left_padding_from(self.public_inputs.recipient.as_slice()),\n            self.public_inputs.amount.into(),\n            B256::left_padding_from(self.public_inputs.token.as_slice()),",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "public_inputs/ser-withdraw-claim-top-byte-zero",
+  "mirror": "public_inputs.rs",
+  "old": "            r[4] == self.public_inputs.commitment_root,\n",
+  "new": "            r[4] == self.public_inputs.commitment_root,\n            r[2].0@[0] == 0u8,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition (u128-style claim fails on the full domain)"
+ },
+ {
+  "id": "public_inputs/ser-be16-mask-7f",
+  "mirror": "public_inputs.rs",
+  "old": "out[i] = ((x >> shift) & 0xff) as u8;",
+  "new": "out[i] = ((x >> shift) & 0x7f) as u8;",
+  "expect": "invariant not satisfied at end of loop body",
+  "kind": "mutated body"
+ },
+ {
+  "id": "public_inputs/ser-halves-swapped",
+  "mirror": "public_inputs.rs",
+  "old": "    let h = be16(x.hi);\n    let l = be16(x.lo);",
+  "new": "    let h = be16(x.lo);\n    let l = be16(x.hi);",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "public_inputs/ser-pad-no-offset",
+  "mirror": "public_inputs.rs",
+  "old": "            out[off + i] = value[i];",
+  "new": "            out[i] = value[i];",
+  "expect": "invariant not satisfied at end of loop body",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/commitment-swap-owner-salt",
+  "mirror": "hash_param.rs",
+  "old": "H::poseidon4(token_b256, amount_b256, self.owner_pubkey.0, self.salt)",
+  "new": "H::poseidon4(token_b256, amount_b256, self.salt, self.owner_pubkey.0)",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/commitment-claim-extra",
+  "mirror": "hash_param.rs",
+  "old": "        ensures commitment_of::<H>(*self, r.0),",
+  "new": "        ensures commitment_of::<H>(*self, r.0), r.0 == H::h4(self.salt, self.salt, self.salt, self.salt),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "hash_param/cnull-swap-args",
+  "mirror": "hash_param.rs",
+  "old": "let hash = H::poseidon2(self.0, spending_key.0);",
+  "new": "let hash = H::poseidon2(spending_key.0, self.0);",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/cnull-claim-symmetric",
+  "mirror": "hash_param.rs",
+  "old": "        ensures r.0 == H::h2(self.0, spending_key.0),",
+  "new": "        ensures r.0 == H::h2(self.0, spending_key.0), r.0 == H::h2(spending_key.0, self.0),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "hash_param/owner-identity",
+  "mirror": "hash_param.rs",
+  "old": "OwnerPubkey(H::poseidon1(self.0))",
+  "new": "OwnerPubkey(self.0)",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/owner-claim-identity",
+  "mirror": "hash_param.rs",
+  "old": "        ensures r.0 == H::h1(self.0),",
+  "new": "        ensures r.0 == H::h1(self.0), r.0 == self.0,",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "hash_param/nnull-commits-salt",
+  "mirror": "hash_param.rs",
+  "old": "        self.commitment::<H>().nullifier::<H>(spending_key)\n",
+  "new": "        Commitment(self.salt).nullifier::<H>(spending_key)\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/deposit-funding-is-attester",
+  "mirror": "hash_param.rs",
+  "old": "            funding_address,\n            attestation_root,\n            payload_hash: H::payload_commitment(encrypted_payload),",
+  "new": "            funding_address: attester,\n            attestation_root,\n            payload_hash: H::payload_commitment(encrypted_payload),",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/deposit-claim-owner-from-salt",
+  "mirror": "hash_param.rs",
+  "old": "            r.owner_pubkey.0 == H::h1(spending_key.0),",
+  "new": "            r.owner_pubkey.0 == H::h1(spending_key.0),\n            r.owner_pubkey.0 == H::h1(note.salt),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "hash_param/transfer-swap-nullifiers",
+  "mirror": "hash_param.rs",
+  "old": "            input_notes[0].nullifier::<H>(&spending_key).0,\n            input_notes[1].nullifier::<H>(&spending_key).0,",
+  "new": "            input_notes[1].nullifier::<H>(&spending_key).0,\n            input_notes[0].nullifier::<H>(&spending_key).0,",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/transfer-claim-cross-index",
+  "mirror": "hash_param.rs",
+  "old": "            nullifier_of::<H>(input_notes[0], spending_key, r.nullifiers[0]),",
+  "new": "            nullifier_of::<H>(input_notes[0], spending_key, r.nullifiers[0]),\n            nullifier_of::<H>(input_notes[1], spending_key, r.nullifiers[0]),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "hash_param/withdraw-recipient-is-token",
+  "mirror": "hash_param.rs",
+  "old": "            recipient,\n            commitment_root,\n            spending_key,\n            note,",
+  "new": "            recipient: note.token,\n            commitment_root,\n            spending_key,\n            note,",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "hash_param/withdraw-claim-recipient-token",
+  "mirror": "hash_param.rs",
+  "old": "            r.recipient == recipient,",
+  "new": "            r.recipient == recipient,\n            r.recipient == note.token,",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/b256fr-const-word",
+  "mirror": "crypto_field.rs",
+  "old": "    Fr::from_be_bytes_mod_order(value.as_ref())\n",
+  "new": "    Fr::from_be_bytes_mod_order(B256([7u8; 32]).as_ref())\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/b256fr-claim-no-reduction",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures r.val() == fe(value),\n",
+  "new": "    ensures r.val() == fe(value), r.val() == be_value(value.0@),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/frb256-raw-repr",
+  "mirror": "crypto_field.rs",
+  "old": "    let big_int = value.into_bigint();\n",
+  "new": "    let big_int = BigInt(value.repr);\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/frb256-claim-top-byte-zero",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures be_value(r.0@) == value.val(), be_value(r.0@) < R(),\n",
+  "new": "    ensures be_value(r.0@) == value.val(), be_value(r.0@) < R(), r.0@[0] == 0u8,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/p1-wrong-arity",
+  "mirror": "crypto_field.rs",
+  "old": "        P::new_circom(1).expect(\"Failed to create Poseidon hasher\");\n    let input = b256_to_fr(a);",
+  "new": "        P::new_circom(2).expect(\"Failed to create Poseidon hasher\");\n    let input = b256_to_fr(a);",
+  "expect": "precondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/p1-claim-identity",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures be_value(r.0@) == P::h1(fe(a)) % R(), be_value(r.0@) < R(),\n",
+  "new": "    ensures be_value(r.0@) == P::h1(fe(a)) % R(), be_value(r.0@) < R(), be_value(r.0@) == fe(a),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/p2-swap-args",
+  "mirror": "crypto_field.rs",
+  "old": "    let inputs = [b256_to_fr(a), b256_to_fr(b)];\n",
+  "new": "    let inputs = [b256_to_fr(b), b256_to_fr(a)];\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/p2-claim-symmetric",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures be_value(r.0@) == P::h2(fe(a), fe(b)) % R(), be_value(r.0@) < R(),\n",
+  "new": "    ensures be_value(r.0@) == P::h2(fe(a), fe(b)) % R(), be_value(r.0@) < R(), P::h2(fe(a), fe(b)) % R() == P::h2(fe(b), fe(a)) % R(),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/p4-swap-cd",
+  "mirror": "crypto_field.rs",
+  "old": "    let inputs = [b256_to_fr(a), b256_to_fr(b), b256_to_fr(c), b256_to_fr(d)];\n",
+  "new": "    let inputs = [b256_to_fr(a), b256_to_fr(b), b256_to_fr(d), b256_to_fr(c)];\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/p4-claim-ignores-d",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures be_value(r.0@) == P::h4(fe(a), fe(b), fe(c), fe(d)) % R(), be_value(r.0@) < R(),\n",
+  "new": "    ensures be_value(r.0@) == P::h4(fe(a), fe(b), fe(c), fe(d)) % R(), be_value(r.0@) < R(), be_value(r.0@) == P::h4(fe(a), fe(b), fe(c), 0) % R(),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/pc-hash-empty",
+  "mirror": "crypto_field.rs",
+  "old": "    let reduced = Fr::from_be_bytes_mod_order(K::keccak256(payload).as_slice());\n",
+  "new": "    let reduced = Fr::from_be_bytes_mod_order(K::keccak256(&payload[0..0]).as_slice());\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/pc-claim-no-reduction",
+  "mirror": "crypto_field.rs",
+  "old": "    ensures be_value(r.0@) == be_value(K::k(payload@).0@) % R(), be_value(r.0@) < R(),\n",
+  "new": "    ensures be_value(r.0@) == be_value(K::k(payload@).0@) % R(), be_value(r.0@) < R(), be_value(r.0@) == be_value(K::k(payload@).0@),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "crypto_field/ph-swap-children",
+  "mirror": "crypto_field.rs",
+  "old": "                Fr::from_be_bytes_mod_order(&input[..32]),\n                Fr::from_be_bytes_mod_order(&input[32..]),\n",
+  "new": "                Fr::from_be_bytes_mod_order(&input[32..]),\n                Fr::from_be_bytes_mod_order(&input[..32]),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "crypto_field/ph-weak-length",
+  "mirror": "crypto_field.rs",
+  "old": "        requires input.len() == 64,\n",
+  "new": "        requires input.len() >= 32,\n",
+  "expect": "precondition not satisfied",
+  "kind": "weakened precondition"
+ },
+ {
+  "id": "crypto_field/standin-no-reduce",
+  "mirror": "crypto_field.rs",
+  "old": "        let y = reduce(U256 { lo, hi });\n",
+  "new": "        let y = U256 { lo, hi };\n",
+  "expect": "precondition not satisfied",
+  "kind": "mutated stand-in (fails at the lemma_small_mod premise value(y) < r)"
+ },
+ {
+  "id": "crypto_field/standin-sub-no-borrow",
+  "mirror": "crypto_field.rs",
+  "old": "        U256 { lo: x.lo + (u128::MAX - R_LO + 1), hi: x.hi - R_HI - 1 }\n",
+  "new": "        U256 { lo: x.lo + (u128::MAX - R_LO + 1), hi: x.hi - R_HI }\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated stand-in"
+ },
+ {
+  "id": "prover_fmt/ff-format-zero",
+  "mirror": "prover_fmt.rs",
+  "old": "    fmt_display_b256(value)\n}\n\n/// Format an Address",
+  "new": "    fmt_display_b256(&B256::ZERO)\n}\n\n/// Format an Address",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/ff-claim-no-prefix",
+  "mirror": "prover_fmt.rs",
+  "old": "fn format_field(value: &B256) -> (r: String)\n    ensures is_hex_of(r@, value.0@),\n",
+  "new": "fn format_field(value: &B256) -> (r: String)\n    ensures is_hex_of(r@, value.0@), r@.len() == 64,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/ff-standin-nibble-swap",
+  "mirror": "prover_fmt.rs",
+  "old": "        s.push(hex_digit(b / 16));\n        s.push(hex_digit(b % 16));\n",
+  "new": "        s.push(hex_digit(b % 16));\n        s.push(hex_digit(b / 16));\n",
+  "expect": "invariant not satisfied at end of loop body",
+  "kind": "mutated stand-in"
+ },
+ {
+  "id": "prover_fmt/ffa-drop-byte",
+  "mirror": "prover_fmt.rs",
+  "old": "    let b256 = B256::left_padding_from(addr.as_slice());\n",
+  "new": "    let b256 = B256::left_padding_from(&addr.as_slice()[1..]);\n",
+  "expect": "assertion failed",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/ffa-claim-20-bytes",
+  "mirror": "prover_fmt.rs",
+  "old": "    ensures is_hex_of(r@, left_pad20(addr.0@)),\n",
+  "new": "    ensures is_hex_of(r@, left_pad20(addr.0@)), r@.len() == 42,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/pfa-no-resize",
+  "mirror": "prover_fmt.rs",
+  "old": "    padded.resize(max_depth, B256::ZERO);\n",
+  "new": "",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/pfa-claim-no-truncation",
+  "mirror": "prover_fmt.rs",
+  "old": "        r.len() == max_depth,\n        forall|i: int| 0 <= i < max_depth && i < path.len()",
+  "new": "        r.len() == max_depth, path.len() <= r.len(),\n        forall|i: int| 0 <= i < max_depth && i < path.len()",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/pia-pad-one",
+  "mirror": "prover_fmt.rs",
+  "old": "    padded.resize(max_depth, 0);\n",
+  "new": "    padded.resize(max_depth, 1);\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/pia-claim-no-truncation",
+  "mirror": "prover_fmt.rs",
+  "old": "        r.len() == max_depth,\n        forall|i: int| 0 <= i < max_depth ==> #[trigger] r@[i] == padded_index(indices@, i),",
+  "new": "        r.len() == max_depth, indices.len() <= r.len(),\n        forall|i: int| 0 <= i < max_depth ==> #[trigger] r@[i] == padded_index(indices@, i),",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "misc_domain/p2p-zero-commitment",
+  "mirror": "misc_domain.rs",
+  "old": "        Self {\n            encrypted_note,\n            commitment,\n",
+  "new": "        Self {\n            encrypted_note,\n            commitment: Commitment(B256([0u8; 32])),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "misc_domain/p2p-claim-nonempty",
+  "mirror": "misc_domain.rs",
+  "old": "            r.recipient_viewing_pubkey == recipient_viewing_pubkey,\n",
+  "new": "            r.recipient_viewing_pubkey == recipient_viewing_pubkey, r.encrypted_note.bytes@.len() > 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "misc_domain/dec-wrong-none-error",
+  "mirror": "misc_domain.rs",
+  "old": "        .ok_or(DecryptionError::DecryptionFailed)\n",
+  "new": "        .ok_or(DecryptionError::MalformedEnvelope)\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "misc_domain/dec-nonempty-aad",
+  "mirror": "misc_domain.rs",
+  "old": "    S::open(&recipient, &envelope, &aad)\n",
+  "new": "    S::open(&recipient, &envelope, encrypted.as_bytes())\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "misc_domain/dec-claim-parse-implies-ok",
+  "mirror": "misc_domain.rs",
+  "old": "    ensures r == decrypt_spec::<S>(encrypted.bytes@, viewing_key.0),\n",
+  "new": "    ensures r == decrypt_spec::<S>(encrypted.bytes@, viewing_key.0), S::parses(encrypted.bytes@) ==> r is Ok,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "misc_domain/b2b-zero",
+  "mirror": "misc_domain.rs",
+  "old": "    value.0\n}\n",
+  "new": "    [0u8; 32]\n}\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "misc_domain/b2b-claim-top-zero",
+  "mirror": "misc_domain.rs",
+  "old": "pub fn b256_to_bytes(value: &B256) -> (r: [u8; 32])\n    ensures r@ == value.0@,\n",
+  "new": "pub fn b256_to_bytes(value: &B256) -> (r: [u8; 32])\n    ensures r@ == value.0@, r@[0] == 0u8,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "misc_domain/by2b-zero",
+  "mirror": "misc_domain.rs",
+  "old": "    B256::from_slice(bytes)\n}\n",
+  "new": "    B256([0u8; 32])\n}\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "misc_domain/by2b-claim-last-zero",
+  "mirror": "misc_domain.rs",
+  "old": "pub fn bytes_to_b256(bytes: &[u8; 32]) -> (r: B256)\n    ensures r.0@ == bytes@,\n",
+  "new": "pub fn bytes_to_b256(bytes: &[u8; 32]) -> (r: B256)\n    ensures r.0@ == bytes@, r.0@[31] == 0u8,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/fu-drop-high-half",
+  "mirror": "prover_fmt.rs",
+  "old": "    fmt_u256_decimal(value)\n",
+  "new": "    fmt_u256_decimal(&U256 { lo: value.lo, hi: 0 })\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/fu-claim-u128-length",
+  "mirror": "prover_fmt.rs",
+  "old": "fn format_u256(value: &U256) -> (r: String)\n    ensures r@ == dec_str(uval(*value)),\n",
+  "new": "fn format_u256(value: &U256) -> (r: String)\n    ensures r@ == dec_str(uval(*value)), r@.len() <= 38,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/fu-standin-no-carry",
+  "mirror": "prover_fmt.rs",
+  "old": "    let t1 = rh * 0x1_0000_0000_0000_0000u128 + l1;\n",
+  "new": "    let t1 = l1;\n",
+  "expect": "assertion failed",
+  "kind": "mutated stand-in"
+ },
+ {
+  "id": "prover_fmt/dpi-token-is-funding",
+  "mirror": "prover_fmt.rs",
+  "old": "            token: format_field_from_address(&w.token),\n            amount: format_u256(&w.amount),\n            funding_address:",
+  "new": "            token: format_field_from_address(&w.funding_address),\n            amount: format_u256(&w.amount),\n            funding_address:",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/dpi-wrong-depth",
+  "mirror": "prover_fmt.rs",
+  "old": "                &w.attestation_proof.path,\n                MAX_ATTESTATION_TREE_DEPTH,\n",
+  "new": "                &w.attestation_proof.path,\n                MAX_COMMITMENT_TREE_DEPTH,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/dpi-claim-amount-u128",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures deposit_input_ok(r, *w),\n",
+  "new": "        ensures deposit_input_ok(r, *w), r.amount@.len() <= 38,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/tpi-swap-input-amounts",
+  "mirror": "prover_fmt.rs",
+  "old": "            amount_in_0: format_u256(&w.input_notes[0].amount),\n",
+  "new": "            amount_in_0: format_u256(&w.input_notes[1].amount),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/tpi-path1-from-proof0",
+  "mirror": "prover_fmt.rs",
+  "old": "            path_1: pad_field_array(&w.input_proofs[1].path, MAX_COMMITMENT_TREE_DEPTH),\n",
+  "new": "            path_1: pad_field_array(&w.input_proofs[0].path, MAX_COMMITMENT_TREE_DEPTH),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/tpi-claim-length-bounded",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures transfer_input_ok(r, *w),\n",
+  "new": "        ensures transfer_input_ok(r, *w), r.proof_length_0 <= 32,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/wpi-recipient-is-token",
+  "mirror": "prover_fmt.rs",
+  "old": "            recipient: format_field_from_address(&w.recipient),\n",
+  "new": "            recipient: format_field_from_address(&w.token),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/wpi-salt-from-nullifier",
+  "mirror": "prover_fmt.rs",
+  "old": "            salt: format_field(&w.note.salt),\n",
+  "new": "            salt: format_field(&w.nullifier),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/wpi-claim-amount-u128",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures withdraw_input_ok(r, *w),\n",
+  "new": "        ensures withdraw_input_ok(r, *w), r.amount@.len() <= 38,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "merkle_proofs/gcp-directions-from-leaf-index",
+  "mirror": "merkle_proofs.rs",
+  "old": "        let indices: Vec<u8> = decode_path(proof.index, proof.siblings.len());\n\n        let proof_length = path.len();\n\n        Some(CommitmentMerkleProof {",
+  "new": "        let indices: Vec<u8> = decode_path(leaf_index as usize, proof.siblings.len());\n\n        let proof_length = path.len();\n\n        Some(CommitmentMerkleProof {",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "merkle_proofs/gcp-claim-depth-32",
+  "mirror": "merkle_proofs.rs",
+  "old": "    ) -> (r: Option<CommitmentMerkleProof>)\n        requires usize::BITS == 64,\n        ensures\n",
+  "new": "    ) -> (r: Option<CommitmentMerkleProof>)\n        requires usize::BITS == 64,\n        ensures\n            r is Some ==> r->Some_0.proof_length <= 32,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "merkle_proofs/gap-zero-leaf-index",
+  "mirror": "merkle_proofs.rs",
+  "old": "        Some(AttestationMerkleProof {\n            path,\n            indices,\n            leaf_index,\n",
+  "new": "        Some(AttestationMerkleProof {\n            path,\n            indices,\n            leaf_index: 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "merkle_proofs/gap-claim-leaf-index-bits",
+  "mirror": "merkle_proofs.rs",
+  "old": "    ) -> (r: Option<AttestationMerkleProof>)\n        requires usize::BITS == 64,\n        ensures\n",
+  "new": "    ) -> (r: Option<AttestationMerkleProof>)\n        requires usize::BITS == 64,\n        ensures\n            r is Some ==> (forall|i: int| 0 <= i < r->Some_0.indices@.len() ==> r->Some_0.indices@[i] == bit(leaf_index as usize, i)),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "merkle_proofs/gap-weak-no-word-size",
+  "mirror": "merkle_proofs.rs",
+  "old": "    ) -> (r: Option<AttestationMerkleProof>)\n        requires usize::BITS == 64,\n",
+  "new": "    ) -> (r: Option<AttestationMerkleProof>)\n        requires true,\n",
+  "expect": "precondition not satisfied",
+  "kind": "weakened precondition"
+ },
+ {
+  "id": "key_wrappers/vkr-advanced-rng",
+  "mirror": "key_wrappers.rs",
+  "old": "        Self(S::generate_from_rng(rng))\n",
+  "new": "        let _first = S::generate_from_rng(rng);\n        Self(S::generate_from_rng(rng))\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/vkr-claim-rng-independent",
+  "mirror": "key_wrappers.rs",
+  "old": "        ensures r.0 == S::generated(old(rng).seed@),\n",
+  "new": "        ensures r.0 == S::generated(old(rng).seed@), r.0 == S::generated(Seq::<u8>::empty()),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "key_wrappers/vkf-empty-input",
+  "mirror": "key_wrappers.rs",
+  "old": "        Ok(Self(S::from_slice(bytes)?))\n",
+  "new": "        Ok(Self(S::from_slice(&bytes[0..0])?))\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/vkf-claim-always-ok",
+  "mirror": "key_wrappers.rs",
+  "old": "            (r is Ok) == S::accepts(bytes@),\n            r is Ok ==> r->Ok_0.0 == S::parsed(bytes@),\n",
+  "new": "            (r is Ok) == S::accepts(bytes@), r is Ok,\n            r is Ok ==> r->Ok_0.0 == S::parsed(bytes@),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "key_wrappers/dvp-other-key",
+  "mirror": "key_wrappers.rs",
+  "old": "        ViewingPubkey(self.0.public_key())\n",
+  "new": "        ViewingPubkey(S::generate_from_rng(&mut Rng { seed: Vec::new() }).public_key())\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/dvp-claim-fixed-key",
+  "mirror": "key_wrappers.rs",
+  "old": "        ensures r.0 == self.0.pk(),\n",
+  "new": "        ensures r.0 == self.0.pk(), r.0 == S::parsed(Seq::<u8>::empty()).pk(),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "key_wrappers/vps-empty-input",
+  "mirror": "key_wrappers.rs",
+  "old": "        Ok(Self(P::from_sec1_bytes(bytes)?))\n",
+  "new": "        Ok(Self(P::from_sec1_bytes(&bytes[0..0])?))\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/vps-claim-33-bytes-ok",
+  "mirror": "key_wrappers.rs",
+  "old": "            (r is Ok) == P::accepts_sec1(bytes@),\n            r is Ok ==> r->Ok_0.0 == P::parsed_sec1(bytes@),\n",
+  "new": "            (r is Ok) == P::accepts_sec1(bytes@), bytes@.len() == 33 ==> r is Ok,\n            r is Ok ==> r->Ok_0.0 == P::parsed_sec1(bytes@),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "key_wrappers/vpt-uncompressed",
+  "mirror": "key_wrappers.rs",
+  "old": "        to_vec_u8(self.0.to_sec1_point(true).as_bytes())\n",
+  "new": "        to_vec_u8(self.0.to_sec1_point(false).as_bytes())\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/vpt-claim-33-bytes",
+  "mirror": "key_wrappers.rs",
+  "old": "        ensures r@ == self.0.sec1(true),\n",
+  "new": "        ensures r@ == self.0.sec1(true), r@.len() == 33,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "key_wrappers/enc-nonempty-aad",
+  "mirror": "key_wrappers.rs",
+  "old": "        &aad,\n        rng,\n",
+  "new": "        note.salt.as_slice(),\n        rng,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/enc-drop-bytes",
+  "mirror": "key_wrappers.rs",
+  "old": "    EncryptedNote::new(to_vec_u8(envelope.as_bytes()))\n",
+  "new": "    EncryptedNote::new(Vec::new())\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/enc-drop-seal-premise",
+  "mirror": "key_wrappers.rs",
+  "old": "        ensures\n            r is Ok,\n            r->Ok_0 == Self::sealed(*pk, *note, aad@, old(rng).seed@);\n",
+  "new": "        ensures\n            r is Ok ==> r->Ok_0 == Self::sealed(*pk, *note, aad@, old(rng).seed@);\n",
+  "expect": "precondition not satisfied",
+  "kind": "weakened premise"
+ },
+ {
+  "id": "key_wrappers/rcpt-default-one",
+  "mirror": "key_wrappers.rs",
+  "old": "            block_number: receipt.block_number.unwrap_or(0),\n",
+  "new": "            block_number: receipt.block_number.unwrap_or(1),\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "key_wrappers/rcpt-claim-real-block",
+  "mirror": "key_wrappers.rs",
+  "old": "            r.block_number == block_or_zero(receipt.block_number),\n",
+  "new": "            r.block_number == block_or_zero(receipt.block_number), r.block_number > 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "serde_wrappers/enn-fresh-buffer",
+  "mirror": "serde_wrappers.rs",
+  "old": "        J::to_writer(out, note)\n",
+  "new": "        J::to_writer(&mut Vec::new(), note)\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "serde_wrappers/enn-claim-infallible",
+  "mirror": "serde_wrappers.rs",
+  "old": "    pub fn encode_note<J: JsonApi>(note: &Note, out: &mut Vec<u8>) -> (r: Result<(), J::Error>)\n        ensures\n",
+  "new": "    pub fn encode_note<J: JsonApi>(note: &Note, out: &mut Vec<u8>) -> (r: Result<(), J::Error>)\n        ensures\n            r is Ok,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "serde_wrappers/den-empty-input",
+  "mirror": "serde_wrappers.rs",
+  "old": "        J::from_slice(bytes)\n",
+  "new": "        J::from_slice(&bytes[0..0])\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "serde_wrappers/den-claim-infallible",
+  "mirror": "serde_wrappers.rs",
+  "old": "        ensures r == J::decoded(bytes@),\n",
+  "new": "        ensures r == J::decoded(bytes@), r is Ok,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "serde_wrappers/ser-uncompressed",
+  "mirror": "serde_wrappers.rs",
+  "old": "        let bytes = key.to_sec1_point(true);\n",
+  "new": "        let bytes = key.to_sec1_point(false);\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "serde_wrappers/ser-claim-infallible",
+  "mirror": "serde_wrappers.rs",
+  "old": "        ensures r == serializer.ser_bytes(key.sec1(true)),\n",
+  "new": "        ensures r == serializer.ser_bytes(key.sec1(true)), r is Ok,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "serde_wrappers/des-empty-input",
+  "mirror": "serde_wrappers.rs",
+  "old": "        P::from_sec1_bytes(&bytes).map_err(D::custom)\n",
+  "new": "        P::from_sec1_bytes(&bytes[0..0]).map_err(D::custom)\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "serde_wrappers/des-claim-any-bytes-ok",
+  "mirror": "serde_wrappers.rs",
+  "old": "            deserializer.de_vec() is Ok ==> ((r is Ok) == P::accepts_sec1(deserializer.de_vec()->Ok_0)),\n",
+  "new": "            deserializer.de_vec() is Ok ==> ((r is Ok) == P::accepts_sec1(deserializer.de_vec()->Ok_0)), deserializer.de_vec() is Ok ==> r is Ok,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/toml-deposit-empty-text",
+  "mirror": "prover_fmt.rs",
+  "old": "        T::to_string(&input).expect(\"failed to serialize deposit prover input\")\n",
+  "new": "        String::new()\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/toml-deposit-drop-int-bound",
+  "mirror": "prover_fmt.rs",
+  "old": "            witness.expires_at <= i64_max(),\n",
+  "new": "",
+  "expect": "precondition not satisfied",
+  "kind": "weakened precondition"
+ },
+ {
+  "id": "prover_fmt/toml-deposit-claim-nonempty",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures exists|i: DepositProverInput| deposit_input_ok(i, *witness) && r@ == T::text(i),\n",
+  "new": "        ensures exists|i: DepositProverInput| deposit_input_ok(i, *witness) && r@ == T::text(i), r@.len() > 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/toml-transfer-empty-text",
+  "mirror": "prover_fmt.rs",
+  "old": "        T::to_string(&input).expect(\"failed to serialize transfer prover input\")\n",
+  "new": "        String::new()\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/toml-transfer-drop-int-bound",
+  "mirror": "prover_fmt.rs",
+  "old": "            witness.input_proofs[1].proof_length <= i64_max(),\n",
+  "new": "",
+  "expect": "precondition not satisfied",
+  "kind": "weakened precondition"
+ },
+ {
+  "id": "prover_fmt/toml-transfer-claim-nonempty",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures exists|i: TransferProverInput| transfer_input_ok(i, *witness) && r@ == T::text(i),\n",
+  "new": "        ensures exists|i: TransferProverInput| transfer_input_ok(i, *witness) && r@ == T::text(i), r@.len() > 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_fmt/toml-withdraw-empty-text",
+  "mirror": "prover_fmt.rs",
+  "old": "        T::to_string(&input).expect(\"failed to serialize withdraw prover input\")\n",
+  "new": "        String::new()\n",
+  "expect": "postcondition not satisfied",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_fmt/toml-withdraw-drop-int-bound",
+  "mirror": "prover_fmt.rs",
+  "old": "            witness.commitment_proof.proof_length <= i64_max(),\n",
+  "new": "            true,\n",
+  "expect": "precondition not satisfied",
+  "kind": "weakened precondition"
+ },
+ {
+  "id": "prover_fmt/toml-withdraw-claim-nonempty",
+  "mirror": "prover_fmt.rs",
+  "old": "        ensures exists|i: WithdrawProverInput| withdraw_input_ok(i, *witness) && r@ == T::text(i),\n",
+  "new": "        ensures exists|i: WithdrawProverInput| withdraw_input_ok(i, *witness) && r@ == T::text(i), r@.len() > 0,\n",
+  "expect": "postcondition not satisfied",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_new_body",
+  "mirror": "rpc.rs",
+  "function": "new",
+  "old": "S::parse_key(private_key)",
+  "new": "S::parse_key(rpc_url)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_new_post",
+  "mirror": "rpc.rs",
+  "function": "new",
+  "old": "// STRENGTH new\n",
+  "new": "r is Ok, // STRENGTH new\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_commitment_root_body",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_root",
+  "old": "A::call_word(Request::CommitmentRoot(self.provider,self.shielded_pool))",
+  "new": "A::call_word(Request::CommitmentRoot(self.provider,self.attestation_registry))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_commitment_root_post",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_root",
+  "old": "// STRENGTH get_commitment_root\n",
+  "new": "r is Ok, // STRENGTH get_commitment_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_is_nullifier_spent_body",
+  "mirror": "rpc.rs",
+  "function": "is_nullifier_spent",
+  "old": "A::call_bool(Request::Nullifier(self.provider,self.shielded_pool,nullifier))",
+  "new": "A::call_bool(Request::Nullifier(self.provider,self.attestation_registry,nullifier))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_is_nullifier_spent_post",
+  "mirror": "rpc.rs",
+  "function": "is_nullifier_spent",
+  "old": "// STRENGTH is_nullifier_spent\n",
+  "new": "r is Ok, // STRENGTH is_nullifier_spent\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_is_known_root_body",
+  "mirror": "rpc.rs",
+  "function": "is_known_root",
+  "old": "A::call_bool(Request::KnownRoot(self.provider,self.shielded_pool,root))",
+  "new": "A::call_bool(Request::KnownRoot(self.provider,self.attestation_registry,root))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_is_known_root_post",
+  "mirror": "rpc.rs",
+  "function": "is_known_root",
+  "old": "// STRENGTH is_known_root\n",
+  "new": "r is Ok, // STRENGTH is_known_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_is_token_supported_body",
+  "mirror": "rpc.rs",
+  "function": "is_token_supported",
+  "old": "A::call_bool(Request::Supported(self.provider,self.shielded_pool,token))",
+  "new": "A::call_bool(Request::Supported(self.provider,self.attestation_registry,token))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_is_token_supported_post",
+  "mirror": "rpc.rs",
+  "function": "is_token_supported",
+  "old": "// STRENGTH is_token_supported\n",
+  "new": "r is Ok, // STRENGTH is_token_supported\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_root_body",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_root",
+  "old": "A::call_word(Request::AttestationRoot(self.provider,self.attestation_registry))",
+  "new": "A::call_word(Request::AttestationRoot(self.provider,self.shielded_pool))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_root_post",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_root",
+  "old": "// STRENGTH get_attestation_root\n",
+  "new": "r is Ok, // STRENGTH get_attestation_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_is_authorized_attester_body",
+  "mirror": "rpc.rs",
+  "function": "is_authorized_attester",
+  "old": "A::call_bool(Request::Authorized(self.provider,self.attestation_registry,attester))",
+  "new": "A::call_bool(Request::Authorized(self.provider,self.shielded_pool,attester))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_is_authorized_attester_post",
+  "mirror": "rpc.rs",
+  "function": "is_authorized_attester",
+  "old": "// STRENGTH is_authorized_attester\n",
+  "new": "r is Ok, // STRENGTH is_authorized_attester\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_token_balance_body",
+  "mirror": "rpc.rs",
+  "function": "get_token_balance",
+  "old": "A::call_word(Request::Balance(self.provider,token,account))",
+  "new": "A::call_word(Request::Balance(self.provider,self.shielded_pool,account))",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_token_balance_post",
+  "mirror": "rpc.rs",
+  "function": "get_token_balance",
+  "old": "// STRENGTH get_token_balance\n",
+  "new": "r is Ok, // STRENGTH get_token_balance\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_commitment_count_body",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_count",
+  "old": "try64(result).unwrap_or(u64::MAX)",
+  "new": "0",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_commitment_count_post",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_count",
+  "old": "// STRENGTH get_commitment_count\n",
+  "new": "r is Ok ==> r->Ok_0 < u64::MAX, // STRENGTH get_commitment_count\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_count_body",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_count",
+  "old": "try64(result).unwrap()",
+  "new": "0",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_count_post",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_count",
+  "old": "// STRENGTH get_attestation_count\n",
+  "new": "r is Ok ==> r->Ok_0 < u64::MAX, // STRENGTH get_attestation_count\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_leaf_body",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_leaf",
+  "old": "index40.unwrap()",
+  "new": "0",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_get_attestation_leaf_post",
+  "mirror": "rpc.rs",
+  "function": "get_attestation_leaf",
+  "old": "// STRENGTH get_attestation_leaf\n",
+  "new": "r is Ok, // STRENGTH get_attestation_leaf\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_deposit_body",
+  "mirror": "rpc.rs",
+  "function": "deposit",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_deposit_post",
+  "mirror": "rpc.rs",
+  "function": "deposit",
+  "old": "// STRENGTH deposit\n",
+  "new": "r is Ok, // STRENGTH deposit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_transfer_body",
+  "mirror": "rpc.rs",
+  "function": "transfer",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_transfer_post",
+  "mirror": "rpc.rs",
+  "function": "transfer",
+  "old": "// STRENGTH transfer\n",
+  "new": "r is Ok, // STRENGTH transfer\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_withdraw_body",
+  "mirror": "rpc.rs",
+  "function": "withdraw",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_withdraw_post",
+  "mirror": "rpc.rs",
+  "function": "withdraw",
+  "old": "// STRENGTH withdraw\n",
+  "new": "r is Ok, // STRENGTH withdraw\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_add_attester_body",
+  "mirror": "rpc.rs",
+  "function": "add_attester",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_add_attester_post",
+  "mirror": "rpc.rs",
+  "function": "add_attester",
+  "old": "// STRENGTH add_attester\n",
+  "new": "r is Ok, // STRENGTH add_attester\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_add_supported_token_body",
+  "mirror": "rpc.rs",
+  "function": "add_supported_token",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_add_supported_token_post",
+  "mirror": "rpc.rs",
+  "function": "add_supported_token",
+  "old": "// STRENGTH add_supported_token\n",
+  "new": "r is Ok, // STRENGTH add_supported_token\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_approve_token_body",
+  "mirror": "rpc.rs",
+  "function": "approve_token",
+  "old": "if !receipt.success",
+  "new": "if receipt.success",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_approve_token_post",
+  "mirror": "rpc.rs",
+  "function": "approve_token",
+  "old": "// STRENGTH approve_token\n",
+  "new": "r is Ok, // STRENGTH approve_token\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_add_attestation_body",
+  "mirror": "rpc.rs",
+  "function": "add_attestation",
+  "old": "find_event(&logs,index_before)",
+  "new": "find_event(&logs,0)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "rpc/rpc_add_attestation_post",
+  "mirror": "rpc.rs",
+  "function": "add_attestation",
+  "old": "// STRENGTH add_attestation\n",
+  "new": "r is Ok, // STRENGTH add_attestation\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_provider_body",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_root",
+  "old": "Request::CommitmentRoot(self.provider,",
+  "new": "Request::CommitmentRoot(0,",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_provider_post",
+  "mirror": "rpc.rs",
+  "function": "get_commitment_root",
+  "old": "// STRENGTH get_commitment_root\n",
+  "new": "r is Ok, // STRENGTH get_commitment_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_deposit_amount_body",
+  "mirror": "rpc.rs",
+  "function": "deposit",
+  "old": "commitment,token,amount,funding_address,encrypted_note)",
+  "new": "commitment,token,commitment,funding_address,encrypted_note)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_deposit_amount_post",
+  "mirror": "rpc.rs",
+  "function": "deposit",
+  "old": "// STRENGTH deposit\n",
+  "new": "r is Ok, // STRENGTH deposit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_approve_spender_body",
+  "mirror": "rpc.rs",
+  "function": "approve_token",
+  "old": "Request::Approve(self.provider,token,self.shielded_pool,amount)",
+  "new": "Request::Approve(self.provider,token,token,amount)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_approve_spender_post",
+  "mirror": "rpc.rs",
+  "function": "approve_token",
+  "old": "// STRENGTH approve_token\n",
+  "new": "r is Ok, // STRENGTH approve_token\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "rpc/rpc_event_expiry_body",
+  "mirror": "rpc.rs",
+  "function": "add_attestation",
+  "old": "subject_pubkey_hash,expires_at)",
+  "new": "subject_pubkey_hash,0)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "rpc/rpc_event_expiry_post",
+  "mirror": "rpc.rs",
+  "function": "add_attestation",
+  "old": "// STRENGTH add_attestation\n",
+  "new": "r is Ok, // STRENGTH add_attestation\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/registry_clone_body",
+  "mirror": "channel.rs",
+  "function": "registry_clone",
+  "old": "R::empty()",
+  "new": "{let mut r=R::empty(); r.insert([0u8;33],0); r}",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "channel/registry_clone_post",
+  "mirror": "channel.rs",
+  "function": "registry_clone",
+  "old": "// STRENGTH registry_clone\n",
+  "new": "r.entries() == registry.entries(), // STRENGTH registry_clone\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/registry_register_body",
+  "mirror": "channel.rs",
+  "function": "registry_register",
+  "old": "E::channel(100)",
+  "new": "E::channel(1)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/registry_register_post",
+  "mirror": "channel.rs",
+  "function": "registry_register",
+  "old": "// STRENGTH registry_register\n",
+  "new": "r.registry.entries().contains_key(viewing_pubkey), // STRENGTH registry_register\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/registry_unregister_body",
+  "mirror": "channel.rs",
+  "function": "registry_unregister",
+  "old": "registry.remove(key);",
+  "new": "",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "channel/registry_unregister_post",
+  "mirror": "channel.rs",
+  "function": "registry_unregister",
+  "old": "// STRENGTH registry_unregister\n",
+  "new": "final(registry).entries() == Map::<Key,u64>::empty(), // STRENGTH registry_unregister\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/registry_send_to_body",
+  "mirror": "channel.rs",
+  "function": "registry_send_to",
+  "old": "Err(Error::RecipientNotFound)",
+  "new": "Err(Error::ChannelClosed)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/registry_send_to_post",
+  "mirror": "channel.rs",
+  "function": "registry_send_to",
+  "old": "// STRENGTH registry_send_to\n",
+  "new": "r is Ok, // STRENGTH registry_send_to\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/channel_new_body",
+  "mirror": "channel.rs",
+  "function": "channel_new",
+  "old": "E::channel(1)",
+  "new": "E::channel(100)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "channel/channel_new_post",
+  "mirror": "channel.rs",
+  "function": "channel_new",
+  "old": "// STRENGTH channel_new\n",
+  "new": "r.receiver == E::pair(100).1, // STRENGTH channel_new\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/channel_send_note_body",
+  "mirror": "channel.rs",
+  "function": "channel_send_note",
+  "old": "recipient:recipient_viewing_pubkey",
+  "new": "recipient:channel.viewing_pubkey",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/channel_send_note_post",
+  "mirror": "channel.rs",
+  "function": "channel_send_note",
+  "old": "// STRENGTH channel_send_note\n",
+  "new": "r is Ok, // STRENGTH channel_send_note\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/channel_receive_note_body",
+  "mirror": "channel.rs",
+  "function": "channel_receive_note",
+  "old": "TryReceive::Empty=>Ok(None)",
+  "new": "TryReceive::Empty=>Err(Error::ChannelClosed)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/channel_receive_note_post",
+  "mirror": "channel.rs",
+  "function": "channel_receive_note",
+  "old": "// STRENGTH channel_receive_note\n",
+  "new": "r is Ok, // STRENGTH channel_receive_note\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/channel_receive_note_blocking_body",
+  "mirror": "channel.rs",
+  "function": "channel_receive_note_blocking",
+  "old": "E::recv(channel.receiver)",
+  "new": "E::recv(0)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/channel_receive_note_blocking_post",
+  "mirror": "channel.rs",
+  "function": "channel_receive_note_blocking",
+  "old": "// STRENGTH channel_receive_note_blocking\n",
+  "new": "r is Ok, // STRENGTH channel_receive_note_blocking\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/system_receive_note_body",
+  "mirror": "channel.rs",
+  "function": "system_receive_note",
+  "old": "TryReceive::Empty=>Ok(None)",
+  "new": "TryReceive::Empty=>Err(Error::ChannelClosed)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/system_receive_note_post",
+  "mirror": "channel.rs",
+  "function": "system_receive_note",
+  "old": "// STRENGTH system_receive_note\n",
+  "new": "r is Ok, // STRENGTH system_receive_note\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/system_receive_note_blocking_body",
+  "mirror": "channel.rs",
+  "function": "system_receive_note_blocking",
+  "old": "E::recv(channel.receiver)",
+  "new": "E::recv(0)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/system_receive_note_blocking_post",
+  "mirror": "channel.rs",
+  "function": "system_receive_note_blocking",
+  "old": "// STRENGTH system_receive_note_blocking\n",
+  "new": "r is Ok, // STRENGTH system_receive_note_blocking\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/system_create_channel_body",
+  "mirror": "channel.rs",
+  "function": "system_create_channel",
+  "old": "receiver:rx",
+  "new": "receiver:tx",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/system_create_channel_post",
+  "mirror": "channel.rs",
+  "function": "system_create_channel",
+  "old": "// STRENGTH system_create_channel\n",
+  "new": "final(registry).entries().dom() == Set::empty().insert(viewing_pubkey), // STRENGTH system_create_channel\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/system_send_note_body",
+  "mirror": "channel.rs",
+  "function": "system_send_note",
+  "old": "if E::send(sender,message)",
+  "new": "if !E::send(sender,message)",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "channel/system_send_note_post",
+  "mirror": "channel.rs",
+  "function": "system_send_note",
+  "old": "// STRENGTH system_send_note\n",
+  "new": "r is Ok, // STRENGTH system_send_note\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "channel/registered_channel_cannot_send_body",
+  "mirror": "channel.rs",
+  "function": "registered_channel_cannot_send",
+  "old": "channel_send_note::<R,E>(&channel,recipient,encrypted_note,commitment).await",
+  "new": "Ok(())",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "channel/registered_channel_cannot_send_post",
+  "mirror": "channel.rs",
+  "function": "registered_channel_cannot_send",
+  "old": "// STRENGTH registered_channel_cannot_send\n",
+  "new": "r is Ok, // STRENGTH registered_channel_cannot_send\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_deposit_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "commitment:witness.commitment",
+  "new": "commitment:witness.attestation_root",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prove_deposit_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "// STRENGTH prove_deposit\n",
+  "new": "r is Ok, // STRENGTH prove_deposit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_transfer_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_transfer",
+  "old": "payload_hash:witness.payload_hash",
+  "new": "payload_hash:witness.commitment_root",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "prover_effects/prove_transfer_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_transfer",
+  "old": "// STRENGTH prove_transfer\n",
+  "new": "r is Ok, // STRENGTH prove_transfer\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_withdraw_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_withdraw",
+  "old": "nullifier:witness.nullifier",
+  "new": "nullifier:witness.commitment_root",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prove_withdraw_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_withdraw",
+  "old": "// STRENGTH prove_withdraw\n",
+  "new": "r is Ok, // STRENGTH prove_withdraw\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_circuit_args_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit_args",
+  "old": "copy_bytes(&[101u8,118u8,109u8])",
+  "new": "copy_bytes(&[97u8,118u8,109u8])",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prove_circuit_args_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit_args",
+  "old": "// STRENGTH prove_circuit_args\n",
+  "new": "r.bb.len() == 9, // STRENGTH prove_circuit_args\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_circuit_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "if !bb_status.success",
+  "new": "if bb_status.success",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prove_circuit_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "// STRENGTH prove_circuit\n",
+  "new": "r is Proof, // STRENGTH prove_circuit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prove_circuit_cleanup_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "let _closed=match E::io_exec(Io::Close(work)) {Ok(v)=>v,Err(e)=>return RunResult::Io(e)};",
+  "new": "",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prove_circuit_cleanup_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "// STRENGTH prove_circuit\n",
+  "new": "r is Proof, // STRENGTH prove_circuit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/deposit_guard_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "if !validate_amount(witness)",
+  "new": "if false",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/deposit_guard_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "// STRENGTH prove_deposit\n",
+  "new": "r is Ok, // STRENGTH prove_deposit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/transfer_guard_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_transfer",
+  "old": "if !validate_tokens(witness)",
+  "new": "if false",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/transfer_guard_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_transfer",
+  "old": "// STRENGTH prove_transfer\n",
+  "new": "r is Ok, // STRENGTH prove_transfer\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/withdraw_no_guard_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_withdraw",
+  "old": "let prover_toml=E::format_withdraw(witness);",
+  "new": "if witness.amount.hi != 0 {return Err(Error::InvalidAmount);}\n let prover_toml=E::format_withdraw(witness);",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/withdraw_no_guard_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_withdraw",
+  "old": "// STRENGTH prove_withdraw\n",
+  "new": "r is Ok ==> witness.amount.hi == 0, // STRENGTH prove_withdraw\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/prover_circuit_name_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "E::prove(Circuit::Deposit,&prover_toml)",
+  "new": "E::prove(Circuit::Withdraw,&prover_toml)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/prover_circuit_name_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_deposit",
+  "old": "// STRENGTH prove_deposit\n",
+  "new": "r is Ok, // STRENGTH prove_deposit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/process_kill_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "E::run(&settings.bb_binary,&commands.bb,package_dir,true)",
+  "new": "E::run(&settings.bb_binary,&commands.bb,package_dir,false)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/process_kill_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "// STRENGTH prove_circuit\n",
+  "new": "r is Proof, // STRENGTH prove_circuit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/process_nargo_failure_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "if !nargo_status.success",
+  "new": "if false",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/process_nargo_failure_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "// STRENGTH prove_circuit\n",
+  "new": "r is Proof, // STRENGTH prove_circuit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "prover_effects/process_binary_body",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "E::run(&settings.bb_binary,&commands.bb,package_dir,true)",
+  "new": "E::run(&settings.nargo_binary,&commands.bb,package_dir,true)",
+  "expect": "proof error",
+  "kind": "mutated body"
+ },
+ {
+  "id": "prover_effects/process_binary_post",
+  "mirror": "prover_effects.rs",
+  "function": "prove_circuit",
+  "old": "// STRENGTH prove_circuit\n",
+  "new": "r is Proof, // STRENGTH prove_circuit\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "tree/CommitmentTree_insert_body",
+  "mirror": "tree.rs",
+  "function": "CommitmentTree_insert",
+  "old": "self.0.insert(leaf);",
+  "new": "",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "tree/CommitmentTree_insert_post",
+  "mirror": "tree.rs",
+  "function": "CommitmentTree_insert",
+  "old": "// STRENGTH CommitmentTree_insert\n",
+  "new": "final(self).0.model() != old(self).0.model(), // STRENGTH CommitmentTree_insert\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "tree/CommitmentTree_root_body",
+  "mirror": "tree.rs",
+  "function": "CommitmentTree_root",
+  "old": "self.0.root()",
+  "new": "None",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "tree/CommitmentTree_root_post",
+  "mirror": "tree.rs",
+  "function": "CommitmentTree_root",
+  "old": "// STRENGTH CommitmentTree_root\n",
+  "new": "r is Some, // STRENGTH CommitmentTree_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "tree/AttestationTree_insert_body",
+  "mirror": "tree.rs",
+  "function": "AttestationTree_insert",
+  "old": "self.0.insert(leaf);",
+  "new": "",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "tree/AttestationTree_insert_post",
+  "mirror": "tree.rs",
+  "function": "AttestationTree_insert",
+  "old": "// STRENGTH AttestationTree_insert\n",
+  "new": "final(self).0.model() != old(self).0.model(), // STRENGTH AttestationTree_insert\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "tree/AttestationTree_root_body",
+  "mirror": "tree.rs",
+  "function": "AttestationTree_root",
+  "old": "self.0.root()",
+  "new": "None",
+  "expect": "proof error",
+  "kind": "mutated body",
+  "within": "function"
+ },
+ {
+  "id": "tree/AttestationTree_root_post",
+  "mirror": "tree.rs",
+  "function": "AttestationTree_root",
+  "old": "// STRENGTH AttestationTree_root\n",
+  "new": "r is Some, // STRENGTH AttestationTree_root\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition"
+ },
+ {
+  "id": "merkle_proofs/decode_path_msb_first",
+  "mirror": "merkle_proofs.rs",
+  "old": "        let bit = ((index >> i) & 1) as u8;",
+  "new": "        let bit = ((index >> (63 - i)) & 1) as u8;",
+  "expect": "proof error",
+  "kind": "mutated body (added in this package)"
+ },
+ {
+  "id": "merkle_proofs/decode_path_claim_first_bit_zero",
+  "mirror": "merkle_proofs.rs",
+  "old": "    ensures r@.len() == path_len, forall|i: int| 0 <= i < path_len ==> #[trigger] r@[i] == bit(index, i),",
+  "new": "    ensures r@.len() == path_len, forall|i: int| 0 <= i < path_len ==> #[trigger] r@[i] == bit(index, i), path_len > 0 ==> r@[0] == 0u8,",
+  "expect": "proof error",
+  "kind": "strengthened postcondition (added in this package)"
+ },
+ {
+  "id": "misc_domain/decryption_error_note_decode_as_failed",
+  "mirror": "misc_domain.rs",
+  "old": "            OpenError::NoteDecode => Self::DeserializationFailed,",
+  "new": "            OpenError::NoteDecode => Self::DecryptionFailed,",
+  "expect": "proof error",
+  "kind": "mutated body (added in this package)"
+ },
+ {
+  "id": "misc_domain/decryption_error_claim_never_failed",
+  "mirror": "misc_domain.rs",
+  "old": "        ensures r == open_error_map(err),\n",
+  "new": "        ensures r == open_error_map(err), r != DecryptionError::DecryptionFailed,\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition (added in this package)"
+ },
+ {
+  "id": "byte_records/transfer_to_bytes_swap_payloads",
+  "mirror": "byte_records.rs",
+  "old": "        bytes.extend_from_slice(&bytes_1);\n        bytes.extend_from_slice(&bytes_2);",
+  "new": "        bytes.extend_from_slice(&bytes_2);\n        bytes.extend_from_slice(&bytes_1);",
+  "expect": "proof error",
+  "kind": "mutated body (added in this package)"
+ },
+ {
+  "id": "byte_records/transfer_to_bytes_claim_no_header",
+  "mirror": "byte_records.rs",
+  "old": "        ensures r@ == frame(self.note_1.bytes@, self.note_2.bytes@),\n",
+  "new": "        ensures r@ == frame(self.note_1.bytes@, self.note_2.bytes@), r@.len() == self.note_1.bytes.len() + self.note_2.bytes.len(),\n",
+  "expect": "proof error",
+  "kind": "strengthened postcondition (added in this package)"
+ }
+]

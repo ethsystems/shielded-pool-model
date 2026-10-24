@@ -1,0 +1,40 @@
+--- a04b8b3:domain/merkle.rs:103-122
++++ mirrors/byte_records.rs
+@@ -1,20 +1,24 @@
+-    pub fn from_contract_elements(elements: Vec<U256>, leaf_index: u64) -> Self {
+-        let path: Vec<B256> = elements.into_iter().map(|e| e.into()).collect();
+-
+-        // Compute indices from leaf_index
++    pub fn from_contract_elements(elements: Vec<U256>, leaf_index: u64) -> (r: Self)
++        ensures contract_mapping(elements@, leaf_index, r),
++    {
++        let path: Vec<B256> = elements.into_iter().map(|e: U256| -> (r: B256) ensures r@ == word_bytes(e) { word_to_be(&e) }).collect();
+         let mut indices = Vec::with_capacity(path.len());
+         let mut idx = leaf_index;
+-        for _ in 0..path.len() {
++        assert(leaf_index >> 0u64 == leaf_index) by (bit_vector);
++        assert(idx == suffix(leaf_index, 0));
++        for i in 0..path.len()
++            invariant i <= path.len(), indices.len() == i,
++                      path.len() == elements.len(),
++                      forall|k: int| #![trigger path@[k]] 0 <= k < path.len() ==>
++                          path@[k]@ == word_bytes(elements@[k]),
++                      forall|k: int| #![trigger indices@[k]] 0 <= k < i ==>
++                          indices@[k] == (suffix(leaf_index, k) & 1u64) as u8,
++                      idx == suffix(leaf_index, i as int),
++        {
+             indices.push((idx & 1) as u8);
++            proof { suffix_step(leaf_index, i); }
+             idx >>= 1;
+         }
+-
+         let proof_length = path.len();
+-
+-        Self {
+-            path,
+-            indices,
+-            leaf_index,
+-            proof_length,
+-        }
++        Self { path, indices, leaf_index, proof_length }
+     }

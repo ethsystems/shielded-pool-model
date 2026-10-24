@@ -1,0 +1,23 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:510-522
++++ mirrors/rpc.rs
+@@ -1,13 +1,7 @@
+-    async fn get_token_balance(
+-        &self,
+-        token: Address,
+-        account: Address,
+-    ) -> Result<U256, OnChainError> {
+-        let erc20 = IERC20::new(token, &self.provider);
+-        let result = erc20
+-            .balanceOf(account)
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn get_token_balance<A: RpcApi>(&self, token: Address, account: Address) -> (r: Result<Word,Error>)
++ ensures r == word_result(A::word((Request::Balance(self.provider,token,account)).view())),
++ // STRENGTH get_token_balance
++{
++ let result = A::call_word(Request::Balance(self.provider,token,account));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

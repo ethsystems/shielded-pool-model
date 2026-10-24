@@ -1,0 +1,11 @@
+--- a04b8b3:adapters/channel.rs:156-159
++++ mirrors/channel.rs
+@@ -1,4 +1,4 @@
+-    async fn receive_note_blocking(&self) -> Result<P2pMessage, P2pError> {
+-        let mut receiver = self.receiver.lock().await;
+-        receiver.recv().await.ok_or(P2pError::ChannelClosed)
+-    }
++pub async fn channel_receive_note_blocking<R: RegistryApi,E: Effects>(channel: &Channel<R>) -> (r: Result<Message,Error>)
++ ensures r == blocking::<E>(channel.receiver),
++ // STRENGTH channel_receive_note_blocking
++{ E::recv(channel.receiver).ok_or(Error::ChannelClosed) }

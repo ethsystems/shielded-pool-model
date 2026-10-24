@@ -1,0 +1,14 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:163-170
++++ mirrors/key_wrappers.rs
+@@ -1,4 +1,10 @@
+-    fn convert_receipt(receipt: &alloy::rpc::types::TransactionReceipt) -> TxReceipt {
++    fn convert_receipt(receipt: &TransactionReceipt) -> (r: TxReceipt)
++        ensures
++            r.tx_hash == receipt.transaction_hash,
++            r.block_number == block_or_zero(receipt.block_number),
++            r.gas_used == receipt.gas_used,
++            r.success == receipt.status_flag,
++    {
+         TxReceipt {
+             tx_hash: receipt.transaction_hash,
+             block_number: receipt.block_number.unwrap_or(0),

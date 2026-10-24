@@ -1,0 +1,21 @@
+--- a04b8b3:domain/note.rs:73-82
++++ mirrors/hash_param.rs
+@@ -1,10 +1,16 @@
+-    pub fn commitment(&self) -> Commitment {
++    pub fn commitment<H: PoolHash>(&self) -> (r: Commitment)
++        ensures commitment_of::<H>(*self, r.0),
++    {
+         // Convert address to B256 (pad with zeros on the left)
+         let token_b256 = B256::left_padding_from(self.token.as_slice());
+ 
+         // Convert amount to B256
+         let amount_b256: B256 = self.amount.into();
+ 
+-        let hash = poseidon4(token_b256, amount_b256, self.owner_pubkey.0, self.salt);
++        let hash = H::poseidon4(token_b256, amount_b256, self.owner_pubkey.0, self.salt);
++        proof {
++            assert(is_left_pad(token_b256.0@, self.token.0@));
++            assert(is_amount_word(amount_b256.0@, self.amount));
++        }
+         Commitment(hash)
+     }

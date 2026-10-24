@@ -1,0 +1,20 @@
+# Verified items Verus reports for each file with --no-cheating (functions, lemmas, helpers and
+# main). The mirror counts are those recorded when each file was first checked; the probe counts
+# are from the first run of this package (no earlier count was recorded).
+byte_records.rs 24
+channel.rs 14
+crypto_field.rs 47
+guards.rs 17
+hash_param.rs 32
+key_wrappers.rs 15
+merkle_proofs.rs 8
+misc_domain.rs 12
+note_key.rs 19
+prover_effects.rs 18
+prover_fmt.rs 40
+public_inputs.rs 28
+rpc.rs 27
+serde_wrappers.rs 6
+tree.rs 5
+probes/async.rs 2
+probes/await.rs 3

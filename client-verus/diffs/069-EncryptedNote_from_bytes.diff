@@ -1,0 +1,17 @@
+--- a04b8b3:domain/encrypted.rs:37-45
++++ mirrors/byte_records.rs
+@@ -1,9 +1,9 @@
+-    pub fn from_bytes(bytes: &[u8]) -> Result<Self, &'static str> {
++    pub fn from_bytes(bytes: &[u8]) -> (r: Result<Self, &'static str>)
++        ensures note_decoded(bytes@, r),
++    {
+         if bytes.is_empty() {
+             return Err("Empty bytes");
+         }
+-
+-        Ok(Self {
+-            bytes: bytes.to_vec(),
+-        })
++        assert(bytes@.subrange(0, bytes.len() as int) =~= bytes@);
++        Ok(Self { bytes: copy_range(bytes, 0, bytes.len()) })
+     }

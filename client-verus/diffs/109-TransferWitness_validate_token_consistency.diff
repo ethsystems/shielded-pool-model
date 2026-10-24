@@ -1,0 +1,15 @@
+--- a04b8b3:domain/witness.rs:168-173
++++ mirrors/guards.rs
+@@ -1,6 +1,8 @@
+-    pub fn validate_token_consistency(&self) -> bool {
++    pub fn validate_token_consistency(&self) -> (r: bool)
++        ensures r == same_tokens(self),
++    {
+         let token = self.input_notes[0].token;
+-        self.input_notes[1].token == token
+-            && self.output_notes[0].token == token
+-            && self.output_notes[1].token == token
++        address_eq(&self.input_notes[1].token, &token)
++            && address_eq(&self.output_notes[0].token, &token)
++            && address_eq(&self.output_notes[1].token, &token)
+     }

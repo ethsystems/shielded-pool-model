@@ -1,0 +1,10 @@
+--- a04b8b3:domain/witness.rs:156-160
++++ mirrors/guards.rs
+@@ -1,4 +1,6 @@
+-        fn sum(notes: &[Note; 2]) -> Option<u128> {
++        fn sum(notes: &[Note; 2]) -> (r: Option<u128>)
++            ensures r == sum_spec(notes),
++        {
+             let a = u128::try_from(notes[0].amount).ok()?;
+             let b = u128::try_from(notes[1].amount).ok()?;
+             a.checked_add(b)

@@ -1,0 +1,28 @@
+--- a04b8b3:adapters/channel.rs:176-190
++++ mirrors/channel.rs
+@@ -1,15 +1,10 @@
+-    pub async fn create_channel(&self, viewing_pubkey: ViewingPubkey) -> SystemChannel {
+-        let (tx, rx) = mpsc::channel(CHANNEL_BUFFER_SIZE);
+-        let key = viewing_pubkey.to_sec1_bytes();
+-
+-        {
+-            let mut registry = self.registry.write().await;
+-            registry.insert(key, tx);
+-        }
+-
+-        SystemChannel {
+-            viewing_pubkey,
+-            receiver: Arc::new(Mutex::new(rx)),
+-            registry: self.registry.clone(),
+-        }
+-    }
++pub async fn system_create_channel<R: RegistryApi,E: Effects>(registry: &mut R, viewing_pubkey: Key) -> (r: SystemChannel)
++ ensures final(registry).entries() == old(registry).entries().insert(viewing_pubkey,E::pair(100).0),
++ r.viewing_pubkey == viewing_pubkey, r.receiver == E::pair(100).1, r.registry_handle == old(registry).handle(),
++ // STRENGTH system_create_channel
++{
++ let (tx,rx)=E::channel(100);
++ let key=viewing_pubkey;
++ registry.insert(key,tx);
++ SystemChannel {viewing_pubkey,receiver:rx,registry_handle:registry.shared_handle()}
++}

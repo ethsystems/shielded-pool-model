@@ -1,0 +1,48 @@
+--- a04b8b3:domain/witness.rs:121-149
++++ mirrors/hash_param.rs
+@@ -1,26 +1,38 @@
+-    pub fn new(
++    pub fn new<H: PoolHash>(
+         spending_key: SpendingKey,
+         input_notes: [Note; 2],
+         output_notes: [Note; 2],
+         input_proofs: [CommitmentMerkleProof; 2],
+         commitment_root: B256,
+         encrypted_payload: &[u8],
+-    ) -> Self {
++    ) -> (r: Self)
++        ensures
++            nullifier_of::<H>(input_notes[0], spending_key, r.nullifiers[0]),
++            nullifier_of::<H>(input_notes[1], spending_key, r.nullifiers[1]),
++            commitment_of::<H>(output_notes[0], r.output_commitments[0]),
++            commitment_of::<H>(output_notes[1], r.output_commitments[1]),
++            r.commitment_root == commitment_root,
++            r.payload_hash == H::pc(encrypted_payload@),
++            r.spending_key == spending_key,
++            r.input_notes == input_notes,
++            r.output_notes == output_notes,
++            r.input_proofs == input_proofs,
++    {
+         let nullifiers = [
+-            input_notes[0].nullifier(&spending_key).0,
+-            input_notes[1].nullifier(&spending_key).0,
++            input_notes[0].nullifier::<H>(&spending_key).0,
++            input_notes[1].nullifier::<H>(&spending_key).0,
+         ];
+ 
+         let output_commitments = [
+-            output_notes[0].commitment().0,
+-            output_notes[1].commitment().0,
++            output_notes[0].commitment::<H>().0,
++            output_notes[1].commitment::<H>().0,
+         ];
+ 
+         Self {
+             nullifiers,
+             output_commitments,
+             commitment_root,
+-            payload_hash: payload_commitment(encrypted_payload),
++            payload_hash: H::payload_commitment(encrypted_payload),
+             spending_key,
+             input_notes,
+             output_notes,

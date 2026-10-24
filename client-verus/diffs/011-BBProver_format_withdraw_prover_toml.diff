@@ -1,0 +1,13 @@
+--- a04b8b3:adapters/bb_prover.rs:275-278
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,8 @@
+-    fn format_withdraw_prover_toml(witness: &WithdrawWitness) -> String {
++    fn format_withdraw_prover_toml<T: TomlApi>(witness: &WithdrawWitness) -> (r: String)
++        requires
++            witness.commitment_proof.proof_length <= i64_max(),
++        ensures exists|i: WithdrawProverInput| withdraw_input_ok(i, *witness) && r@ == T::text(i),
++    {
+         let input = WithdrawProverInput::from(witness);
+-        toml::to_string(&input).expect("failed to serialize withdraw prover input")
++        T::to_string(&input).expect("failed to serialize withdraw prover input")
+     }

@@ -1,0 +1,19 @@
+--- a04b8b3:domain/keys.rs:124-130
++++ mirrors/serde_wrappers.rs
+@@ -1,7 +1,11 @@
+-    pub fn deserialize<'de, D>(deserializer: D) -> Result<k256::PublicKey, D::Error>
+-    where
+-        D: Deserializer<'de>,
++    pub fn deserialize<D, P: PublicKeyApi>(deserializer: D) -> (r: Result<P, D::Error>)
++        where
++            D: Deserializer<P::Error>,
++        ensures
++            deserializer.de_vec() is Err ==> r == Err::<P, D::Error>(deserializer.de_vec()->Err_0),
++            deserializer.de_vec() is Ok ==> ((r is Ok) == P::accepts_sec1(deserializer.de_vec()->Ok_0)),
++            (deserializer.de_vec() is Ok && r is Ok) ==> r->Ok_0 == P::parsed_sec1(deserializer.de_vec()->Ok_0),
+     {
+-        let bytes: Vec<u8> = Deserialize::deserialize(deserializer)?;
+-        k256::PublicKey::from_sec1_bytes(&bytes).map_err(serde::de::Error::custom)
++        let bytes: Vec<u8> = D::deserialize_vec(deserializer)?;
++        P::from_sec1_bytes(&bytes).map_err(D::custom)
+     }

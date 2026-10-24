@@ -1,0 +1,13 @@
+--- a04b8b3:crypto/poseidon.rs:26-34
++++ mirrors/crypto_field.rs
+@@ -1,6 +1,8 @@
+-pub fn poseidon1(a: B256) -> B256 {
++pub fn poseidon1<P: PoseidonHasher>(a: B256) -> (r: B256)
++    ensures be_value(r.0@) == P::h1(fe(a)) % R(), be_value(r.0@) < R(),
++{
+     let mut hasher =
+-        Poseidon::<Fr>::new_circom(1).expect("Failed to create Poseidon hasher");
++        P::new_circom(1).expect("Failed to create Poseidon hasher");
+     let input = b256_to_fr(a);
+     let result = hasher
+         .hash(&[input])
