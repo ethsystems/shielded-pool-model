@@ -17,9 +17,12 @@ KEVM's semantics and the trust base below, each inside its own scope. They are n
 contract, of any deployment, or of claim 1. The model gate (`scripts/gate.sh`) never runs them and
 nothing here changes the claim in the parent README.
 
-Which numbers this machine reproduced: [RESULT.md](RESULT.md) has one table per suite. A run marked
-"not rerun here" there carries the expected values of the earlier run, and this README says so in
-the suite's section.
+Which numbers this machine reproduced: [RESULT.md](RESULT.md) has one table per suite. On 2026-10-24
+every run of `withdraw-success`, `guards-patched`, `guards-stock`, `insert-loop` (`rejections`,
+`controls`) and `poseidon-frame` was rerun here and gave the expected verdicts and failing outputs.
+**Not rerun here:** the `public-inputs` proof runs (`canonical`, `order`, `fixed-token`; its build
+and replays did run) and the insertion-loop K claims in `insert-loop/k/`. For those, `EXPECTED.tsv`
+and the sections below carry the values of the earlier run.
 
 ## Suites
 
@@ -217,6 +220,10 @@ fixed. Mutants `LATE_MARK`, `SWAP_INPUTS`, `DROP_BIT253`, `PAY_CALLER`, `SKIP_VE
 outputs of the table above; a witness must fail with Panic 0x01. The `token-above-0x11` run covers
 this token as one case, with a stronger body.
 
+**Not rerun here** (time): the runs `canonical`, `order` and `fixed-token`; their expected values
+are those of the earlier run (2026-10-01). The build (peak 8.59 GB, just under the cap) and the 36
+replays ran here.
+
 Not shown: deposit and transfer with a nonempty symbolic proof and a symbolic payload together (the
 `*_split` bodies, one `bytes` split at a symbolic index, did not finish in the earlier run and no
 run here selects them); a caller other than the test contract; the verifier's own soundness; a
@@ -391,20 +398,21 @@ In order, `check.sh`:
 
 Each container: `--memory 8g --memory-swap 8g` (no swap), core dumps off, no network, one at a time.
 Before each container `kontrol-run.sh` waits until no other Kontrol container runs and `free -g`
-shows at least `GATE_GIB` (default 10) GiB available. Environment: `CAP`, `BUILD_CPUS` (default 4),
-`PROVE_CPUS` (default 6), `TLIM` (seconds per container, default 7200), `GATE_GIB`, `FORGE`, `CAST`,
+shows at least `GATE_GIB` (default 10) GiB available. Environment: `CAP`, `BUILD_CPUSET` (default
+`0-1`), `PROVE_CPUSET` (default `0-5`), `TLIM` (seconds per container, default 7200), `GATE_GIB`, `FORGE`, `CAST`,
 `SOLC`, `POCS`, `DEPS_CACHE`, `WORK`, `PULL=0`, `SOLC_FETCH=0`, `TOOLS_UNPINNED=1`.
 
 Exit 0 means every compared line was as expected. A run that gives no verdict (a timeout, an OOM
 kill, a crash) is a mismatch, never a pass. A suite run with some runs not selected says "partial".
 
-Cost, from the earlier runs (cap 8 GiB): a build takes 1.5 to 5 minutes and peaks at 6 to 8 GiB
-(a kompile with more CPUs can hit the cap; `BUILD_CPUS=2` lowers the peak); `withdraw-success`
-`token-above-0x11` took 2,288 s at 6.52 GB; `two-tokens` about 1,800 s; `public-inputs` `canonical`
-and `order` together 4,996 s; `fixed-token` about 30 minutes; each guard 3 to 9 minutes and each
-guard mutant 4 to 12 minutes of prover time; `insert-loop` `controls` a few seconds;
-`poseidon-frame` about 30 seconds. RESULT.md has
-the times measured here. `work/` takes about 0.5 GB per suite (saved proof graphs); neither `work/`
+Cost, measured here (cap 8 GiB, CPUs `0-1` for a build and `0-5` for a proof run): each build 2.5
+to 4 minutes at 7.3 to 7.9 GB peak (the `public-inputs` build reached 8.59 GB, just under the cap;
+KEVM runs two kompiles in parallel, so a build can hit the cap and must then be rerun);
+`withdraw-success` `token-above-0x11` 3,438 s and `two-tokens` 3,554 s (peaks 6.9 and 7.1 GB);
+`guards-patched` 3,000 s; `guards-stock` 2,179 to 2,324 s per run; `insert-loop` `rejections`
+326 s and `controls` a few seconds; `poseidon-frame` about 30 s. Everything except the
+`public-inputs` proofs took about 5 hours; the earlier run of `public-inputs` `canonical` and
+`order` took 4,996 s. `work/` takes 0.5 to 2.5 GB per suite (saved proof graphs); neither `work/`
 nor `.deps/` is tracked.
 
 ## Layout
