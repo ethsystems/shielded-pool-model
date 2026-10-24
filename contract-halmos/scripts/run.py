@@ -7,8 +7,8 @@ each run, default 8G), TLIM (seconds, default 900), RUN_SCOPE (auto, 1 or 0: run
 own systemd user scope with MemoryMax=CAP; auto uses one when systemd-run --user works), ONLY (a
 regex on run names, for debugging; check.sh never sets it).
 
-runs.tsv columns: kind, run, contract, test regex (or test file for kind forge), loop, byte lengths,
-env (K=V,K=V or -), extra flags (or -). Every halmos run gets the same base command:
+runs.tsv columns: kind, run, contract, test regex (or test file for kind forge), loop, byte lengths
+(or - for Halmos's default), env (K=V,K=V or -), extra flags (or -). Every halmos run gets the same base command:
   halmos --root <project> --contract C --match-test RE --loop L --solver-timeout-assertion 60s
          --default-bytes-lengths B --solver-command "<yices-smt2> --smt2-model-format --bvconst-in-decimal" [flags]
 Writes <log-dir>/<run>.txt (the raw output) and appends one line per verdict to <log-dir>/results.tsv:
@@ -58,10 +58,13 @@ def main() -> None:
         env = dict(os.environ, FOUNDRY_OFFLINE="true", FOUNDRY_SOLC=os.environ["SOLC"], FOUNDRY_LINT_LINT_ON_BUILD="false")
         if envs != "-":
             env.update(kv.split("=", 1) for kv in envs.split(","))
+        # PROJECT=<variant> selects the variant project <project>-<variant> (scripts/setup-suite.sh).
+        wd = Path(f"{proj}-{env.pop('PROJECT')}") if envs != "-" and "PROJECT=" in envs else proj
         if kind == "halmos":
-            cmd = [halmos, "--root", str(proj), "--contract", contract, "--match-test", regex, "--loop", loop,
-                   "--solver-timeout-assertion", "60s", "--default-bytes-lengths", nbytes,
-                   "--solver-command", f"{yices} --smt2-model-format --bvconst-in-decimal"]
+            cmd = [halmos, "--root", str(wd), "--contract", contract, "--match-test", regex, "--loop", loop,
+                   "--solver-timeout-assertion", "60s"]
+            cmd += [] if nbytes == "-" else ["--default-bytes-lengths", nbytes]
+            cmd += ["--solver-command", f"{yices} --smt2-model-format --bvconst-in-decimal"]
             cmd += [] if flags == "-" else shlex.split(flags)
         elif kind == "forge":
             cmd = ["forge", "test", "--offline", "--match-path", f"contracts/test/{suite}/{regex}"]
@@ -83,7 +86,7 @@ def main() -> None:
             f.write("CMD " + shlex.join(cmd) + "\n" + ("ENV " + envs + "\n"))
             f.flush()
             t0 = time.time()
-            rc = subprocess.run(wrap, cwd=proj, env=env, stdout=f, stderr=subprocess.STDOUT).returncode
+            rc = subprocess.run(wrap, cwd=wd, env=env, stdout=f, stderr=subprocess.STDOUT).returncode
             wall = time.time() - t0
         text = ANSI.sub("", out.read_text(errors="replace"))
         m = re.search(r"^SCOPE rc=(\d+)(?: peak_bytes=(\d+) oom_kill=(\d+))?", text, re.M)

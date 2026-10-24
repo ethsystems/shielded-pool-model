@@ -4,8 +4,8 @@
 Usage: compare.py <EXPECTED.tsv> <work-dir> <suite>...
 EXPECTED.tsv columns: suite, run, check, verdict, paths, assertion.
 - verdict: PASS, FAIL or ERROR for a Halmos check; PASS for a forge test (check = Contract.test).
-- paths: the count of the frozen research run, a range lo-hi where two frozen runs of the same input
-  differed, or - for forge tests. Halmos decides branch feasibility with a 1 ms solver timeout, so
+- paths: the count of the frozen first run, a range lo-hi where two frozen runs of the same input
+  differed, ? where the frozen record kept the verdict but not the count, or - for forge tests. Halmos decides branch feasibility with a 1 ms solver timeout, so
   a count can differ from run to run and machine to machine; a different count is reported as a
   PATHS line and counted, and fails the check only with STRICT_PATHS=1. A different verdict always fails.
 - assertion: - , or the name of the assertion at which a FAIL must stop. scripts/locate.py reads it
@@ -56,7 +56,7 @@ def main() -> None:
             v, p = got.pop((run, check), ("MISSING", "-"))
             ok = v == want
             pok = True
-            if ok and wpaths != "-":
+            if ok and wpaths not in ("-", "?"):
                 if "-" in wpaths:
                     lo, hi = map(int, wpaths.split("-"))
                     pok = p.isdigit() and lo <= int(p) <= hi

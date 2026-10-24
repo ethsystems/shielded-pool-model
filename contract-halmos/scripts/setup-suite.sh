@@ -33,16 +33,22 @@ mkdir "$P/dependencies/zk-kit-v1"; git -C "$ZKKIT_GIT" archive "$(pin zkkit_rev)
 #    Halmos fills link placeholders only in the test contract, so the pool's bytecode must carry
 #    fixed addresses: foundry.toml gets a libraries block (4 lines after optimizer_runs), and each
 #    harness etches the library code at that address in setUp. Nothing else in the export changes.
+#    A suite may add settings in harness/<suite>/foundry-extra.txt (inserted after the same line).
 cp "$P/foundry.toml" "$P/foundry.toml.orig"
+EXTRA="$PKG/harness/$SUITE/foundry-extra.txt"; nextra=0
+if [ -f "$EXTRA" ]; then sed -i '/^optimizer_runs = 100$/r '"$EXTRA" "$P/foundry.toml"; nextra=$(grep -c . "$EXTRA"); fi
 sed -i '/^optimizer_runs = 100$/r '"$PKG/scripts/foundry-libraries.txt" "$P/foundry.toml"
 diff "$P/foundry.toml.orig" "$P/foundry.toml" > "$P/foundry.toml.diff" || true
-[ "$(grep -c '^> ' "$P/foundry.toml.diff")" -eq 4 ] && [ "$(grep -c '^< ' "$P/foundry.toml.diff")" -eq 0 ] || { echo "library patch not as documented"; exit 1; }
+[ "$(grep -c '^> ' "$P/foundry.toml.diff")" -eq $((4 + nextra)) ] && [ "$(grep -c '^< ' "$P/foundry.toml.diff")" -eq 0 ] || { echo "foundry.toml patch not as documented"; exit 1; }
 rm "$P/foundry.toml.orig"
 
-# 4. The harness and the mutants of this suite.
-mkdir -p "$P/contracts/test/$SUITE"
-cp "$PKG/harness/$SUITE/"*.sol "$P/contracts/test/$SUITE/"
-[ ! -d "$PKG/mutants/$SUITE" ] || python3 "$PKG/mutants/make.py" "$SUITE" "$P"
+# 4. The harness and the mutants of this suite, and of the suites its requires.txt names (a harness
+#    may import helper contracts from another suite's files).
+for s in "$SUITE" $( [ ! -f "$PKG/harness/$SUITE/requires.txt" ] || cat "$PKG/harness/$SUITE/requires.txt"); do
+  mkdir -p "$P/contracts/test/$s"
+  cp "$PKG/harness/$s/"*.sol "$P/contracts/test/$s/"
+  [ ! -d "$PKG/mutants/$s" ] || python3 "$PKG/mutants/make.py" "$s" "$P"
+done
 # Halmos and vm.getCode read the build output from out/; the pinned foundry.toml writes contracts/out.
 ln -sfn contracts/out "$P/out"
 
@@ -53,4 +59,22 @@ set +e
 set -e
 [ "$rc" -eq 0 ] || { tail -30 "$P/build.log"; echo "build failed"; exit 1; }
 grep -q "Solc $(pin solc_version | cut -d+ -f1)" "$P/build.log" || { tail -5 "$P/build.log"; echo "build did not use solc $(pin solc_version)"; exit 1; }
+# 6. Variant projects (harness/<suite>/variants.tsv: variant, mutant file): a copy of the built
+#    project whose contracts/src/ShieldedPool.sol is replaced by that mutant, for harnesses that deploy
+#    ShieldedPool by name. A run selects one with PROJECT=<variant> in its env column.
+if [ -f "$PKG/harness/$SUITE/variants.tsv" ]; then
+  while IFS=$'\t' read -r v mfile; do
+    [ "$v" != variant ] || continue
+    V="$P-$v"; mkdir "$V"
+    (cd "$P" && tar -c --exclude=./dependencies --exclude=./contracts/out --exclude=./contracts/cache --exclude=./out .) | tar -x -C "$V"
+    cp -al "$P/dependencies" "$V/dependencies"; ln -sfn contracts/out "$V/out"   # hard links: no extra space
+    cp "$V/contracts/test/$SUITE/mutants/$mfile" "$V/contracts/src/ShieldedPool.sol"
+    set +e
+    (cd "$V" && FOUNDRY_OFFLINE=true FOUNDRY_SOLC="$SOLC" FOUNDRY_LINT_LINT_ON_BUILD=false \
+      forge build --ast --extra-output storageLayout metadata) > "$V/build.log" 2>&1; rc=$?
+    set -e
+    [ "$rc" -eq 0 ] || { tail -30 "$V/build.log"; echo "build of variant $v failed"; exit 1; }
+    echo "setup $SUITE variant $v: contracts/src/ShieldedPool.sol is $mfile (sha256 $(sha256sum < "$V/contracts/src/ShieldedPool.sol" | cut -c1-16))"
+  done < "$PKG/harness/$SUITE/variants.tsv"
+fi
 echo "setup $SUITE: $(wc -l < "$P/export-manifest.txt") files equal their blobs at ${PIN:0:7}; library patch; $(ls "$P/contracts/test/$SUITE" | grep -c '\.sol$') harness files; $(grep -E 'Compiling|finished' "$P/build.log" | tr '\n' ' ')"
