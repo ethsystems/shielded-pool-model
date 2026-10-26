@@ -52,13 +52,11 @@ reads them; `expected.json` pins these three, `SOURCES.txt` and this file.
 
 The pool sources are public: ethsystems/pocs, whose `master` is
 `a04b8b38969dfc2ee64de47edee7e396454204a8`, the same commit that the records below name as
-the pin (checked 2026-10-13). The private twin ethsystems/pocs-private is two commits ahead.
-PR #16 (`748884e`, merged 2026-10-08) changes `circuits/transfer/src/main.nr`,
-`contracts/src/verifiers/TransferVerifier.sol`, `src/lib/adapters/channel.rs` and the
-changelog; the circuit `Nargo.toml` files, `soldeer.lock` and `foundry.toml` are unchanged
-(diff `a04b8b3..748884e`). PR #14 (`9409fae`, its current `master`) adds the private MMF
-requirement documents and touches no shielded-pool file. The Poseidon pins are the same at
-that tip.
+the pin (checked 2026-10-13). A later commit of that repository (`748884e`, merged
+2026-10-08) changes `circuits/transfer/src/main.nr`, `contracts/src/verifiers/TransferVerifier.sol`,
+`src/lib/adapters/channel.rs` and the changelog; the circuit `Nargo.toml` files, `soldeer.lock`
+and `foundry.toml` are unchanged (diff `a04b8b3..748884e`), so the Poseidon pins are the same
+at that tip.
 
 - **PoseidonT3.sol.** The dependency `poseidon-solidity` 0.0.5 that the pool pins at
   `a04b8b38969dfc2ee64de47edee7e396454204a8` (`soldeer.lock`, archive sha256
