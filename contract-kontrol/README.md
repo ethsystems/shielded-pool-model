@@ -351,9 +351,14 @@ forge and solc.
   deletion at line 456, the `ensures lengthBytes(BS) <=Int 1073741824` of
   `rule #enc(#bytes(BS)) => #encBytes(lengthBytes(BS), BS)` (`kevm-patch/abi.md.diff`). K adds an
   `ensures` to the path condition, so the deletion removes an assumption and adds none; the
-  remaining bound below 2^64 comes from Kontrol's argument ranges. A local change, not a KEVM
-  release. `check.sh` reads the image's file and requires that it plus the diff gives the pinned
-  file.
+  remaining bound below 2^64 comes from Kontrol's argument ranges. The change is a commit of a
+  fork of KEVM: `https://github.com/oskarth/evm-semantics`, branch `shielded-pool-model`, commit
+  `6795265`, one commit on top of upstream tag `v1.0.921` (`d4bf484`), the kevm-pyk version inside
+  the image. The fork is not built into an image: the proofs run the pinned upstream image with the
+  fork's `abi.md` mounted over the image's own. `check.sh` reads the image's file and requires that
+  it plus the diff gives the pinned file, and (unless `KEVM_FETCH=0`) fetches the fork commit and
+  requires that its parent is the `v1.0.921` commit, that its `abi.md` is `kevm-patch/abi.md`, and
+  that the parent's `abi.md` is the image's.
 - The bytes-prefix rule (`lemmas/bytes-prefix.k`) for `withdraw-success` (all its runs), with the
   soundness argument above.
 - Kontrol's settings: gas off, fail-fast on (a proof stops at its first failing node), default
@@ -424,7 +429,8 @@ In order, `check.sh`:
 1. checks forge, cast and solc (versions and binary sha256); when a `halmos` run is selected, checks
    the Halmos environment (`scripts/pyenv-check.py`, as in `contract-halmos`); when a build is
    selected, checks the image id, `kontrol version`, the image's `abi.md` against its pin, that
-   `abi.md.diff` turns it into `kevm-patch/abi.md`, and the lemma file;
+   `abi.md.diff` turns it into `kevm-patch/abi.md`, that the pinned commit of the KEVM fork holds
+   that file on top of the image's `v1.0.921` (skipped with `KEVM_FETCH=0`), and the lemma file;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
 3. fetches the soldeer zips by the pinned lock (checked by sha256 and soldeer's integrity hash),
    zk-kit.solidity and kontrol-cheatcodes by commit (checked by tree id), into `.deps/`;
@@ -472,7 +478,8 @@ nor `.deps/` is tracked.
 - `mutants/make.py`; `mutants/<suite>/`: `MUTANTS.tsv` (id, base, diff, output, change), the diffs,
   `MUTANTS.sha256`.
 - `lemmas/bytes-prefix.k`: the bytes-prefix rule.
-- `kevm-patch/abi.md`, `kevm-patch/abi.md.diff`: the patched KEVM file and its one deletion.
+- `kevm-patch/abi.md`, `kevm-patch/abi.md.diff`: the patched KEVM file (the copy that is mounted
+  into the container; the same file as fork commit `6795265`) and its one deletion.
 - `scripts/`: `setup-suite.sh`, `kontrol-run.sh`, `kverdicts.py`, `compare.py`,
   `pyenv-check.py` (as in `contract-halmos/`), `soldeer-integrity.py` (as in `deployment/`),
   `foundry-kontrol.txt`, `rename-map.txt`, and `klengths.py`, which prints the `bytes` length bounds at the test entry of saved proofs (stock:

@@ -14,7 +14,8 @@
 # Env: FORGE, CAST (default: from PATH), SOLC (solc 0.8.37; default: the svm copy, else a download into
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
-# Linux x86_64 build; its version must still match), PULL=0 (never pull the image), CAP (container
+# Linux x86_64 build; its version must still match), PULL=0 (never pull the image), KEVM_FETCH=0 (do
+# not fetch the KEVM fork commit; the local abi.md checks still run), CAP (container
 # memory cap, default 8g), HALMOS (the halmos of a Python 3.12 environment installed from
 # requirements-halmos.txt; default .venv/bin/halmos), BUILD_CPUSET and PROVE_CPUSET (docker --cpuset-cpus for kontrol build
 # and kontrol prove, default 0-1 and 0-5: fewer CPUs keep the kompile below the cap), TLIM (seconds per container, default 7200), GATE_GIB (available memory
@@ -165,8 +166,24 @@ docker run --rm --network none "$IMAGE" cat "$ABI_PATH" > "$T/abi.stock" || fail
 cp "$T/abi.stock" "$T/abi.patched" && patch -s "$T/abi.patched" "$PKG/kevm-patch/abi.md.diff" || fail tools "kevm-patch/abi.md.diff does not apply to the image's abi.md"
 [ "$(sha "$T/abi.patched")" = "$(pin kevm_abi_patched_sha256)" ] && [ "$(sha "$PKG/kevm-patch/abi.md")" = "$(pin kevm_abi_patched_sha256)" ] \
   || fail tools "kevm-patch/abi.md is not the image's abi.md with the pinned deletion"
+# The same change as a commit of the KEVM fork: fetch the pinned commit with its parent, and require
+# that the parent is the pinned upstream tag commit, that the commit's abi.md is kevm-patch/abi.md
+# and that the parent's abi.md is the image's. KEVM_FETCH=0 skips the fetch (offline).
+if [ "${KEVM_FETCH:-1}" = 1 ]; then
+  rm -rf "$T/kevm" && git init -q "$T/kevm" \
+    && git -C "$T/kevm" fetch -q --depth 2 "$(pin kevm_fork_repo)" "$(pin kevm_fork_commit)" \
+    || fail tools "cannot fetch $(pin kevm_fork_commit) from $(pin kevm_fork_repo) (KEVM_FETCH=0 skips this check)"
+  [ "$(git -C "$T/kevm" rev-parse 'FETCH_HEAD^')" = "$(pin kevm_base_commit)" ] || fail tools "the parent of the fork commit is not $(pin kevm_tag) ($(pin kevm_base_commit))"
+  git -C "$T/kevm" show "FETCH_HEAD:$(pin kevm_abi_srcpath)" > "$T/abi.fork" 2>/dev/null || fail tools "no $(pin kevm_abi_srcpath) at the fork commit"
+  [ "$(sha "$T/abi.fork")" = "$(pin kevm_abi_patched_sha256)" ] || fail tools "the fork commit's abi.md is not kevm-patch/abi.md"
+  git -C "$T/kevm" show "FETCH_HEAD^:$(pin kevm_abi_srcpath)" > "$T/abi.base" 2>/dev/null && [ "$(sha "$T/abi.base")" = "$(pin kevm_abi_stock_sha256)" ] \
+    || fail tools "the abi.md of $(pin kevm_tag) is not the image's file"
+  KEVM_NOTE=", fork commit $(pin kevm_fork_commit | cut -c1-7) on $(pin kevm_tag)"
+else
+  KEVM_NOTE=", fork commit not fetched (KEVM_FETCH=0)"
+fi
 [ "$(sha "$PKG/lemmas/bytes-prefix.k")" = "$(pin lemma_sha256)" ] || fail tools "lemmas/bytes-prefix.k differs from its pin"
-echo "tools: Kontrol $(pin kontrol_version) ($IMAGE), abi.md stock $(pin kevm_abi_stock_sha256 | cut -c1-8) and patched $(pin kevm_abi_patched_sha256 | cut -c1-8), forge and cast $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
+echo "tools: Kontrol $(pin kontrol_version) ($IMAGE), abi.md stock $(pin kevm_abi_stock_sha256 | cut -c1-8) and patched $(pin kevm_abi_patched_sha256 | cut -c1-8)$KEVM_NOTE, forge and cast $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
 else
 echo "tools: no Kontrol run selected, Docker not used; forge and cast $(pin forge_version) ($FORGE), solc $solc_ver ($SOLC)${UNPINNED:+; unpinned build:$UNPINNED}"
 fi

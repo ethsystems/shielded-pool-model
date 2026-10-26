@@ -53,6 +53,18 @@ kontrol_image_digest sha256:858f004144d61b005997f56bb8b7cd15673850286c96e0e5ec05
 kevm_abi_relpath kproj/evm-semantics/abi.md
 kevm_abi_stock_sha256 878f77321bd92e42e41754ccf0a4b005bcf375ff4d5eb0acd0d8d94b3c1ef95e
 kevm_abi_patched_sha256 e249e9e2d283f82e7d5f53cf5ec3724875321c8806097e5cde958a37174f7a88
+
+# The patched abi.md as a commit: the fork of runtimeverification/evm-semantics, branch
+# shielded-pool-model, one commit on top of the tag whose kevm-pyk the image carries (1.0.921).
+# check.sh fetches kevm_fork_commit (depth 2) unless KEVM_FETCH=0, and requires that its parent is
+# kevm_base_commit, that its abi.md is kevm-patch/abi.md and that the parent's abi.md is the image's.
+kevm_repo https://github.com/runtimeverification/evm-semantics
+kevm_tag v1.0.921
+kevm_base_commit d4bf484a5dfe1e38d729a30434cd6f41e3590fb2
+kevm_fork_repo https://github.com/oskarth/evm-semantics
+kevm_fork_branch shielded-pool-model
+kevm_fork_commit 67952650674cb4802217fe2c33b44958dbbd55a6
+kevm_abi_srcpath kevm-pyk/src/kevm_pyk/kproj/evm-semantics/abi.md
 lemma_sha256 e47301ecc2d1443ed399cce2744ba9dc1f24c6292e4a995a9f22f6837946c6d2 lemmas/bytes-prefix.k
 
 # Toolchain on the host, for the forge replays; solc is also forge's compiler inside the container

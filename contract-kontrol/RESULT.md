@@ -76,6 +76,11 @@ Commits `2ff286b` and `51b7cea` changed the checker after the runs above. They c
 added the Halmos environment pins to `PINS.txt`. No harness, mutant, lemma, `abi.md`, prove command
 or line of `EXPECTED.tsv` changed.
 
+A later commit (2026-10-26) added the KEVM fork pins to `PINS.txt` (`kevm_fork_repo`,
+`kevm_fork_commit` and the upstream `v1.0.921` base) and the fetch of that commit to the tools
+stage of `check.sh` (`KEVM_FETCH=0` skips it). `kevm-patch/abi.md` is byte for byte the file the
+runs above mounted (sha256 `e249e9e2...7a88`); the runs were not repeated.
+
 - `scripts/kontrol-run.sh`: the shell in the container exits with the command's status. Before, it
   ended with an `echo`, so the runner exit was 0 even when the command failed. Now the RUN end line
   shows a runner exit equal to the command exit, unless the run was stopped (124: timeout, 137:
