@@ -23,7 +23,8 @@ count, none in a verdict.
 - Date: 2026-10-24, started 13:41 UTC, from a local commit whose `contract-halmos/` tree is the one of
   `8338e47` on this branch (the last package commit before the run), with the submodule `contract-halmos/pocs` at
   `a04b8b38969dfc2ee64de47edee7e396454204a8`. After that commit, this file and one README sentence
-  (the reports of 2026-09-29 and 2026-09-30 are not in this repository) changed; no file `check.sh`
+  (the reports of 2026-09-29 and 2026-09-30 are not in this repository) changed, and one stray
+  line of pasted output was removed from `PINS.txt` (no pin changed); no other file `check.sh`
   reads changed.
 - Command: `PYTHON=<python 3.12.14> ./check.sh --venv`. `.venv/` came from an earlier
   `./check.sh --venv` of the same day (pip `--require-hashes` from PyPI) and was not reinstalled;

@@ -82,7 +82,7 @@ The package does not say "Noir equals Solidity". It is not a security claim. Ope
 5. **Collision resistance.** Nothing. `CryptoHyp` in the parent model stays as it is, a
    hypothesis on one history, and this package does not discharge any part of it. It
    narrows no simplification of the model, because `PrimSpec.nullify` stays opaque. It is
-   evidence that the contract and the circuits hash Merkle nodes the same way (CLAIMS.md).
+   evidence that the transcriptions of both Merkle-node hashes agree (CLAIMS.md).
 
 Also out of scope: the four-input commitment hash and the one-input key hash, Merkle paths,
 and anything about the circuits that call `hash_2`.
