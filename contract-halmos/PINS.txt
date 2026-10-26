@@ -79,4 +79,3 @@ pyenv_record_sha256 ee0f24161985379c7703362be8b15171bdf6ce22400cf15a31996fed9311
 pyenv_record_sha256 ad9652d8cb7497542de8dd600e5c1179be5f163aae2eae32e625f52d64d066d2 xxhash==4.0.1
 pyenv_record_sha256 828f8df2706fbfaeb03a60200007e11f4ce9b1c934871b102360a8ca82bdb075 yices-solver==2.6.4.post23
 pyenv_record_sha256 01e4ddb8325e30c98d6e47c8e8da3d44ab4b8115db73cb76cd9345b585fb0061 z3-solver==4.12.6.0
-FAIL pyenv: the pyenv_record_sha256 pins of PINS.txt do not name the versions of requirements.txt
