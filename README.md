@@ -222,7 +222,8 @@ checksum.
   patched Lampe (a fork pinned by commit), the hash-bound rules hold for
   every accepting execution: the commitment and nullifier equations, the
   one owner key, and the Merkle roots as folds with depth bounds 20, 32
-  and 32 (transfer input 1 is checked only when its amount is nonzero);
+  and 32 (the second transfer input, circuit input 1, is checked only when its
+  amount is nonzero);
   the extracted Poseidon permutations compute their pure functions. Statements about the program as Lampe reads it, not the
   compiled constraints; the Noir compiler stays trusted on this route.
   Separate package, own check and trust base; the gate does not build it.
