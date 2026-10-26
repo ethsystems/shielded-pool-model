@@ -1,8 +1,9 @@
 # Result of a run
 
 Run of `scripts/check.sh` on 2026-10-24, at a local commit whose `privacy-games/` tree is the one
-of `9c22ff2` on this branch. After that commit, the package changed in this file and in one README
-line (the `.lake` size, 8.1 GiB). The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
+of `9c22ff2` on this branch. After that commit, the package changed in this file, in one README
+line (the `.lake` size, 8.1 GiB), and in `scripts/check.sh`, which now unsets `PYTHONOPTIMIZE`
+before its helpers run (no check changed; the run had it unset). The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
 other work running at the same time. Lean 4.33.1 through elan, inside a memory-capped scope
 (`systemd-run --user --scope -p MemoryMax=8G`), with `JOBS=2` and `LEAN_NUM_THREADS=2`.
 

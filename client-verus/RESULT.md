@@ -5,7 +5,9 @@ branch, on a Linux laptop
 (x86-64, 16 threads, 30 GB, btrfs). Each ran in its own systemd user scope with `MemoryMax=8G`
 and `MemorySwapMax=0`, with `JOBS=4` (the default) and Rust 1.98.1 from the default rustup home.
 After the runs, this file changed, and one comment block of `scripts/rename-map.txt` (the labels
-of the earlier mirror rounds, which `check.sh` does not read). No file that `check.sh` reads changed.
+of the earlier mirror rounds, which `check.sh` does not read), and `check.sh` itself, which now
+unsets `PYTHONOPTIMIZE` before its helpers run (no check changed; the runs had it unset). No
+other file that `check.sh` reads changed.
 
 The two transcripts below are the complete output of `check.sh`, with one substitution and no
 other edit: the absolute path of the checkout, which names a home directory, is written
