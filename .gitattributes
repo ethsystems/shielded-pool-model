@@ -1,0 +1,8 @@
+# Files that a package's check.sh regenerates and compares. GitHub folds them in a diff view.
+client-verus/diffs/** linguist-generated
+client-verus/FUNCTIONS.md linguist-generated
+client-verus/TRUSTED.md linguist-generated
+refinement/controls/gen/** linguist-generated
+refinement/fold-bridge/controls/gen/** linguist-generated
+refinement/statements/** linguist-generated
+privacy-games/statements/** linguist-generated
