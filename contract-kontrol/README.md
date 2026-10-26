@@ -356,7 +356,8 @@ forge and solc.
   `6795265`, one commit on top of upstream tag `v1.0.921` (`d4bf484`), the kevm-pyk version inside
   the image. The fork is not built into an image: the proofs run the pinned upstream image with the
   fork's `abi.md` mounted over the image's own. `check.sh` reads the image's file and requires that
-  it plus the diff gives the pinned file, and (unless `KEVM_FETCH=0`) fetches the fork commit and
+  it plus the diff gives the pinned file, and, when a selected build mounts the patched file (unless
+  `KEVM_FETCH=0`), fetches the fork commit and
   requires that its parent is the `v1.0.921` commit, that its `abi.md` is `kevm-patch/abi.md`, and
   that the parent's `abi.md` is the image's.
 - The bytes-prefix rule (`lemmas/bytes-prefix.k`) for `withdraw-success` (all its runs), with the
@@ -428,9 +429,10 @@ In order, `check.sh`:
    failing proof or replay);
 1. checks forge, cast and solc (versions and binary sha256); when a `halmos` run is selected, checks
    the Halmos environment (`scripts/pyenv-check.py`, as in `contract-halmos`); when a build is
-   selected, checks the image id, `kontrol version`, the image's `abi.md` against its pin, that
+   selected, checks the image's repository digest, `kontrol version`, the image's `abi.md` against its pin, that
    `abi.md.diff` turns it into `kevm-patch/abi.md`, that the pinned commit of the KEVM fork holds
-   that file on top of the image's `v1.0.921` (skipped with `KEVM_FETCH=0`), and the lemma file;
+   that file on top of the image's `v1.0.921` (only when that build mounts the patched file; skipped
+   with `KEVM_FETCH=0`), and the lemma file;
 2. checks that `pocs/` holds `a04b8b3` and that the 14 files to export have the pinned blob ids;
 3. fetches the soldeer zips by the pinned lock (checked by sha256 and soldeer's integrity hash),
    zk-kit.solidity and kontrol-cheatcodes by commit (checked by tree id), into `.deps/`;

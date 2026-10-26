@@ -15,7 +15,7 @@
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
 # Linux x86_64 build; its version must still match), PULL=0 (never pull the image), KEVM_FETCH=0 (do
-# not fetch the KEVM fork commit; the local abi.md checks still run), CAP (container
+# not fetch the KEVM fork commit, which only a build of a patched suite needs; the local abi.md checks still run), CAP (container
 # memory cap, default 8g), HALMOS (the halmos of a Python 3.12 environment installed from
 # requirements-halmos.txt; default .venv/bin/halmos), BUILD_CPUSET and PROVE_CPUSET (docker --cpuset-cpus for kontrol build
 # and kontrol prove, default 0-1 and 0-5: fewer CPUs keep the kompile below the cap), TLIM (seconds per container, default 7200), GATE_GIB (available memory
@@ -44,6 +44,7 @@ usage() { echo "usage: ./check.sh [suite[:run[,run...]]...]: $1" >&2; echo "CHEC
 mapfile -t ALL_SUITES < <(sed -n 's/^suite //p' "$PKG/harness/SUITES.txt")
 runs_of() { awk -F'\t' 'NR > 1 && $2 != "" {print $2}' "$PKG/harness/$1/runs.tsv"; }
 kind_of() { awk -F'\t' -v r="$2" 'NR > 1 && $2 == r {print $1}' "$PKG/harness/$1/runs.tsv"; }
+abi_of() { awk -F'\t' -v r="$2" 'NR > 1 && $2 == r {print $3}' "$PKG/harness/$1/runs.tsv"; }
 selected() { tr ',' '\n' <<<"${SELECT[$1]}" | grep -qxF -- "$2"; }
 SUITES=(); declare -A SELECT
 for a in "$@"; do
@@ -105,11 +106,12 @@ SOLC="$(readlink -f "$SOLC")"
 "$SOLC" --version 2>/dev/null | grep -qF "Version: $solc_ver" || fail tools "solc $SOLC is not $solc_ver"
 binpin solc "$SOLC" "$solc_sha"
 export SOLC
-# Halmos is needed only when a halmos run is selected (poseidon-frame); Docker only when a build is.
-NEED_HALMOS=0; NEED_DOCKER=0
+# Halmos is needed only when a halmos run is selected (poseidon-frame); Docker only when a build is;
+# the KEVM fork commit only when a selected build mounts the patched abi.md.
+NEED_HALMOS=0; NEED_DOCKER=0; NEED_FORK=0
 for s in "${SUITES[@]}"; do
   for r in $(tr ',' ' ' <<<"${SELECT[$s]}"); do
-    case "$(kind_of "$s" "$r")" in halmos) NEED_HALMOS=1 ;; build) NEED_DOCKER=1 ;; esac
+    case "$(kind_of "$s" "$r")" in halmos) NEED_HALMOS=1 ;; build) NEED_DOCKER=1; [ "$(abi_of "$s" "$r")" = patched ] && NEED_FORK=1 ;; esac
   done
 done
 if [ "$NEED_HALMOS" = 1 ]; then
@@ -153,7 +155,9 @@ if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
   [ "${PULL:-1}" = 1 ] || fail tools "image $IMAGE not present and PULL=0"
   docker pull "$IMAGE" >/dev/null || fail tools "cannot pull $IMAGE"
 fi
-[ "$(docker image inspect "$IMAGE" --format '{{.Id}}')" = "$(pin kontrol_image_digest)" ] || fail tools "image id of $IMAGE is not $(pin kontrol_image_digest)"
+# The local image must carry the pinned repository digest. (Its .Id is the manifest digest on the
+# containerd image store and the config digest on the classic store, so .Id is not compared.)
+docker image inspect "$IMAGE" --format '{{range .RepoDigests}}{{println .}}{{end}}' | grep -qxF "$IMAGE" || fail tools "the local image does not carry the repository digest $IMAGE"
 kv="$(docker run --rm --network none "$IMAGE" kontrol version 2>/dev/null | tr -d '\r')"
 [ "$kv" = "Kontrol version: $(pin kontrol_version)" ] || fail tools "the image reports '$kv', pinned Kontrol $(pin kontrol_version)"
 # The KEVM abi.md: the image's file must be the pinned stock file, and kevm-patch/abi.md must be that
@@ -168,8 +172,11 @@ cp "$T/abi.stock" "$T/abi.patched" && patch -s "$T/abi.patched" "$PKG/kevm-patch
   || fail tools "kevm-patch/abi.md is not the image's abi.md with the pinned deletion"
 # The same change as a commit of the KEVM fork: fetch the pinned commit with its parent, and require
 # that the parent is the pinned upstream tag commit, that the commit's abi.md is kevm-patch/abi.md
-# and that the parent's abi.md is the image's. KEVM_FETCH=0 skips the fetch (offline).
-if [ "${KEVM_FETCH:-1}" = 1 ]; then
+# and that the parent's abi.md is the image's. Only a selected build that mounts the patched file needs
+# it; KEVM_FETCH=0 skips the fetch (offline).
+if [ "$NEED_FORK" = 0 ]; then
+  KEVM_NOTE=", fork commit not fetched (no patched build selected)"
+elif [ "${KEVM_FETCH:-1}" = 1 ]; then
   rm -rf "$T/kevm" && git init -q "$T/kevm" \
     && git -C "$T/kevm" fetch -q --depth 2 "$(pin kevm_fork_repo)" "$(pin kevm_fork_commit)" \
     || fail tools "cannot fetch $(pin kevm_fork_commit) from $(pin kevm_fork_repo) (KEVM_FETCH=0 skips this check)"
