@@ -8,8 +8,9 @@ The rule texts, enforcing layers and status cells are those of the board as it s
 2026-10-13. Each evidence cell names the check in this repository that backs the row, by package
 and by suite or theorem, with the command that runs it. Where no package covers a piece of
 evidence, the cell says so and gives the date it was measured. Each package's README states the
-exact scope of its checks. The six packages added on 2026-10-24 record their last run in a
-RESULT.md; the four earlier ones record it in their README.
+exact scope of its checks. Six packages (`deployment/`, `privacy-games/`, `refinement/`,
+`client-verus/`, `contract-halmos/`, `contract-kontrol/`) record their last run in a RESULT.md;
+the other four record it in their README.
 
 **Claim 1 (on-chain safety), the target.** Nobody can steal, mint or double-spend pool funds, whatever
 client they submit from. It is a target, not yet an established theorem about a deployment. The Lean model

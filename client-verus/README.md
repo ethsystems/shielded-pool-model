@@ -333,8 +333,9 @@ labels, which the 2026-10-01 report (not in this repository) uses.
 [scripts/rename-map.txt](scripts/rename-map.txt) maps each earlier label, file name and control
 id to its name here. Three earlier mirror files are not
 carried over: two `u128` mirrors of the public-input serializers, superseded by
-`public_inputs.rs` over the full `U256` domain, and a mirror of the transfer guard before
-PR #12 of the private implementation repository (public as `a04b8b3`), which is not the body at `a04b8b3`. A variant of `validate_amount` with
+`public_inputs.rs` over the full `U256` domain, and a mirror of the transfer guard from
+before PR #12 of the private implementation repository; `a04b8b3` includes that change, so this
+is not the body at `a04b8b3`. A variant of `validate_amount` with
 trusted library specifications, which fails `--no-cheating`, is not carried over either. No row
 depends on them.
 
