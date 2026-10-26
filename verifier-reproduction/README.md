@@ -42,7 +42,8 @@ changes). Everything below is open, and the package claims none of it.
   with "error converting into field Circuit::opcodes", measured once on 2026-09-30, not
   reproduced here),
   so only the nightly reproduces the files. That is a pin, not a statement about
-  either build's correctness.
+  either build's correctness. The bb asset is a nightly release, which upstream can
+  remove; it should be mirrored, by its sha256, to a release of this repository.
 
 The package never says "the verifier is correct". It says "the committed verifier
 files are the build of these circuits with these tools".
