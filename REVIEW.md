@@ -2,8 +2,8 @@
 
 Find where the claim is wrong, too strong or unclear. This is not an
 audit. Track A (part 5) asks whether the model says what the spec
-says. It closed on 2026-10-19 with two readings; new readers are
-welcome.
+says. It closed on 2026-10-19 with one full reading and one
+high-level reading; new readers are welcome.
 
 ## 1. What is claimed
 
@@ -16,7 +16,8 @@ welcome.
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
 > the model says what the spec says is a human reading, not a
-> machine check; two readings are done (REVIEW.md, part 5).
+> machine check; one full reading (the second reader) and one
+> high-level reading (Oskar) are done (REVIEW.md, part 5).
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -102,7 +103,8 @@ cache) and `gate_test.sh` about 21 minutes for the 26 cheats.
 ## 5. The hypothesis and the 16 simplifications (Track A)
 
 Does the model say what the spec says? No machine can check this.
-Track A closed on 2026-10-19 with two human readings:
+Track A closed on 2026-10-19 with two human readings, one full and
+one high-level:
 
 - Oskar, the author, read the L3 statements, the guards and the
   simplifications against spec 2 on 2026-09-30, from a one-page

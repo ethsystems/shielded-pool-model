@@ -20,7 +20,8 @@ core is made to be read whole in an afternoon.
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
 > the model says what the spec says is a human reading, not a
-> machine check; two readings are done (REVIEW.md, part 5).
+> machine check; one full reading (the second reader) and one
+> high-level reading (Oskar) are done (REVIEW.md, part 5).
 
 Nine theorems: nullifier uniqueness, no double spend and value
 conservation, plus six supporting results about the same model
@@ -113,8 +114,9 @@ guard can fire. The epoch and k-anonymity files came later, the
 root-window files and the liveness control last. Many files changed
 during review; the commit history records each change.
 
-AI agents from two model families wrote the proofs; Oskar and a second
-reader read the statements against the spec (REVIEW.md, part 5).
+AI agents from two model families wrote the proofs. A second reader
+read the statements against the spec in full; Oskar did a high-level
+reading from a one-page summary (REVIEW.md, part 5).
 The gate checks mechanical conditions on the result. It does not
 by itself establish independence from malicious build or elaboration
 code: the axiom census reads printed output, and code imported during
@@ -323,8 +325,9 @@ Each gate run copies `.lake`; without cheap file copies, set
 
 ## Status
 
-The core proofs and gate are complete. Two human readings of the
-model against the spec are done (REVIEW.md, part 5).
+The core proofs and gate are complete. One full reading (the second
+reader) and one high-level reading (Oskar) of the model against the
+spec are done (REVIEW.md, part 5).
 [REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
 here (part 8 of that guide gives the format), and each gets an answer.
 
