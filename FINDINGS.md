@@ -10,7 +10,7 @@ but the register itself runs nothing. The words and research labels the rows use
 [BOARD.md](BOARD.md).
 
 To add a finding, append a row with the next free ID (never renumber) and update "Counts"; rows F71 and later came from Astra's review of 2026-10-13 and are not in date order. IDs here are register IDs, not the F1-F9 of a research coverage note or the writeup's figure F4.
-Every row cited at least one evidence path in the research phase, checked to exist on 2026-10-13; this register keeps only the date of each record, and the package that now checks the code where there is one. "Status today" means 2026-10-13; upstream states come from local git of the implementation repository and the cited records. Anything not verified carries [?]. The text, component, finder, status and writeup cells of F14, F33 and F47 are withheld.
+Every row cited at least one evidence path in the research phase, checked to exist on 2026-10-13; this register keeps only the date of each record, and the package that now checks the code where there is one. "Status today" means 2026-10-13; upstream states come from local git of the implementation repository and the cited records. Anything not verified carries [?]. "Record date" is the date of the research-phase record behind a row; it can come before the "Date" column when that record was written for an earlier observation. The text, component, finder, status and writeup cells of F14, F33 and F47 are withheld.
 
 | ID | Date | Finding | Component | Found by | Class | Status today | Record date | Writeup |
 |---|---|---|---|---|---|---|---|---|
