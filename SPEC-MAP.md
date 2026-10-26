@@ -7,8 +7,8 @@ reading by a second reader and a high-level reading by the author
 Base source of truth: spec 2 at ethsystems/specs 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is
 byte-identical). Line numbers are that file's.
-Spec main (72414f4) adds the commitment-seen set in 5.2 and shifts later
-line numbers. This map stays pinned to 4d4dce1 until the 6.2 row change
+Spec main after 4d4dce1 adds the commitment-seen set in 5.2 (commit c0f9122)
+and shifts later line numbers; one row below cites 5.2 at 72414f4. This map stays pinned to 4d4dce1 until the 6.2 row change
 lands; the repin then remaps every line citation in one commit.
 Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`,
 `LeanShieldedPool/Statements/L3.lean`, `LeanShieldedPool/Draft/NonVacuity.lean`.
