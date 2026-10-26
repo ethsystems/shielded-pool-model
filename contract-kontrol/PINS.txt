@@ -56,7 +56,8 @@ kevm_abi_patched_sha256 e249e9e2d283f82e7d5f53cf5ec3724875321c8806097e5cde958a37
 
 # The patched abi.md as a commit: the fork of runtimeverification/evm-semantics, branch
 # shielded-pool-model, one commit on top of the tag whose kevm-pyk the image carries (1.0.921).
-# check.sh fetches kevm_fork_commit (depth 2) unless KEVM_FETCH=0, and requires that its parent is
+# check.sh fetches kevm_fork_commit (depth 2) when a selected run mounts the patched abi.md, unless
+# KEVM_FETCH=0, and requires that its parent is
 # kevm_base_commit, that its abi.md is kevm-patch/abi.md and that the parent's abi.md is the image's.
 kevm_repo https://github.com/runtimeverification/evm-semantics
 kevm_tag v1.0.921

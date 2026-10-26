@@ -15,7 +15,7 @@
 # DEPS_CACHE), POCS (default ./pocs), DEPS_CACHE (default ./.deps), WORK (default ./work), SOLC_FETCH=0
 # (never download solc), TOOLS_UNPINNED=1 (accept a forge or solc binary whose sha256 is not the pinned
 # Linux x86_64 build; its version must still match), PULL=0 (never pull the image), KEVM_FETCH=0 (do
-# not fetch the KEVM fork commit, which only a build of a patched suite needs; the local abi.md checks still run), CAP (container
+# not fetch the KEVM fork commit, which only a run that mounts the patched abi.md needs; the local abi.md checks still run), CAP (container
 # memory cap, default 8g), HALMOS (the halmos of a Python 3.12 environment installed from
 # requirements-halmos.txt; default .venv/bin/halmos), BUILD_CPUSET and PROVE_CPUSET (docker --cpuset-cpus for kontrol build
 # and kontrol prove, default 0-1 and 0-5: fewer CPUs keep the kompile below the cap), TLIM (seconds per container, default 7200), GATE_GIB (available memory
@@ -81,6 +81,8 @@ binpin() { # name, binary, pinned sha256
   UNPINNED="$UNPINNED $1"
 }
 command -v python3 >/dev/null || fail tools "python3 not found"
+# The helper scripts validate with assert statements, which PYTHONOPTIMIZE would strip.
+unset PYTHONOPTIMIZE
 command -v patch >/dev/null || fail tools "patch not found"
 [ -n "$FORGE" ] && [ -x "$FORGE" ] || fail tools "forge not found (set FORGE=/path; $(pin foundry_asset))"
 [ -n "$CAST" ] && [ -x "$CAST" ] || fail tools "cast not found (set CAST=/path; $(pin foundry_asset))"
@@ -107,11 +109,12 @@ SOLC="$(readlink -f "$SOLC")"
 binpin solc "$SOLC" "$solc_sha"
 export SOLC
 # Halmos is needed only when a halmos run is selected (poseidon-frame); Docker only when a build is;
-# the KEVM fork commit only when a selected build mounts the patched abi.md.
+# the KEVM fork commit only when a selected run mounts the patched abi.md.
 NEED_HALMOS=0; NEED_DOCKER=0; NEED_FORK=0
 for s in "${SUITES[@]}"; do
   for r in $(tr ',' ' ' <<<"${SELECT[$s]}"); do
-    case "$(kind_of "$s" "$r")" in halmos) NEED_HALMOS=1 ;; build) NEED_DOCKER=1; [ "$(abi_of "$s" "$r")" = patched ] && NEED_FORK=1 ;; esac
+    case "$(kind_of "$s" "$r")" in halmos) NEED_HALMOS=1 ;; build) NEED_DOCKER=1 ;; esac
+    [ "$(abi_of "$s" "$r")" = patched ] && NEED_FORK=1
   done
 done
 if [ "$NEED_HALMOS" = 1 ]; then
@@ -172,10 +175,10 @@ cp "$T/abi.stock" "$T/abi.patched" && patch -s "$T/abi.patched" "$PKG/kevm-patch
   || fail tools "kevm-patch/abi.md is not the image's abi.md with the pinned deletion"
 # The same change as a commit of the KEVM fork: fetch the pinned commit with its parent, and require
 # that the parent is the pinned upstream tag commit, that the commit's abi.md is kevm-patch/abi.md
-# and that the parent's abi.md is the image's. Only a selected build that mounts the patched file needs
+# and that the parent's abi.md is the image's. Only a selected run that mounts the patched file needs
 # it; KEVM_FETCH=0 skips the fetch (offline).
 if [ "$NEED_FORK" = 0 ]; then
-  KEVM_NOTE=", fork commit not fetched (no patched build selected)"
+  KEVM_NOTE=", fork commit not fetched (no patched run selected)"
 elif [ "${KEVM_FETCH:-1}" = 1 ]; then
   rm -rf "$T/kevm" && git init -q "$T/kevm" \
     && git -C "$T/kevm" fetch -q --depth 2 "$(pin kevm_fork_repo)" "$(pin kevm_fork_commit)" \
