@@ -1,6 +1,7 @@
 # client-verus: runs of 2026-10-24
 
-Two runs of `check.sh` at commit `ee58b42cab281afc714d9b1a7e089e7aa0675c3b`, on a Linux laptop
+Two runs of `check.sh` at a local commit whose `client-verus/` tree is the one of `d718d50` on this
+branch, on a Linux laptop
 (x86-64, 16 threads, 30 GB, btrfs). Each ran in its own systemd user scope with `MemoryMax=8G`
 and `MemorySwapMax=0`, with `JOBS=4` (the default) and Rust 1.98.1 from the default rustup home.
 After the runs, this file changed, and one comment block of `scripts/rename-map.txt` (the labels

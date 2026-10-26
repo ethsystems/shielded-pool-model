@@ -1,13 +1,14 @@
 # Result of a run
 
-Run of `scripts/check.sh` at commit `7eeb0b2`, on 2026-10-24. The commit that records this
-file changes only this file; one later commit corrects the `.lake` size in the README (8.1 GiB). The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
+Run of `scripts/check.sh` on 2026-10-24, at a local commit whose `privacy-games/` tree is the one
+of `9c22ff2` on this branch. After that commit, the package changed in this file and in one README
+line (the `.lake` size, 8.1 GiB). The machine: a Linux laptop (16 threads, 30 GB, btrfs), with
 other work running at the same time. Lean 4.33.1 through elan, inside a memory-capped scope
 (`systemd-run --user --scope -p MemoryMax=8G`), with `JOBS=2` and `LEAN_NUM_THREADS=2`.
 
 ## Fresh copy
 
-The repository at `7eeb0b2` with no `.lake` and no `build` directory in `privacy-games/`, and
+The repository at that commit with no `.lake` and no `build` directory in `privacy-games/`, and
 no untracked or ignored file there. Elan, the toolchain and Mathlib's prebuilt olean archives
 were already on the machine (in the user caches of elan and Mathlib), so `lake exe cache get`
 did not download them again. Lake cloned VCV-io, Mathlib and their eleven other dependencies.

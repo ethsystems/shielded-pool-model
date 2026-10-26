@@ -20,9 +20,11 @@ count, none in a verdict.
 
 ## The run
 
-- Date: 2026-10-24, started 13:41 UTC, from commit `1bed4ce` of this repository (the commit that
-  adds the checks this run used) with the submodule `contract-halmos/pocs` at
-  `a04b8b38969dfc2ee64de47edee7e396454204a8`. This file is the only change after that commit.
+- Date: 2026-10-24, started 13:41 UTC, from a local commit whose `contract-halmos/` tree is the one of
+  `8338e47` on this branch (the commit that adds the checks this run used), with the submodule `contract-halmos/pocs` at
+  `a04b8b38969dfc2ee64de47edee7e396454204a8`. After that commit, this file and one README sentence
+  (the reports of 2026-09-29 and 2026-09-30 are not in this repository) changed; no file `check.sh`
+  reads changed.
 - Command: `PYTHON=<python 3.12.14> ./check.sh --venv`. `.venv/` came from an earlier
   `./check.sh --venv` of the same day (pip `--require-hashes` from PyPI) and was not reinstalled;
   this run checked it: `pyenv: 19 distributions at the versions of requirements.txt, 811 files equal

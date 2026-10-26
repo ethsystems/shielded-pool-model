@@ -1,7 +1,8 @@
 # Result of a run of scripts/check.sh
 
 Run of 2026-10-24, 14:28 to 15:17 (+01:00), on a Linux laptop (16 threads, 30 GB, btrfs), from a
-git worktree at commit `807c5b6`, with no change to any tracked file. Before the run, the
+git worktree at a local commit whose `refinement/` tree is the one of `12cf70d` on this branch, with
+no change to any tracked file. Before the run, the
 checkouts of Mathlib and its eight dependencies, with Mathlib's prebuilt oleans, were copied into
 `../.lake/packages` and `../circuits-lampe/.lake/packages` at the pinned revisions; nothing else
 was built. The run cloned the Lampe fork and built Lampe, its stdlib, the extracted circuits, the

@@ -38,40 +38,40 @@ Runs, each `check.sh` from a `git archive` copy of the package. The commit named
 history whose `contract-kontrol/` tree equals the tree of the run (the runs were made before a
 rebase that changed the commit ids, not the package files):
 
-- run 3, commit `e7e6829`, `./check.sh withdraw-success guards-patched guards-stock public-inputs`,
+- run 3, commit `90e3f96`, `./check.sh withdraw-success guards-patched guards-stock public-inputs`,
   started about 10:14Z: the `withdraw-success` build hit the cap (below); `guards-patched` ran to the end;
   I stopped the run after it to start the queue below with `withdraw-success` first. Its
   comparison was run on its work directory afterwards (`scripts/compare.py EXPECTED.tsv work
   guards-patched`).
-- run 5, commit `77b56e2`, `./check.sh withdraw-success guards-stock insert-loop public-inputs
+- run 5, commit `0544f95`, `./check.sh withdraw-success guards-stock insert-loop public-inputs
   poseidon-frame`, started 11:14Z, 14,617 s: four suites `CHECK PASS`; I stopped the
   `public-inputs` build container after 11 s because the time budget of the day was spent, so that
   suite reads `BUILD-FAILED` there and the last line is `CHECK FAIL`.
-- run 6, commit `77b56e2`, `./check.sh public-inputs:none` (the build and the replays, no proof
+- run 6, commit `0544f95`, `./check.sh public-inputs:none` (the build and the replays, no proof
   run; the checker of that commit read the unknown run name `none` as "no prove run"; the current
   `check.sh` rejects it, and `public-inputs:build,replay` selects the same runs), started 15:18Z,
   151 s: `CHECK PASS suite public-inputs (partial: not run canonical, order, fixed-token)`.
-- run 2 (commit `842a889`, `insert-loop` with `controls` only) and run 4 (commit `7a1d3fc`,
+- run 2 (commit `bf4adc7`, `insert-loop` with `controls` only) and run 4 (commit `6925f81`,
   `poseidon-frame`) gave the same results as run 5 for those runs.
-- run 7, commit `0ae5190`, `./check.sh insert-loop`, started 15:24Z, 439 s: `CHECK PASS` (all 50
+- run 7, commit `3201b9f`, `./check.sh insert-loop`, started 15:24Z, 439 s: `CHECK PASS` (all 50
   lines; build 7.25 GB, `rejections` 299 s at 3.71 GB, failing nodes 22, 25 and 29). Commit
-  `0ae5190` came after runs 3 to 6 and changed no proof input: the prove commands spell
+  `3201b9f` came after runs 3 to 6 and changed no proof input: the prove commands spell
   the parallel-process option by its short alias `-j` (one option of the image's `pyk`), and `check.sh` asks the
   image for the path of its `abi.md` in place of a pinned path. Run 7 checks that end to end.
-- run 8, commit `793b038`, `./check.sh public-inputs`, started 15:35Z, 4,619 s: `CHECK PASS suite
+- run 8, commit `6931f31`, `./check.sh public-inputs`, started 15:35Z, 4,619 s: `CHECK PASS suite
   public-inputs` and last line `CHECK PASS: 1 suites`, all 59 compared lines as expected. It used
   the checker of that commit, the one of run 7 (the old runner and comparator, before the changes
-  below). Against run 6's commit `77b56e2` it changes no input of this suite: the `-j` alias in
+  below). Against run 6's commit `0544f95` it changes no input of this suite: the `-j` alias in
   `runs.tsv`, the `abi.md` path lookup, `scripts/klengths.py` and documentation. Every container
   saw the patched `abi.md` (`e249e9e2...7a88`).
 
-Between run 3 and run 5 the harness of `withdraw-success` changed (commit `e9cb2b2`: the probe and
+Between run 3 and run 5 the harness of `withdraw-success` changed (commit `99c6e04`: the probe and
 witness bodies moved out of the mutant siblings, bodies unchanged) and `insert-loop` gained the
 `rejections` run; no other suite input changed.
 
 ## Checker changes after these runs
 
-Commits `2ff286b` and `51b7cea` changed the checker after the runs above. They changed
+Commits `d11edf6` and `e01b390` changed the checker after the runs above. They changed
 `check.sh`, `scripts/compare.py` and `scripts/kontrol-run.sh`, added `scripts/pyenv-check.py`, and
 added the Halmos environment pins to `PINS.txt`. No harness, mutant, lemma, `abi.md`, prove command
 or line of `EXPECTED.tsv` changed.
@@ -134,7 +134,7 @@ the same versions). With `TOOLS_UNPINNED=1` the suite passes in it. The rerun be
 
 ## Runs after the checker changes
 
-Commit `51b7cea`, each `check.sh` from a `git archive` copy of the package, with `POCS`,
+Commit `e01b390`, each `check.sh` from a `git archive` copy of the package, with `POCS`,
 `DEPS_CACHE` and `WORK` set as above. No Kontrol container ran: another Kontrol run (run 8) held the
 machine (one container at a time, and `free -g` showed 8 GiB available, below the 10 GiB gate).
 
