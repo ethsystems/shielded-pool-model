@@ -5,8 +5,10 @@ results, each with its Lean name, English, spec clause and hypothesis.
 The statement files `LeanShieldedPool/Statements/L3.lean`, `L4.lean`,
 `L4B.lean`, `L5.lean` and `Window.lean` are the source of truth. The
 gate checks the type of each name against `statements/INVENTORY.md`.
-These fifteen are the repo's claim; the root-window results and the
-gated k-anonymity extension are supporting material, not further claims.
+Two terms are used throughout. The claim set is rows 1 to 15 (these
+fifteen theorems). The core claim is rows 2 and 3: no double spend and
+value conservation. The root-window results and the gated k-anonymity
+extension are supporting material, outside the claim set.
 
 ## How to read a row
 
@@ -144,8 +146,8 @@ theorem is supplied.
 
 Stated in `Statements/Window.lean`, proved in `Proofs/Window.lean`, over
 the base model (not the epoch model). Issue #2 asked for the boundary
-and liveness results. They are supporting results, not part of the
-nine-theorem claim. Spec clauses refer to spec 2 at 4d4dce1.
+and liveness results. They are supporting results, outside the claim
+set (rows 1 to 15). Spec clauses refer to spec 2 at 4d4dce1.
 
 | # | Lean name | English | Spec clause | Hypothesis |
 |---|---|---|---|---|
@@ -189,7 +191,7 @@ spec; the model does not show it.
 
 ## What the base rows mean
 
-- Theorems 2 and 3 are the claim. Theorem 1 follows from the
+- Theorems 2 and 3 are the core claim. Theorem 1 follows from the
   guards alone.
 - Theorems 4 to 9 are supporting results about the same model, in three
   groups. Accounting: theorems 4 to 7. Authorization: theorem 8. Event

@@ -23,7 +23,8 @@ core is made to be read whole in an afternoon.
 > machine check; one full reading (the second reader) and one
 > high-level reading (Oskar) are done (REVIEW.md, part 5).
 
-Nine theorems: nullifier uniqueness, no double spend and value
+The core claim is rows 2 and 3 of CLAIMS.md. The nine base theorems
+(rows 1 to 9) are nullifier uniqueness, no double spend and value
 conservation, plus six supporting results about the same model
 (solvency, no over-withdrawal, no minting, balance equals live value,
 owner-key binding, event replay). [CLAIMS.md](CLAIMS.md) gives each
@@ -151,9 +152,9 @@ model, the statements, the proofs, the controls, `scripts/gate.sh`.
 [REVIEW.md](REVIEW.md) is the reviewer guide.
 
 Three more units are gated with the core, each with its own files.
-The epoch results extend the claim; the root-window results and the
-k-anonymity extension are supporting material, not further claims
-(CLAIMS.md). Their files, excluded from the core route:
+The epoch results (rows 10 to 15) complete the claim set of rows 1 to
+15; the root-window results and the k-anonymity extension are
+supporting material, outside the claim set (CLAIMS.md). Their files, excluded from the core route:
 
 - Epochs (L5): cross-epoch no double spend for value-bearing inputs
   plus five supporting results over the PoC epoch extension spec
@@ -167,7 +168,7 @@ k-anonymity extension are supporting material, not further claims
   [CLAIMS.md](CLAIMS.md), [SPEC-MAP.md](SPEC-MAP.md) and the
   inventory. Gated with the core.
 - Root window (spec 2 section 4.4, issue #2): five theorems over the
-  core model, outside the nine. Every window entry is an operation
+  core model, outside the claim set. Every window entry is an operation
   boundary (`windowBoundary`), the newest entry is the current root
   (`windowHead`), and the root between a transfer's two inserts is not
   in the window (`noMidTransferRoot`). The owner of a note that the
