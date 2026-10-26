@@ -17,6 +17,11 @@ The pin is not the latest circuit. Commit `748884e` of ethsystems/pocs (merged
 after `a04b8b3`. The package stays at the pin; the newer transfer circuit is not covered
 here.
 
+The deposit circuit at `a04b8b3` is the attested-pool circuit, not the spec-2 deposit
+statement: it has six public inputs, among them `attestation_root`, and derives the owner
+key in the circuit. The spec-2 test circuit `tests/core_deposit` is pinned in
+`inputs/SHA256SUMS` but not built or proved.
+
 ## The theorems
 
 `circuit.Satisfied w` means that the assignment `w : Nat → Fin P` (P the BN254 scalar
