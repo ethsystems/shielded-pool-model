@@ -80,8 +80,9 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 
 Every item is a deliberate abstraction. Each is a review point.
 
-Scope: in a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision
-4d4dce1), the protocol rules imply that no note spends twice and that
+Scope: in a Lean 4 model of the integrity rules of spec 2/SHIELDED-POOL
+(sections 4-6, revision 4d4dce1; items 9, 10 and 12 below name the parts
+left out), the protocol rules imply that no note spends twice and that
 value is conserved per token, from an empty pool over every accepted
 history, under one hypothesis: among the notes and keys that appear in
 that history, no two distinct notes with `u128` amounts share a

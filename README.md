@@ -11,8 +11,9 @@ core is made to be read whole in an afternoon.
 
 ## The core claim
 
-> The model covers spec 2/SHIELDED-POOL, sections 4 to 6, at revision
-> 4d4dce1. In the model, the protocol rules imply two guarantees: no
+> The model covers the integrity rules of spec 2/SHIELDED-POOL,
+> sections 4 to 6, at revision 4d4dce1 (exclusions in SPEC-MAP.md). In
+> the model, the protocol rules imply two guarantees: no
 > note spends twice, and value is conserved per token. Both hold from
 > an empty pool, over every accepted history. One hypothesis is
 > assumed, about the notes and keys that appear in that history. No
