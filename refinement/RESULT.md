@@ -2,12 +2,17 @@
 
 Run of 2026-10-24, 14:28 to 15:17 (+01:00), on a Linux laptop (16 threads, 30 GB, btrfs), from a
 git worktree at a local commit whose `refinement/` tree is the one of `12cf70d` on this branch, with
-no change to any tracked file. Before the run, the
+no change to any tracked file. At that local commit the three `circuits-lampe/` helpers that
+`PINS.sha256` pins (`build.py` `54b96a78...`, `rename.py` `1a7cbac2...`, `rename-map.txt`
+`48365bc8...`) matched their pins. At `12cf70d` on this branch they do not, because the branch was
+rebased onto the merged circuits-lampe review fixes, and the later repin named below is the first
+commit of this branch that passes the pin check. The run used the earlier helpers and was not
+repeated. Before the run, the
 checkouts of Mathlib and its eight dependencies, with Mathlib's prebuilt oleans, were copied into
 `../.lake/packages` and `../circuits-lampe/.lake/packages` at the pinned revisions; nothing else
 was built. The run cloned the Lampe fork and built Lampe, its stdlib, the extracted circuits, the
 13 model modules of the parent directory and every module of this package from source. The only
-change after the run is this file, one comment in `scripts/rename-map.txt` (which the check does not read), and one later repin: the pins of `circuits-lampe/scripts/build.py`, `rename.py` and `rename-map.txt` were rewritten for the reviewed versions of those helpers (a cache key that covers the dependency checkouts, and comments); no Lean file and no other pin changed.
+change after the run is this file, one comment in `scripts/rename-map.txt` (which the check reads but whose comments it ignores), and one later repin: the pins of `circuits-lampe/scripts/build.py`, `rename.py` and `rename-map.txt` were rewritten for the reviewed versions of those helpers (a cache key that covers the dependency checkouts, and comments); no Lean file and no other pin changed.
 
 ```
 JOBS=1 LEAN_NUM_THREADS=2 systemd-run --user --scope -p MemoryMax=8G -- scripts/check.sh

@@ -1,4 +1,5 @@
-# Files that a package's check.sh regenerates and compares. GitHub folds them in a diff view.
+# Files that check.sh regenerates and compares, in the five packages added on 2026-10-26.
+# GitHub folds them in a diff view.
 client-verus/diffs/** linguist-generated
 client-verus/FUNCTIONS.md linguist-generated
 client-verus/TRUSTED.md linguist-generated
