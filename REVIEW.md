@@ -38,10 +38,15 @@ gate test.
 
 ## 2. What is not claimed
 
-- No implementation is verified (client, circuits, contract). The
-  separate packages (README, "Separate packages") check selected facts
-  about circuits, hash code and verifier builds; they are outside
-  Track A and change no claim here.
+- No implementation is verified (client, circuits, contract). The ten
+  separate packages (README, "Separate packages") check selected facts:
+  `circuits-acir/` and `circuits-lampe/` (circuits), `hash-agreement/`
+  (hash code), `verifier-reproduction/` (verifier builds),
+  `deployment/` (one deployment at one block), `contract-halmos/` and
+  `contract-kontrol/` (the contract source), `client-verus/` (client
+  mirrors), `refinement/` (a conditional refinement of the contract to
+  the model) and `privacy-games/` (privacy games in models). They are
+  outside Track A and change no claim here.
 - No deployed-privacy claim. The symbolic k-anonymity extension
   (`LeanShieldedPool/Extensions/`, CLAIMS.md "Extension") proves
   properties of a symbolic observer relation; no real cryptographic
@@ -180,9 +185,9 @@ secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
-Verus proofs of the client's prover input encoders and public-input array builders live on a separate branch of
-the private implementation repository; they prove the byte encoding of the `Prover.toml` inputs and the
-public-input array layout only, and are not linked to this model. A
+Verus proofs of the client's prover input encoders and public-input array builders are in
+`client-verus/` (`mirrors/prover_fmt.rs`, `mirrors/public_inputs.rs`), with the other client
+rows. They prove selected properties of reviewed mirrors only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
 share found one conformance bug in the contract, fixed in ethsystems/pocs
 commit a04b8b3. This gate does not
