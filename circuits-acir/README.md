@@ -71,8 +71,10 @@ checks use kernel reduction (`decide +kernel`), never `native_decide`.
   proof of the name-to-wire map.
 - Separate obligations: correctness of the compiler from Noir source to ACIR, of bb from
   ACIR to UltraHonk, and of the proof system and verifier contract. The identity of the
-  deployed verifier is also separate: the artifacts reproduce the committed verifier
-  sources at a04b8b3 (inputs/PROVENANCE.md), not on-chain bytecode.
+  deployed verifier is also separate. The artifacts reproduced the committed verifier
+  sources at a04b8b3 once, on an earlier build (inputs/PROVENANCE.md), not on-chain
+  bytecode. No check re-measures that link, and no check compares this package's ACIR
+  with the ACIR that `verifier-reproduction/` builds.
 - Hash-bound rules (commitments, nullifiers, Merkle membership) are not covered.
 - `Neg/TransferNoRange.lean` is a failed proof attempt, not a false full-circuit
   statement: it drops the RANGE facts from the conservation proof, so `omega` cannot
