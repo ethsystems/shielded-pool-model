@@ -359,7 +359,9 @@ forge and solc.
   it plus the diff gives the pinned file, and, when a selected run mounts the patched file (unless
   `KEVM_FETCH=0`), fetches the fork commit and
   requires that its parent is the `v1.0.921` commit, that its `abi.md` is `kevm-patch/abi.md`, and
-  that the parent's `abi.md` is the image's.
+  that the parent's `abi.md` is the image's. The fork lives on a personal account: if that account
+  deletes or rewrites it, the fetch fails. A fork under the ethsystems organization, then a repin,
+  is the planned fix.
 - The bytes-prefix rule (`lemmas/bytes-prefix.k`) for `withdraw-success` (all its runs), with the
   soundness argument above.
 - Kontrol's settings: gas off, fail-fast on (a proof stops at its first failing node), default

@@ -155,7 +155,9 @@ No proof uses `native_decide`.
 - Lampe: `https://github.com/oskarth/lampe` at `e0c0f6097bb97dd539355b76371e2443bd58b656`,
   on upstream `https://github.com/reilabs/lampe` at `919a38712d22d05fc83e59af17ef57077abda1e0`.
   `lakefile.toml` requires the fork by git at that commit, twice: `Lampe` (`subDir = "Lampe"`)
-  and its generated stdlib `std-1.0.0-beta.21` (`subDir = "stdlib/lampe"`).
+  and its generated stdlib `std-1.0.0-beta.21` (`subDir = "stdlib/lampe"`). The fork lives on
+  a personal account: if that account deletes or rewrites it, the check cannot fetch Lampe. A
+  fork under the ethsystems organization, then a repin, is the planned fix.
 - The 28 extracted Lean files of `extracted/`. Two dependency packages are shared by the
   three circuits, so `extracted/deps/` keeps one copy of each; the three extractions of each
   file are identical. The generated `lakefile.toml` files carried the absolute paths of the
