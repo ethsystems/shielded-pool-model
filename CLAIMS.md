@@ -20,6 +20,17 @@ and reach the state `st`. Spec clauses refer to spec 2 at 4d4dce1
 (`specs/2/README.md` in ethsystems/specs); numbers in brackets
 are its line numbers.
 
+Two corrections to the docstrings of `Statements/L3.lean`, which is
+pinned and so not edited here:
+
+- The `noteSpentAtMostOnce` docstring says the property holds "at the
+  level the chain sees". It does not. It is about the input commitments
+  the history's spends consume (`Tx.consumes`), which are private
+  witnesses; the matching state field `spentCms` is ghost state. The
+  chain sees only nullifiers (row 1).
+- The docstrings call `noDoubleSpend` "theorem 1" and
+  `valueConservation` "theorem 2". This file numbers them rows 2 and 3.
+
 ## The hypothesis
 
 `CryptoHyp P txs` (L3.lean) says: among the notes and keys that appear in
