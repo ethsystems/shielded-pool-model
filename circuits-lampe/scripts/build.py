@@ -4,13 +4,18 @@
   build.py [--jobs N] [MODULE...]   build MODULE and its imports (default: every module)
 
 Each module is compiled once with the flags below, the flags of the original runs. A module
-is skipped when its source, its flags and the hashes of the package modules it imports are
-unchanged since its last successful compile (the `.trace-cl` file next to its olean). The
+is skipped when its source, its flags, the hashes of the package modules it imports and the
+fingerprint of its dependencies are unchanged since its last successful compile (the
+`.trace-cl` file next to its olean). The fingerprint covers lakefile.toml, lake-manifest.json,
+lean-toolchain, PINS.sha256, every olean of the five extracted packages, and the commit and
+uncommitted changes of the Lampe and stdlib checkouts; when any of them changes, every proof
+module is compiled again. The
 extracted packages, Lampe and its stdlib must be built first (`lake build` of their
 targets; scripts/check.sh does that). Every compile is logged to build/logs/<module>.log,
 and build/times.tsv gets one row per compile: module, exit code, seconds, peak RSS (KiB).
 """
 import hashlib
+import json
 import os
 import re
 import subprocess
@@ -40,6 +45,47 @@ def imports(path):
     return re.findall(r'^import\s+(\S+)', path.read_text(), re.M)
 
 
+def checkout_state(d):
+    """The commit, the uncommitted changes and the untracked files, with their contents, of a git
+    checkout (or of its enclosing repo). A git failure stops the build: an unknown state must
+    not be cached."""
+    def g(*a):
+        r = subprocess.run(['git', '-C', str(d), *a], capture_output=True)
+        if r.returncode:
+            sys.exit(f'git {a[0]} failed in {d}: {r.stderr.decode().strip()}')
+        return r.stdout
+    state = g('rev-parse', 'HEAD') + g('diff', 'HEAD', '--', '.')
+    for rel in g('ls-files', '--others', '--exclude-standard', '-z', '--', '.').split(b'\0'):
+        if rel:
+            p = d / rel.decode()
+            state += rel + (hashlib.sha256(p.read_bytes()).digest() if p.is_file() else b'')
+    return state
+
+
+def fingerprint():
+    """A hash of everything outside the proof modules that a compile reads."""
+    h = hashlib.sha256()
+    for name in ('lakefile.toml', 'lake-manifest.json', 'lean-toolchain', 'PINS.sha256'):
+        h.update(name.encode() + (PKG / name).read_bytes())
+    ext = PKG / 'extracted'
+    oleans = sorted(ext.glob('*/.lake/build/lib/lean/**/*.olean')) + \
+        sorted(ext.glob('deps/*/.lake/build/lib/lean/**/*.olean'))
+    if not oleans:
+        sys.exit('no olean of the extracted packages: build them first (scripts/check.sh)')
+    for f in oleans:
+        h.update(str(f.relative_to(PKG)).encode() + hashlib.sha256(f.read_bytes()).digest())
+    m = json.loads((PKG / 'lake-manifest.json').read_text())
+    for p in m['packages']:
+        if p['name'].strip('«»') in ('Lampe', 'std-1.0.0-beta.21'):
+            if p['type'] == 'path':
+                d = PKG / p['dir']
+            else:
+                d = PKG / m.get('packagesDir', '.lake/packages') / p['name'].strip('«»')
+                d = d / (p.get('subDir') or '')
+            h.update(p['name'].encode() + checkout_state(d))
+    return h.hexdigest()
+
+
 def main():
     args = sys.argv[1:]
     jobs = 1
@@ -60,6 +106,7 @@ def main():
     key, done, failed, running = {}, set(), set(), {}
     env = {**os.environ, 'LEAN_NUM_THREADS': os.environ.get('LEAN_NUM_THREADS', '1')}
     skipped = built = 0
+    fp = fingerprint()
     while len(done) + len(failed) < len(wanted):
         ready = [m for m in sorted(wanted - done - failed - set(running))
                  if all(d in done for d in deps[m])]
@@ -71,7 +118,7 @@ def main():
         for m in ready:
             if len(running) >= jobs:
                 break
-            h = hashlib.sha256(mods[m].read_bytes() + ' '.join(FLAGS).encode()
+            h = hashlib.sha256(mods[m].read_bytes() + ' '.join(FLAGS).encode() + fp.encode()
                                + ''.join(key[d] for d in sorted(deps[m])).encode()).hexdigest()
             key[m] = h
             olean = OUT / Path(*m.split('.')).with_suffix('.olean')

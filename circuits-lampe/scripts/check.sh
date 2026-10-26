@@ -26,7 +26,7 @@ step() { echo "== $1 (${SECONDS}s)"; }
 step tools
 lv="$(lake --version 2>/dev/null)" || fail tools "lake not found (install elan)"
 grep -q "Lean version 4.33.1" <<<"$lv" || fail tools "lake is '$lv', want Lean 4.33.1"
-python3 -c 'import sys; assert sys.version_info >= (3, 10)' || fail tools "python3 3.10 or later needed"
+python3 -c 'import sys; assert sys.version_info >= (3, 11)' || fail tools "python3 3.11 or later needed (tomllib)"
 echo "tools: $lv"
 
 step pins
@@ -47,18 +47,33 @@ if [ -e "$POCS/.git" ]; then
 else
   echo "pins: no pocs checkout at $POCS; circuit-source pins not checked"
 fi
-rev="$(pin lampe_rev)"
-if grep -q '^git = ' lakefile.toml; then
-  for n in Lampe std-1.0.0-beta.21; do
-    python3 - "$n" "$rev" <<'PY' || fail pins "$n in lake-manifest.json is not at lampe_rev $rev"
-import json, sys
-m = {p['name'].strip('«»'): p for p in json.load(open('lake-manifest.json'))['packages']}
-p = m[sys.argv[1]]
-assert p['type'] == 'git' and p['rev'] == sys.argv[2] and 'oskarth/lampe' in p['url'], p
+rev="$(pin lampe_rev)"; repo="$(pin lampe_repo)"
+form="$(python3 - "$rev" "$repo" <<'PY'
+import json, pathlib, sys, tomllib
+rev, repo = sys.argv[1:]
+want = {'Lampe': 'Lampe', 'std-1.0.0-beta.21': 'stdlib/lampe'}
+req = {r['name']: r for r in tomllib.load(open('lakefile.toml', 'rb')).get('require', [])}
+man = {p['name'].strip('«»'): p for p in json.load(open('lake-manifest.json'))['packages']}
+forms = set()
+for name, sub in want.items():
+    r, m = req.get(name), man.get(name)
+    assert r is not None and m is not None, f'{name}: no require or no manifest entry'
+    if 'git' in r:
+        assert r['git'] == repo and r.get('rev') == rev and r.get('subDir') == sub, f'lakefile.toml {name}: {r}'
+        assert m['type'] == 'git' and m['url'] == repo and m['rev'] == rev and m.get('subDir') == sub, \
+            f'lake-manifest.json {name}: {m}'
+        forms.add('git')
+    else:
+        assert r.get('path') == f'.lampe/{sub}', f'lakefile.toml {name}: {r}'
+        assert m['type'] == 'path' and pathlib.Path(m['dir']).resolve() == pathlib.Path('.lampe', sub).resolve(), \
+            f'lake-manifest.json {name}: {m} does not resolve to .lampe/{sub}'
+        forms.add('path')
+assert len(forms) == 1, 'Lampe and the stdlib are required in different forms'
+print(forms.pop())
 PY
-  done
-  grep -q "rev = \"$rev\"" lakefile.toml || fail pins "lakefile.toml does not require lampe_rev $rev"
-  echo "pins: Lampe and its stdlib at $rev"
+)" || fail pins "the Lampe requires of lakefile.toml or lake-manifest.json are not at lampe_rev $rev"
+if [ "$form" = git ]; then
+  echo "pins: Lampe and its stdlib required from $repo at $rev (lakefile.toml and lake-manifest.json)"
 else
   head="$(git -C .lampe rev-parse HEAD 2>/dev/null || true)"
   [ "$head" = "$rev" ] || fail pins "local Lampe checkout .lampe is at '$head', not lampe_rev $rev"

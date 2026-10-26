@@ -67,14 +67,25 @@ for c in deposit withdraw transfer; do
   (HOME="$W/nargo-home" GIT_ALLOW_PROTOCOL=none "$LAMPE" --root "$W/out/$c" --overwrite) > "$W/$c.log" 2>&1 \
     || { tail -20 "$W/$c.log"; fail "extraction of $c (see $W/$c.log)"; }
   g="$W/out/$c/lampe"
+  # Every generated file has a committed counterpart and the reverse: the circuit's own files
+  # and each of the two shared dependency copies, with no file missing or extra.
+  gen="$(cd "$g" && find . -name '*.lean' -not -path '*/.lake/*' | LC_ALL=C sort)"
+  mapped="$(sed -e 's|^\./deps/\([^/]*\)/lampe/|extracted/deps/\1/|' -e "s|^\./|extracted/$c-0.0.0/|" <<<"$gen" | LC_ALL=C sort)"
+  want="$(find "extracted/$c-0.0.0" extracted/deps -name '*.lean' -not -path '*/.lake/*' | LC_ALL=C sort)"
+  if [ "$mapped" != "$want" ]; then
+    echo "FILE SETS DIFFER for $c (< generated, > extracted/):"
+    diff <(echo "$mapped") <(echo "$want") | grep '^[<>]'  || true
+    bad=$((bad + 1))
+  fi
   while read -r f; do
     case "$f" in
       ./deps/*) rel="extracted/deps/$(echo "$f" | sed 's|^\./deps/\([^/]*\)/lampe/|\1/|')" ;;
       *) rel="extracted/$c-0.0.0/${f#./}" ;;
     esac
     if ! cmp -s "$g/$f" "$rel"; then echo "DIFFERS: $c $f (extracted: $rel)"; bad=$((bad + 1)); fi
-  done < <(cd "$g" && find . -name '*.lean' -not -path './.lake/*' | LC_ALL=C sort)
-  echo "extracted: $c"
+  done <<<"$gen"
+  n=$(wc -l <<<"$gen")
+  echo "extracted: $c, $n generated files compared"
 done
-[ "$bad" -eq 0 ] || fail "$bad generated files differ from extracted/"
+[ "$bad" -eq 0 ] || fail "$bad differences between the generated files and extracted/"
 echo "EXTRACT PASS: deposit, withdraw and transfer regenerate byte for byte"

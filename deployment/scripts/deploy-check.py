@@ -271,7 +271,8 @@ for key in CONTRACTS:
     elif gm.get("solc") != em.get("solc"):
         report(f"METADATA:{key}", "FAIL", f"compiler differs: expected {em.get('solc', b'').hex()} chain {gm.get('solc', b'').hex()}")
     else:
-        report(f"METADATA:{key}", "WARN", f"CBOR tail bytes differ, same solc: expected ipfs {em.get('ipfs', b'').hex()} chain {gm.get('ipfs', b'').hex()}")
+        # The claim is equality of the whole runtime code, so a metadata difference is a FAIL too.
+        report(f"METADATA:{key}", "FAIL", f"CBOR tail bytes differ, same solc: expected ipfs {em.get('ipfs', b'').hex()} chain {gm.get('ipfs', b'').hex()}")
 
 
 def call(to, path, name, sig):
@@ -368,8 +369,11 @@ order = lambda x: (int(x["blockNumber"], 16), int(x["transactionIndex"], 16), in
 ot = sorted((lg for lg in logs if lg["topics"][0] == T["OwnershipTransferred"]), key=order)
 last = "0x" + ot[-1]["topics"][2][-40:] if ot else None
 first_prev = "0x" + ot[0]["topics"][1][-40:] if ot else None
-ok = own == addr(claim["owner"]) and last == own and first_prev == "0x" + "0" * 40
-report("OWNER", "PASS" if ok else "FAIL", f"owner()={own} claimed={addr(claim['owner'])} OwnershipTransferred logs={len(ot)} last new owner={last}")
+# Exactly one OwnershipTransferred log, from zero to the claimed owner, and owner() equal to it:
+# a transfer away and back again fails too.
+ok = own == addr(claim["owner"]) and len(ot) == 1 and last == own and first_prev == "0x" + "0" * 40
+report("OWNER", "PASS" if ok else "FAIL", f"owner()={own} claimed={addr(claim['owner'])} OwnershipTransferred logs={len(ot)} "
+       f"(exactly 1 required) first previous owner={first_prev} last new owner={last}")
 
 tok = set()
 for lg in sorted(logs, key=order):

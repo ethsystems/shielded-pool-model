@@ -51,13 +51,13 @@ and the Noir stdlib). `p` is the BN254 scalar field prime.
 |---|---|---|
 | deposit | `Deposit.Commitment.accepting_main_commitment_eq` | `commitment = hash4 token amount (ownerKey spending_key) salt` |
 | deposit | `Deposit.AttestationRoot.accepting_main_attestation_root` | the commitment equation, `proof_length ≤ 20` and `attestation_root = merkleRoot hash2v leaf proof_length indices path` |
-| deposit | `Deposit.Commitment.rules_eq_nonvacuous` | the premises hold at the all-zero execution `Deposit.Main.main_accepting_execution` |
+| deposit | `Deposit.Main.main_accepting_execution`, `Deposit.Commitment.rules_eq_nonvacuous` | an accepting execution of `main`, and the premises and conclusions of the rule equations at it |
 | withdraw | `Withdraw.Nullifier.accepting_main_withdraw_rules` | `nullifier = hash2v C spending_key`, `proof_length ≤ 32`, the extracted root call on `C` returns `commitment_root` |
 | withdraw | `Withdraw.Root.accepting_main_withdraw_root` | `proof_length ≤ 32`, `commitment_root = merkleRoot hash2v C proof_length indices path`, the nullifier equation |
-| withdraw | `Withdraw.Nullifier.withdraw_rules_nonvacuous`, `Withdraw.Root.withdraw_root_nonvacuous` | an accepting execution at depth 0, and one at depth 3 where the root is three `hash2v` levels above `C` |
+| withdraw | `Withdraw.Nullifier.main_accepting_execution`, `Withdraw.Root.main_accepting_execution_depth`; `Withdraw.Nullifier.withdraw_rules_nonvacuous`, `Withdraw.Root.withdraw_root_nonvacuous` | accepting executions at depth 0 and at every depth up to 32; at them, the rule premises hold, and at depth 3 the root is three `hash2v` levels above `C` |
 | transfer | `Transfer.Rules.accepting_main_transfer_rules` | the Merkle root calls (input 1 only when `amount_in_1 ≠ 0`), both nullifier equations, both output commitments |
 | transfer | `Transfer.Root.accepting_main_transfer_root` | the same, with each root as `merkleRoot hash2v Cᵢ proof_length_i indices_i path_i` |
-| transfer | `Transfer.Execution.transfer_rules_nonvacuous` | an accepting execution, with a zero-amount input 1 at `proof_length_1 = 33` |
+| transfer | `Transfer.Execution.main_accepting_execution`, `Transfer.Execution.transfer_rules_nonvacuous` | an accepting execution, with a zero-amount input 1 at `proof_length_1 = 33`; the rule premises hold at it |
 | all | `Merkle.Fold.bmr_fwd` | the extracted `binary_merkle_root<N>` returns `merkleRoot h leaf depth indices path` for a hasher that computes `h` |
 | all | `Poseidon.Permutation2.perm`, `Poseidon.Permutation5.perm`, `Poseidon.Hash2.perm3w` | the extracted `permute` at widths 2, 5 and 3 computes the pure permutation `f` |
 
@@ -91,14 +91,27 @@ No proof uses `native_decide`.
   cryptographic properties: collision resistance and hiding are not stated.
 - Not covered: the range and linear rules (amounts below `2^128`, transfer conservation,
   equal tokens), the unconstrained inputs (`funding_address`, `payload_hash`, `recipient`),
-  and the root of a zero-amount transfer input, which the circuit does not check.
-- Non-vacuity: each circuit has an accepting execution that meets the premises of its rule
-  theorems, with all-zero inputs; withdraw also at every depth up to 32, and at depth 3 with the
-  root written out. These are Lean derivations, not solver witnesses or contract-accepted
+  and the root of transfer input 1 when its amount is zero, which the circuit does not check
+  (input 0 is checked at every amount).
+- Non-vacuity: each circuit has an accepting execution of `main` (the `main_accepting_execution`
+  theorems), and the `*_nonvacuous` theorems apply the rule theorems at it. The inputs are zero
+  where the circuit lets them be: token, amount, spending key, salt, attester and timestamps 0,
+  with zero paths and direction bits. The values the circuit checks are the hash expressions of
+  those inputs: in deposit the commitment `hash4 0 0 (ownerKey 0) 0` and an attestation root at
+  depth 0 equal to the attestation leaf; in withdraw the zero note's commitment as the root and
+  its nullifier; in transfer the two nullifiers, the output commitments and input 0's commitment
+  as the root. Transfer input 1 has salt 1 and `proof_length_1 = 33`, which the circuit accepts
+  because its amount is zero. Withdraw also has an accepting execution at every depth up to 32,
+  for every path and direction bits, with the root the Merkle fold of the zero note, and at depth
+  3 the root written out. These are Lean derivations, not solver witnesses or contract-accepted
   proofs.
 - The lookup certificates (`*Lookup` modules, 59 leaves each, one per module environment)
-  prove by `rfl` that each name used by the proofs is declared once in the circuit
-  environment, so the proofs call the declaration the circuit calls.
+  prove by `rfl` which declarations of each name used by the proofs the circuit environment
+  holds, and derive `Deposit.Range.UniqueDecl`: every declaration with that name has the same
+  body. A name may be declared more than once with an identical body: the stdlib
+  functions (`assert_max_bit_size`, `pow_32`, `to_le_bits`) are present three times
+  (`Deposit.Range.range_unique` uses three copies). So the proofs call the body the circuit
+  calls.
 - The controls (`controls/`) copy a theorem, change its statement, and must fail to compile;
   the `same_*` copies change nothing and must compile. A failing control shows that the
   original proof does not prove the changed statement. It does not show that the changed
@@ -156,7 +169,7 @@ No proof uses `native_decide`.
 
 ## Re-check
 
-Install git, bash, python3 (3.10 or later), sha256sum and elan. The first run downloads the
+Install git, bash, python3 (3.11 or later), sha256sum and elan. The first run downloads the
 Lampe fork, Mathlib and Mathlib's prebuilt oleans (about 7 GB in `.lake`).
 
 ```
@@ -172,8 +185,9 @@ the circuit-source pins, check out the pocs submodule first (from the repo root:
 
 1. the tools: Lean 4.33.1 through lake, python3;
 2. the pins: every file of `extracted/` against `PINS.sha256`, with no file missing or extra;
-   the circuit sources at the pocs pin, as git blobs, when the checkout is there; the Lampe
-   commit in `lakefile.toml` and `lake-manifest.json`;
+   the circuit sources at the pocs pin, as git blobs, when the checkout is there; the git
+   URL, commit and `subDir` of each of the two Lampe requires, in `lakefile.toml` (parsed as
+   TOML) and in `lake-manifest.json`;
 3. a source scan of every Lean file for `sorry`, `admit`, `native_decide`, `axiom`, `opaque`,
    `extern`, `implemented_by`, `unsafe` and `skipKernelTC`, and of the lakefiles for kernel
    options;
@@ -183,7 +197,10 @@ the circuit-source pins, check out the pocs submodule first (from the repo root:
    the extracted `Consts.lean` (`scripts/gen-constants3.py`);
 6. the build: `lake build` of Lampe, its stdlib and the extracted packages, then every proof
    module with `scripts/build.py`, one Lean process per module, with the flags `-M8192
-   --tstack=65536 -DElab.async=false -DmaxRecDepth=10000 -DmaxHeartbeats=4000000`;
+   --tstack=65536 -DElab.async=false -DmaxRecDepth=10000 -DmaxHeartbeats=4000000`; a module
+   is compiled again when its source, its imports or the dependency fingerprint change (the
+   lakefile, the manifest, the toolchain, the pins, the oleans of the extracted packages, and
+   the commit and changes of the Lampe checkouts);
 7. the census (`Census.lean`, `scripts/census.py`): every theorem of every package module,
    auxiliary ones included, depends on a subset of the three axioms; no package module declares
    an axiom or an opaque constant; the census imports every module; and the theorems, their
@@ -198,7 +215,9 @@ the circuit-source pins, check out the pocs submodule first (from the repo root:
 `scripts/extract.sh` is not part of the check. It builds the fork's extractor, reads the three
 circuits from the pocs submodule at the pin, clones the two Noir dependencies by tag (commit
 and source hashes checked), runs the extractor with no network access for nargo, and compares
-every generated Lean file with `extracted/`. The fork pins Rust 1.90.0 in `rust-toolchain.toml`;
+the output with `extracted/`: for each circuit the set of generated Lean files (its own and the
+two dependency copies) must equal the committed set, and each file must be the same byte for
+byte. The fork pins Rust 1.90.0 in `rust-toolchain.toml`;
 the reproduction recorded here used Rust 1.95.0 (`RUST_TOOLCHAIN=1.95.0`).
 
 Cost on a Linux laptop (16 threads, 30 GB, btrfs), with Mathlib's oleans present: the

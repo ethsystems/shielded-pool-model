@@ -8,7 +8,9 @@
 #
 # Kinds: "module" names a Lean module (and its file), "namespace" a namespace,
 # "both" a name used as module and namespace, "prefix" a Noir path prefix of the
-# helper functions declared with noir_def, "control" a must-fail control.
+# helper functions declared with noir_def, "theorem" a theorem name in a hand-written
+# control, "control" a must-fail control, "source" the earlier file name of a hand-written
+# control.
 
 # Semantics lemmas about Lampe builtins
 both       Stage3Semantics      -> Semantics.Builtins
@@ -204,3 +206,10 @@ control    Stage9Control_C9_config_det_nocert           -> config_det_without_ce
 control    Stage9Control_C9_to_le_bits_nohp             -> to_le_bits_good_without_bound
 control    Stage9Control_C9_toLeBits_nohp               -> toLeBits_det_without_bound
 control    Stage7Control_C8_cast_unconstrained          -> cast_unconstrained
+
+# Earlier file names of the hand-written controls (controls/hand/<new>.lean)
+source     Stage8Control9_C9_bdet_pure_fresh       -> bdet_pure_on_fresh
+source     Stage8Control9_C9_config_det_nocert     -> config_det_without_certificate
+source     Stage8Control9_C9_to_le_bits_nohp       -> to_le_bits_good_without_bound
+source     Stage8Control9_C9_toLeBits_nohp         -> toLeBits_det_without_bound
+source     Stage8Control_cast_unconstrained        -> cast_unconstrained
