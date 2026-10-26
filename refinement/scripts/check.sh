@@ -16,6 +16,8 @@
 # bridge: build in the circuits-lampe workspace (with its dependency checkouts checked), its
 # census and its controls; last, the pins and every dependency checkout again.
 set -uo pipefail
+# The helper scripts validate with assert statements, which PYTHONOPTIMIZE would strip.
+unset PYTHONOPTIMIZE
 cd "$(dirname "$0")/.."
 export PYTHONDONTWRITEBYTECODE=1 LEAN_NUM_THREADS="${LEAN_NUM_THREADS:-1}"
 JOBS="${JOBS:-1}"

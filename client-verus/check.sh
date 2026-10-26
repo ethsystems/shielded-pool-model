@@ -12,6 +12,8 @@
 # limit counts as a failure), TOOLS_UNPINNED=1 (accept a Verus or rustc build whose hashes differ from the pins; the
 # versions must still match). Relative paths are taken from the caller's directory.
 set -uo pipefail
+# The helper scripts validate with assert statements, which PYTHONOPTIMIZE would strip.
+unset PYTHONOPTIMIZE
 CALLER="$(pwd)"
 rel() { case "$1" in /*|"") printf '%s' "$1" ;; *) printf '%s/%s' "$CALLER" "$1" ;; esac; }
 VERUS_DIR="$(rel "${VERUS_DIR:-}")"

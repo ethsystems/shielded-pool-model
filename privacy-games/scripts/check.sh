@@ -14,6 +14,8 @@
 # fetched checkout; build (lake build, no warning allowed in a package module); census against
 # statements/; controls against controls/EXPECTED.tsv; the pins of the checkouts once more.
 set -uo pipefail
+# The helper scripts validate with assert statements, which PYTHONOPTIMIZE would strip.
+unset PYTHONOPTIMIZE
 cd "$(dirname "$0")/.."
 export PYTHONDONTWRITEBYTECODE=1 LEAN_NUM_THREADS="${LEAN_NUM_THREADS:-2}"
 JOBS="${JOBS:-1}"
