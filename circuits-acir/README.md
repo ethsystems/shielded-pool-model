@@ -126,7 +126,10 @@ re-runs the extractor and the kernel on them and compares every result with
 2. checks that `pocs/` is at the pinned commit, reads the 12 files of
    `inputs/SHA256SUMS` from that commit as git blobs and checks their hashes;
 3. places the two Noir libraries of `inputs/DEPS.txt` where nargo looks for them (cloned
-   once by tag into `.deps/`, with a commit check), so nargo fetches nothing;
+   once by tag into `.deps/`, with a commit check), so nargo fetches nothing. The
+   binary-merkle-root URL there names `privacy-scaling-explorations/zk-kit.noir`, which now
+   redirects to its canonical URL, `https://github.com/zk-kit/zk-kit.noir`; the pin keeps
+   the old URL, as the circuits' `Nargo.toml` files do;
 4. runs `nargo compile`, `nargo execute` with the committed `Prover.toml` and
    `noir-inspector print-acir` for each circuit, into `build/inputs/` (not tracked);
    nargo runs with `GIT_ALLOW_PROTOCOL=none`, so a fetch by nargo fails the build;

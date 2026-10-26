@@ -70,7 +70,10 @@ files are the build of these circuits with these tools".
   before the build.
 - The two Noir dependencies, poseidon v0.3.0 (git `0880c371`) and binary-merkle-root
   v0.0.2 (git `ff307011`), as the circuits' `Nargo.toml` files name them (by git URL
-  and tag). The check makes the same shallow clone of each tag that nargo makes and
+  and tag). `inputs/DEPS.txt` and the circuits give the binary-merkle-root URL as
+  `privacy-scaling-explorations/zk-kit.noir`, which now redirects to its canonical URL,
+  `https://github.com/zk-kit/zk-kit.noir`; the pins keep the old URL, as the circuits'
+  `Nargo.toml` files do. The check makes the same shallow clone of each tag that nargo makes and
   requires the commit in `inputs/DEPS.txt`, so a fresh clone of a tag that has moved
   fails. The clones stay in `.deps/` (or `DEPS_CACHE`), keyed by commit; a commit
   already there is used without asking upstream. The check places each tree where
