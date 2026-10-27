@@ -15,7 +15,7 @@ the other four record it in their README.
 **Claim 1 (on-chain safety), the target.** Nobody can steal, mint or double-spend pool funds, whatever
 client they submit from. It is a target, not yet an established theorem about a deployment. The Lean model
 proves conservation, no minting, no double spending and witness-key authorization under its premises
-(the core claim, [CLAIMS.md](CLAIMS.md) rows 1 to 9). Applying that to a deployment needs C1, the
+(the nine base theorems, [CLAIMS.md](CLAIMS.md) rows 1 to 9). Applying that to a deployment needs C1, the
 assumptions at the end, every rule below, and X3: a complete argument that every accepted contract
 execution matches the model's guards and post-states, from the empty pool. Adversarial clients are in
 scope; a user's own leaked key or malicious client is not (A7).
