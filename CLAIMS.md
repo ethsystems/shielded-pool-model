@@ -156,8 +156,8 @@ theorem is supplied.
 ## The five root-window theorems
 
 Stated in `Statements/Window.lean`, proved in `Proofs/Window.lean`, over
-the base model (not the epoch model). Issue #2 asked for the boundary
-and liveness results. They are supporting results, outside the claim
+the base model (not the epoch model). The model follow-up list asked for
+the boundary and liveness results. They are supporting results, outside the claim
 set (rows 1 to 15). Spec clauses refer to spec 2 at 4d4dce1.
 
 | # | Lean name | English | Spec clause | Hypothesis |

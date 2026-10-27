@@ -103,8 +103,8 @@ to the units here:
 - The wallet proofs, Verus half: [client-verus/](client-verus/README.md);
   the Aeneas half is counted from the client coverage report of
   2026-10-01, which is not in this repo.
-- The findings: [FINDINGS.md](FINDINGS.md). Issue #10 tracks the
-  hand-offs below the model.
+- The findings: [FINDINGS.md](FINDINGS.md). The hand-offs below the
+  model are tracked outside this repository.
 
 ## Where it comes from
 
@@ -122,8 +122,8 @@ reading from a one-page summary (REVIEW.md, part 5).
 The gate checks mechanical conditions on the result. It does not
 by itself establish independence from malicious build or elaboration
 code: the axiom census reads printed output, and code imported during
-elaboration can affect that channel. A kernel-level census is a
-follow-up in issue #2.
+elaboration can affect that channel. A kernel-level census is an open
+follow-up.
 
 ## Layout
 
@@ -168,7 +168,7 @@ supporting material, outside the claim set (CLAIMS.md). Their files, excluded fr
   `Proofs/EpochBase.lean`, the `_l5` controls, the L5 sections of
   [CLAIMS.md](CLAIMS.md), [SPEC-MAP.md](SPEC-MAP.md) and the
   inventory. Gated with the core.
-- Root window (spec 2 section 4.4, issue #2): five theorems over the
+- Root window (spec 2 section 4.4): five theorems over the
   core model, outside the claim set. Every window entry is an operation
   boundary (`windowBoundary`), the newest entry is the current root
   (`windowHead`), and the root between a transfer's two inserts is not
