@@ -1,0 +1,14 @@
+--- a/LeanIMT.sol
++++ b/LeanIMT_M_DUP.sol
+@@ -1,9 +1,9 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.4;
+ 
+-import {InternalLeanIMT, LeanIMTData} from "./InternalLeanIMT.sol";
++import {InternalLeanIMT_M_DUP as InternalLeanIMT, LeanIMTData} from "./InternalLeanIMT_M_DUP.sol";
+ 
+-library LeanIMT {
++library LeanIMT_M_DUP { // mutant DUP wrapper
+     using InternalLeanIMT for *;
+ 
+     function insert(LeanIMTData storage self, uint256 leaf) public returns (uint256) {

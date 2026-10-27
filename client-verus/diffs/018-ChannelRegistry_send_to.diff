@@ -1,0 +1,31 @@
+--- a04b8b3:adapters/channel.rs:71-90
++++ mirrors/channel.rs
+@@ -1,20 +1,8 @@
+-    async fn send_to(
+-        &self,
+-        recipient_viewing_pubkey: &ViewingPubkey,
+-        message: P2pMessage,
+-    ) -> Result<(), P2pError> {
+-        let key = recipient_viewing_pubkey.to_sec1_bytes();
+-
+-        let channels = self.channels.read().await;
+-        let sender = channels.get(&key).ok_or_else(|| {
+-            P2pError::RecipientNotFound(format!(
+-                "No channel registered for viewing pubkey: {}",
+-                hex::encode(&key)
+-            ))
+-        })?;
+-
+-        sender
+-            .send(message)
+-            .await
+-            .map_err(|_| P2pError::ChannelClosed)
+-    }
++pub async fn registry_send_to<R: RegistryApi,E: Effects>(registry: &R, recipient_viewing_pubkey: Key, message: Message) -> (r: Result<(),Error>)
++ ensures r == sent::<E>(registry.entries(),recipient_viewing_pubkey,message),
++ // STRENGTH registry_send_to
++{
++ let key=recipient_viewing_pubkey;
++ let sender=match registry.get(key) {Some(tx)=>tx,None=>return Err(Error::RecipientNotFound)};
++ if E::send(sender,message) {Ok(())} else {Err(Error::ChannelClosed)}
++}

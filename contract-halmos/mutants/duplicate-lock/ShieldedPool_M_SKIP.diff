@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_SKIP.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_SKIP is ReentrancyGuard { // mutant SKIP: deposit skips insertion when the commitment is already a leaf
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -166,7 +166,7 @@
+         if (!verifier.verifyDeposit(proof, publicInputs)) revert InvalidProof();
+ 
+         // Add commitment to tree and update root tracking
+-        _tree.insert(uint256(commitment));
++        if (!_tree.has(uint256(commitment))) _tree.insert(uint256(commitment));
+         _recordRoot();
+ 
+         // Insertion and its event complete before the external call (spec §4.6), so a

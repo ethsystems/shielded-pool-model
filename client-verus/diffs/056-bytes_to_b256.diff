@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/merkle_tree.rs:192-194
++++ mirrors/misc_domain.rs
+@@ -1,3 +1,5 @@
+-pub fn bytes_to_b256(bytes: &[u8; 32]) -> alloy::primitives::B256 {
+-    alloy::primitives::B256::from_slice(bytes)
++pub fn bytes_to_b256(bytes: &[u8; 32]) -> (r: B256)
++    ensures r.0@ == bytes@,
++{
++    B256::from_slice(bytes)
+ }

@@ -1,0 +1,158 @@
+# Earlier names -> names in this package. The claim board (../BOARD.md) and the research-phase
+# reports (not in this repository) cite the earlier run labels and the earlier test, contract and
+# file names; this map connects them to the suites here. Only names changed;
+# check bodies are unchanged. One line per name: <earlier> <TAB> <here> <TAB> <kind>.
+# This file is the one place in the package that carries the research labels.
+
+# Earlier run labels -> suites
+halmos-caller	caller	run
+D5X1	duplicate-lock	run
+N9b	owner-payout	run
+the bounded insert checks	insert-callback	run
+the Halmos guard checks	guards	run
+N4	ring-funding	run
+N12	post-deposit-withdraw	run
+N14	post-transfer-admin	run
+row 6 Halmos checks on the merged contract (2026-09-29)	root-window	run
+
+# caller (the withdraw-caller report of 2026-10-13)
+Caller.t.sol	WithdrawCaller.t.sol	file
+Replay.t.sol	WithdrawCallerReplay.t.sol	file
+D4Base	WithdrawCallerBase	contract
+D4Withdraw	WithdrawCallerTest	contract
+D4W_M_W6O	WithdrawCallerMut_LATE_MARKTest	contract
+D4W_M_PAY	WithdrawCallerMut_PAY_CALLERTest	contract
+Replay_W	WithdrawCallerReplay	contract
+Replay_M_W6O	WithdrawCallerReplay_LATE_MARK	contract
+Replay_M_PAY	WithdrawCallerReplay_PAY_CALLER	contract
+W6O	LATE_MARK	mutant
+PAY	PAY_CALLER	mutant
+W10Inputs	VerifierInputsDiverged	assertion
+W10VerifierBypassed	VerifierBypassed	assertion
+W6NotMarkedAtPayout	NotMarkedAtPayout	assertion
+W6NotMarkedAfter	NotMarkedAfter	assertion
+W10Calls	TokenCallCount	assertion
+W10Args	PayoutArgs	assertion
+W10WrongToken	WrongToken	assertion
+S_full	stock	run
+M_W6O	mutant-LATE_MARK	run
+M_PAY	mutant-PAY_CALLER	run
+P_loop4	loop4	run
+P_loop8_b2	loop8	run
+P_alias_debug	alias-debug	run
+
+# duplicate-lock
+D5X1.t.sol	DuplicateLock.t.sol	file
+D5X1Replay.t.sol	DuplicateLockReplay.t.sol	file
+D5X1Test	DuplicateLockTest	contract
+D5X1Mut_<ID>Test	DuplicateLockMut_<ID>Test	contract
+D5X1ReplayTest	DuplicateLockReplayTest	contract
+S_probe	probe	run
+S_D5_full	dup-full	run
+S_D5_probe	dup-probe-full	run
+S_X1_full	lock-full	run
+S_X1core_full	lock-core-full	run
+S_band	band	run
+S_band_probe	band-probe	run
+M_<ID>_<scope>	mutant-<ID>-<scope>	run
+A_X1raw	attempt-raw-calldata	run
+
+# insert-callback
+Ctq.t.sol	InsertCallback.t.sol	file
+CtqCore.t.sol	InsertCallbackCore.t.sol	file
+CtqTest	InsertCallbackTest	contract
+CtqMut_<ID>Test	InsertCallbackMut_<ID>Test	contract
+X1Core	InsertCallbackCore	contract
+CtqCoreTest	InsertCallbackCoreTest	contract
+CtqCore_<ID>Test	InsertCallbackCoreMut_<ID>Test	contract
+A_probe_leaf	probe-leaf-index	run
+B_noband	no-band	run
+B_withdraw	withdraw-full	run
+A_probe_dep	probe-new-leaf	run
+C_band_dep	band-deposit	run
+C_band_tr	band-transfer	run
+M_DUP_dep	mutant-DUP-deposit	run
+M_DUP_tr	mutant-DUP-transfer	run
+M_<ID>	mutant-<ID>	run
+XC_withdraw	core-withdraw	run
+XC_deposit	core-deposit	run
+XM_<ID>	core-mutant-<ID>	run
+
+# owner-payout
+N9b.t.sol	OwnerPayout.t.sol	file
+N9bEvents.t.sol	OwnerEvents.t.sol	file
+N9bMutants.t.sol	OwnerPayoutMutants.t.sol	file
+N9bTest	OwnerPayoutTest	contract
+N9bMut_<ID>Test	OwnerPayoutMut_<ID>Test	contract
+N9bEventsTest	OwnerEventsTest	contract
+W10	payout	run
+PROBE	probe	run
+G1_non	owner-guard	run
+G1_eff	owner-effect	run
+G1_sweep	sweep	run
+M_<ID>	mutant-<ID>	run
+
+# guards (the guard ids D1-D6, T1-T5, W1-W7 of the guard checks are not the claim-board rows)
+check_D1_unsupportedToken	check_deposit_unsupportedToken	check
+check_D2_zeroAmount	check_deposit_zeroAmount	check
+check_D3_amountTooLarge	check_deposit_amountTooLarge	check
+check_D4_zeroFundingAddress	check_deposit_zeroFundingAddress	check
+check_D5_senderNotFundingAddress	check_deposit_senderNotFundingAddress	check
+check_D6_nonCanonicalInput	check_deposit_nonCanonicalInput	check
+check_T1_identicalNullifiers	check_transfer_identicalNullifiers	check
+check_T2_firstNullifierSpent	check_transfer_firstNullifierSpent	check
+check_T3_secondNullifierSpent	check_transfer_secondNullifierSpent	check
+check_T4_unknownRoot	check_transfer_unknownRoot	check
+check_T5_nonCanonicalInput	check_transfer_nonCanonicalInput	check
+check_W1_unsupportedToken	check_withdraw_unsupportedToken	check
+check_W2_zeroAmount	check_withdraw_zeroAmount	check
+check_W3_amountTooLarge	check_withdraw_amountTooLarge	check
+check_W4_zeroRecipient	check_withdraw_zeroRecipient	check
+check_W5_nullifierSpent	check_withdraw_nullifierSpent	check
+check_W6_unknownRoot	check_withdraw_unknownRoot	check
+check_W7_nonCanonicalInput	check_withdraw_nonCanonicalInput	check
+check_core_<guard>_<name>	check_core_<function>_<name>	check
+check_core_D4nz_zeroFundingAddress_nonzeroCaller	check_core_deposit_zeroFundingAddress_nonzeroCaller	check
+check_S1_withdrawThenReuseRejected	check_spent_withdrawThenReuseRejected	check
+D1 D2 D3 D4 D5 D6	DEP_TOKEN DEP_AMOUNT_ZERO DEP_AMOUNT_MAX DEP_FUNDER_ZERO DEP_FUNDER_CALLER DEP_CANONICAL	mutant
+T1 T2 T3 T4 T5	TR_DISTINCT TR_SPENT0 TR_SPENT1 TR_ROOT TR_CANONICAL	mutant
+W1 W2 W3 W4 W5 W6 W7	WD_TOKEN WD_AMOUNT_ZERO WD_AMOUNT_MAX WD_RECIPIENT_ZERO WD_SPENT WD_ROOT WD_CANONICAL	mutant
+GuardsMut_<guard>Test	GuardsMut_<mutant>Test	contract
+A_probes B_guards C_spent D_witness E_core	probes guards spent-sequence witnesses core	run
+M_<guard> MC_<guard> MS_<guard> MC_D4nz	mutant-<mutant> core-mutant-<mutant> spent-mutant-<mutant> core-mutant-DEP_FUNDER_ZERO-nonzero-caller	run
+
+# root-window
+check_P4v1_postTxRootsOnly_expectFail	check_P4v1_postTxRootsOnly	check
+N0 N1 N2	NUL0 NUL1 NUL2	constant
+ShieldedPoolNoGuard.sol (harness-local copy)	mutants/root-window/ShieldedPoolNoGuard.diff (mutant NO_GUARD_W)	file
+A_reached	reached	run
+B_probes	probes	run
+C_F40	fresh-depth40	run
+D_R256	depth-cap	run
+E_RWc255_dep E_RWc64_dep E_RWc64_tr E_RWc255_tr	cap-witness-deposit-255 cap-witness-deposit-64 cap-witness-transfer-64 cap-witness-transfer-255	run
+F_B0_8_P5_dep F_B0_8_P1_dep F_BW8_dep	band8-P5-deposit band8-P1-deposit band8-witness-deposit	run
+F_B0_4_P5_tr F_B0_4_P1_tr F_BW4_tr	band4-P5-transfer band4-P1-transfer band4-witness-transfer	run
+
+# ring-funding
+Ctq.t.sol (the funding-call version)	FundingInsert.t.sol	file
+PoolRootWindow.t.sol	RootWindowRing.t.sol	file
+CtqTest (the funding-call version)	FundingInsertTest	contract
+CtqMut_<ID>Test (the funding-call version)	FundingInsertMut_<ID>Test	contract
+J2_deposit J2_transfer J2_witnesses	ring-deposit ring-transfer ring-witnesses	run
+X2 D6 D6_witness M3_baseline	deposit-order funding-call funding-witness reached-roots	run
+D6_mutant D6_caller_mutant X2_mutant	mutant-D6 mutant-D6_CALLER mutant-ORD_D	run
+M1_transfer M2_ring M3_lookup	mutant-M1 mutant-M2 mutant-M3	run
+
+# post-deposit-withdraw
+N12.t.sol	PostDepositWithdraw.t.sol	file
+N12Test	PostDepositWithdrawTest	contract
+Mut_<field>	PostDepositWithdrawMut_<field>	contract
+Registry12 Hash12 Verifier12 Token12 SVM12	PostRegistry PostHash PostVerifier PostToken SVM	contract
+M_<field>	mutant-<field>	run
+
+# post-transfer-admin
+N14.t.sol	PostTransferAdmin.t.sol	file
+N14Test	PostTransferAdminTest	contract
+Mut_<field>	PostTransferAdminMut_<field>	contract
+Registry14 Hash14 Verifier14 Token14 SVM14	PostRegistry PostHash PostVerifier PostToken SVM	contract
+M_<field>	mutant-<field>	run

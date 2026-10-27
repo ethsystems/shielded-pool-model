@@ -1,0 +1,19 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:176-184
++++ mirrors/rpc.rs
+@@ -1,9 +1,7 @@
+-    async fn get_commitment_root(&self) -> Result<B256, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-        let result = pool
+-            .commitmentRoot()
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result.into())
+-    }
++pub async fn get_commitment_root<A: RpcApi>(&self) -> (r: Result<Word,Error>)
++ ensures r == word_result(A::word((Request::CommitmentRoot(self.provider,self.shielded_pool)).view())),
++ // STRENGTH get_commitment_root
++{
++ let result = A::call_word(Request::CommitmentRoot(self.provider,self.shielded_pool));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

@@ -1,0 +1,33 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:387-407
++++ mirrors/rpc.rs
+@@ -1,21 +1,9 @@
+-    async fn add_attester(&self, attester: Address) -> Result<TxReceipt, OnChainError> {
+-        let registry =
+-            IAttestationRegistry::new(self.attestation_registry, &self.provider);
+-
+-        let receipt = registry
+-            .addAttester(attester)
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted(
+-                "addAttester reverted".into(),
+-            ));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn add_attester<A: RpcApi>(&self, attester: Address) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::AddAttester(self.provider,self.attestation_registry,attester)),
++ // STRENGTH add_attester
++{
++ let pending=match A::send(Request::AddAttester(self.provider,self.attestation_registry,attester)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}

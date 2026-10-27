@@ -1,0 +1,4 @@
+libraries = [
+    "dependencies/zk-kit-v1/packages/lean-imt/contracts/LeanIMT.sol:LeanIMT:0x00000000000000000000000000000000000A1001",
+    "dependencies/poseidon-solidity-0.0.5/PoseidonT3.sol:PoseidonT3:0x00000000000000000000000000000000000A1002",
+]

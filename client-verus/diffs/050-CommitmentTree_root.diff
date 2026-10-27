@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/merkle_tree.rs:92-94
++++ mirrors/tree.rs
+@@ -1,3 +1,4 @@
+-    pub fn root(&self) -> Option<[u8; 32]> {
+-        self.0.root()
+-    }
++pub fn root(&self) -> (r: Option<[u8;32]>)
++ ensures r == T::root_of(self.0.model()),
++ // STRENGTH CommitmentTree_root
++{self.0.root()}

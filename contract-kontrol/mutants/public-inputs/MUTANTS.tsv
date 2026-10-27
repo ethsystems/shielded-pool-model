@@ -1,0 +1,12 @@
+id	base	diff	output	change
+LATE_MARK	pool	ShieldedPool_M_LATE_MARK.diff	ShieldedPool_M_LATE_MARK.sol	withdraw marks the nullifier after the token payout (lines 283, 286)
+SWAP_INPUTS	pool	ShieldedPool_M_SWAP_INPUTS.diff	ShieldedPool_M_SWAP_INPUTS.sol	withdraw passes the nullifier and the root to the verifier in swapped places (lines 267, 271)
+DROP_BIT253	pool	ShieldedPool_M_DROP_BIT253.diff	ShieldedPool_M_DROP_BIT253.sol	withdraw passes the nullifier to the verifier with bit 253 cleared (line 267)
+PAY_CALLER	pool	ShieldedPool_M_PAY_CALLER.diff	ShieldedPool_M_PAY_CALLER.sol	withdraw pays msg.sender instead of the recipient (line 286)
+SKIP_VERIFIER	pool	ShieldedPool_M_SKIP_VERIFIER.diff	ShieldedPool_M_SKIP_VERIFIER.sol	withdraw does not call the verifier (line 278)
+DEPOSIT_SWAP_45	pool	ShieldedPool_M_DEPOSIT_SWAP_45.diff	ShieldedPool_M_DEPOSIT_SWAP_45.sol	deposit passes the attestation root and the payload hash to the verifier in swapped places (lines 159, 160)
+TRANSFER_SWAP_45	pool	ShieldedPool_M_TRANSFER_SWAP_45.diff	ShieldedPool_M_TRANSFER_SWAP_45.sol	transfer passes the root and the payload hash to the verifier in swapped places (lines 212, 213)
+DEPOSIT_CANONICAL	pool	ShieldedPool_M_DEPOSIT_CANONICAL.diff	ShieldedPool_M_DEPOSIT_CANONICAL.sol	deposit does not check that its public inputs are below P (line 163)
+TRANSFER_CANONICAL	pool	ShieldedPool_M_TRANSFER_CANONICAL.diff	ShieldedPool_M_TRANSFER_CANONICAL.sol	transfer does not check that its public inputs are below P (line 218)
+WITHDRAW_CANONICAL	pool	ShieldedPool_M_WITHDRAW_CANONICAL.diff	ShieldedPool_M_WITHDRAW_CANONICAL.sol	withdraw does not check that its public inputs are below P (line 275)
+BOUND_GT	pool	ShieldedPool_M_BOUND_GT.diff	ShieldedPool_M_BOUND_GT.sol	the canonicality check uses > in place of >=, so the input P passes (line 361)

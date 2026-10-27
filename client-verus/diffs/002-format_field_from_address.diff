@@ -1,0 +1,11 @@
+--- a04b8b3:adapters/bb_prover.rs:38-41
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,7 @@
+-fn format_field_from_address(addr: &Address) -> String {
++fn format_field_from_address(addr: &Address) -> (r: String)
++    ensures is_hex_of(r@, left_pad20(addr.0@)),
++{
+     let b256 = B256::left_padding_from(addr.as_slice());
++    proof { assert(b256.0@ =~= left_pad20(addr.0@)); }
+     format_field(&b256)
+ }

@@ -1,0 +1,47 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:349-383
++++ mirrors/rpc.rs
+@@ -1,35 +1,9 @@
+-    async fn withdraw(
+-        &self,
+-        proof: &WithdrawProof,
+-        nullifier: B256,
+-        token: Address,
+-        amount: U256,
+-        recipient: Address,
+-        root: B256,
+-    ) -> Result<TxReceipt, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-
+-        let receipt = pool
+-            .withdraw(
+-                proof.proof.clone(),
+-                nullifier,
+-                token,
+-                amount,
+-                recipient,
+-                root,
+-            )
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted(
+-                "Withdraw reverted".into(),
+-            ));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn withdraw<A: RpcApi>(&self, proof: &WithdrawProof, nullifier: Word, token: Address, amount: Word, recipient: Address, root: Word) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::Withdraw(self.provider,self.shielded_pool,proof.proof,nullifier,token,amount,recipient,root)),
++ // STRENGTH withdraw
++{
++ let pending=match A::send(Request::Withdraw(self.provider,self.shielded_pool,clone_bytes(&proof.proof),nullifier,token,amount,recipient,root)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}

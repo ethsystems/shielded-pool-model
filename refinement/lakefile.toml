@@ -1,0 +1,35 @@
+name = "refinement"
+defaultTargets = ["Refinement", "Tree", "Balance", "Journey", "Gas"]
+
+# The dependency checkouts (Mathlib and its dependencies) are those of the root package, at the
+# same revisions (lake-manifest.json), so the two packages share one copy and Mathlib's oleans.
+packagesDir = "../.lake/packages"
+
+# The flag of the original runs.
+moreLeanArgs = ["-M4096"]
+
+[[lean_lib]]
+name = "Refinement"
+globs = ["Refinement.+"]
+
+[[lean_lib]]
+name = "Tree"
+globs = ["Tree.+"]
+
+[[lean_lib]]
+name = "Balance"
+globs = ["Balance.+"]
+
+[[lean_lib]]
+name = "Journey"
+globs = ["Journey.+"]
+
+[[lean_lib]]
+name = "Gas"
+globs = ["Gas.+"]
+
+# The gated model of the parent directory, unchanged: the refinement is stated over its
+# modules (Pool/State.lean, Pool/Tx.lean, the statements and the proofs of the money theorems).
+[[require]]
+name = "LeanShieldedPool"
+path = ".."

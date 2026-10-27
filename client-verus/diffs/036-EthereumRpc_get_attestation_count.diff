@@ -1,0 +1,21 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:241-250
++++ mirrors/rpc.rs
+@@ -1,10 +1,8 @@
+-    async fn get_attestation_count(&self) -> Result<u64, OnChainError> {
+-        let registry =
+-            IAttestationRegistry::new(self.attestation_registry, &self.provider);
+-        let result = registry
+-            .getAttestationCount()
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result.try_into().unwrap())
+-    }
++pub async fn get_attestation_count<A: RpcApi>(&self) -> (r: Result<u64,Error>)
++ requires A::word((Request::AttestationCount(self.provider,self.attestation_registry)).view()) is Ok ==> fits64(A::word((Request::AttestationCount(self.provider,self.attestation_registry)).view())->Ok_0),
++ ensures r == match A::word((Request::AttestationCount(self.provider,self.attestation_registry)).view()) {Err(e)=>Err(Error::Contract(e)),Ok(w)=>Ok(w.lo as u64)},
++ // STRENGTH get_attestation_count
++{
++ let result=match A::call_word(Request::AttestationCount(self.provider,self.attestation_registry)) {Ok(w)=>w,Err(e)=>return Err(Error::Contract(e))};
++ Ok(try64(result).unwrap())
++}

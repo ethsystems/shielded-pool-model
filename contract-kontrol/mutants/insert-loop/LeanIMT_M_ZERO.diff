@@ -1,0 +1,57 @@
+--- a/LeanIMT.sol
++++ b/LeanIMT_M_ZERO.sol
+@@ -1,17 +1,17 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.4;
+ 
+-import {InternalLeanIMT, LeanIMTData} from "./InternalLeanIMT.sol";
++import {InternalLeanIMT_M_ZERO, LeanIMTData} from "./InternalLeanIMT_M_ZERO.sol";
+ 
+-library LeanIMT {
+-    using InternalLeanIMT for *;
++library LeanIMT_M_ZERO {
++    using InternalLeanIMT_M_ZERO for *;
+ 
+     function insert(LeanIMTData storage self, uint256 leaf) public returns (uint256) {
+-        return InternalLeanIMT._insert(self, leaf);
++        return InternalLeanIMT_M_ZERO._insert(self, leaf);
+     }
+ 
+     function insertMany(LeanIMTData storage self, uint256[] calldata leaves) public returns (uint256) {
+-        return InternalLeanIMT._insertMany(self, leaves);
++        return InternalLeanIMT_M_ZERO._insertMany(self, leaves);
+     }
+ 
+     function update(
+@@ -20,7 +20,7 @@
+         uint256 newLeaf,
+         uint256[] calldata siblingNodes
+     ) public returns (uint256) {
+-        return InternalLeanIMT._update(self, oldLeaf, newLeaf, siblingNodes);
++        return InternalLeanIMT_M_ZERO._update(self, oldLeaf, newLeaf, siblingNodes);
+     }
+ 
+     function remove(
+@@ -28,18 +28,18 @@
+         uint256 oldLeaf,
+         uint256[] calldata siblingNodes
+     ) public returns (uint256) {
+-        return InternalLeanIMT._remove(self, oldLeaf, siblingNodes);
++        return InternalLeanIMT_M_ZERO._remove(self, oldLeaf, siblingNodes);
+     }
+ 
+     function has(LeanIMTData storage self, uint256 leaf) public view returns (bool) {
+-        return InternalLeanIMT._has(self, leaf);
++        return InternalLeanIMT_M_ZERO._has(self, leaf);
+     }
+ 
+     function indexOf(LeanIMTData storage self, uint256 leaf) public view returns (uint256) {
+-        return InternalLeanIMT._indexOf(self, leaf);
++        return InternalLeanIMT_M_ZERO._indexOf(self, leaf);
+     }
+ 
+     function root(LeanIMTData storage self) public view returns (uint256) {
+-        return InternalLeanIMT._root(self);
++        return InternalLeanIMT_M_ZERO._root(self);
+     }
+ }

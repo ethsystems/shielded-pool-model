@@ -1,0 +1,16 @@
+--- a04b8b3:domain/encrypted.rs:62-72
++++ mirrors/misc_domain.rs
+@@ -2,7 +2,12 @@
+         encrypted_note: EncryptedNote,
+         commitment: Commitment,
+         recipient_viewing_pubkey: ViewingPubkey,
+-    ) -> Self {
++    ) -> (r: Self)
++        ensures
++            r.encrypted_note == encrypted_note,
++            r.commitment == commitment,
++            r.recipient_viewing_pubkey == recipient_viewing_pubkey,
++    {
+         Self {
+             encrypted_note,
+             commitment,

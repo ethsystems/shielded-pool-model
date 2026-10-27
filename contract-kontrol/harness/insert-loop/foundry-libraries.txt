@@ -1,0 +1,3 @@
+    "contracts/test/insert-loop/mutants/LeanIMT_M_FIELD.sol:LeanIMT_M_FIELD:0x00000000000000000000000000000000000A1011",
+    "contracts/test/insert-loop/mutants/LeanIMT_M_ZERO.sol:LeanIMT_M_ZERO:0x00000000000000000000000000000000000A1012",
+    "contracts/test/insert-loop/mutants/LeanIMT_M_DUP.sol:LeanIMT_M_DUP:0x00000000000000000000000000000000000A1013",

@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/bb_prover.rs:139-175
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,6 @@
+-    fn from(w: &TransferWitness) -> Self {
++    pub fn from(w: &TransferWitness) -> (r: Self)
++        ensures transfer_input_ok(r, *w),
++    {
+         Self {
+             nullifier_0: format_field(&w.nullifiers[0]),
+             nullifier_1: format_field(&w.nullifiers[1]),

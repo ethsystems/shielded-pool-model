@@ -1,0 +1,14 @@
+--- a04b8b3:domain/note.rs:67-69
++++ mirrors/note_key.rs
+@@ -1,3 +1,9 @@
+-    pub fn zero(token: Address, owner_pubkey: OwnerPubkey) -> Self {
+-        Self::new(token, U256::ZERO, owner_pubkey)
++    pub fn zero(token: Address, owner_pubkey: OwnerPubkey, rng: &Rng) -> (r: Self)
++        ensures
++            value(r.amount) == 0,
++            r.token == token,
++            r.owner_pubkey == owner_pubkey,
++            canonical_field_bytes(r.salt.0@, rng.bytes@),
++    {
++        Self::new(token, U256::ZERO, owner_pubkey, rng)
+     }

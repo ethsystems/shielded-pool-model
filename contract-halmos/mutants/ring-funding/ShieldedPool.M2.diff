@@ -1,0 +1,10 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool.M2.inplace
+@@ -371,7 +371,6 @@
+         // Evict the old root being overwritten from the valid set
+         bytes32 evictedRoot = historicalRoots[historicalRootIndex];
+         if (evictedRoot != bytes32(0)) {
+-            delete validRoots[evictedRoot];
+         }
+ 
+         validRoots[currentRoot] = true;

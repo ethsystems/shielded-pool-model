@@ -1,0 +1,19 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:198-206
++++ mirrors/rpc.rs
+@@ -1,9 +1,7 @@
+-    async fn is_nullifier_spent(&self, nullifier: B256) -> Result<bool, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-        let result = pool
+-            .nullifiers(nullifier)
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn is_nullifier_spent<A: RpcApi>(&self, nullifier: Word) -> (r: Result<bool,Error>)
++ ensures r == bool_result(A::boolean((Request::Nullifier(self.provider,self.shielded_pool,nullifier)).view())),
++ // STRENGTH is_nullifier_spent
++{
++ let result = A::call_bool(Request::Nullifier(self.provider,self.shielded_pool,nullifier));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

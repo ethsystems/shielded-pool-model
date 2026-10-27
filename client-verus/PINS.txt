@@ -1,0 +1,33 @@
+# Pins read by check.sh. One "key value" per line; blob lines are "blob <id> <path>".
+# The client source: ethsystems/pocs (public), the submodule pocs/.
+pocs_commit a04b8b38969dfc2ee64de47edee7e396454204a8
+pocs_dir pocs/private-payment/shielded-pool/src/lib
+blob 2887abc019a64239333a58177e2726ab1d7d2a75 adapters/bb_prover.rs
+blob e68f1795538304892ac33a94bb8cc585ae07f8e9 adapters/channel.rs
+blob a17a4ffb359f5d9a2f1af52dccff841f35f49a3d adapters/ethereum_rpc.rs
+blob 06c0f6d101f130c9e0f2686538321f41a91f0cd2 adapters/merkle_tree.rs
+blob 7e9a574e1d0d33e8613428b15f093ba983647408 crypto/encryption.rs
+blob c7ecdf2d32054c3bf8b967f09cf5d80d6cda88c4 crypto/poseidon.rs
+blob 25ce72cbbe5df044aae127b1134830491edaf149 domain/commitment.rs
+blob bb5f0432fb6b84238b0715ff2348c604e8f2d620 domain/encrypted.rs
+blob 28059a47665f7eec5c38e26b95ff53580cd1c302 domain/keys.rs
+blob 8ede4a1625377eef1dc8d8e53475463beeca92d6 domain/merkle.rs
+blob d663ce719df3c54a65262ef0eeada95f846909d6 domain/note.rs
+blob ea487d1c196002b98f50b8bb93b8be490a44213b domain/proof.rs
+blob c426360ffae5807f5b879f9dc90fbc5d25625406 domain/witness.rs
+# Verus: the x86-linux asset of the GitHub release release/0.2026.09.13.671956e of
+# verus-lang/verus. The zip sha256 equals the digest GitHub lists for the asset.
+verus_version 0.2026.09.13.671956e
+verus_commit 671956ec527d3b7164779f767bdbfe769bedce6c
+verus_url https://github.com/verus-lang/verus/releases/download/release/0.2026.09.13.671956e/verus-0.2026.09.13.671956e-x86-linux.zip
+verus_zip_sha256 08c85b96e0fbbbdcb1b3a9fa8943dce7598c3e7b343680820f649b4e1efda4b4
+verus_zip_size 485525774
+verus_sha256 2fe2fca366846ec5aaaaaf80edf061f7d19564c097cb9840c7638719e8bc1854
+rust_verify_sha256 3cfacec957eceda46a5e2048695b762604cf25d2f2bc95c53c46d7bd4f501184
+vstd_vir_sha256 ad33d161e8869e8783225857200b1c5fe59dc7861a665cb988efc8adfbccc089
+z3_sha256 e583c4186a45e72411fa2cb2048401eed03f0f8e5f24694676a8f6271a50b765
+z3_version 4.16.0
+# Rust: the toolchain this Verus release names in version.json, installed by rustup.
+rust_toolchain 1.98.1-x86_64-unknown-linux-gnu
+rustc_commit 48a229ceaefd4985c50990b14116b6d856af0985
+rustc_driver_sha256 96218b68a4a569c06c6fea5ee95b9052ce61c7316ac265a7963e7fea90e985d2

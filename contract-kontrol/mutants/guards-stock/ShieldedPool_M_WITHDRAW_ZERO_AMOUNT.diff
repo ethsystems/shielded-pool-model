@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_WITHDRAW_ZERO_AMOUNT.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_WITHDRAW_ZERO_AMOUNT is ReentrancyGuard { // mutant WITHDRAW_ZERO_AMOUNT: one guard removed
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -252,7 +252,7 @@
+         bytes32 root
+     ) external nonReentrant {
+         if (!supportedTokens[token]) revert UnsupportedToken();
+-        if (amount == 0) revert ZeroAmount();
++        // mutant WITHDRAW_ZERO_AMOUNT: guard removed
+         if (amount >= MAX_AMOUNT) revert AmountTooLarge();
+         if (recipient == address(0)) revert ZeroAddress();
+ 

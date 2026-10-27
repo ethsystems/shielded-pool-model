@@ -1,0 +1,107 @@
+# Rename map: earlier name -> name here.
+#
+# The modules were first written with working names. This map gives each earlier module and
+# namespace the name it has in this package, so that older reports can be read against these
+# files. scripts/rename.py applies it forwards; scripts/check-rename.py applies it backwards to
+# check that only names and comments changed.
+#
+# Kinds: "module" renames a module in import lines (and the file path); "namespace" renames a
+# namespace wherever it starts an identifier, as a whole name (full dotted forms are listed
+# separately, because the substitution does not match after a "."); "control" documents the
+# earlier name of a control file and is not applied. Declaration names do not change, and the
+# declarations keep the namespace LeanShieldedPool.Refine.
+
+# Contract-storage model, premises and the refinement induction
+module     LeanShieldedPool.Refine.Storage            -> Refinement.Storage
+module     LeanShieldedPool.Refine.Rep                -> Refinement.Rep
+module     LeanShieldedPool.Refine.Post               -> Refinement.Post
+module     LeanShieldedPool.Refine.Compose            -> Refinement.Compose
+module     LeanShieldedPool.Refine.Cases              -> Refinement.Cases
+module     LeanShieldedPool.Refine.NonVacuity         -> Refinement.NonVacuity
+
+# Root provenance and the model variant Step'
+module     LeanShieldedPool.Refine.Provenance         -> Refinement.Provenance
+module     LeanShieldedPool.Refine.ProvenanceModel    -> Refinement.ProvenanceModel
+module     LeanShieldedPool.Refine.ProvenanceRefine   -> Refinement.ProvenanceRefine
+module     LeanShieldedPool.Refine.ProvenanceNV       -> Refinement.ProvenanceNonVacuity
+
+# Path-local tree premises
+module     LeanShieldedPool.Refine.PathLocal          -> Refinement.PathLocal
+module     LeanShieldedPool.Refine.PathLocalNV        -> Refinement.PathLocalNonVacuity
+
+# The LeanIMT tree and the circuit fold
+module     LeanShieldedPool.Refine.TreeN18            -> Tree.LeanImt
+module     LeanShieldedPool.Refine.TreeN18Checks      -> Tree.Checks
+
+# External token balances
+module     LeanShieldedPool.Refine.Balance            -> Balance.Basic
+module     LeanShieldedPool.Refine.BalanceNV          -> Balance.NonVacuity
+module     LeanShieldedPool.Refine.BalanceNV3         -> Balance.ToyRun
+module     LeanShieldedPool.Refine.BalancePL          -> Balance.PathLocal
+module     LeanShieldedPool.Refine.BalancePLNV        -> Balance.PathLocalNonVacuity
+
+# The withdraw journey
+module     LeanShieldedPool.Proofs.WithdrawJourney    -> Journey.Withdraw
+
+# Gas arithmetic
+module     LeanShieldedPool.Proofs.GasEnvelope        -> Gas.Envelope
+
+# Namespaces of the tree module and of the toy instances
+namespace  LeanShieldedPool.Refine.N18                -> LeanShieldedPool.Refine.LeanImt
+namespace  N18                                        -> LeanImt
+namespace  LeanShieldedPool.Refine.NV                 -> LeanShieldedPool.Refine.Toy
+namespace  NV                                         -> Toy
+namespace  LeanShieldedPool.Refine.NV3                -> LeanShieldedPool.Refine.ToyRun
+namespace  NV3                                        -> ToyRun
+namespace  LeanShieldedPool.Refine.PV                 -> LeanShieldedPool.Refine.ProvToy
+namespace  PV                                         -> ProvToy
+namespace  LeanShieldedPool.Refine.PL                 -> LeanShieldedPool.Refine.PathToy
+namespace  PL                                         -> PathToy
+namespace  LeanShieldedPool.Refine.BNV                -> LeanShieldedPool.Refine.BalanceToy
+namespace  BNV                                        -> BalanceToy
+namespace  LeanShieldedPool.Refine.BNV3               -> LeanShieldedPool.Refine.BalanceToyRun
+namespace  BNV3                                       -> BalanceToyRun
+namespace  LeanShieldedPool.Refine.BPLNV              -> LeanShieldedPool.Refine.BalancePathToy
+namespace  BPLNV                                      -> BalancePathToy
+namespace  LeanShieldedPool.Refine.NVJ                -> LeanShieldedPool.Refine.JourneyToy
+namespace  NVJ                                        -> JourneyToy
+
+# The fold bridge (fold-bridge/): the circuit's field fold against the LeanIMT fold. Its
+# earlier sources also used the earlier names of circuits-lampe; check-rename.py applies
+# ../circuits-lampe/scripts/rename-map.txt backwards after this map for these modules.
+module     N19Bridge                                  -> FoldBridge.Bridge
+module     N19Compose                                 -> FoldBridge.Compose
+module     N19Checks                                  -> FoldBridge.Checks
+namespace  N19Bridge                                  -> FoldBridge
+
+# Controls: earlier file name -> name here (controls/; the generated ones are in controls/gen/
+# and fold-bridge/controls/gen/)
+control    neg_repcore_window                         -> fail_rep_without_valid_roots
+control    neg_treelink_zero                          -> fail_treelink_without_nonzero
+control    neg_prefixroot_no_bound                    -> fail_prefixroot_drop_leaf
+control    neg_prov_step_no_fresh                     -> fail_prov_step_without_fresh
+control    neg_balance_no_rollback                    -> fail_balance_without_rollback
+control    neg_journey_no_path_tree                   -> fail_journey_without_path_tree
+control    neg_journey_swapped_words                  -> fail_journey_swapped_words
+control    refute_input0_ballast                      -> pass_input0_ballast_refuted
+control    M1_level_direction_flipped                 -> fail_imt_fold_direction_flipped
+control    M2_sub_no_carry                            -> fail_imt_no_carry
+control    M3_proof_left_bit_true                     -> fail_imt_proof_left_bit_true
+control    P0_bridge_unmodified                       -> pass_bridge_unchanged
+control    CB1_bridge_direction_flipped               -> fail_bridge_direction_flipped
+control    CB2_bridge_depth_plus_one                  -> fail_bridge_depth_plus_one
+control    CB3_bad_field_no_range                     -> fail_bridge_bad_field_no_range
+
+# Labels of the claim board (../BOARD.md) and of the earlier reports (not in this repository)
+# -> the results here.
+label      D3                                         -> root provenance and refineP_run: Refinement/Provenance.lean, Refinement/ProvenanceModel.lean, Refinement/ProvenanceRefine.lean, Refinement/ProvenanceNonVacuity.lean
+label      PATHLOCAL                                  -> refinePL_run with PathFacts and PathTreeHyp: Refinement/PathLocal.lean, Refinement/PathLocalNonVacuity.lean
+label      N11                                        -> refine_run: Refinement/Storage.lean to Refinement/Cases.lean
+label      N11b                                       -> refine_run with reachable-state premises, and the toy pool: Refinement/Post.lean, Refinement/Cases.lean, Refinement/NonVacuity.lean
+label      BALANCE                                    -> refineB_w9, refineB_run, refineBPL_w9, refineBPL_run: Balance/
+label      N18                                        -> the LeanIMT tree and fold, namespace LeanShieldedPool.Refine.LeanImt: Tree/LeanImt.lean, Tree/Checks.lean
+label      N19                                        -> the field-to-Nat fold bridge, namespace FoldBridge: fold-bridge/FoldBridge/
+label      GAS-LEMMA                                  -> the arithmetic of the gas argument, namespace GasEnvelope: Gas/Envelope.lean (the written argument is in README.md)
+label      Journey                                    -> LeanShieldedPool.Refine.Journey: Journey/Withdraw.lean
+label      NVJ                                        -> LeanShieldedPool.Refine.JourneyToy.journey_toy: Journey/Withdraw.lean
+label      A0V                                        -> the gated model of the parent directory (the refinement imports it unchanged)

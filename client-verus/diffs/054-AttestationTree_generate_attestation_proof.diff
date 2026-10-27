@@ -1,0 +1,25 @@
+--- a04b8b3:adapters/merkle_tree.rs:155-177
++++ mirrors/merkle_proofs.rs
+@@ -1,14 +1,16 @@
+     pub fn generate_attestation_proof(
+         &self,
+         leaf_index: u64,
+-    ) -> Option<AttestationMerkleProof> {
++    ) -> (r: Option<AttestationMerkleProof>)
++        requires usize::BITS == 64,
++        ensures
++            self.0.proof_of(leaf_index as usize) is Err ==> r is None,
++            self.0.proof_of(leaf_index as usize) is Ok ==> (r is Some && record_ok(r->Some_0.path@, r->Some_0.indices@,
++                r->Some_0.leaf_index, r->Some_0.proof_length, self.0.proof_of(leaf_index as usize)->Ok_0, leaf_index)),
++    {
+         let proof = self.0.generate_proof(leaf_index as usize).ok()?;
+ 
+-        let path: Vec<alloy::primitives::B256> = proof
+-            .siblings
+-            .iter()
+-            .map(|s| alloy::primitives::B256::from_slice(s))
+-            .collect();
++        let path: Vec<B256> = siblings_to_b256(&proof.siblings);
+ 
+         let indices: Vec<u8> = decode_path(proof.index, proof.siblings.len());
+ 

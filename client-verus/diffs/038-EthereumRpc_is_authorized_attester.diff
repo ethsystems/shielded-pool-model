@@ -1,0 +1,23 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:265-277
++++ mirrors/rpc.rs
+@@ -1,13 +1,7 @@
+-    async fn is_authorized_attester(
+-        &self,
+-        attester: Address,
+-    ) -> Result<bool, OnChainError> {
+-        let registry =
+-            IAttestationRegistry::new(self.attestation_registry, &self.provider);
+-        let result = registry
+-            .authorizedAttesters(attester)
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn is_authorized_attester<A: RpcApi>(&self, attester: Address) -> (r: Result<bool,Error>)
++ ensures r == bool_result(A::boolean((Request::Authorized(self.provider,self.attestation_registry,attester)).view())),
++ // STRENGTH is_authorized_attester
++{
++ let result = A::call_bool(Request::Authorized(self.provider,self.attestation_registry,attester));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

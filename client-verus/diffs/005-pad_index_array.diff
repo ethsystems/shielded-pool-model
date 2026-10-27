@@ -1,0 +1,14 @@
+--- a04b8b3:adapters/bb_prover.rs:56-60
++++ mirrors/prover_fmt.rs
+@@ -1,5 +1,9 @@
+-fn pad_index_array(indices: &[u8], max_depth: usize) -> Vec<u8> {
+-    let mut padded = indices.to_vec();
++fn pad_index_array(indices: &[u8], max_depth: usize) -> (r: Vec<u8>)
++    ensures
++        r.len() == max_depth,
++        forall|i: int| 0 <= i < max_depth ==> #[trigger] r@[i] == padded_index(indices@, i),
++{
++    let mut padded = to_vec_u8(indices);
+     padded.resize(max_depth, 0);
+     padded
+ }

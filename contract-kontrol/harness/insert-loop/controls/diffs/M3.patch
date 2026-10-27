@@ -1,0 +1,11 @@
+--- stock/InternalLeanIMT.sol
++++ M3/InternalLeanIMT.sol
+@@ -77,7 +77,7 @@
+         self.size = ++index;
+ 
+         self.sideNodes[treeDepth] = node;
+-        self.leaves[leaf] = index;
++        self.sideNodes[leaf] = index;
+ 
+         return node;
+     }

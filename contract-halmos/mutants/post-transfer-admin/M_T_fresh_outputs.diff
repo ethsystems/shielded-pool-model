@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/M_T_fresh_outputs.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract M_T_fresh_outputs is ReentrancyGuard {
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -227,7 +227,7 @@
+         nullifiers[inputNullifiers[1]] = true;
+ 
+         // Add new commitments
+-        _tree.insert(uint256(outputCommitments[0]));
++        _tree.leaves[uint256(outputCommitments[0])] = 0; _tree.insert(uint256(outputCommitments[0]));
+         _tree.insert(uint256(outputCommitments[1]));
+         _recordRoot();
+ 

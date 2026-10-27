@@ -1,0 +1,18 @@
+--- a04b8b3:adapters/merkle_tree.rs:58-68
++++ mirrors/merkle_proofs.rs
+@@ -1,7 +1,13 @@
+-fn decode_path(index: usize, path_len: usize) -> Vec<u8> {
++fn decode_path(index: usize, path_len: usize) -> (r: Vec<u8>)
++    requires usize::BITS == 64, path_len <= 64,
++    ensures r@.len() == path_len, forall|i: int| 0 <= i < path_len ==> #[trigger] r@[i] == bit(index, i),
++{
+     let mut path = Vec::with_capacity(path_len);
+ 
+-    for i in 0..path_len {
++    for i in 0..path_len
++        invariant path_len <= 64, usize::BITS == 64, path@.len() == i,
++            forall|j: int| 0 <= j < i ==> #[trigger] path@[j] == bit(index, j),
++    {
+         // extract bits from LSB to MSB
+         let bit = ((index >> i) & 1) as u8;
+         path.push(bit);

@@ -1,0 +1,3 @@
+kind	run	abi	command
+build	build	patched	kontrol build --no-O2 --regen; echo BUILD_EXIT=$?
+prove	withdraw	patched	kontrol prove --reinit --match-test LongProofWithdrawGuards.prove_withdraw_zero_amount --match-test LongProofWithdrawGuards.prove_withdraw_amount_max --match-test LongProofWithdrawGuards.prove_withdraw_spent --match-test LongProofWithdrawGuards.prove_withdraw_root --match-test LongProofWithdrawGuards_M_WITHDRAW_ZERO_AMOUNT.prove_withdraw_zero_amount --match-test LongProofWithdrawGuards_M_WITHDRAW_AMOUNT_MAX.prove_withdraw_amount_max --match-test LongProofWithdrawGuards_M_WITHDRAW_SPENT.prove_withdraw_spent --match-test LongProofWithdrawGuards_M_WITHDRAW_ROOT.prove_withdraw_root -j 3 --max-frontier-parallel 2

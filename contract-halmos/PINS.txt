@@ -1,0 +1,81 @@
+# Pins that check.sh reads. One pin per line: <key> <value> [<name or note>].
+# check.sh fails closed on any miss. The tool binary pins are the Linux x86_64 builds;
+# TOOLS_UNPINNED=1 accepts another build of the same version, and the run then says so.
+
+# Source: ethsystems/pocs at a04b8b3, the submodule pocs/.
+pocs_repo https://github.com/ethsystems/pocs
+pocs_commit a04b8b38969dfc2ee64de47edee7e396454204a8
+pocs_dir pocs/private-payment/shielded-pool
+pool_sha256 8cad561537fc26512764f5ebaece04eb9cea2f550f5d31ca20434f59fac59c94 contracts/src/ShieldedPool.sol
+
+# Git blob ids of the 14 exported files at pocs_commit, under pocs_dir (git ls-tree -r).
+blob 0819cd83b22dfe8c43f31290d6ed0b5257624915 contracts/src/AttestationRegistry.sol
+blob a7112bd3e8c710e6fe886dda0a69a89eef3fb448 contracts/src/CompositeVerifier.sol
+blob 5d9e12e9eef14df67cc19e9c84b39cba76b50132 contracts/src/ShieldedPool.sol
+blob 038f0283918fc2d870082a0b554a756ee8786f34 contracts/src/interfaces/IAttestationRegistry.sol
+blob bee43159aad65b250c2f494dfbbd33ffcc5fb5ae contracts/src/interfaces/IUltraVerifier.sol
+blob 98eb41c433cdd5bb375ee8a8917298fa8a510831 contracts/src/interfaces/IVerifier.sol
+blob d638bd2eb552ecf71ca41f53671e4a7c4855e286 contracts/src/mocks/MockCompositeVerifier.sol
+blob 2ee14a0cfd55991c8119d888e086c34fc2af43ef contracts/src/mocks/MockERC20.sol
+blob 30a3c90ce9e13fc7989e041bef63abb3a5c289b3 contracts/src/mocks/MockVerifier.sol
+blob 8a2eff3b8441b0d2c2a119d93cc5856b72f9beeb contracts/src/verifiers/DepositVerifier.sol
+blob bc147ffbc5b70dc25804a7e19fcf4535dc81c74b contracts/src/verifiers/TransferVerifier.sol
+blob 6d9c45e11fd94a123da80e58d21046cb8e402a50 contracts/src/verifiers/WithdrawVerifier.sol
+blob 47abcfc00b984e39bfbbac7f10dbb637d8f82805 foundry.toml
+blob 0d92e3928dd205ec937466b4e932daf5896e9731 soldeer.lock
+
+# The three soldeer packages: sha256 of the zip that the pinned soldeer.lock names (its url and
+# checksum), as in deployment/PINS.txt.
+zip_sha256 d37187263f82783c5eaeeb3c18d0147e23d54ae33f5966fce2a7bac60ce81480 @openzeppelin-contracts-5.6.0-rc.1
+zip_sha256 d10079d1b7aac1a36dd2eeb4c5d042e8ed27b00f4ef89530b7f0a6ecd18cada3 forge-std-1.14.0
+zip_sha256 c622cf4f348014da6947d3ddeba267317f1ca3701466f92e0be64a7726c3b31c poseidon-solidity-0.0.5
+
+# The git dependency: zk-kit.solidity at the lock's rev, and the tree id of that commit.
+zkkit_repo https://github.com/zk-kit/zk-kit.solidity.git
+zkkit_rev a171c845ec7fdc50cdd1fe96c14c27d707cdfbed
+zkkit_tree 7ced94aea59a00e9b53fe8eaf36fa849f0ba79cd
+
+# Toolchain. forge from the foundry v1.8.3 release; solc from binaries.soliditylang.org (as deployment/).
+forge_version 1.8.3
+forge_commit cae51ad458f6abb64852b7709eb784352429825d
+forge_sha256 deb412a722e873e11e60051deb9d403b584a2d7e49d8b9ee68441edfea215e9c
+foundry_asset https://github.com/foundry-rs/foundry/releases/download/v1.8.3/foundry_v1.8.3_linux_amd64.tar.gz sha256=7ca48e6ca3cac1bce1403ca67e5bc1dc3bc1fd818199c9957c7165079c228568
+solc_version 0.8.37+commit.f401782d
+solc_sha256 5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a
+solc_url https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.8.37+commit.f401782d
+
+# Halmos and its solvers. requirements.txt pins every package by sha256 for the install. check.sh
+# reads the versions and yices_sha256 below; the wheel, sdist and package lines record what
+# requirements.txt pins, and the pyenv_record_sha256 lines hold the installed files.
+python_version 3.12 the Python of the halmos environment (the first runs used 3.12.14)
+halmos_version 0.3.3
+halmos_wheel_sha256 3967291bdd4aaac96a4c42dd18bf25bd76215acad53697d98f02b986ac8d3f67 halmos-0.3.3-py3-none-any.whl
+halmos_sdist_sha256 2830f421fecea413919c52f499597d796d4d49f5a0f3f0741c2a8399e2bd6abf halmos-0.3.3.tar.gz
+yices_version 2.6.4
+yices_package yices-solver==2.6.4.post23
+yices_sha256 8b5598ac07dfc73abb86ed0851d218e789b898274d83122535ac18af31373888 yices-smt2 from the manylinux x86_64 wheel
+z3_version 4.12.6
+z3_package z3-solver==4.12.6.0
+
+# The Python environment of halmos: per distribution, the sha256 of its sorted RECORD lines (path and
+# hash; dist-info files and console scripts left out) after the Linux x86_64 CPython 3.12 install of
+# requirements.txt. scripts/pyenv-check.py checks every file against its RECORD and each RECORD here.
+pyenv_record_sha256 b7acdabcbf61053ca5d925816c60a87a8110e02b2de7112ac6cfbff3d8dd289c certifi==2026.7.22
+pyenv_record_sha256 14535438dd7e9a5373dcf7bc28666dad67993507d7f20d50c89f127bdf6ce22e charset-normalizer==3.5.1
+pyenv_record_sha256 686ea2a08ea3209573c67fbdaaf92dbc236a15d7968901ff9e0095e5fe30cb6d eth-hash==0.8.0
+pyenv_record_sha256 77552c2caefe01271e895c2543033ccbdbeea071a0c06ca82cd0a5ea859fe04b halmos==0.3.3
+pyenv_record_sha256 8b87b8d0b6a5c53c0180d45640ca217555fee75d21c0497ca9fda5e4d9ab8603 idna==3.20
+pyenv_record_sha256 53277dd40a7d8704d13c5fdfe0feb1431571b767a0fc74ad7ae6926c5ba502d1 markdown-it-py==4.2.0
+pyenv_record_sha256 a566f08e648147af05123f7c115e62239a1b45ed858b1eeca8b7f5026d53d042 mdurl==0.1.2
+pyenv_record_sha256 b3e4fdade0591c7789193c83ce5db47543248f23d6a7e5c36ebcacfb600780ba psutil==7.2.2
+pyenv_record_sha256 da83105bcafe3870846358e9612e11fb37ba1b834038473facb662068e67ea82 pygments==2.21.0
+pyenv_record_sha256 3d81a8027b929878a0671655d7b4b11326d148fcf10344d9492aa3d53fdbeecc python-dotenv==1.2.3
+pyenv_record_sha256 33faf578663feeb3031ac21778c2c8cbdce6a45b94ad9b0168657137179400b0 requests==2.34.2
+pyenv_record_sha256 09e0de563adf6f9e39c0f1d5fef47d92f7a0781072b924c4d03e14a54061130a rich==14.0.0
+pyenv_record_sha256 015bbc965f944c83b4c0bdb475b93c5b2bdc9553665f8defeea64e14d25c2911 safe-pysha3==1.0.5
+pyenv_record_sha256 118595068264b4029a2683f035d1ad6ebf214a49310738ec599f34f44333cffa sortedcontainers==2.4.0
+pyenv_record_sha256 2ee39869c62e82e7b8db1e833d32ee69c0de6f24ee08bc62a545a114b5542e3f toml==0.10.2
+pyenv_record_sha256 ee0f24161985379c7703362be8b15171bdf6ce22400cf15a31996fed9311ed9a urllib3==2.8.0
+pyenv_record_sha256 ad9652d8cb7497542de8dd600e5c1179be5f163aae2eae32e625f52d64d066d2 xxhash==4.0.1
+pyenv_record_sha256 828f8df2706fbfaeb03a60200007e11f4ce9b1c934871b102360a8ca82bdb075 yices-solver==2.6.4.post23
+pyenv_record_sha256 01e4ddb8325e30c98d6e47c8e8da3d44ab4b8115db73cb76cd9345b585fb0061 z3-solver==4.12.6.0

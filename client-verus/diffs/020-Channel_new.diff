@@ -1,0 +1,19 @@
+--- a04b8b3:adapters/channel.rs:116-124
++++ mirrors/channel.rs
+@@ -1,9 +1,7 @@
+-    pub fn new(viewing_pubkey: ViewingPubkey, registry: Arc<ChannelRegistry>) -> Self {
+-        // This is a simplified constructor; the receiver will be set up separately
+-        let (_, rx) = mpsc::channel(1);
+-        Self {
+-            viewing_pubkey,
+-            receiver: Arc::new(Mutex::new(rx)),
+-            registry,
+-        }
+-    }
++pub fn channel_new<R: RegistryApi,E: Effects>(viewing_pubkey: Key, registry: R) -> (r: Channel<R>)
++ ensures r.viewing_pubkey == viewing_pubkey, r.registry == registry, r.receiver == E::pair(1).1,
++ // STRENGTH channel_new
++{
++ let (_,rx)=E::channel(1);
++ Channel {viewing_pubkey,receiver:rx,registry}
++}

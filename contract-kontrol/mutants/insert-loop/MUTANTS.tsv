@@ -1,0 +1,7 @@
+id	base	diff	output	change
+InternalLeanIMT_M_FIELD	internal-leanimt	InternalLeanIMT_M_FIELD.diff	InternalLeanIMT_M_FIELD.sol	insert: the leaf < P check removed
+LeanIMT_M_FIELD	leanimt	LeanIMT_M_FIELD.diff	LeanIMT_M_FIELD.sol	insert: the leaf < P check removed: the LeanIMT wrapper renamed to call it
+InternalLeanIMT_M_ZERO	internal-leanimt	InternalLeanIMT_M_ZERO.diff	InternalLeanIMT_M_ZERO.sol	insert: the nonzero-leaf check removed
+LeanIMT_M_ZERO	leanimt	LeanIMT_M_ZERO.diff	LeanIMT_M_ZERO.sol	insert: the nonzero-leaf check removed: the LeanIMT wrapper renamed to call it
+InternalLeanIMT_M_DUP	internal-leanimt	InternalLeanIMT_M_DUP.diff	InternalLeanIMT_M_DUP.sol	insert: the duplicate-leaf check removed
+LeanIMT_M_DUP	leanimt	LeanIMT_M_DUP.diff	LeanIMT_M_DUP.sol	insert: the duplicate-leaf check removed: the LeanIMT wrapper renamed to call it

@@ -1,0 +1,38 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	A_add	PostTransferAdminTest	^check_A_add\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	A_add_witness	PostTransferAdminTest	^check_A_add_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	A_owner	PostTransferAdminTest	^check_A_owner\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	A_owner_witness	PostTransferAdminTest	^check_A_owner_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	A_registry	PostTransferAdminTest	^check_A_registry\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	A_registry_witness	PostTransferAdminTest	^check_A_registry_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	A_remove	PostTransferAdminTest	^check_A_remove\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	A_remove_witness	PostTransferAdminTest	^check_A_remove_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-A_add	PostTransferAdminMut_A_add	^check_A_add\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-A_owner	PostTransferAdminMut_A_owner	^check_A_owner\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-A_registry	PostTransferAdminMut_A_registry	^check_A_registry\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-A_remove	PostTransferAdminMut_A_remove	^check_A_remove\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_distinct	PostTransferAdminMut_T_distinct	^check_T_distinct\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_fresh_outputs	PostTransferAdminMut_T_fresh_outputs	^check_T_fresh_outputs\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_known_root	PostTransferAdminMut_T_known_root	^check_T_known_root\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_no_effects	PostTransferAdminMut_T_no_effects	^check_T_no_effects\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_post	PostTransferAdminMut_T_post	^check_T_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_post_mapping	PostTransferAdminMut_T_post_mapping	^check_T_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_post_order	PostTransferAdminMut_T_post_order	^check_T_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_unspent	PostTransferAdminMut_T_unspent	^check_T_unspent\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_verified_canonical	PostTransferAdminMut_T_verified_canonical	^check_T_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_verified	PostTransferAdminMut_T_verified	^check_T_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	mutant-T_verified_root	PostTransferAdminMut_T_verified_root	^check_T_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_distinct	PostTransferAdminTest	^check_T_distinct\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_distinct_witness	PostTransferAdminTest	^check_T_distinct_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_fresh_outputs	PostTransferAdminTest	^check_T_fresh_outputs\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_fresh_outputs_witness	PostTransferAdminTest	^check_T_fresh_outputs_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_known_root	PostTransferAdminTest	^check_T_known_root\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_known_root_witness	PostTransferAdminTest	^check_T_known_root_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_no_effects	PostTransferAdminTest	^check_T_no_effects\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_no_effects_witness	PostTransferAdminTest	^check_T_no_effects_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_post	PostTransferAdminTest	^check_T_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_post_witness	PostTransferAdminTest	^check_T_post_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_unspent	PostTransferAdminTest	^check_T_unspent\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_unspent_witness	PostTransferAdminTest	^check_T_unspent_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit
+halmos	T_verified	PostTransferAdminTest	^check_T_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes *
+halmos	T_verified_witness	PostTransferAdminTest	^check_T_verified_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2 --panic-error-codes * --early-exit

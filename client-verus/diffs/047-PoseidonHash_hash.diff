@@ -1,0 +1,15 @@
+--- a04b8b3:adapters/merkle_tree.rs:36-49
++++ mirrors/crypto_field.rs
+@@ -1,5 +1,10 @@
+-    fn hash(input: &[u8]) -> [u8; 32] {
+-        let hash = Poseidon::<Fq>::new_circom(2)
++    pub fn hash<P: PoseidonHasher>(input: &[u8]) -> (r: [u8; 32])
++        requires input.len() == 64,
++        ensures
++            be_value(r@) == P::h2(be_value(input@.subrange(0, 32)) % R(), be_value(input@.subrange(32, 64)) % R()) % R(),
++            be_value(r@) < R(),
++    {
++        let hash = P::new_circom(2)
+             .expect("Failed to initialize Poseidon")
+             .hash(&[
+                 Fr::from_be_bytes_mod_order(&input[..32]),

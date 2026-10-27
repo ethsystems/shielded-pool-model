@@ -1,0 +1,1615 @@
+{
+ "commit": "a04b8b38969dfc2ee64de47edee7e396454204a8",
+ "source_prefix": "pocs/private-payment/shielded-pool/src/lib/",
+ "region_rule": "lines line..end of the file at the commit, joined with newline, plus one trailing newline",
+ "rows": [
+  {
+   "n": 1,
+   "function": "format_field",
+   "file": "adapters/bb_prover.rs",
+   "line": 33,
+   "end": 35,
+   "sha256": "e7e242ee2fa6023b1f95e2ef7bd577843a3d00127247eb0dea74b89f1720fd9d",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "fn format_field(value: &B256)"
+   },
+   "property": "\"0x\" + 64 lowercase hex digits of the word; injective (lemma)",
+   "new_mirror": false
+  },
+  {
+   "n": 2,
+   "function": "format_field_from_address",
+   "file": "adapters/bb_prover.rs",
+   "line": 38,
+   "end": 41,
+   "sha256": "f5c6387da95ce5c525315d8f668d9927ba326b0f61067a38ebdfe9bcf6c27ecc",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "fn format_field_from_address(addr: &Address)"
+   },
+   "property": "hex field of 12 zero bytes + the 20 address bytes",
+   "new_mirror": false
+  },
+  {
+   "n": 3,
+   "function": "format_u256",
+   "file": "adapters/bb_prover.rs",
+   "line": 44,
+   "end": 46,
+   "sha256": "d17fb02fe22a6763b2f5728027eb7003ab6f120a036a59a23ef3d8599a7b68eb",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "fn format_u256(value: &U256)"
+   },
+   "property": "canonical decimal string of the FULL U256 value (no range check; >= 2^128 gives 39+ digits)",
+   "new_mirror": false
+  },
+  {
+   "n": 4,
+   "function": "pad_field_array",
+   "file": "adapters/bb_prover.rs",
+   "line": 49,
+   "end": 53,
+   "sha256": "bcd3c673e4286203edc4ba95f03c836d4a07e4fb06d3bdf02259d5fc833fd606",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "fn pad_field_array(path"
+   },
+   "property": "exactly max_depth hex fields: path zero-padded, TRUNCATED when longer",
+   "new_mirror": false
+  },
+  {
+   "n": 5,
+   "function": "pad_index_array",
+   "file": "adapters/bb_prover.rs",
+   "line": 56,
+   "end": 60,
+   "sha256": "b76689d2fbd516562bce7d8cf06b7d969381d6fab43f4c58a7e16bde0be1bf2e",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "fn pad_index_array(indices"
+   },
+   "property": "exactly max_depth bytes: zero-padded, TRUNCATED when longer",
+   "new_mirror": false
+  },
+  {
+   "n": 6,
+   "function": "DepositProverInput::from",
+   "file": "adapters/bb_prover.rs",
+   "line": 81,
+   "end": 104,
+   "sha256": "980387e2938e2941997bd738d99385bf8b462e96488e3af4e6b8a32a5a5f647b",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    pub fn from(w: &DepositWitness)"
+   },
+   "property": "all 14 fields from the right witness fields and encodings; paths padded to 20",
+   "new_mirror": false
+  },
+  {
+   "n": 7,
+   "function": "TransferProverInput::from",
+   "file": "adapters/bb_prover.rs",
+   "line": 139,
+   "end": 175,
+   "sha256": "1da267550fe570fb964e351ffd2cfaceabb6b6d8fe467fbc48e18696a37c0f86",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    pub fn from(w: &TransferWitness)"
+   },
+   "property": "all 27 fields from the right note/index/proof; paths padded to 32",
+   "new_mirror": false
+  },
+  {
+   "n": 8,
+   "function": "WithdrawProverInput::from",
+   "file": "adapters/bb_prover.rs",
+   "line": 193,
+   "end": 209,
+   "sha256": "3062e5c71665b54d30919b8cea66d5a1899bd5aad6fea7fac0b8dbd2d2625633",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    pub fn from(w: &WithdrawWitness)"
+   },
+   "property": "all 10 fields from the right witness fields; salt from the note",
+   "new_mirror": false
+  },
+  {
+   "n": 9,
+   "function": "BBProver::format_deposit_prover_toml",
+   "file": "adapters/bb_prover.rs",
+   "line": 263,
+   "end": 266,
+   "sha256": "d268c88d8de9055f7953fcc80f30c2711f8a4fdfa3dd732ae102e7aff2fa0791",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    fn format_deposit_prover_toml<T"
+   },
+   "property": "Safe under the stated integer bounds and the assumed TOML contract; record provenance checked, text abstract.",
+   "new_mirror": false
+  },
+  {
+   "n": 10,
+   "function": "BBProver::format_transfer_prover_toml",
+   "file": "adapters/bb_prover.rs",
+   "line": 269,
+   "end": 272,
+   "sha256": "4ca11f7abe3795ac9f497e9633fcffbf9345c8ca4996ffd40e19f563a3c8c550",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    fn format_transfer_prover_toml<T"
+   },
+   "property": "Safe under the stated integer bounds and the assumed TOML contract; record provenance checked, text abstract.",
+   "new_mirror": false
+  },
+  {
+   "n": 11,
+   "function": "BBProver::format_withdraw_prover_toml",
+   "file": "adapters/bb_prover.rs",
+   "line": 275,
+   "end": 278,
+   "sha256": "240720fa8de7a02422247eb507e3b588afa4fa44c59392788fe22328ecbc3f33",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_fmt.rs",
+    "marker": "    fn format_withdraw_prover_toml<T"
+   },
+   "property": "Safe under the stated integer bounds and the assumed TOML contract; record provenance checked, text abstract.",
+   "new_mirror": false
+  },
+  {
+   "n": 12,
+   "function": "BBProver::prove_circuit",
+   "file": "adapters/bb_prover.rs",
+   "line": 281,
+   "end": 358,
+   "sha256": "dd0d7fdfee7c866010974bdf462d62be8e5d6162bcc11b350d12d3201b7a60cb",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_effects.rs",
+    "marker": "// STRENGTH prove_circuit\n"
+   },
+   "property": "Exact nargo/bb argument bytes and control-flow result under path/I/O/process contracts; cleanup failure propagates.",
+   "new_mirror": true
+  },
+  {
+   "n": 13,
+   "function": "BBProver::prove_deposit",
+   "file": "adapters/bb_prover.rs",
+   "line": 362,
+   "end": 385,
+   "sha256": "eeef4157208f3b79fd512dc749177a1afe3cecd987049854f540367c3b621e96",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_effects.rs",
+    "marker": "// STRENGTH prove_deposit\n"
+   },
+   "property": "Amount guard and proof fields under safe TOML bounds and prover contract.",
+   "new_mirror": true
+  },
+  {
+   "n": 14,
+   "function": "BBProver::prove_transfer",
+   "file": "adapters/bb_prover.rs",
+   "line": 387,
+   "end": 413,
+   "sha256": "aa3db8dcdb554b575ec186122c3272ad0911eed2f137ddd6ea3f9d8231ab61ed",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_effects.rs",
+    "marker": "// STRENGTH prove_transfer\n"
+   },
+   "property": "Amount/token guard outcomes and proof fields under safe TOML bounds and prover contract.",
+   "new_mirror": true
+  },
+  {
+   "n": 15,
+   "function": "BBProver::prove_withdraw",
+   "file": "adapters/bb_prover.rs",
+   "line": 415,
+   "end": 430,
+   "sha256": "c21c343a91b231de2a26fbf5f8d6085458d2bca8c21b1b57518f01609b6c77b0",
+   "route": "Verus",
+   "verus": {
+    "mirror": "prover_effects.rs",
+    "marker": "// STRENGTH prove_withdraw\n"
+   },
+   "property": "Proof fields under safe TOML bounds and prover contract; no amount guard.",
+   "new_mirror": true
+  },
+  {
+   "n": 16,
+   "function": "ChannelRegistry::register",
+   "file": "adapters/channel.rs",
+   "line": 47,
+   "end": 61,
+   "sha256": "5c219a2d724636adc7e6cb76d836a0bfd7e3771a2ecb8afbeb20c0bafe97f194",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH registry_register\n"
+   },
+   "property": "Capacity 100; key-to-sender insertion; returned receiver/key; cloned registry is empty.",
+   "new_mirror": true
+  },
+  {
+   "n": 17,
+   "function": "ChannelRegistry::unregister",
+   "file": "adapters/channel.rs",
+   "line": 64,
+   "end": 68,
+   "sha256": "58ee2abe031c96624c3a36480cef1ada475d2d3a591fc3581bdd41d5829da906",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH registry_unregister\n"
+   },
+   "property": "Remove exactly the selected serialized key under the sequential registry contract.",
+   "new_mirror": true
+  },
+  {
+   "n": 18,
+   "function": "ChannelRegistry::send_to",
+   "file": "adapters/channel.rs",
+   "line": 71,
+   "end": 90,
+   "sha256": "522d686cb76097a124b0f24f5cd87f1cf577c04330f7008772b3c6e7b76fc7c2",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH registry_send_to\n"
+   },
+   "property": "Lookup key; missing recipient, send success and closed-channel mapping.",
+   "new_mirror": true
+  },
+  {
+   "n": 19,
+   "function": "ChannelRegistry::clone",
+   "file": "adapters/channel.rs",
+   "line": 94,
+   "end": 99,
+   "sha256": "0c0417fa531842ff23f77efc3c5844f6de35bcc408386270f842b0ebe1f6229a",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH registry_clone\n"
+   },
+   "property": "Return an empty registry, independent of the input entries.",
+   "new_mirror": true
+  },
+  {
+   "n": 20,
+   "function": "Channel::new",
+   "file": "adapters/channel.rs",
+   "line": 116,
+   "end": 124,
+   "sha256": "0671ba4caf79e9b56b7c8c8b1e386fe35487217dab9fcaa591f87390384416d6",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH channel_new\n"
+   },
+   "property": "Capacity 1; retain key and registry; return receiver endpoint.",
+   "new_mirror": true
+  },
+  {
+   "n": 21,
+   "function": "Channel::send_note",
+   "file": "adapters/channel.rs",
+   "line": 133,
+   "end": 145,
+   "sha256": "424abf64970f79cabc5139323863a9170c2ca72faea85fdf8acf732f5fc7c15b",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH channel_send_note\n"
+   },
+   "property": "Message fields and recipient routing to the given registry.",
+   "new_mirror": true
+  },
+  {
+   "n": 22,
+   "function": "Channel::receive_note",
+   "file": "adapters/channel.rs",
+   "line": 147,
+   "end": 154,
+   "sha256": "e3398c4449454c3a7f9475f637b34e7d0db5651a8ea4259d5011e8af1c848480",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH channel_receive_note\n"
+   },
+   "property": "Message to Some, Empty to None, Disconnected to ChannelClosed.",
+   "new_mirror": true
+  },
+  {
+   "n": 23,
+   "function": "Channel::receive_note_blocking",
+   "file": "adapters/channel.rs",
+   "line": 156,
+   "end": 159,
+   "sha256": "e1fd418fe70fe7c087ce42451446d1800fe1c133de0283b68da3c4f07e1a25b5",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH channel_receive_note_blocking\n"
+   },
+   "property": "Some message preserved; None becomes ChannelClosed.",
+   "new_mirror": true
+  },
+  {
+   "n": 24,
+   "function": "ChannelSystem::create_channel",
+   "file": "adapters/channel.rs",
+   "line": 176,
+   "end": 190,
+   "sha256": "2b610d9a85364e812194c268771363516134954fcaa66159eb3786e20647cdca",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH system_create_channel\n"
+   },
+   "property": "Capacity 100; insert chosen key/sender; retain shared handle and receiver.",
+   "new_mirror": true
+  },
+  {
+   "n": 25,
+   "function": "SystemChannel::send_note",
+   "file": "adapters/channel.rs",
+   "line": 214,
+   "end": 236,
+   "sha256": "bad896a1c03e1a0c560bd9a715e0ca35ffa82be28e8e047747cae917d925afb9",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH system_send_note\n"
+   },
+   "property": "Recipient key and message fields; lookup/send error mapping.",
+   "new_mirror": true
+  },
+  {
+   "n": 26,
+   "function": "SystemChannel::receive_note",
+   "file": "adapters/channel.rs",
+   "line": 238,
+   "end": 245,
+   "sha256": "e3398c4449454c3a7f9475f637b34e7d0db5651a8ea4259d5011e8af1c848480",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH system_receive_note\n"
+   },
+   "property": "Message to Some, Empty to None, Disconnected to ChannelClosed.",
+   "new_mirror": true
+  },
+  {
+   "n": 27,
+   "function": "SystemChannel::receive_note_blocking",
+   "file": "adapters/channel.rs",
+   "line": 247,
+   "end": 250,
+   "sha256": "e1fd418fe70fe7c087ce42451446d1800fe1c133de0283b68da3c4f07e1a25b5",
+   "route": "Verus",
+   "verus": {
+    "mirror": "channel.rs",
+    "marker": "// STRENGTH system_receive_note_blocking\n"
+   },
+   "property": "Some message preserved; None becomes ChannelClosed.",
+   "new_mirror": true
+  },
+  {
+   "n": 28,
+   "function": "EthereumRpc::new",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 120,
+   "end": 145,
+   "sha256": "bd31c1daca72dc902ddf5c9ab5b0650d8a3b63640e45d2df005337278c842a6c",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH new\n"
+   },
+   "property": "Signer and URL parse error categories; provider, wallet address and configured contract fields.",
+   "new_mirror": true
+  },
+  {
+   "n": 29,
+   "function": "EthereumRpc::convert_receipt",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 163,
+   "end": 170,
+   "sha256": "64d03de00259814ebbaf089f5d4679c72a12e2d87a359491851ee96d6dd88bfd",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    fn convert_receipt(receipt"
+   },
+   "property": "fields kept; missing block number becomes 0; success = status",
+   "new_mirror": false
+  },
+  {
+   "n": 30,
+   "function": "EthereumRpc::get_commitment_root",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 176,
+   "end": 184,
+   "sha256": "63b077304cc97c9a1e61e8fb18d1013383cfa1a6a9570d35a6d5d1d3a6bc6ddb",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_commitment_root\n"
+   },
+   "property": "Provider, pool address and commitmentRoot request; Contract error mapping.",
+   "new_mirror": true
+  },
+  {
+   "n": 31,
+   "function": "EthereumRpc::get_commitment_count",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 186,
+   "end": 194,
+   "sha256": "13d0889bde2a9bf6a7023ca2bd1123b53d0fa9aa30cb9225e4fbe90f28cc19ef",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_commitment_count\n"
+   },
+   "property": "Provider and request; full U256 conversion saturates at u64::MAX.",
+   "new_mirror": true
+  },
+  {
+   "n": 32,
+   "function": "EthereumRpc::is_nullifier_spent",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 198,
+   "end": 206,
+   "sha256": "e749d869b52dd3bdd50b44b800805a1f97a77ddffbbd8ccc09619afe7de20b3c",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH is_nullifier_spent\n"
+   },
+   "property": "Provider, pool and nullifier argument; Boolean/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 33,
+   "function": "EthereumRpc::is_known_root",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 208,
+   "end": 216,
+   "sha256": "ee8f8abdba58a7f17f2e59c3be5f6bdd9585d55e87ec2edabce30b2dc4a92d1c",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH is_known_root\n"
+   },
+   "property": "Provider, pool and root argument; Boolean/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 34,
+   "function": "EthereumRpc::is_token_supported",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 218,
+   "end": 226,
+   "sha256": "5f686f14fd3dee9e11c8abdc189f66caaf3dbf89aab9a8e57bc5088cbfbedfb6",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH is_token_supported\n"
+   },
+   "property": "Provider, pool and token argument; Boolean/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 35,
+   "function": "EthereumRpc::get_attestation_root",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 230,
+   "end": 239,
+   "sha256": "ef25cd47999e65d3fa60a682ba649ecf4b908bd6de2e8344dd702f20e0eff8c0",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_attestation_root\n"
+   },
+   "property": "Provider, registry and root request; word/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 36,
+   "function": "EthereumRpc::get_attestation_count",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 241,
+   "end": 250,
+   "sha256": "754818028025de501a984ff77bd4af79909437dfd0825a8f50a2a5c31c1158ec",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_attestation_count\n"
+   },
+   "property": "Exact count under the explicit U256-to-u64 fit precondition.",
+   "new_mirror": true
+  },
+  {
+   "n": 37,
+   "function": "EthereumRpc::get_attestation_leaf",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 254,
+   "end": 263,
+   "sha256": "b9a3f5dad6e3bbffec26ee82dcb4df995a1d47b4e29be6faf5ba696ab7864314",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_attestation_leaf\n"
+   },
+   "property": "Exact index argument under index < 2^40; result/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 38,
+   "function": "EthereumRpc::is_authorized_attester",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 265,
+   "end": 277,
+   "sha256": "be2173e76be950e5b322ec2f93b782b9381ddbdc3e360102b4f5bac41e408ebc",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH is_authorized_attester\n"
+   },
+   "property": "Provider, registry and attester argument; Boolean/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 39,
+   "function": "EthereumRpc::deposit",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 281,
+   "end": 313,
+   "sha256": "cc35da4abcdbe942ae402debf8b22bba770562bcb4b1dd09df42e9711eecfd63",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH deposit\n"
+   },
+   "property": "All six ABI arguments and provider/target; send and receipt errors; status check.",
+   "new_mirror": true
+  },
+  {
+   "n": 40,
+   "function": "EthereumRpc::transfer",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 315,
+   "end": 347,
+   "sha256": "aea056ebad4ffee94e68dba7518926452c4446c7744f2f7d43f5f7c6f389700e",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH transfer\n"
+   },
+   "property": "Proof, ordered pairs, root and encrypted bytes; send and receipt errors; status check.",
+   "new_mirror": true
+  },
+  {
+   "n": 41,
+   "function": "EthereumRpc::withdraw",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 349,
+   "end": 383,
+   "sha256": "e62f8459e82588e68a95415d1c3dc9bb01e071529213b64a38af5d38db88b86a",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH withdraw\n"
+   },
+   "property": "Proof, nullifier, token, full amount, recipient and root; error/status handling.",
+   "new_mirror": true
+  },
+  {
+   "n": 42,
+   "function": "EthereumRpc::add_attester",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 387,
+   "end": 407,
+   "sha256": "584fd564e8522cdcae8a80d59e364b41f25bea12c74689d7e3e2d0ebcef5e5a3",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH add_attester\n"
+   },
+   "property": "Registry and attester argument; send and receipt errors; status check.",
+   "new_mirror": true
+  },
+  {
+   "n": 43,
+   "function": "EthereumRpc::add_attestation",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 409,
+   "end": 459,
+   "sha256": "197128a7d27c3081bd5466eef0eac4e7a1c5db390c6ad6da1209f624cdd924c1",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH add_attestation\n"
+   },
+   "property": "Count before send; first decoded event fields and earlier count index; all local errors.",
+   "new_mirror": true
+  },
+  {
+   "n": 44,
+   "function": "EthereumRpc::add_supported_token",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 461,
+   "end": 483,
+   "sha256": "6000f404046d7c5043c4a590f92d97051b63ae5d4df2936eb201a32656875e6a",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH add_supported_token\n"
+   },
+   "property": "Pool and token argument; send and receipt errors; status check.",
+   "new_mirror": true
+  },
+  {
+   "n": 45,
+   "function": "EthereumRpc::approve_token",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 487,
+   "end": 508,
+   "sha256": "003ad0f5916aeebff192110ae8ae74688604aed050ded73e57022f5993b1a15f",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH approve_token\n"
+   },
+   "property": "Token contract, pool spender and full amount; error/status handling.",
+   "new_mirror": true
+  },
+  {
+   "n": 46,
+   "function": "EthereumRpc::get_token_balance",
+   "file": "adapters/ethereum_rpc.rs",
+   "line": 510,
+   "end": 522,
+   "sha256": "3a120a4f62878d7e47a6a37547cc16ea8a871af8b8b90a5070ce588b7c66c8c2",
+   "route": "Verus",
+   "verus": {
+    "mirror": "rpc.rs",
+    "marker": "// STRENGTH get_token_balance\n"
+   },
+   "property": "Token contract and account argument; full U256/error forwarding.",
+   "new_mirror": true
+  },
+  {
+   "n": 47,
+   "function": "PoseidonHash::hash",
+   "file": "adapters/merkle_tree.rs",
+   "line": 36,
+   "end": 49,
+   "sha256": "8e9556f3cd29ee3c4d9eef72810d6c8be045d4840aef29e04ae298779b0fe135",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "    pub fn hash<P: PoseidonHasher>(input: &[u8])"
+   },
+   "property": "node = h2(left mod r, right mod r) mod r, left = bytes 0..32; no panic for 64-byte input",
+   "new_mirror": false
+  },
+  {
+   "n": 48,
+   "function": "decode_path",
+   "file": "adapters/merkle_tree.rs",
+   "line": 58,
+   "end": 68,
+   "sha256": "fc4dcd844d80fabb1076c3c775c4f4c764b31339b36275dd7b5ce4003fb9228f",
+   "route": "both",
+   "verus": {
+    "mirror": "merkle_proofs.rs",
+    "marker": "fn decode_path(index: usize"
+   },
+   "property": "LSB-first bits, length (path_len <= usize bits)",
+   "new_mirror": false
+  },
+  {
+   "n": 49,
+   "function": "CommitmentTree::insert",
+   "file": "adapters/merkle_tree.rs",
+   "line": 77,
+   "end": 79,
+   "sha256": "2ea1116ab44879a97c65e4ab5f51bbc1b8be015d72117496ce8ddc99a5a6f0d6",
+   "route": "Verus",
+   "verus": {
+    "mirror": "tree.rs",
+    "marker": "// STRENGTH CommitmentTree_insert\n"
+   },
+   "property": "THIN: forward insert to lean-imt under its abstract contract; no tree semantics proved.",
+   "new_mirror": true
+  },
+  {
+   "n": 50,
+   "function": "CommitmentTree::root",
+   "file": "adapters/merkle_tree.rs",
+   "line": 92,
+   "end": 94,
+   "sha256": "bf5531fc14f44141831f30a31d3558c0b603d2cd195540b4f074e87fcba5efef",
+   "route": "Verus",
+   "verus": {
+    "mirror": "tree.rs",
+    "marker": "// STRENGTH CommitmentTree_root\n"
+   },
+   "property": "THIN: forward root to lean-imt under its abstract contract; no tree semantics proved.",
+   "new_mirror": true
+  },
+  {
+   "n": 51,
+   "function": "CommitmentTree::generate_commitment_proof",
+   "file": "adapters/merkle_tree.rs",
+   "line": 97,
+   "end": 119,
+   "sha256": "394ef2de1f9c3084ba41b20e6713e657f6647dd55bc358dfcc5d666af8d0f6bd",
+   "route": "Verus",
+   "verus": {
+    "mirror": "merkle_proofs.rs",
+    "marker": "    pub fn generate_commitment_proof("
+   },
+   "property": "None iff lean-imt errs; path = siblings in order; bits from the PROOF index (not leaf_index); leaf_index kept; length = sibling count",
+   "new_mirror": false
+  },
+  {
+   "n": 52,
+   "function": "AttestationTree::insert",
+   "file": "adapters/merkle_tree.rs",
+   "line": 135,
+   "end": 137,
+   "sha256": "2ea1116ab44879a97c65e4ab5f51bbc1b8be015d72117496ce8ddc99a5a6f0d6",
+   "route": "Verus",
+   "verus": {
+    "mirror": "tree.rs",
+    "marker": "// STRENGTH AttestationTree_insert\n"
+   },
+   "property": "THIN: forward insert to lean-imt under its abstract contract; no tree semantics proved.",
+   "new_mirror": true
+  },
+  {
+   "n": 53,
+   "function": "AttestationTree::root",
+   "file": "adapters/merkle_tree.rs",
+   "line": 150,
+   "end": 152,
+   "sha256": "bf5531fc14f44141831f30a31d3558c0b603d2cd195540b4f074e87fcba5efef",
+   "route": "Verus",
+   "verus": {
+    "mirror": "tree.rs",
+    "marker": "// STRENGTH AttestationTree_root\n"
+   },
+   "property": "THIN: forward root to lean-imt under its abstract contract; no tree semantics proved.",
+   "new_mirror": true
+  },
+  {
+   "n": 54,
+   "function": "AttestationTree::generate_attestation_proof",
+   "file": "adapters/merkle_tree.rs",
+   "line": 155,
+   "end": 177,
+   "sha256": "67f2d823144bc15011bb7bab57147fe9753e46a256225b6f1d68ebd4e4455858",
+   "route": "Verus",
+   "verus": {
+    "mirror": "merkle_proofs.rs",
+    "marker": "    pub fn generate_attestation_proof("
+   },
+   "property": "as generate_commitment_proof",
+   "new_mirror": false
+  },
+  {
+   "n": 55,
+   "function": "b256_to_bytes",
+   "file": "adapters/merkle_tree.rs",
+   "line": 187,
+   "end": 189,
+   "sha256": "72e3f11a929d15f518ce0d12bec3a5e7b5e2d03fd8032b7973e6607f4d161a75",
+   "route": "Verus",
+   "verus": {
+    "mirror": "misc_domain.rs",
+    "marker": "pub fn b256_to_bytes("
+   },
+   "property": "bytes kept",
+   "new_mirror": false
+  },
+  {
+   "n": 56,
+   "function": "bytes_to_b256",
+   "file": "adapters/merkle_tree.rs",
+   "line": 192,
+   "end": 194,
+   "sha256": "ab773fcc8ab0852bf0ee17da88261d6d90bb4b1ded833bd8f623cef9cefb189d",
+   "route": "Verus",
+   "verus": {
+    "mirror": "misc_domain.rs",
+    "marker": "pub fn bytes_to_b256("
+   },
+   "property": "bytes kept; from_slice cannot panic",
+   "new_mirror": false
+  },
+  {
+   "n": 57,
+   "function": "NoteDomain::encode_note",
+   "file": "crypto/encryption.rs",
+   "line": 45,
+   "end": 47,
+   "sha256": "b088d2d3159c4b05e999f4ced4681e58758856b1fe4d99ebc99edda7f73e8741",
+   "route": "Verus",
+   "verus": {
+    "mirror": "serde_wrappers.rs",
+    "marker": "    pub fn encode_note<J"
+   },
+   "property": "appends J::json(note) to out on Ok",
+   "new_mirror": false
+  },
+  {
+   "n": 58,
+   "function": "NoteDomain::decode_note",
+   "file": "crypto/encryption.rs",
+   "line": 49,
+   "end": 51,
+   "sha256": "4ffff0edbb78859afb01e1ae6fd10cfaf8faba090475c9ce011d46b07ec5c636",
+   "route": "Verus",
+   "verus": {
+    "mirror": "serde_wrappers.rs",
+    "marker": "    pub fn decode_note<J"
+   },
+   "property": "result = J::decoded(bytes)",
+   "new_mirror": false
+  },
+  {
+   "n": 59,
+   "function": "encrypt_note",
+   "file": "crypto/encryption.rs",
+   "line": 55,
+   "end": 64,
+   "sha256": "7d67623c714a35f96f91d2f3bc1a69e7c5d8a6fdd026ee1b334c483f6bcb02b7",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "pub fn encrypt_note<P"
+   },
+   "property": "bytes = sealring envelope for (recipient key, note, EMPTY AAD, RNG); no panic under the seal premise",
+   "new_mirror": false
+  },
+  {
+   "n": 60,
+   "function": "decrypt_note",
+   "file": "crypto/encryption.rs",
+   "line": 72,
+   "end": 83,
+   "sha256": "f863f8b97e1eddde0f8c8abf78a9dd4c5decb66efa00bedf42d45c79fb4c8e76",
+   "route": "Verus",
+   "verus": {
+    "mirror": "misc_domain.rs",
+    "marker": "pub fn decrypt_note<S"
+   },
+   "property": "Ok only if parse succeeds and open returns Some; error mapping exact; AAD empty",
+   "new_mirror": false
+  },
+  {
+   "n": 61,
+   "function": "DecryptionError::from",
+   "file": "crypto/encryption.rs",
+   "line": 97,
+   "end": 102,
+   "sha256": "6d3f2ce1164d052ccf3e327f4ebf928541f12d9cec65dabe2268d2243c39fcd5",
+   "route": "both",
+   "verus": {
+    "mirror": "misc_domain.rs",
+    "marker": "impl From<OpenError> for DecryptionError {\n    fn from("
+   },
+   "property": "exhaustive OpenError mapping",
+   "new_mirror": false
+  },
+  {
+   "n": 62,
+   "function": "b256_to_fr",
+   "file": "crypto/poseidon.rs",
+   "line": 13,
+   "end": 15,
+   "sha256": "fb5b632bde8e71bd677ad9f04dfd743d458a2aef8e25fc968c8a4c09a2d184fb",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "fn b256_to_fr(value: B256)"
+   },
+   "property": "field value = big-endian value mod r (BN254 scalar)",
+   "new_mirror": false
+  },
+  {
+   "n": 63,
+   "function": "fr_to_b256",
+   "file": "crypto/poseidon.rs",
+   "line": 18,
+   "end": 22,
+   "sha256": "13b26c046a92fed53505f582e63b745f8a6cf2c20954af1cddca1aaced40590f",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "fn fr_to_b256(value: Fr)"
+   },
+   "property": "32 big-endian bytes of the canonical value (< r); from_slice never panics",
+   "new_mirror": false
+  },
+  {
+   "n": 64,
+   "function": "poseidon1",
+   "file": "crypto/poseidon.rs",
+   "line": 26,
+   "end": 34,
+   "sha256": "6f630a40c126fba9742db0ce2508b4cb9037b16a79478c92ecb6314f6f51ac80",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "pub fn poseidon1<P"
+   },
+   "property": "output = h1(key mod r) mod r, canonical; both expect calls cannot fail",
+   "new_mirror": false
+  },
+  {
+   "n": 65,
+   "function": "poseidon2",
+   "file": "crypto/poseidon.rs",
+   "line": 40,
+   "end": 48,
+   "sha256": "04031fda11d34b76dd0c923ee91d7a92148110cff0394bb2b0b4d53a0c870ef3",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "pub fn poseidon2<P"
+   },
+   "property": "output = h2(a mod r, b mod r) mod r, argument order a, b; no panic",
+   "new_mirror": false
+  },
+  {
+   "n": 66,
+   "function": "poseidon4",
+   "file": "crypto/poseidon.rs",
+   "line": 54,
+   "end": 62,
+   "sha256": "4c60f5b805f083fe2c3d7175572eb219a8b404af11569796c6cc4f4e5e93914c",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "pub fn poseidon4<P"
+   },
+   "property": "output = h4(a, b, c, d mod r) mod r, order kept; no panic",
+   "new_mirror": false
+  },
+  {
+   "n": 67,
+   "function": "Commitment::nullifier",
+   "file": "domain/commitment.rs",
+   "line": 41,
+   "end": 44,
+   "sha256": "86487385b6c378a23bc013bacc27b937d7e9d67f442f031f23b02d19c006225b",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn nullifier<H: PoolHash>(&self, spending_key: &SpendingKey) -> (r: Nullifier)\n        ensures r.0 == H::h2"
+   },
+   "property": "H2 order",
+   "new_mirror": false
+  },
+  {
+   "n": 68,
+   "function": "payload_commitment",
+   "file": "domain/commitment.rs",
+   "line": 51,
+   "end": 54,
+   "sha256": "94bd158c4c49b5290bb6ea23371faf9c7204b91fc60b8f86177af17b14b3e5f7",
+   "route": "Verus",
+   "verus": {
+    "mirror": "crypto_field.rs",
+    "marker": "pub fn payload_commitment<K"
+   },
+   "property": "output = keccak(payload) mod r as 32 big-endian bytes, canonical",
+   "new_mirror": false
+  },
+  {
+   "n": 69,
+   "function": "EncryptedNote::from_bytes",
+   "file": "domain/encrypted.rs",
+   "line": 37,
+   "end": 45,
+   "sha256": "866e2e7c2115fe05088cb1100d46555f730d11c1435591b4fc0e366e6b2354f7",
+   "route": "Verus",
+   "verus": {
+    "mirror": "byte_records.rs",
+    "marker": "impl EncryptedNote {\n    pub fn from_bytes"
+   },
+   "property": "empty rejected, bytes kept (Verus detour)",
+   "new_mirror": false
+  },
+  {
+   "n": 70,
+   "function": "P2pMessage::new",
+   "file": "domain/encrypted.rs",
+   "line": 62,
+   "end": 72,
+   "sha256": "3077cae141642eb0ad76b619654b4c8a6f2ccd8a230246be5a97ed5acdae3bab",
+   "route": "Verus",
+   "verus": {
+    "mirror": "misc_domain.rs",
+    "marker": "    pub fn new(\n        encrypted_note: EncryptedNote,"
+   },
+   "property": "fields kept; no validation (empty ciphertext accepted)",
+   "new_mirror": false
+  },
+  {
+   "n": 71,
+   "function": "EncryptedTransferNotes::new",
+   "file": "domain/encrypted.rs",
+   "line": 87,
+   "end": 89,
+   "sha256": "45581b74a0a9de25d0a65b7a375296bf38ccfaeab44068ca30d4c9600386ebdf",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "positions kept",
+   "new_mirror": false
+  },
+  {
+   "n": 72,
+   "function": "EncryptedTransferNotes::to_bytes",
+   "file": "domain/encrypted.rs",
+   "line": 92,
+   "end": 101,
+   "sha256": "b85450db02d8561654dfc115a0ad3369200d7301395a5fc13795a04ae861ff4b",
+   "route": "both",
+   "verus": {
+    "mirror": "byte_records.rs",
+    "marker": "impl EncryptedTransferNotes {\n    pub fn to_bytes"
+   },
+   "property": "BE32 prefix + payloads (capacity premise); Verus roundtrip",
+   "new_mirror": false
+  },
+  {
+   "n": 73,
+   "function": "EncryptedTransferNotes::from_bytes",
+   "file": "domain/encrypted.rs",
+   "line": 104,
+   "end": 118,
+   "sha256": "1a57fde5c098160ab9aa17aca3edabb4b613f53a8efca4c03154c1824bfabd54",
+   "route": "Verus",
+   "verus": {
+    "mirror": "byte_records.rs",
+    "marker": "impl EncryptedTransferNotes {\n    pub fn from_bytes"
+   },
+   "property": "exact split and errors (Verus detour, 64-bit)",
+   "new_mirror": false
+  },
+  {
+   "n": 74,
+   "function": "SpendingKey::random",
+   "file": "domain/keys.rs",
+   "line": 18,
+   "end": 23,
+   "sha256": "6cd2a6e7954322cad17a23ac626ada40cbc2e6c2f3ca68ec3e7a7a92132bbc8e",
+   "route": "Verus",
+   "verus": {
+    "mirror": "note_key.rs",
+    "marker": "    pub fn random(rng: &Rng)"
+   },
+   "property": "key < 2^216 < r",
+   "new_mirror": false
+  },
+  {
+   "n": 75,
+   "function": "SpendingKey::from_bytes",
+   "file": "domain/keys.rs",
+   "line": 26,
+   "end": 28,
+   "sha256": "eeed63184fd61d4d1c65690e765aebd877f0a4e56447768710bca4f8e7a6bd31",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "byte preservation",
+   "new_mirror": false
+  },
+  {
+   "n": 76,
+   "function": "SpendingKey::derive_owner_pubkey",
+   "file": "domain/keys.rs",
+   "line": 32,
+   "end": 34,
+   "sha256": "78509dd1e7e2a5eced5ff374a122c0073f38433889e1b6e0760836b2a5a6fdb2",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn derive_owner_pubkey<H: PoolHash>(&self)"
+   },
+   "property": "H1(key)",
+   "new_mirror": false
+  },
+  {
+   "n": 77,
+   "function": "OwnerPubkey::from_bytes",
+   "file": "domain/keys.rs",
+   "line": 49,
+   "end": 51,
+   "sha256": "eeed63184fd61d4d1c65690e765aebd877f0a4e56447768710bca4f8e7a6bd31",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "byte preservation",
+   "new_mirror": false
+  },
+  {
+   "n": 78,
+   "function": "ViewingKey::random",
+   "file": "domain/keys.rs",
+   "line": 66,
+   "end": 68,
+   "sha256": "c51014feb9a3e1f4e638fc9fae4d9bda48fdd2ff101caf0f19f6d7f1d3aa84b2",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    pub fn random(rng: &mut Rng)"
+   },
+   "property": "key = k256 generator on the supplied RNG bytes",
+   "new_mirror": false
+  },
+  {
+   "n": 79,
+   "function": "ViewingKey::from_bytes",
+   "file": "domain/keys.rs",
+   "line": 71,
+   "end": 73,
+   "sha256": "e6c823043fb8898ec2353ac34a63880a8ddd4c3f5cc050ae17013732cd61be69",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    pub fn from_bytes(bytes: &[u8]) -> (r: Result<Self, S::Error>)"
+   },
+   "property": "Ok exactly when k256 accepts the bytes; wraps that key",
+   "new_mirror": false
+  },
+  {
+   "n": 80,
+   "function": "ViewingKey::derive_viewing_pubkey",
+   "file": "domain/keys.rs",
+   "line": 76,
+   "end": 78,
+   "sha256": "c3b665dc21ac6838338e5ce7a481cda914aef574fddd81a3e07671160e34a682",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    pub fn derive_viewing_pubkey(&self)"
+   },
+   "property": "wraps k256 public_key of the secret",
+   "new_mirror": false
+  },
+  {
+   "n": 81,
+   "function": "ViewingPubkey::from_sec1_bytes",
+   "file": "domain/keys.rs",
+   "line": 92,
+   "end": 94,
+   "sha256": "bbf724a3665ac1277cfb103bf7bea77435975c85c7481c7f4714b4c44dc2c4bf",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    pub fn from_sec1_bytes(bytes: &[u8]) -> (r: Result<Self, P::Error>)"
+   },
+   "property": "Ok exactly when k256 accepts the SEC1 bytes",
+   "new_mirror": false
+  },
+  {
+   "n": 82,
+   "function": "ViewingPubkey::to_sec1_bytes",
+   "file": "domain/keys.rs",
+   "line": 102,
+   "end": 105,
+   "sha256": "56d324371fd6067858e99789a0337fd7c379aa7201364ae22215e75460c82052",
+   "route": "Verus",
+   "verus": {
+    "mirror": "key_wrappers.rs",
+    "marker": "    pub fn to_sec1_bytes(&self)"
+   },
+   "property": "bytes = COMPRESSED SEC1 encoding",
+   "new_mirror": false
+  },
+  {
+   "n": 83,
+   "function": "viewing_pubkey_serde::serialize",
+   "file": "domain/keys.rs",
+   "line": 116,
+   "end": 122,
+   "sha256": "ae37648b92fce3cf9faed3839381928e307ee13e37a2f071618a40c7e9528b35",
+   "route": "Verus",
+   "verus": {
+    "mirror": "serde_wrappers.rs",
+    "marker": "    pub fn serialize<S"
+   },
+   "property": "serializes the COMPRESSED SEC1 bytes",
+   "new_mirror": false
+  },
+  {
+   "n": 84,
+   "function": "viewing_pubkey_serde::deserialize",
+   "file": "domain/keys.rs",
+   "line": 124,
+   "end": 130,
+   "sha256": "86ddf7449cf897772ec2457547d7b32be11c4f53a7dcfababc54655cd651dcd4",
+   "route": "Verus",
+   "verus": {
+    "mirror": "serde_wrappers.rs",
+    "marker": "    pub fn deserialize<D"
+   },
+   "property": "Deserializer errors preserved; success requires decoded bytes accepted by k256; parser-error text is unspecified.",
+   "new_mirror": false
+  },
+  {
+   "n": 85,
+   "function": "CommitmentMerkleProof::new",
+   "file": "domain/merkle.rs",
+   "line": 34,
+   "end": 42,
+   "sha256": "eb798595ec9a691a6af5690fbe26553bc4922906290e57b0632c6defd18fd82d",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "length assignment",
+   "new_mirror": false
+  },
+  {
+   "n": 86,
+   "function": "CommitmentMerkleProof::with_proof_length",
+   "file": "domain/merkle.rs",
+   "line": 45,
+   "end": 57,
+   "sha256": "180d5f12569788a6a96a4e85b8152f0536051d9bb11a7e72cc75d2aafe0ab00b",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "preservation",
+   "new_mirror": false
+  },
+  {
+   "n": 87,
+   "function": "AttestationMerkleProof::new",
+   "file": "domain/merkle.rs",
+   "line": 76,
+   "end": 84,
+   "sha256": "eb798595ec9a691a6af5690fbe26553bc4922906290e57b0632c6defd18fd82d",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "length assignment",
+   "new_mirror": false
+  },
+  {
+   "n": 88,
+   "function": "AttestationMerkleProof::with_proof_length",
+   "file": "domain/merkle.rs",
+   "line": 87,
+   "end": 99,
+   "sha256": "180d5f12569788a6a96a4e85b8152f0536051d9bb11a7e72cc75d2aafe0ab00b",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "preservation",
+   "new_mirror": false
+  },
+  {
+   "n": 89,
+   "function": "AttestationMerkleProof::from_contract_elements",
+   "file": "domain/merkle.rs",
+   "line": 103,
+   "end": 122,
+   "sha256": "d7b963df09d46d720c6ac638382ccc2fce4a6e6ff37856c2823eb24143f464d8",
+   "route": "Verus",
+   "verus": {
+    "mirror": "byte_records.rs",
+    "marker": "    pub fn from_contract_elements("
+   },
+   "property": "word bytes and index bits (Verus detour)",
+   "new_mirror": false
+  },
+  {
+   "n": 90,
+   "function": "Note::new",
+   "file": "domain/note.rs",
+   "line": 38,
+   "end": 49,
+   "sha256": "2e08528ea79eb3730504f9e472e9d99c030cb3946ba305100d75640ed9370c17",
+   "route": "Verus",
+   "verus": {
+    "mirror": "note_key.rs",
+    "marker": "    pub fn new(token: Address"
+   },
+   "property": "salt < 2^216 < r, fields kept",
+   "new_mirror": false
+  },
+  {
+   "n": 91,
+   "function": "Note::with_salt",
+   "file": "domain/note.rs",
+   "line": 52,
+   "end": 64,
+   "sha256": "13d9fd2f3f878941caee30ff7c3ca3bd17f3e223bc88b7c3d613fa3a86f14472",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "field placement",
+   "new_mirror": false
+  },
+  {
+   "n": 92,
+   "function": "Note::zero",
+   "file": "domain/note.rs",
+   "line": 67,
+   "end": 69,
+   "sha256": "332a0f8a68a5487384e3b57d15c4109be127bc9a8595b5d95d2ddec2e83d7a41",
+   "route": "Verus",
+   "verus": {
+    "mirror": "note_key.rs",
+    "marker": "    pub fn zero(token: Address"
+   },
+   "property": "amount 0, salt canonical",
+   "new_mirror": false
+  },
+  {
+   "n": 93,
+   "function": "Note::commitment",
+   "file": "domain/note.rs",
+   "line": 73,
+   "end": 82,
+   "sha256": "6f716689bfc44cd0f3fa43774b58c3d2f6a8d60f4cb86df0778163c41f1ac9ed",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn commitment<H: PoolHash>(&self)"
+   },
+   "property": "H4 argument order and encoding",
+   "new_mirror": false
+  },
+  {
+   "n": 94,
+   "function": "Note::nullifier",
+   "file": "domain/note.rs",
+   "line": 86,
+   "end": 88,
+   "sha256": "85dad7722fdeebe347fee417740241c800ab95075c3b21c1aa5b88b8ebf2f484",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn nullifier<H: PoolHash>(&self, spending_key: &SpendingKey) -> (r: Nullifier)\n        ensures nullifier_of"
+   },
+   "property": "H2(commitment, key)",
+   "new_mirror": false
+  },
+  {
+   "n": 95,
+   "function": "Note::is_zero",
+   "file": "domain/note.rs",
+   "line": 91,
+   "end": 93,
+   "sha256": "156814e23b115512b362d097884b4719a96f76e6e15ddd8087db330158047a3f",
+   "route": "Verus",
+   "verus": {
+    "mirror": "note_key.rs",
+    "marker": "    pub fn is_zero(&self)"
+   },
+   "property": "iff value 0",
+   "new_mirror": false
+  },
+  {
+   "n": 96,
+   "function": "DepositProof::new",
+   "file": "domain/proof.rs",
+   "line": 34,
+   "end": 54,
+   "sha256": "d99e63e97534ba3033c2f7631784fbbcdace1cb581c3a4697dbf2e4e23f6583d",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "six fields placed",
+   "new_mirror": false
+  },
+  {
+   "n": 97,
+   "function": "DepositProof::public_inputs_as_array",
+   "file": "domain/proof.rs",
+   "line": 57,
+   "end": 66,
+   "sha256": "bf4d7f28f115e97117df0a6aa9c48065d7ea7e8f5da864c8ca089fd879f9c78b",
+   "route": "both",
+   "verus": {
+    "mirror": "public_inputs.rs",
+    "marker": "    pub fn public_inputs_as_array(&self) -> (r: [B256; 6])"
+   },
+   "property": "word layout of the public inputs (Aeneas, shim); Verus full-U256 mirror for deposit/withdraw",
+   "new_mirror": false
+  },
+  {
+   "n": 98,
+   "function": "TransferProof::new",
+   "file": "domain/proof.rs",
+   "line": 91,
+   "end": 109,
+   "sha256": "5ea88e78dab3e916c61eb857f766a04758a7e475ccf01c818a98d759415169e4",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "index and field placement",
+   "new_mirror": false
+  },
+  {
+   "n": 99,
+   "function": "TransferProof::public_inputs_as_array",
+   "file": "domain/proof.rs",
+   "line": 112,
+   "end": 121,
+   "sha256": "9a88c025da07eacfdd4d72404a74209415e537b972f4b1eae4536c838a617cfe",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "Public-input word layout through the Aeneas extraction shim.",
+   "new_mirror": false
+  },
+  {
+   "n": 100,
+   "function": "TransferProof::nullifiers",
+   "file": "domain/proof.rs",
+   "line": 124,
+   "end": 129,
+   "sha256": "ac450937062e35a6f10e9fdec55ceb6970bcfb449c196220fcc6ede6c3535a5e",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "ordered pair",
+   "new_mirror": false
+  },
+  {
+   "n": 101,
+   "function": "TransferProof::output_commitments",
+   "file": "domain/proof.rs",
+   "line": 132,
+   "end": 137,
+   "sha256": "5297ec88e286bda6e2cce69dabc821cf5f59c0dc5d4971dbdc3423a21b819f6e",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "ordered pair",
+   "new_mirror": false
+  },
+  {
+   "n": 102,
+   "function": "WithdrawProof::new",
+   "file": "domain/proof.rs",
+   "line": 161,
+   "end": 179,
+   "sha256": "4591ae264f59cdda045850a7cae6ea1cfb3d3a9e2dcc29e11cc156483e70c5f1",
+   "route": "Aeneas",
+   "verus": null,
+   "property": "five fields placed",
+   "new_mirror": false
+  },
+  {
+   "n": 103,
+   "function": "WithdrawProof::public_inputs_as_array",
+   "file": "domain/proof.rs",
+   "line": 182,
+   "end": 190,
+   "sha256": "e630a83660e8f8f7b9ec119c98d3b0c75eca7fa04bff01387ced8000093bdefb",
+   "route": "both",
+   "verus": {
+    "mirror": "public_inputs.rs",
+    "marker": "    pub fn public_inputs_as_array(&self) -> (r: [B256; 5])"
+   },
+   "property": "word layout of the public inputs (Aeneas, shim); Verus full-U256 mirror for deposit/withdraw",
+   "new_mirror": false
+  },
+  {
+   "n": 104,
+   "function": "DepositWitness::new",
+   "file": "domain/witness.rs",
+   "line": 61,
+   "end": 87,
+   "sha256": "52a56bccfd95d2d0e9cc653c2517437ff0a27314f844851efb57a704e4e9f9d8",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn new<H: PoolHash>(\n        note: &Note,"
+   },
+   "property": "13-field provenance",
+   "new_mirror": false
+  },
+  {
+   "n": 105,
+   "function": "DepositWitness::validate_amount",
+   "file": "domain/witness.rs",
+   "line": 90,
+   "end": 92,
+   "sha256": "c244a2b21c65f5c851b6175f09772ca6d1a732ff92228477764f7b5766117c59",
+   "route": "Verus",
+   "verus": {
+    "mirror": "guards.rs",
+    "marker": "    pub fn validate_amount(&self)"
+   },
+   "property": "iff 0 < amount < 2^128",
+   "new_mirror": false
+  },
+  {
+   "n": 106,
+   "function": "TransferWitness::new",
+   "file": "domain/witness.rs",
+   "line": 121,
+   "end": 149,
+   "sha256": "f35999b03c1c47258cf022f79e8a0bc2853e01fcc43afc4198556bd32229285f",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn new<H: PoolHash>(\n        spending_key: SpendingKey,\n        input_notes"
+   },
+   "property": "index and field provenance",
+   "new_mirror": false
+  },
+  {
+   "n": 107,
+   "function": "TransferWitness::validate_amounts",
+   "file": "domain/witness.rs",
+   "line": 155,
+   "end": 165,
+   "sha256": "889d6346f416ae3eccd6e3ec392d2438fe12636be55d3cd845859ef25bc4a155",
+   "route": "both",
+   "verus": {
+    "mirror": "guards.rs",
+    "marker": "    pub fn validate_amounts(&self)"
+   },
+   "property": "accepts iff 4 amounts and both sums < 2^128 and equal",
+   "new_mirror": false
+  },
+  {
+   "n": 108,
+   "function": "TransferWitness::sum",
+   "file": "domain/witness.rs",
+   "line": 156,
+   "end": 160,
+   "sha256": "eba27a88b3891106365757b779c64f874d1001c3cc5829872d9c29536e2d78fe",
+   "route": "both",
+   "verus": {
+    "mirror": "guards.rs",
+    "marker": "        fn sum(notes: &[Note; 2])"
+   },
+   "property": "exact checked sum (Aeneas `sum_spec`; Verus)",
+   "new_mirror": false
+  },
+  {
+   "n": 109,
+   "function": "TransferWitness::validate_token_consistency",
+   "file": "domain/witness.rs",
+   "line": 168,
+   "end": 173,
+   "sha256": "6e0b65bf440891d044a2b962d99d19d7b86aac5692a3c5cef98d1c9dda9b4167",
+   "route": "both",
+   "verus": {
+    "mirror": "guards.rs",
+    "marker": "    pub fn validate_token_consistency(&self)"
+   },
+   "property": "all tokens equal",
+   "new_mirror": false
+  },
+  {
+   "n": 110,
+   "function": "WithdrawWitness::new",
+   "file": "domain/witness.rs",
+   "line": 202,
+   "end": 221,
+   "sha256": "4017f102df45b7521f90b5e9bfceafba857a3bb4a564037f2dc49c85257f3686",
+   "route": "Verus",
+   "verus": {
+    "mirror": "hash_param.rs",
+    "marker": "    pub fn new<H: PoolHash>(\n        spending_key: SpendingKey,\n        note: Note,"
+   },
+   "property": "nullifier and field provenance",
+   "new_mirror": false
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/bb_prover.rs:81-104
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,6 @@
+-    fn from(w: &DepositWitness) -> Self {
++    pub fn from(w: &DepositWitness) -> (r: Self)
++        ensures deposit_input_ok(r, *w),
++    {
+         Self {
+             commitment: format_field(&w.commitment),
+             token: format_field_from_address(&w.token),

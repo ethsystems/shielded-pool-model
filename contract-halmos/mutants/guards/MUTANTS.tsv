@@ -1,0 +1,19 @@
+id	base	diff	output	change	checked by
+DEP_TOKEN	pool	ShieldedPool_M_DEP_TOKEN.diff	ShieldedPool_M_DEP_TOKEN.sol	deposit guard removed (line 145: if (!supportedTokens[token]) revert UnsupportedToken();)	runs
+DEP_AMOUNT_ZERO	pool	ShieldedPool_M_DEP_AMOUNT_ZERO.diff	ShieldedPool_M_DEP_AMOUNT_ZERO.sol	deposit guard removed (line 146: if (amount == 0) revert ZeroAmount();)	runs
+DEP_AMOUNT_MAX	pool	ShieldedPool_M_DEP_AMOUNT_MAX.diff	ShieldedPool_M_DEP_AMOUNT_MAX.sol	deposit guard removed (line 147: if (amount >= MAX_AMOUNT) revert AmountTooLarge();)	runs
+DEP_FUNDER_ZERO	pool	ShieldedPool_M_DEP_FUNDER_ZERO.diff	ShieldedPool_M_DEP_FUNDER_ZERO.sol	deposit guard removed (line 148: if (fundingAddress == address(0)) revert ZeroAddress();)	runs
+DEP_FUNDER_CALLER	pool	ShieldedPool_M_DEP_FUNDER_CALLER.diff	ShieldedPool_M_DEP_FUNDER_CALLER.sol	deposit guard removed (line 149: if (msg.sender != fundingAddress) revert FundingAddressMismatch();)	runs
+DEP_CANONICAL	pool	ShieldedPool_M_DEP_CANONICAL.diff	ShieldedPool_M_DEP_CANONICAL.sol	deposit guard removed (line 163: _requireCanonicalInputs(publicInputs);)	runs
+TR_DISTINCT	pool	ShieldedPool_M_TR_DISTINCT.diff	ShieldedPool_M_TR_DISTINCT.sol	transfer guard removed (line 195,196,197: if (inputNullifiers[0] == inputNullifiers[1]) { revert IdenticalNullifiers(); })	runs
+TR_SPENT0	pool	ShieldedPool_M_TR_SPENT0.diff	ShieldedPool_M_TR_SPENT0.sol	transfer guard removed (line 200: if (nullifiers[inputNullifiers[0]]) revert NullifierAlreadySpent();)	runs
+TR_SPENT1	pool	ShieldedPool_M_TR_SPENT1.diff	ShieldedPool_M_TR_SPENT1.sol	transfer guard removed (line 201: if (nullifiers[inputNullifiers[1]]) revert NullifierAlreadySpent();)	runs
+TR_ROOT	pool	ShieldedPool_M_TR_ROOT.diff	ShieldedPool_M_TR_ROOT.sol	transfer guard removed (line 204: if (!isKnownRoot(root)) revert InvalidRoot();)	runs
+TR_CANONICAL	pool	ShieldedPool_M_TR_CANONICAL.diff	ShieldedPool_M_TR_CANONICAL.sol	transfer guard removed (line 218: _requireCanonicalInputs(publicInputs);)	runs
+WD_TOKEN	pool	ShieldedPool_M_WD_TOKEN.diff	ShieldedPool_M_WD_TOKEN.sol	withdraw guard removed (line 254: if (!supportedTokens[token]) revert UnsupportedToken();)	runs
+WD_AMOUNT_ZERO	pool	ShieldedPool_M_WD_AMOUNT_ZERO.diff	ShieldedPool_M_WD_AMOUNT_ZERO.sol	withdraw guard removed (line 255: if (amount == 0) revert ZeroAmount();)	runs
+WD_AMOUNT_MAX	pool	ShieldedPool_M_WD_AMOUNT_MAX.diff	ShieldedPool_M_WD_AMOUNT_MAX.sol	withdraw guard removed (line 256: if (amount >= MAX_AMOUNT) revert AmountTooLarge();)	runs
+WD_RECIPIENT_ZERO	pool	ShieldedPool_M_WD_RECIPIENT_ZERO.diff	ShieldedPool_M_WD_RECIPIENT_ZERO.sol	withdraw guard removed (line 257: if (recipient == address(0)) revert ZeroAddress();)	runs
+WD_SPENT	pool	ShieldedPool_M_WD_SPENT.diff	ShieldedPool_M_WD_SPENT.sol	withdraw guard removed (line 260: if (nullifiers[nullifier]) revert NullifierAlreadySpent();)	runs
+WD_ROOT	pool	ShieldedPool_M_WD_ROOT.diff	ShieldedPool_M_WD_ROOT.sol	withdraw guard removed (line 263: if (!isKnownRoot(root)) revert InvalidRoot();)	runs
+WD_CANONICAL	pool	ShieldedPool_M_WD_CANONICAL.diff	ShieldedPool_M_WD_CANONICAL.sol	withdraw guard removed (line 275: _requireCanonicalInputs(publicInputs);)	runs

@@ -230,10 +230,9 @@ keys, such as `comment`.
 
 ## Where it comes from
 
-The three scripts were first written and run on 2026-10-07 against a local test chain; the
-frozen report and the copies are in
-[evidence/2026-10-07-deploy-check/](../evidence/2026-10-07-deploy-check/REPORT.md). The
-scripts here start from those copies (the first commit of this package adds them unchanged).
+The three scripts were first written and run on 2026-10-07 against a local test chain, with
+three planted deviations; that run and its report are not in this repository. The scripts
+here start from the scripts of that run (the first commit of this package adds them unchanged).
 The changes are for a public chain and for running from this package: CHAIN and CHAIN-END
 accept a chain head above the claimed block, the pool logs can start at `logsFromBlock` in
 windows with the guard above, RPC calls send their own user-agent and retry rate limits, forge
@@ -242,5 +241,5 @@ and a failed build prints its log tail. Two changes make the comparison stricter
 metadata difference with the same solc is a FAIL, not a WARN, and OWNER requires exactly one
 `OwnershipTransferred` log. The rest of the comparison is unchanged.
 
-The writeup reports a Sepolia run of this check on 2026-10-19 at block 11949456 with a PASS.
+The writeup of 2026-10-27 (not in this repository) reports a Sepolia run of this check on 2026-10-19 at block 11949456 with a PASS.
 This package reproduces that verdict at that block from public inputs (RESULT.md).

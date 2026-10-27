@@ -1,0 +1,8 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	stock	WithdrawCallerTest	^check_(withdraw|witnessHigh|witnessLow)\(	8	0,1,32,65,1024	-	-
+halmos	loop4	WithdrawCallerTest	^check_withdraw\(	4	0,65	-	-
+halmos	loop8	WithdrawCallerTest	^check_withdraw\(	8	0,65	-	-
+halmos	alias-debug	WithdrawCallerTest	^check_withdraw\(	8	65	-	--debug
+halmos	mutant-LATE_MARK	WithdrawCallerMut_LATE_MARKTest	^check_withdraw\(	8	0,65	-	--early-exit -vv
+halmos	mutant-PAY_CALLER	WithdrawCallerMut_PAY_CALLERTest	^check_withdraw\(	8	0,65	-	--early-exit -vv
+forge	replay	-	WithdrawCallerReplay.t.sol	-	-	-	-

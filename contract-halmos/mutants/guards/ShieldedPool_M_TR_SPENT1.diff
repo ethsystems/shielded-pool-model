@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_TR_SPENT1.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_TR_SPENT1 is ReentrancyGuard { // mutant TR_SPENT1: one guard removed
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -198,7 +198,7 @@
+ 
+         // Check nullifiers haven't been spent
+         if (nullifiers[inputNullifiers[0]]) revert NullifierAlreadySpent();
+-        if (nullifiers[inputNullifiers[1]]) revert NullifierAlreadySpent();
++        // mutant TR_SPENT1: guard removed
+ 
+         // Verify root is valid (current or historical)
+         if (!isKnownRoot(root)) revert InvalidRoot();

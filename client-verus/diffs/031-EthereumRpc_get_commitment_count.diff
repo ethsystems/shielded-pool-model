@@ -1,0 +1,20 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:186-194
++++ mirrors/rpc.rs
+@@ -1,9 +1,8 @@
+-    async fn get_commitment_count(&self) -> Result<u64, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-        let result = pool
+-            .getCommitmentCount()
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result.try_into().unwrap_or(u64::MAX))
+-    }
++pub async fn get_commitment_count<A: RpcApi>(&self) -> (r: Result<u64,Error>)
++ 
++ ensures r == match A::word((Request::CommitmentCount(self.provider,self.shielded_pool)).view()) {Err(e)=>Err(Error::Contract(e)),Ok(w)=>Ok(if fits64(w) {w.lo as u64} else {u64::MAX})},
++ // STRENGTH get_commitment_count
++{
++ let result=match A::call_word(Request::CommitmentCount(self.provider,self.shielded_pool)) {Ok(w)=>w,Err(e)=>return Err(Error::Contract(e))};
++ Ok(try64(result).unwrap_or(u64::MAX))
++}

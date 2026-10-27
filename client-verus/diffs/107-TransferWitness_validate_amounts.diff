@@ -1,0 +1,14 @@
+--- a04b8b3:domain/witness.rs:155-165
++++ mirrors/guards.rs
+@@ -1,5 +1,9 @@
+-    pub fn validate_amounts(&self) -> bool {
+-        fn sum(notes: &[Note; 2]) -> Option<u128> {
++    pub fn validate_amounts(&self) -> (r: bool)
++        ensures r == transfer_amounts_ok(self),
++    {
++        fn sum(notes: &[Note; 2]) -> (r: Option<u128>)
++            ensures r == sum_spec(notes),
++        {
+             let a = u128::try_from(notes[0].amount).ok()?;
+             let b = u128::try_from(notes[1].amount).ok()?;
+             a.checked_add(b)

@@ -1,0 +1,48 @@
+--- a04b8b3:adapters/bb_prover.rs:387-413
++++ mirrors/prover_effects.rs
+@@ -1,27 +1,18 @@
+-    async fn prove_transfer(
+-        &self,
+-        witness: &TransferWitness,
+-    ) -> Result<TransferProof, ports::prover::ProverError> {
+-        // Validate witness before proving
+-        if !witness.validate_amounts() {
+-            return Err(ports::prover::ProverError::InvalidWitness(
+-                "Input amounts do not equal output amounts".to_string(),
+-            ));
+-        }
+-        if !witness.validate_token_consistency() {
+-            return Err(ports::prover::ProverError::InvalidWitness(
+-                "Token mismatch in notes".to_string(),
+-            ));
+-        }
+-
+-        let prover_toml = Self::format_transfer_prover_toml(witness);
+-        let proof_bytes = self.prove_circuit("transfer", &prover_toml).await?;
+-
+-        Ok(TransferProof::new(
+-            Bytes::from(proof_bytes),
+-            witness.nullifiers,
+-            witness.output_commitments,
+-            witness.commitment_root,
+-            witness.payload_hash,
+-        ))
+-    }
++pub async fn prove_transfer<E: Effects>(witness: &TransferWitness) -> (r: Result<TransferProof,Error>)
++ requires (transfer_amounts_valid(*witness) && transfer_tokens_valid(*witness)) ==> transfer_format_ok(*witness),
++ ensures !(transfer_amounts_valid(*witness) && transfer_tokens_valid(*witness)) ==> (r is Err && r->Err_0 == if !transfer_amounts_valid(*witness) {Error::InvalidAmount} else {Error::InvalidTokens}),
++ (transfer_amounts_valid(*witness) && transfer_tokens_valid(*witness)) ==> ((r is Ok) == (E::proof(Circuit::Transfer,E::transfer_text(*witness)) is Ok)),
++ (transfer_amounts_valid(*witness) && transfer_tokens_valid(*witness)) && r is Err ==> r->Err_0 == Error::Effect(E::proof(Circuit::Transfer,E::transfer_text(*witness))->Err_0),
++ r is Ok ==> r->Ok_0.proof@ == E::proof(Circuit::Transfer,E::transfer_text(*witness))->Ok_0,
++ r is Ok ==> r->Ok_0.nullifiers == witness.nullifiers,
++ r is Ok ==> r->Ok_0.output_commitments == witness.output_commitments,
++ r is Ok ==> r->Ok_0.commitment_root == witness.commitment_root,
++ r is Ok ==> r->Ok_0.payload_hash == witness.payload_hash,
++ // STRENGTH prove_transfer
++{
++ if !validate_amounts(witness) {return Err(Error::InvalidAmount);}
++ if !validate_tokens(witness) {return Err(Error::InvalidTokens);}
++ let prover_toml=E::format_transfer(witness);
++ let proof_bytes=match E::prove(Circuit::Transfer,&prover_toml) {Ok(b)=>b,Err(e)=>return Err(Error::Effect(e))};
++ Ok(TransferProof {proof:proof_bytes,nullifiers:witness.nullifiers,output_commitments:witness.output_commitments,commitment_root:witness.commitment_root,payload_hash:witness.payload_hash})
++}

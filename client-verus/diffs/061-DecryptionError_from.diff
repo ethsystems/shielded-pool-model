@@ -1,0 +1,10 @@
+--- a04b8b3:crypto/encryption.rs:97-102
++++ mirrors/misc_domain.rs
+@@ -1,4 +1,6 @@
+-    fn from(err: OpenError) -> Self {
++    fn from(err: OpenError) -> (r: Self)
++        ensures r == open_error_map(err),
++    {
+         match err {
+             OpenError::Aead | OpenError::Verify => Self::DecryptionFailed,
+             OpenError::NoteDecode => Self::DeserializationFailed,

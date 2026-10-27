@@ -1,0 +1,162 @@
+[
+  {
+    "tag": "stock",
+    "mode": "loop",
+    "entry": 1964,
+    "exit": 2170,
+    "appended_entry": 4385,
+    "appended_capture": 4431,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      2171,
+      2172,
+      2173,
+      2174
+    ],
+    "stack_words": 9,
+    "returned_words": 9
+  },
+  {
+    "tag": "stock",
+    "mode": "post",
+    "entry": 2170,
+    "exit": 369,
+    "appended_entry": 4385,
+    "appended_capture": 4427,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      370,
+      371,
+      372,
+      373
+    ],
+    "stack_words": 8,
+    "returned_words": 1
+  },
+  {
+    "tag": "M1",
+    "mode": "loop",
+    "entry": 1964,
+    "exit": 2170,
+    "appended_entry": 4385,
+    "appended_capture": 4431,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      2171,
+      2172,
+      2173,
+      2174
+    ],
+    "stack_words": 9,
+    "returned_words": 9
+  },
+  {
+    "tag": "M1",
+    "mode": "post",
+    "entry": 2170,
+    "exit": 369,
+    "appended_entry": 4385,
+    "appended_capture": 4427,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      370,
+      371,
+      372,
+      373
+    ],
+    "stack_words": 8,
+    "returned_words": 1
+  },
+  {
+    "tag": "M2",
+    "mode": "loop",
+    "entry": 1964,
+    "exit": 2170,
+    "appended_entry": 4385,
+    "appended_capture": 4431,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      2171,
+      2172,
+      2173,
+      2174
+    ],
+    "stack_words": 9,
+    "returned_words": 9
+  },
+  {
+    "tag": "M2",
+    "mode": "post",
+    "entry": 2170,
+    "exit": 369,
+    "appended_entry": 4385,
+    "appended_capture": 4427,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      370,
+      371,
+      372,
+      373
+    ],
+    "stack_words": 8,
+    "returned_words": 1
+  },
+  {
+    "tag": "M3",
+    "mode": "loop",
+    "entry": 1964,
+    "exit": 2170,
+    "appended_entry": 4385,
+    "appended_capture": 4431,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      2171,
+      2172,
+      2173,
+      2174
+    ],
+    "stack_words": 9,
+    "returned_words": 9
+  },
+  {
+    "tag": "M3",
+    "mode": "post",
+    "entry": 2170,
+    "exit": 369,
+    "appended_entry": 4385,
+    "appended_capture": 4427,
+    "changed_original_offsets": [
+      0,
+      1,
+      2,
+      3,
+      370,
+      371,
+      372,
+      373
+    ],
+    "stack_words": 8,
+    "returned_words": 1
+  }
+]

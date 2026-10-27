@@ -1,0 +1,43 @@
+--- a04b8b3:domain/witness.rs:61-87
++++ mirrors/hash_param.rs
+@@ -1,4 +1,4 @@
+-    pub fn new(
++    pub fn new<H: PoolHash>(
+         note: &Note,
+         spending_key: SpendingKey,
+         funding_address: Address,
+@@ -8,15 +8,30 @@
+         expires_at: u64,
+         attestation_proof: AttestationMerkleProof,
+         encrypted_payload: &[u8],
+-    ) -> Self {
++    ) -> (r: Self)
++        ensures
++            commitment_of::<H>(*note, r.commitment),
++            r.token == note.token,
++            r.amount == note.amount,
++            r.funding_address == funding_address,
++            r.attestation_root == attestation_root,
++            r.payload_hash == H::pc(encrypted_payload@),
++            r.owner_pubkey.0 == H::h1(spending_key.0),
++            r.spending_key == spending_key,
++            r.salt == note.salt,
++            r.attester == attester,
++            r.issued_at == issued_at,
++            r.expires_at == expires_at,
++            r.attestation_proof == attestation_proof,
++    {
+         Self {
+-            commitment: note.commitment().0,
++            commitment: note.commitment::<H>().0,
+             token: note.token,
+             amount: note.amount,
+             funding_address,
+             attestation_root,
+-            payload_hash: payload_commitment(encrypted_payload),
+-            owner_pubkey: spending_key.derive_owner_pubkey(),
++            payload_hash: H::payload_commitment(encrypted_payload),
++            owner_pubkey: spending_key.derive_owner_pubkey::<H>(),
+             spending_key,
+             salt: note.salt,
+             attester,

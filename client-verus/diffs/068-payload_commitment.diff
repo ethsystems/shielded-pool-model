@@ -1,0 +1,11 @@
+--- a04b8b3:domain/commitment.rs:51-54
++++ mirrors/crypto_field.rs
+@@ -1,4 +1,6 @@
+-pub fn payload_commitment(payload: &[u8]) -> B256 {
+-    let reduced = Fr::from_be_bytes_mod_order(keccak256(payload).as_slice());
++pub fn payload_commitment<K: Keccak>(payload: &[u8]) -> (r: B256)
++    ensures be_value(r.0@) == be_value(K::k(payload@).0@) % R(), be_value(r.0@) < R(),
++{
++    let reduced = Fr::from_be_bytes_mod_order(K::keccak256(payload).as_slice());
+     B256::from_slice(&reduced.into_bigint().to_bytes_be())
+ }

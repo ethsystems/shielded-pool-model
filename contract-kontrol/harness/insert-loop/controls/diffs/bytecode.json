@@ -1,0 +1,20 @@
+[
+  {
+    "mutant": "M1",
+    "pc": 2158,
+    "before": "0x20",
+    "after": "0x2"
+  },
+  {
+    "mutant": "M2",
+    "pc": 2149,
+    "before": "0x2",
+    "after": "0x3"
+  },
+  {
+    "mutant": "M3",
+    "pc": 2209,
+    "before": "0x3",
+    "after": "0x2"
+  }
+]

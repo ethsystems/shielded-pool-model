@@ -1,0 +1,8 @@
+getter	assertion	asserts
+calls	TokenCallCount|WrongToken	exactly one recorded call reached the two tokens, and it went to the named token
+spentSeen	NotMarkedAtPayout	the nullifier was marked when the token was called
+nullifiers	NotMarkedAfter	the nullifier is marked after the call
+others	TokenCallCount	neither token recorded another selector
+to	PayoutArgs	the payout recipient is the recipient argument
+amt	PayoutArgs	the payout amount is the amount argument
+from	PayoutArgs	the payout came from the pool

@@ -1,0 +1,15 @@
+--- a04b8b3:adapters/bb_prover.rs:263-266
++++ mirrors/prover_fmt.rs
+@@ -1,4 +1,10 @@
+-    fn format_deposit_prover_toml(witness: &DepositWitness) -> String {
++    fn format_deposit_prover_toml<T: TomlApi>(witness: &DepositWitness) -> (r: String)
++        requires
++            witness.issued_at <= i64_max(),
++            witness.expires_at <= i64_max(),
++            witness.attestation_proof.proof_length <= i64_max(),
++        ensures exists|i: DepositProverInput| deposit_input_ok(i, *witness) && r@ == T::text(i),
++    {
+         let input = DepositProverInput::from(witness);
+-        toml::to_string(&input).expect("failed to serialize deposit prover input")
++        T::to_string(&input).expect("failed to serialize deposit prover input")
+     }

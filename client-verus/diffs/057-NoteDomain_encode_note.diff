@@ -1,0 +1,12 @@
+--- a04b8b3:crypto/encryption.rs:45-47
++++ mirrors/serde_wrappers.rs
+@@ -1,3 +1,7 @@
+-    fn encode_note(note: &Self::Note, out: &mut Vec<u8>) -> Result<(), Self::Error> {
+-        serde_json::to_writer(out, note)
++    pub fn encode_note<J: JsonApi>(note: &Note, out: &mut Vec<u8>) -> (r: Result<(), J::Error>)
++        ensures
++            (r is Ok) == J::encodes(*note),
++            r is Ok ==> final(out)@ == old(out)@ + J::json_of(*note),
++    {
++        J::to_writer(out, note)
+     }

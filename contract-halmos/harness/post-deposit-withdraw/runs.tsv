@@ -1,0 +1,31 @@
+kind	run	contract	test	loop	bytes	env	flags
+halmos	D_amount_ne_zero	PostDepositWithdrawTest	^check_D_amount_ne_zero\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_fresh_leaf	PostDepositWithdrawTest	^check_D_fresh_leaf\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_guarded	PostDepositWithdrawTest	^check_D_guarded\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_post	PostDepositWithdrawTest	^check_D_post\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_supported	PostDepositWithdrawTest	^check_D_supported\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_token_calls	PostDepositWithdrawTest	^check_D_token_calls\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_verified	PostDepositWithdrawTest	^check_D_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	D_witness	PostDepositWithdrawTest	^check_D_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	mutant-D_amount_ne_zero	PostDepositWithdrawMut_D_amount_ne_zero	^check_D_amount_ne_zero\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_fresh_leaf	PostDepositWithdrawMut_D_fresh_leaf	^check_D_fresh_leaf\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_guarded	PostDepositWithdrawMut_D_guarded	^check_D_guarded\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_post	PostDepositWithdrawMut_D_post	^check_D_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_supported	PostDepositWithdrawMut_D_supported	^check_D_supported\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_token_calls	PostDepositWithdrawMut_D_token_calls	^check_D_token_calls\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-D_verified	PostDepositWithdrawMut_D_verified	^check_D_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_amount_ne_zero	PostDepositWithdrawMut_W_amount_ne_zero	^check_W_amount_ne_zero\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_guarded	PostDepositWithdrawMut_W_guarded	^check_W_guarded\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_known_root	PostDepositWithdrawMut_W_known_root	^check_W_known_root\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_post	PostDepositWithdrawMut_W_post	^check_W_post\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_token_calls	PostDepositWithdrawMut_W_token_calls	^check_W_token_calls\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_unspent	PostDepositWithdrawMut_W_unspent	^check_W_unspent\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	mutant-W_verified	PostDepositWithdrawMut_W_verified	^check_W_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2 --early-exit
+halmos	W_amount_ne_zero	PostDepositWithdrawTest	^check_W_amount_ne_zero\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_guarded	PostDepositWithdrawTest	^check_W_guarded\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_known_root	PostDepositWithdrawTest	^check_W_known_root\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_post	PostDepositWithdrawTest	^check_W_post\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_token_calls	PostDepositWithdrawTest	^check_W_token_calls\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_unspent	PostDepositWithdrawTest	^check_W_unspent\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_verified	PostDepositWithdrawTest	^check_W_verified\(	10	0,65	-	--storage-layout generic --solver-threads 2
+halmos	W_witness	PostDepositWithdrawTest	^check_W_witness\(	10	0,65	-	--storage-layout generic --solver-threads 2

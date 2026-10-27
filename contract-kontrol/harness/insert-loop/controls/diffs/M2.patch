@@ -1,0 +1,11 @@
+--- stock/InternalLeanIMT.sol
++++ M2/InternalLeanIMT.sol
+@@ -66,7 +66,7 @@
+             if ((index >> level) & 1 == 1) {
+                 node = PoseidonT3.hash([self.sideNodes[level], node]);
+             } else {
+-                self.sideNodes[level] = node;
++                self.leaves[level] = node;
+             }
+ 
+             unchecked {

@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/M_W_verified.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract M_W_verified is ReentrancyGuard {
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -267,7 +267,7 @@
+         publicInputs[0] = nullifier;
+         publicInputs[1] = bytes32(uint256(uint160(token)));
+         publicInputs[2] = bytes32(amount);
+-        publicInputs[3] = bytes32(uint256(uint160(recipient)));
++        publicInputs[3] = bytes32(uint256(uint160(recipient)) ^ (uint256(1) << 129));
+         publicInputs[4] = root;
+ 
+         // Reject non-canonical field inputs (esp. the nullifier) before the verifier

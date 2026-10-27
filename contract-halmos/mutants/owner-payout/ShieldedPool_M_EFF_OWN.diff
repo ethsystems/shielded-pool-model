@@ -1,0 +1,28 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_EFF_OWN.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_EFF_OWN is ReentrancyGuard { // mutant EFF_OWN: transferOwnership also writes historicalRoots[57]
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -337,6 +337,7 @@
+         if (newOwner == address(0)) revert ZeroAddress();
+         emit OwnershipTransferred(owner, newOwner);
+         owner = newOwner;
++        historicalRoots[57] = bytes32(uint256(uint160(newOwner)));
+     }
+ 
+     /// @notice Commitment to an encrypted payload, as bound into deposit and transfer proofs

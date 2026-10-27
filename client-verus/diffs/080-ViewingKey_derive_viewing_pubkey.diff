@@ -1,0 +1,9 @@
+--- a04b8b3:domain/keys.rs:76-78
++++ mirrors/key_wrappers.rs
+@@ -1,3 +1,5 @@
+-    pub fn derive_viewing_pubkey(&self) -> ViewingPubkey {
++    pub fn derive_viewing_pubkey(&self) -> (r: ViewingPubkey<S::Public>)
++        ensures r.0 == self.0.pk(),
++    {
+         ViewingPubkey(self.0.public_key())
+     }

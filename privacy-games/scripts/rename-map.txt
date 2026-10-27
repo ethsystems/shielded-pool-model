@@ -1,0 +1,125 @@
+# Rename map: old name -> new name.
+#
+# The game modules were first written with working names: a game number per experiment and
+# one flat module directory. This map gives each old module and namespace the name it has in
+# this package, so that older reports can be read against these files. scripts/rename.py
+# applies it: "module" entries on import lines (and to the file path), "namespace" entries as
+# whole name components everywhere else. scripts/check-rename.py applies it backwards and
+# checks that only names and comments changed. The audit modules of the first form
+# (`#print axioms` lists) are not here; the census replaces them.
+
+# Namespaces (name components)
+namespace  Game2                 -> RecipientGame
+namespace  Game3                 -> ChainGame
+namespace  Game4                 -> ChosenWorldGame
+namespace  Game5                 -> WithdrawGame
+namespace  Game6                 -> OwnerGame
+namespace  Game7                 -> SenderGame
+namespace  PrivPortControls      -> FundedWorlds
+
+# Declaration names
+name       experiment_eq_game6   -> experiment_eq_owner_game
+
+# The game interface and the averaging lemmas
+module     PoolGame              -> PoolGame.Basic
+module     Summand               -> PoolGame.Summand
+module     Averaging             -> PoolGame.Averaging
+module     LeanShieldedPool.Proofs.GameCorrespondence -> GameCorrespondence
+
+# Recipient of static transfers (hiding route, rejection bounds, funded worlds)
+module     LeanShieldedPool.Proofs.Game2                  -> RecipientGame.Basic
+module     LeanShieldedPool.Proofs.RejectionBound         -> RecipientGame.Rejection
+module     PortControls                                   -> RecipientGame.FundedWorlds
+
+# Recipient along fixed spend chains
+module     LeanShieldedPool.Proofs.Game3                  -> ChainGame.Basic
+module     LeanShieldedPool.Proofs.AdaptiveRejection      -> ChainGame.AdaptiveRejection
+module     LeanShieldedPool.Proofs.AdaptiveExample        -> ChainGame.AdaptiveExample
+
+# Withdrawal when the attacker writes both worlds (the first counterexample)
+module     LeanShieldedPool.Proofs.Game4                  -> ChosenWorldGame.Basic
+module     LeanShieldedPool.Proofs.Game4Controls          -> ChosenWorldGame.Controls
+
+# Withdrawal with honest, challenger-sampled keys (the second counterexample, the ROM bound)
+module     LeanShieldedPool.Proofs.Game5                  -> WithdrawGame.Basic
+module     LeanShieldedPool.Proofs.Game5Toy               -> WithdrawGame.Toy
+module     LeanShieldedPool.Proofs.Game5Controls          -> WithdrawGame.DropPRF
+module     LeanShieldedPool.Proofs.Game5LearnedKey        -> WithdrawGame.LearnedKey
+module     LeanShieldedPool.Proofs.Game5Transport         -> WithdrawGame.Transport
+module     LeanShieldedPool.Proofs.Game5RejectionTerms    -> WithdrawGame.RejectionTerms
+module     LeanShieldedPool.Proofs.Game5HonestToy         -> WithdrawGame.HonestToy
+module     LeanShieldedPool.Proofs.Game5TransportControls -> WithdrawGame.TransportControls
+module     LeanShieldedPool.Proofs.Game5ROM               -> WithdrawGame.ROM.Basic
+module     LeanShieldedPool.Proofs.Game5ROMQueries        -> WithdrawGame.ROM.Queries
+module     LeanShieldedPool.Proofs.Game5ROMProgram        -> WithdrawGame.ROM.Program
+module     LeanShieldedPool.Proofs.Game5ROMCoupling       -> WithdrawGame.ROM.Coupling
+module     LeanShieldedPool.Proofs.Game5ROMWhole          -> WithdrawGame.ROM.Whole
+module     LeanShieldedPool.Proofs.Game5ROMBad            -> WithdrawGame.ROM.Bad
+module     LeanShieldedPool.Proofs.Game5ROMSwitch         -> WithdrawGame.ROM.Switch
+module     LeanShieldedPool.Proofs.Game5ROMReduction      -> WithdrawGame.ROM.Reduction
+module     LeanShieldedPool.Proofs.Game5ROMKernel         -> WithdrawGame.ROM.Kernel
+module     LeanShieldedPool.Proofs.Game5ROMControl        -> WithdrawGame.ROM.Control
+
+# Deposit owner
+module     LeanShieldedPool.Proofs.Game6                  -> OwnerGame.Basic
+module     LeanShieldedPool.Proofs.Game6Toy               -> OwnerGame.Toy
+module     LeanShieldedPool.Proofs.Game6ROMCommit         -> OwnerGame.ROMCommit.Basic
+module     LeanShieldedPool.Proofs.Game6ROMCommitSecurity -> OwnerGame.ROMCommit.Security
+
+# Shared probability lemmas
+module     LeanShieldedPool.Proofs.PrivacyTools           -> PrivacyTools.Basic
+module     LeanShieldedPool.Proofs.PrivacyRejection       -> PrivacyTools.Rejection
+
+# Transfer sender
+module     LeanShieldedPool.Proofs.Game7                  -> SenderGame.Basic
+module     LeanShieldedPool.Proofs.Game7Transport         -> SenderGame.Transport
+module     LeanShieldedPool.Proofs.Game7Toy               -> SenderGame.Toy
+module     LeanShieldedPool.Proofs.Game7Disclosure        -> SenderGame.Disclosure
+module     LeanShieldedPool.Proofs.Game7DropPRF           -> SenderGame.DropPRF
+module     LeanShieldedPool.Proofs.Game7ROM               -> SenderGame.ROM.Basic
+module     LeanShieldedPool.Proofs.Game7ROMSecurity       -> SenderGame.ROM.Security
+module     LeanShieldedPool.Proofs.Game7ROMCommit         -> SenderGame.ROMCommit.Basic
+module     LeanShieldedPool.Proofs.Game7ROMCommitResample -> SenderGame.ROMCommit.Resample
+module     LeanShieldedPool.Proofs.Game7ROMCommitFresh    -> SenderGame.ROMCommit.Fresh
+module     LeanShieldedPool.Proofs.Game7ROMCommitHiding   -> SenderGame.ROMCommit.Hiding
+module     LeanShieldedPool.Proofs.Game7ROMCommitSecurity -> SenderGame.ROMCommit.Security
+
+# The commitment random oracle shared by the owner, sender and recipient ROM games
+module     LeanShieldedPool.Proofs.CommitROMTrace         -> CommitROM.Trace
+module     LeanShieldedPool.Proofs.CommitROMSwitch        -> CommitROM.Switch
+module     LeanShieldedPool.Proofs.CommitROMHiding        -> CommitROM.Hiding
+module     LeanShieldedPool.Proofs.CommitROMPair          -> CommitROM.Pair
+module     LeanShieldedPool.Proofs.CommitROMModel         -> CommitROM.Model
+module     LeanShieldedPool.Proofs.CommitROMLower         -> CommitROM.Lower
+module     LeanShieldedPool.Proofs.CommitROMControls      -> CommitROM.Controls
+module     LeanShieldedPool.Proofs.CommitROMBatch         -> CommitROM.Batch
+module     LeanShieldedPool.Proofs.CommitROMCollision     -> CommitROM.Collision
+module     LeanShieldedPool.Proofs.CommitTableCollision   -> CommitROM.TableCollision
+
+# Recipient of static transfers in the commitment random-oracle model
+module     LeanShieldedPool.Proofs.Game2ROMCommitModel    -> RecipientGame.ROMCommit.Model
+module     LeanShieldedPool.Proofs.Game2ROMCommit         -> RecipientGame.ROMCommit.Basic
+module     LeanShieldedPool.Proofs.Game2ROMCommitHiding   -> RecipientGame.ROMCommit.Hiding
+module     LeanShieldedPool.Proofs.Game2ROMCommitSecurity -> RecipientGame.ROMCommit.Security
+module     LeanShieldedPool.Proofs.Game2ROMCommitCollision -> RecipientGame.ROMCommit.Collision
+module     LeanShieldedPool.Proofs.Game2ROMCommitRejection -> RecipientGame.ROMCommit.Rejection
+module     LeanShieldedPool.Proofs.Game2ROMCommitControls -> RecipientGame.ROMCommit.Controls
+
+# Recipient games with only the commitment idealized (commit-only)
+module     LeanShieldedPool.Proofs.Game2CommitOnly        -> RecipientGame.CommitOnly.Basic
+module     LeanShieldedPool.Proofs.Game2CommitOnlyRejection -> RecipientGame.CommitOnly.Rejection
+module     LeanShieldedPool.Proofs.Game2CommitOnlyValidity -> RecipientGame.CommitOnly.Validity
+module     LeanShieldedPool.Proofs.Game2CommitOnlyFunded  -> RecipientGame.CommitOnly.Funded
+module     LeanShieldedPool.Proofs.Game2CommitOnlyFundedPass -> RecipientGame.CommitOnly.FundedPass
+module     LeanShieldedPool.Proofs.Game2CommitOnlyControls -> RecipientGame.CommitOnly.Controls
+module     LeanShieldedPool.Proofs.Game2CommitOnlyCollisionValidity -> RecipientGame.CommitOnly.CollisionValidity
+module     LeanShieldedPool.Proofs.Game2CommitOnlyTwoFunded -> RecipientGame.CommitOnly.TwoFunded
+module     LeanShieldedPool.Proofs.Game2CommitOnlyCollisionControls -> RecipientGame.CommitOnly.CollisionControls
+module     LeanShieldedPool.Proofs.Game3CommitOnlyModel   -> ChainGame.CommitOnly.Model
+module     LeanShieldedPool.Proofs.Game3CommitOnly        -> ChainGame.CommitOnly.Basic
+module     LeanShieldedPool.Proofs.Game3CommitOnlyHiding  -> ChainGame.CommitOnly.Hiding
+module     LeanShieldedPool.Proofs.Game3CommitOnlySecurity -> ChainGame.CommitOnly.Security
+module     LeanShieldedPool.Proofs.Game3CommitOnlyCollisionRejection -> ChainGame.CommitOnly.CollisionRejection
+module     LeanShieldedPool.Proofs.Game3CommitOnlyFundedChain -> ChainGame.CommitOnly.FundedChain
+module     LeanShieldedPool.Proofs.Game3CommitOnlyCollisionControls -> ChainGame.CommitOnly.CollisionControls
+module     LeanShieldedPool.Proofs.Game3CommitOnlyFundedChecks -> ChainGame.CommitOnly.FundedChecks

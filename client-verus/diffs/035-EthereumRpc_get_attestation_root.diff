@@ -1,0 +1,20 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:230-239
++++ mirrors/rpc.rs
+@@ -1,10 +1,7 @@
+-    async fn get_attestation_root(&self) -> Result<B256, OnChainError> {
+-        let registry =
+-            IAttestationRegistry::new(self.attestation_registry, &self.provider);
+-        let result = registry
+-            .attestationRoot()
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result.into())
+-    }
++pub async fn get_attestation_root<A: RpcApi>(&self) -> (r: Result<Word,Error>)
++ ensures r == word_result(A::word((Request::AttestationRoot(self.provider,self.attestation_registry)).view())),
++ // STRENGTH get_attestation_root
++{
++ let result = A::call_word(Request::AttestationRoot(self.provider,self.attestation_registry));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

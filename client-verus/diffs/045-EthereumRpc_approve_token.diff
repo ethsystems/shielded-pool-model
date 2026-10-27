@@ -1,0 +1,34 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:487-508
++++ mirrors/rpc.rs
+@@ -1,22 +1,9 @@
+-    async fn approve_token(
+-        &self,
+-        token: Address,
+-        amount: U256,
+-    ) -> Result<TxReceipt, OnChainError> {
+-        let erc20 = IERC20::new(token, &self.provider);
+-
+-        let receipt = erc20
+-            .approve(self.shielded_pool, amount)
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted("approve reverted".into()));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn approve_token<A: RpcApi>(&self, token: Address, amount: Word) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::Approve(self.provider,token,self.shielded_pool,amount)),
++ // STRENGTH approve_token
++{
++ let pending=match A::send(Request::Approve(self.provider,token,self.shielded_pool,amount)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}

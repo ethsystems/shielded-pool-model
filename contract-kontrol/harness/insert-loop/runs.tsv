@@ -1,0 +1,4 @@
+kind	run	abi	command
+build	build	stock	kontrol build --no-O2 --regen; echo BUILD_EXIT=$?
+prove	rejections	stock	kontrol prove --reinit --match-test 'TreeRejections.prove_reject_field(' --match-test 'TreeRejections.prove_reject_zero(' --match-test 'TreeRejections.prove_reject_duplicate(' --match-test 'TreeRejections_M_FIELD.prove_reject_field(' --match-test 'TreeRejections_M_ZERO.prove_reject_zero(' --match-test 'TreeRejections_M_DUP.prove_reject_duplicate(' -j 2
+controls	controls	-	controls

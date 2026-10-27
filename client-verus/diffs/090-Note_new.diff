@@ -1,0 +1,19 @@
+--- a04b8b3:domain/note.rs:38-49
++++ mirrors/note_key.rs
+@@ -1,7 +1,13 @@
+-    pub fn new(token: Address, amount: U256, owner_pubkey: OwnerPubkey) -> Self {
+-        let mut rng = rand::rng();
++    pub fn new(token: Address, amount: U256, owner_pubkey: OwnerPubkey, rng: &Rng) -> (r: Self)
++        ensures
++            r.token == token,
++            r.amount == amount,
++            r.owner_pubkey == owner_pubkey,
++            canonical_field_bytes(r.salt.0@, rng.bytes@),
++    {
+         let mut salt_bytes = [0u8; 32];
+-        rng.fill(&mut salt_bytes[5..]); // keep within the field
++        rng.fill_from(&mut salt_bytes, 5); // keep within the field
++        proof { lemma_field_bound(salt_bytes@); }
+ 
+         Self {
+             token,

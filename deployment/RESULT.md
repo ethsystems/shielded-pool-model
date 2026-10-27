@@ -1,7 +1,8 @@
 # RESULT: the Sepolia deployment against a fresh build of `a04b8b3`
 
 Run on 2026-10-23, from 13:33 to 13:37 UTC, on a Linux x86_64 laptop (16 threads, btrfs).
-The checker files are those of commit `c128fce` of this repo:
+The checker files are those of commit `169369b` of this repo (the run was made at a local commit
+with the same `deployment/` checker files):
 
 ```
 fed256c824eb007d668a387f4fb5d10e4bf22519a3da20ceffe9ce45d51dd0f8  check.sh
@@ -248,11 +249,10 @@ end 2026-10-23 13:36:45 UTC
 
 The controls change only the claim. None of them changes a byte on the chain, so no control
 shows a changed byte, a mock verifier or a later `setVerifier` here. Those cases rest on the
-check's logic; the frozen test-chain report
-([../evidence/2026-10-07-deploy-check/REPORT.md](../evidence/2026-10-07-deploy-check/REPORT.md))
-planted such changes on a local chain, with the earlier scripts.
+check's logic; the test-chain report of 2026-10-07 (not in this repository) planted such
+changes on a local chain, with the earlier scripts.
 
-Earlier runs on 2026-10-23, with the checker before commit `c128fce`, gave the same PASS at both
+Earlier runs on 2026-10-23, with the checker before the review fixes of `169369b`, gave the same PASS at both
 blocks. In one of them a
 controls run stopped once with a build exit of 1 and no build log; the rerun passed, and it
 did not recur in more than 30 later builds. One run on Tenderly hit HTTP 429;

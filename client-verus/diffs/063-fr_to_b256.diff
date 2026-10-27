@@ -1,0 +1,10 @@
+--- a04b8b3:crypto/poseidon.rs:18-22
++++ mirrors/crypto_field.rs
+@@ -1,4 +1,6 @@
+-fn fr_to_b256(value: Fr) -> B256 {
++fn fr_to_b256(value: Fr) -> (r: B256)
++    ensures be_value(r.0@) == value.val(), be_value(r.0@) < R(),
++{
+     let big_int = value.into_bigint();
+     let bytes = big_int.to_bytes_be();
+     B256::from_slice(&bytes)

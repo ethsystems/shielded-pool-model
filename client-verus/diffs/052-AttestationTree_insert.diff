@@ -1,0 +1,10 @@
+--- a04b8b3:adapters/merkle_tree.rs:135-137
++++ mirrors/tree.rs
+@@ -1,3 +1,4 @@
+-    pub fn insert(&mut self, leaf: &[u8; 32]) {
+-        self.0.insert(leaf);
+-    }
++pub fn insert(&mut self,leaf: &[u8;32])
++ ensures final(self).0.model() == T::inserted(old(self).0.model(),leaf@),
++ // STRENGTH AttestationTree_insert
++{self.0.insert(leaf);}

@@ -1,0 +1,14 @@
+--- a04b8b3:domain/keys.rs:18-23
++++ mirrors/note_key.rs
+@@ -1,6 +1,8 @@
+-    pub fn random() -> Self {
+-        let mut rng = rand::rng();
++    pub fn random(rng: &Rng) -> (r: Self)
++        ensures canonical_field_bytes(r.0.0@, rng.bytes@),
++    {
+         let mut bytes = [0u8; 32];
+-        rng.fill(&mut bytes[5..]);
++        rng.fill_from(&mut bytes, 5);
++        proof { lemma_field_bound(bytes@); }
+         Self(B256::from(bytes))
+     }

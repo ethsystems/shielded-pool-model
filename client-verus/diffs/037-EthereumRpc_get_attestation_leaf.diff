@@ -1,0 +1,22 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:254-263
++++ mirrors/rpc.rs
+@@ -1,10 +1,9 @@
+-    async fn get_attestation_leaf(&self, index: u64) -> Result<B256, OnChainError> {
+-        let registry =
+-            IAttestationRegistry::new(self.attestation_registry, &self.provider);
+-        let result = registry
+-            .leafAtIndex(index.try_into().unwrap())
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn get_attestation_leaf<A: RpcApi>(&self, index: u64) -> (r: Result<Word,Error>)
++ requires index < 1099511627776u64,
++ ensures r == word_result(A::word((Request::AttestationLeaf(self.provider,self.attestation_registry,index)).view())),
++ // STRENGTH get_attestation_leaf
++{
++ let index40 = if index < 1099511627776u64 {Some(index)} else {None};
++ let result=A::call_word(Request::AttestationLeaf(self.provider,self.attestation_registry,index40.unwrap()));
++ match result {Ok(w)=>Ok(w),Err(e)=>Err(Error::Contract(e))}
++}

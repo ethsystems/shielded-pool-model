@@ -1,0 +1,38 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:120-145
++++ mirrors/rpc.rs
+@@ -1,26 +1,9 @@
+-    pub async fn new(
+-        rpc_url: &str,
+-        private_key: &str,
+-        shielded_pool: Address,
+-        attestation_registry: Address,
+-    ) -> Result<Self, OnChainError> {
+-        let signer: PrivateKeySigner = private_key.parse().map_err(|e| {
+-            OnChainError::SignerError(format!("Invalid private key: {}", e))
+-        })?;
+-
+-        let signer_address = signer.address();
+-        let wallet = EthereumWallet::from(signer);
+-        let provider =
+-            DynProvider::new(ProviderBuilder::new().wallet(wallet).connect_http(
+-                rpc_url.parse().map_err(|e| {
+-                    OnChainError::RpcError(format!("Invalid RPC URL: {}", e))
+-                })?,
+-            ));
+-
+-        Ok(Self {
+-            provider,
+-            shielded_pool,
+-            attestation_registry,
+-            signer_address,
+-        })
+-    }
++pub async fn new<S: Setup>(rpc_url: &Vec<u8>, private_key: &Vec<u8>, shielded_pool: Address, attestation_registry: Address) -> (r: Result<EthereumRpc,Error>)
++ ensures r == match S::signer(private_key@) {Err(e)=>Err(Error::Signer(e)),Ok(signer)=>match S::url(rpc_url@) {Err(e)=>Err(Error::Rpc(e)),Ok(url)=>Ok(EthereumRpc {provider:S::provider(signer,url),shielded_pool,attestation_registry,signer_address:signer})}},
++ // STRENGTH new
++{
++ let signer_address = match S::parse_key(private_key) {Ok(s)=>s,Err(e)=>return Err(Error::Signer(e))};
++ let url = match S::parse_url(rpc_url) {Ok(u)=>u,Err(e)=>return Err(Error::Rpc(e))};
++ let provider=S::connect(signer_address,url);
++ Ok(EthereumRpc {provider,shielded_pool,attestation_registry,signer_address})
++}

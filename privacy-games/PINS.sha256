@@ -1,0 +1,13 @@
+# Pins of privacy-games, checked by scripts/pins.py (scripts/check.sh, stage pins).
+# Lines "# key value" pin the dependencies; sha256sum lines pin the three model files of the
+# gated model that the games import, at the paths lake compiles them from, and
+# lake-manifest.json, which fixes every dependency (the inherited ones too) at a commit.
+# vcvio_url https://github.com/dtumad/VCV-io
+# vcvio_rev dfc7ff078f3dbca0e71c40e289b9db175ab7ce16
+# mathlib_url https://github.com/leanprover-community/mathlib4
+# mathlib_rev 0df444a360eaa60ab8c11dca51a86af692955474
+# lean v4.33.1
+50b2e325d1eb1768176ece309661bfaaba7155b4f3be07b8b96bda52db103489  ../LeanShieldedPool/Pool/State.lean
+6f517b2bf9f6e4b434755f47ac2562944a07d9042f0b6bc770b6787be214637d  ../LeanShieldedPool/Pool/Tx.lean
+42914df65ce445df17b7997b7efdc546c75450739991a955c1c3adc3bb5616fd  ../LeanShieldedPool/Pool/Events.lean
+cea84c98947bd92c93c762b260233069af7bcdfb3366bd39dfde1bbc71ea0f69  lake-manifest.json

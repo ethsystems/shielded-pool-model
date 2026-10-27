@@ -1,0 +1,25 @@
+--- a04b8b3:crypto/encryption.rs:72-83
++++ mirrors/misc_domain.rs
+@@ -1,12 +1,16 @@
+-pub fn decrypt_note(
++pub fn decrypt_note<S: Sealring>(
+     encrypted: &EncryptedNote,
+     viewing_key: &ViewingKey,
+-) -> Result<Note, DecryptionError> {
+-    let envelope = SealedNote::<K256, _>::parse(encrypted.as_bytes())
+-        .map_err(|_| DecryptionError::MalformedEnvelope)?;
+-    let recipient = Recipient::<K256>::new(viewing_key.secret_key().clone());
++) -> (r: Result<Note, DecryptionError>)
++    ensures r == decrypt_spec::<S>(encrypted.bytes@, viewing_key.0),
++{
++    let aad: [u8; 0] = [];
++    let envelope = S::parse(encrypted.as_bytes())
++        .map_err(|_e: S::ParseError| -> (r: DecryptionError) ensures r == DecryptionError::MalformedEnvelope { DecryptionError::MalformedEnvelope })?;
++    let recipient = S::recipient_new(viewing_key.secret_key().clone());
+ 
+-    sealring::open::<K256, NoteDomain, _>(&recipient, &envelope, AAD)
++    proof { assert(aad@ =~= Seq::<u8>::empty()); }
++    S::open(&recipient, &envelope, &aad)
+         .map_err(DecryptionError::from)?
+         .ok_or(DecryptionError::DecryptionFailed)
+ }

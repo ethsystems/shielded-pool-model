@@ -1,0 +1,29 @@
+--- a/ShieldedPool.sol
++++ b/ShieldedPool_M_DROP_BIT253.sol
+@@ -4,14 +4,14 @@
+ import {IERC20} from "@openzeppelin-contracts/token/ERC20/IERC20.sol";
+ import {SafeERC20} from "@openzeppelin-contracts/token/ERC20/utils/SafeERC20.sol";
+ import {ReentrancyGuard} from "@openzeppelin-contracts/utils/ReentrancyGuard.sol";
+-import {IVerifier} from "./interfaces/IVerifier.sol";
+-import {IAttestationRegistry} from "./interfaces/IAttestationRegistry.sol";
++import {IVerifier} from "../../../src/interfaces/IVerifier.sol";
++import {IAttestationRegistry} from "../../../src/interfaces/IAttestationRegistry.sol";
+ import {LeanIMT, LeanIMTData} from "@zk-kit/packages/lean-imt/contracts/LeanIMT.sol";
+ 
+ /// @title ShieldedPool
+ /// @notice Privacy-preserving payment pool with KYC-gated entry
+ /// @dev Implements UTXO model with commitments/nullifiers for unlinkable transfers
+-contract ShieldedPool is ReentrancyGuard {
++contract ShieldedPool_M_DROP_BIT253 is ReentrancyGuard { // mutant DROP_BIT253: bit 253 of the nullifier input dropped
+     using SafeERC20 for IERC20;
+     using LeanIMT for LeanIMTData;
+ 
+@@ -264,7 +264,7 @@
+ 
+         // Build public inputs for verification
+         bytes32[] memory publicInputs = new bytes32[](5);
+-        publicInputs[0] = nullifier;
++        publicInputs[0] = bytes32(uint256(nullifier) & ~(uint256(1) << 253)); // mutant DROP_BIT253: bit 253 dropped
+         publicInputs[1] = bytes32(uint256(uint160(token)));
+         publicInputs[2] = bytes32(amount);
+         publicInputs[3] = bytes32(uint256(uint160(recipient)));

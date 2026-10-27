@@ -1,0 +1,19 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:208-216
++++ mirrors/rpc.rs
+@@ -1,9 +1,7 @@
+-    async fn is_known_root(&self, root: B256) -> Result<bool, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-        let result = pool
+-            .isKnownRoot(root)
+-            .call()
+-            .await
+-            .map_err(|e| OnChainError::ContractError(e.to_string()))?;
+-        Ok(result)
+-    }
++pub async fn is_known_root<A: RpcApi>(&self, root: Word) -> (r: Result<bool,Error>)
++ ensures r == bool_result(A::boolean((Request::KnownRoot(self.provider,self.shielded_pool,root)).view())),
++ // STRENGTH is_known_root
++{
++ let result = A::call_bool(Request::KnownRoot(self.provider,self.shielded_pool,root));
++ match result {Ok(value)=>Ok(value),Err(e)=>Err(Error::Contract(e))}
++}

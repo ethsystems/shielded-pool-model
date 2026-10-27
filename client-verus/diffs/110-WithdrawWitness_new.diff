@@ -1,0 +1,27 @@
+--- a04b8b3:domain/witness.rs:202-221
++++ mirrors/hash_param.rs
+@@ -1,11 +1,21 @@
+-    pub fn new(
++    pub fn new<H: PoolHash>(
+         spending_key: SpendingKey,
+         note: Note,
+         commitment_proof: CommitmentMerkleProof,
+         commitment_root: B256,
+         recipient: Address,
+-    ) -> Self {
+-        let nullifier = note.nullifier(&spending_key).0;
++    ) -> (r: Self)
++        ensures
++            nullifier_of::<H>(note, spending_key, r.nullifier),
++            r.token == note.token,
++            r.amount == note.amount,
++            r.recipient == recipient,
++            r.commitment_root == commitment_root,
++            r.spending_key == spending_key,
++            r.note == note,
++            r.commitment_proof == commitment_proof,
++    {
++        let nullifier = note.nullifier::<H>(&spending_key).0;
+ 
+         Self {
+             nullifier,

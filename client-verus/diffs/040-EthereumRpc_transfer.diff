@@ -1,0 +1,45 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:315-347
++++ mirrors/rpc.rs
+@@ -1,33 +1,9 @@
+-    async fn transfer(
+-        &self,
+-        proof: &TransferProof,
+-        nullifiers: [B256; 2],
+-        commitments: [B256; 2],
+-        root: B256,
+-        encrypted_notes: Bytes,
+-    ) -> Result<TxReceipt, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-
+-        let receipt = pool
+-            .transfer(
+-                proof.proof.clone(),
+-                nullifiers,
+-                commitments,
+-                root,
+-                encrypted_notes,
+-            )
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted(
+-                "Transfer reverted".into(),
+-            ));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn transfer<A: RpcApi>(&self, proof: &TransferProof, nullifiers: [Word;2], commitments: [Word;2], root: Word, encrypted_notes: Vec<u8>) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::Transfer(self.provider,self.shielded_pool,proof.proof,nullifiers,commitments,root,encrypted_notes)),
++ // STRENGTH transfer
++{
++ let pending=match A::send(Request::Transfer(self.provider,self.shielded_pool,clone_bytes(&proof.proof),nullifiers,commitments,root,encrypted_notes)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}

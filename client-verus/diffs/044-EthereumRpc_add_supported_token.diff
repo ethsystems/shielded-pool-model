@@ -1,0 +1,35 @@
+--- a04b8b3:adapters/ethereum_rpc.rs:461-483
++++ mirrors/rpc.rs
+@@ -1,23 +1,9 @@
+-    async fn add_supported_token(
+-        &self,
+-        token: Address,
+-    ) -> Result<TxReceipt, OnChainError> {
+-        let pool = IShieldedPool::new(self.shielded_pool, &self.provider);
+-
+-        let receipt = pool
+-            .addSupportedToken(token)
+-            .send()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?
+-            .get_receipt()
+-            .await
+-            .map_err(|e| OnChainError::TransactionFailed(e.to_string()))?;
+-
+-        if !receipt.status() {
+-            return Err(OnChainError::TransactionReverted(
+-                "addSupportedToken reverted".into(),
+-            ));
+-        }
+-
+-        Ok(Self::convert_receipt(&receipt))
+-    }
++pub async fn add_supported_token<A: RpcApi>(&self, token: Address) -> (r: Result<TxReceipt,Error>)
++ ensures r == tx_result::<A>(Request::AddToken(self.provider,self.shielded_pool,token)),
++ // STRENGTH add_supported_token
++{
++ let pending=match A::send(Request::AddToken(self.provider,self.shielded_pool,token)) {Ok(p)=>p,Err(e)=>return Err(Error::Transaction(e))};
++ let receipt=match A::get_receipt(pending) {Ok(r)=>r,Err(e)=>return Err(Error::Transaction(e))};
++ if !receipt.success {return Err(Error::Reverted);}
++ Ok(convert_receipt(&receipt))
++}
