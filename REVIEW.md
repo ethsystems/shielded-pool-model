@@ -40,7 +40,7 @@ gate test.
 ## 2. What is not claimed
 
 - No implementation is verified (client, circuits, contract). The ten
-  separate packages (README, "Separate packages") check selected facts:
+  separate packages (README, "What is here"; GUIDE.md in full) check selected facts:
   `circuits-acir/` and `circuits-lampe/` (circuits), `hash-agreement/`
   (hash code), `verifier-reproduction/` (verifier builds),
   `deployment/` (one deployment at one block), `contract-halmos/` and
