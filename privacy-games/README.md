@@ -212,6 +212,9 @@ which ones the check enforces and which ones it trusts.
 [PINS.sha256](PINS.sha256) holds the pins as `# key value` lines and sha256sum lines:
 
 - VCV-io: `https://github.com/dtumad/VCV-io` at `dfc7ff078f3dbca0e71c40e289b9db175ab7ce16`.
+  The repository has moved: its canonical URL is now `https://github.com/Verified-zkEVM/VCVio`,
+  and the old URL resolves only through a GitHub redirect. The pin keeps the old URL, because
+  `scripts/pins.py` compares the checkout's origin with it; a repin will move it.
 - Mathlib: `https://github.com/leanprover-community/mathlib4` at
   `0df444a360eaa60ab8c11dca51a86af692955474` (the tag `v4.33.1`, the Mathlib of the gated
   model and of VCV-io's own manifest).

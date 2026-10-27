@@ -4,8 +4,8 @@ This package proves, in Lean, how the contract-level facts about the shielded po
 the gated model of the parent directory. It states an abstract model of the pool contract's
 storage and calls (`Refinement/Storage.lean`), names every fact about the contract, the circuits,
 the Merkle tree and the tokens as a premise, and proves that under those premises every accepted
-history of the pinned deployment refines a run of the model, so the model's money theorems apply
-to it. It also proves the tree results the composition needs (the LeanIMT tree against the
+history of an abstract contract that meets the contract posts refines a run of the model, so the model's
+money theorems apply to it. It also proves the tree results the composition needs (the LeanIMT tree against the
 circuit's Merkle fold, and a bridge from the circuit's field fold), a token-balance bound for
 withdrawals, one withdrawal composed across all the hops, and the arithmetic of a gas argument.
 

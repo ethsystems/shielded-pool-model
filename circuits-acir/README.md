@@ -17,6 +17,11 @@ The pin is not the latest circuit. Commit `748884e` of ethsystems/pocs (merged
 after `a04b8b3`. The package stays at the pin; the newer transfer circuit is not covered
 here.
 
+The deposit circuit at `a04b8b3` is the attested-pool circuit, not the spec-2 deposit
+statement: it has six public inputs, among them `attestation_root`, and derives the owner
+key in the circuit. The spec-2 test circuit `tests/core_deposit` is pinned in
+`inputs/SHA256SUMS` but not built or proved.
+
 ## The theorems
 
 `circuit.Satisfied w` means that the assignment `w : Nat → Fin P` (P the BN254 scalar
@@ -71,8 +76,10 @@ checks use kernel reduction (`decide +kernel`), never `native_decide`.
   proof of the name-to-wire map.
 - Separate obligations: correctness of the compiler from Noir source to ACIR, of bb from
   ACIR to UltraHonk, and of the proof system and verifier contract. The identity of the
-  deployed verifier is also separate: the artifacts reproduce the committed verifier
-  sources at a04b8b3 (inputs/PROVENANCE.md), not on-chain bytecode.
+  deployed verifier is also separate. The artifacts reproduced the committed verifier
+  sources at a04b8b3 once, on an earlier build (inputs/PROVENANCE.md), not on-chain
+  bytecode. No check re-measures that link, and no check compares this package's ACIR
+  with the ACIR that `verifier-reproduction/` builds.
 - Hash-bound rules (commitments, nullifiers, Merkle membership) are not covered.
 - `Neg/TransferNoRange.lean` is a failed proof attempt, not a false full-circuit
   statement: it drops the RANGE facts from the conservation proof, so `omega` cannot
@@ -119,7 +126,10 @@ re-runs the extractor and the kernel on them and compares every result with
 2. checks that `pocs/` is at the pinned commit, reads the 12 files of
    `inputs/SHA256SUMS` from that commit as git blobs and checks their hashes;
 3. places the two Noir libraries of `inputs/DEPS.txt` where nargo looks for them (cloned
-   once by tag into `.deps/`, with a commit check), so nargo fetches nothing;
+   once by tag into `.deps/`, with a commit check), so nargo fetches nothing. The
+   binary-merkle-root URL there names `privacy-scaling-explorations/zk-kit.noir`, which now
+   redirects to its canonical URL, `https://github.com/zk-kit/zk-kit.noir`; the pin keeps
+   the old URL, as the circuits' `Nargo.toml` files do;
 4. runs `nargo compile`, `nargo execute` with the committed `Prover.toml` and
    `noir-inspector print-acir` for each circuit, into `build/inputs/` (not tracked);
    nargo runs with `GIT_ALLOW_PROTOCOL=none`, so a fetch by nargo fails the build;

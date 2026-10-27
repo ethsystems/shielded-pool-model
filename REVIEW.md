@@ -2,13 +2,14 @@
 
 Find where the claim is wrong, too strong or unclear. This is not an
 audit. Track A (part 5) asks whether the model says what the spec
-says. It closed on 2026-10-19 with two readings; new readers are
-welcome.
+says. It closed on 2026-10-19 with one full reading and one
+high-level reading; new readers are welcome.
 
 ## 1. What is claimed
 
-> The model covers spec 2/SHIELDED-POOL, sections 4 to 6, at revision
-> 4d4dce1. In the model, the protocol rules imply two guarantees: no
+> The model covers the integrity rules of spec 2/SHIELDED-POOL,
+> sections 4 to 6, at revision 4d4dce1 (exclusions in SPEC-MAP.md). In
+> the model, the protocol rules imply two guarantees: no
 > note spends twice, and value is conserved per token. Both hold from
 > an empty pool, over every accepted history. One hypothesis is
 > assumed, about the notes and keys that appear in that history. No
@@ -16,7 +17,8 @@ welcome.
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
 > the model says what the spec says is a human reading, not a
-> machine check; two readings are done (REVIEW.md, part 5).
+> machine check; one full reading (the second reader) and one
+> high-level reading (Oskar) are done (REVIEW.md, part 5).
 
 | Theorem | English | Spec clause | Hypothesis |
 |---|---|---|---|
@@ -37,10 +39,15 @@ gate test.
 
 ## 2. What is not claimed
 
-- No implementation is verified (client, circuits, contract). The
-  separate packages (README, "Separate packages") check selected facts
-  about circuits, hash code and verifier builds; they are outside
-  Track A and change no claim here.
+- No implementation is verified (client, circuits, contract). The ten
+  separate packages (README, "Separate packages") check selected facts:
+  `circuits-acir/` and `circuits-lampe/` (circuits), `hash-agreement/`
+  (hash code), `verifier-reproduction/` (verifier builds),
+  `deployment/` (one deployment at one block), `contract-halmos/` and
+  `contract-kontrol/` (the contract source), `client-verus/` (client
+  mirrors), `refinement/` (a conditional refinement of the contract to
+  the model) and `privacy-games/` (privacy games in models). They are
+  outside Track A and change no claim here.
 - No deployed-privacy claim. The symbolic k-anonymity extension
   (`LeanShieldedPool/Extensions/`, CLAIMS.md "Extension") proves
   properties of a symbolic observer relation; no real cryptographic
@@ -102,7 +109,8 @@ cache) and `gate_test.sh` about 21 minutes for the 26 cheats.
 ## 5. The hypothesis and the 16 simplifications (Track A)
 
 Does the model say what the spec says? No machine can check this.
-Track A closed on 2026-10-19 with two human readings:
+Track A closed on 2026-10-19 with two human readings, one full and
+one high-level:
 
 - Oskar, the author, read the L3 statements, the guards and the
   simplifications against spec 2 on 2026-09-30, from a one-page
@@ -178,9 +186,9 @@ secrecy and custody are out of the model.
 
 ## 7. Work in progress
 
-Verus proofs of the client's prover input encoders and public-input array builders live on a separate branch of
-the private implementation repository; they prove the byte encoding of the `Prover.toml` inputs and the
-public-input array layout only, and are not linked to this model. A
+Verus proofs of the client's prover input encoders and public-input array builders are in
+`client-verus/` (`mirrors/prover_fmt.rs`, `mirrors/public_inputs.rs`), with the other client
+rows. They prove selected properties of reviewed mirrors only, and are not linked to this model. A
 bounded check against the root-window rule that the spec and the model
 share found one conformance bug in the contract, fixed in ethsystems/pocs
 commit a04b8b3. This gate does not

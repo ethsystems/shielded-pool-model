@@ -11,8 +11,9 @@ core is made to be read whole in an afternoon.
 
 ## The core claim
 
-> The model covers spec 2/SHIELDED-POOL, sections 4 to 6, at revision
-> 4d4dce1. In the model, the protocol rules imply two guarantees: no
+> The model covers the integrity rules of spec 2/SHIELDED-POOL,
+> sections 4 to 6, at revision 4d4dce1 (exclusions in SPEC-MAP.md). In
+> the model, the protocol rules imply two guarantees: no
 > note spends twice, and value is conserved per token. Both hold from
 > an empty pool, over every accepted history. One hypothesis is
 > assumed, about the notes and keys that appear in that history. No
@@ -20,9 +21,11 @@ core is made to be read whole in an afternoon.
 > distinct spending keys derive the same public key.
 > Machine-checked with the three standard Lean axioms only. Whether
 > the model says what the spec says is a human reading, not a
-> machine check; two readings are done (REVIEW.md, part 5).
+> machine check; one full reading (the second reader) and one
+> high-level reading (Oskar) are done (REVIEW.md, part 5).
 
-Nine theorems: nullifier uniqueness, no double spend and value
+The core claim is rows 2 and 3 of CLAIMS.md. The nine base theorems
+(rows 1 to 9) are nullifier uniqueness, no double spend and value
 conservation, plus six supporting results about the same model
 (solvency, no over-withdrawal, no minting, balance equals live value,
 owner-key binding, event replay). [CLAIMS.md](CLAIMS.md) gives each
@@ -113,8 +116,9 @@ guard can fire. The epoch and k-anonymity files came later, the
 root-window files and the liveness control last. Many files changed
 during review; the commit history records each change.
 
-AI agents from two model families wrote the proofs; Oskar and a second
-reader read the statements against the spec (REVIEW.md, part 5).
+AI agents from two model families wrote the proofs. A second reader
+read the statements against the spec in full; Oskar did a high-level
+reading from a one-page summary (REVIEW.md, part 5).
 The gate checks mechanical conditions on the result. It does not
 by itself establish independence from malicious build or elaboration
 code: the axiom census reads printed output, and code imported during
@@ -149,9 +153,9 @@ model, the statements, the proofs, the controls, `scripts/gate.sh`.
 [REVIEW.md](REVIEW.md) is the reviewer guide.
 
 Three more units are gated with the core, each with its own files.
-The epoch results extend the claim; the root-window results and the
-k-anonymity extension are supporting material, not further claims
-(CLAIMS.md). Their files, excluded from the core route:
+The epoch results (rows 10 to 15) complete the claim set of rows 1 to
+15; the root-window results and the k-anonymity extension are
+supporting material, outside the claim set (CLAIMS.md). Their files, excluded from the core route:
 
 - Epochs (L5): cross-epoch no double spend for value-bearing inputs
   plus five supporting results over the PoC epoch extension spec
@@ -165,7 +169,7 @@ k-anonymity extension are supporting material, not further claims
   [CLAIMS.md](CLAIMS.md), [SPEC-MAP.md](SPEC-MAP.md) and the
   inventory. Gated with the core.
 - Root window (spec 2 section 4.4, issue #2): five theorems over the
-  core model, outside the nine. Every window entry is an operation
+  core model, outside the claim set. Every window entry is an operation
   boundary (`windowBoundary`), the newest entry is the current root
   (`windowHead`), and the root between a transfer's two inserts is not
   in the window (`noMidTransferRoot`). The owner of a note that the
@@ -218,7 +222,8 @@ checksum.
   patched Lampe (a fork pinned by commit), the hash-bound rules hold for
   every accepting execution: the commitment and nullifier equations, the
   one owner key, and the Merkle roots as folds with depth bounds 20, 32
-  and 32 (transfer input 1 is checked only when its amount is nonzero);
+  and 32 (the second transfer input, circuit input 1, is checked only when its
+  amount is nonzero);
   the extracted Poseidon permutations compute their pure functions. Statements about the program as Lampe reads it, not the
   compiled constraints; the Noir compiler stays trusted on this route.
   Separate package, own check and trust base; the gate does not build it.
@@ -323,8 +328,9 @@ Each gate run copies `.lake`; without cheap file copies, set
 
 ## Status
 
-The core proofs and gate are complete. Two human readings of the
-model against the spec are done (REVIEW.md, part 5).
+The core proofs and gate are complete. One full reading (the second
+reader) and one high-level reading (Oskar) of the model against the
+spec are done (REVIEW.md, part 5).
 [REVIEW.md](REVIEW.md) is the reviewer guide; findings go in issues
 here (part 8 of that guide gives the format), and each gets an answer.
 

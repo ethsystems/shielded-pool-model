@@ -1,5 +1,6 @@
-# Files that check.sh regenerates and compares (client-verus, refinement, privacy-games;
-# contract-halmos and contract-kontrol regenerate nothing). GitHub folds them in a diff view.
+# Files that check.sh regenerates and compares (client-verus, refinement, privacy-games,
+# circuits-lampe, hash-agreement; contract-halmos and contract-kontrol regenerate nothing).
+# GitHub folds them in a diff view.
 client-verus/diffs/** linguist-generated
 client-verus/FUNCTIONS.md linguist-generated
 client-verus/TRUSTED.md linguist-generated
@@ -7,3 +8,21 @@ refinement/controls/gen/** linguist-generated
 refinement/fold-bridge/controls/gen/** linguist-generated
 refinement/statements/** linguist-generated
 privacy-games/statements/** linguist-generated
+circuits-lampe/controls/*.lean linguist-generated
+circuits-lampe/Deposit/VerifyLookup.lean linguist-generated
+circuits-lampe/Deposit/VerifyLookup/** linguist-generated
+circuits-lampe/Deposit/ConfigLookup.lean linguist-generated
+circuits-lampe/Deposit/ConfigLookup/** linguist-generated
+circuits-lampe/Deposit/HashLookup.lean linguist-generated
+circuits-lampe/Deposit/HashLookup/** linguist-generated
+circuits-lampe/Deposit/MerkleLookup.lean linguist-generated
+circuits-lampe/Deposit/MerkleLookup/** linguist-generated
+circuits-lampe/Withdraw/Lookup.lean linguist-generated
+circuits-lampe/Withdraw/Lookup/** linguist-generated
+circuits-lampe/Transfer/Lookup.lean linguist-generated
+circuits-lampe/Transfer/Lookup/** linguist-generated
+circuits-lampe/statements/** linguist-generated
+hash-agreement/HashAgreement/*.lean linguist-generated
+hash-agreement/Neg/RoundsNeg.lean linguist-generated
+hash-agreement/test/Vectors.lean linguist-generated
+hash-agreement/blocks.sha256 linguist-generated

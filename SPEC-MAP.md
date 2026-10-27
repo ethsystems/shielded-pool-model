@@ -1,13 +1,14 @@
 # Clause map: base pool and epoch extension
 
-Base model status: two human readings against spec 2 are done, the
-author's and a second reader's (REVIEW.md, part 5, Track A).
+Base model status: two human readings against spec 2 are done: a full
+reading by a second reader and a high-level reading by the author
+(REVIEW.md, part 5, Track A).
 
 Base source of truth: spec 2 at ethsystems/specs 4d4dce1 (`specs/2/README.md`;
 the staged copy `2-SHIELDED-POOL.md` the model was written from is
 byte-identical). Line numbers are that file's.
-Spec main (72414f4) adds the commitment-seen set in 5.2 and shifts later
-line numbers. This map stays pinned to 4d4dce1 until the 6.2 row change
+Spec main after 4d4dce1 adds the commitment-seen set in 5.2 (commit c0f9122)
+and shifts later line numbers; one row below cites 5.2 at 72414f4. This map stays pinned to 4d4dce1 until the 6.2 row change
 lands; the repin then remaps every line citation in one commit.
 Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`,
 `LeanShieldedPool/Statements/L3.lean`, `LeanShieldedPool/Draft/NonVacuity.lean`.
@@ -79,8 +80,9 @@ Model files: `LeanShieldedPool/Pool/State.lean`, `LeanShieldedPool/Pool/Tx.lean`
 
 Every item is a deliberate abstraction. Each is a review point.
 
-Scope: in a Lean 4 model of spec 2/SHIELDED-POOL (sections 4-6, revision
-4d4dce1), the protocol rules imply that no note spends twice and that
+Scope: in a Lean 4 model of the integrity rules of spec 2/SHIELDED-POOL
+(sections 4-6, revision 4d4dce1; items 9, 10 and 12 below name the parts
+left out), the protocol rules imply that no note spends twice and that
 value is conserved per token, from an empty pool over every accepted
 history, under one hypothesis: among the notes and keys that appear in
 that history, no two distinct notes with `u128` amounts share a
