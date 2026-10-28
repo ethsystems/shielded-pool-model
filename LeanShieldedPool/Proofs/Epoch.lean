@@ -104,7 +104,7 @@ theorem Step.valueConsumes_witness {st st' : St P} {tx : Tx P}
       have hf2 : d.in2.nfE d.key st.currentEpoch ∉ st.active := by
         intro hm
         exact hins.1.2.1 (List.mem_append_left _ hm)
-      have first : ∃ n ∈ notes (Tx.transfer d), ∃ key ∈ (inputs (Tx.transfer d)).map Prod.snd,
+      have former : ∃ n ∈ notes (Tx.transfer d), ∃ key ∈ (inputs (Tx.transfer d)).map Prod.snd,
           n.cm = d.in1.cm ∧ n.ownedBy key ∧ SpendGuard st n key ∧
           Recorded (d.post st) n key := by
         refine ⟨d.in1, List.mem_cons_self, d.key, List.mem_cons_self, rfl, ho1,
@@ -113,7 +113,7 @@ theorem Step.valueConsumes_witness {st st' : St P} {tx : Tx P}
         simp only [TransferData.post, ite_true, TransferData.nullifiers,
           List.mem_append, List.mem_cons, List.not_mem_nil, or_false]
         exact Or.inr (Or.inl trivial)
-      have second (h2 : ¬ d.in2.amount = 0) :
+      have latter (h2 : ¬ d.in2.amount = 0) :
           ∃ n ∈ notes (Tx.transfer d), ∃ key ∈ (inputs (Tx.transfer d)).map Prod.snd,
           n.cm = d.in2.cm ∧ n.ownedBy key ∧ SpendGuard st n key ∧
           Recorded (d.post st) n key := by
@@ -132,14 +132,14 @@ theorem Step.valueConsumes_witness {st st' : St P} {tx : Tx P}
       · exact False.elim (List.not_mem_nil hc)
       · rw [List.mem_singleton] at hc
         subst hc
-        exact second h2
+        exact latter h2
       · rw [List.mem_singleton] at hc
         subst hc
-        exact first
+        exact former
       · simp only [List.mem_cons, List.not_mem_nil, or_false] at hc
         rcases hc with rfl | rfl
-        · exact first
-        · exact second h2
+        · exact former
+        · exact latter h2
   | @withdraw d hg =>
       have hg' := hg.2.2.2.1
       simp only [Tx.valueConsumes, List.mem_singleton] at hc
@@ -225,17 +225,17 @@ theorem crossEpochNoDoubleSpend_proof (P : PrimSpec) : crossEpochNoDoubleSpend P
   | empty => intro _; exact List.nodup_nil
   | @step txs st st' tx hr hs ih =>
       intro hcrypto
-      have oldNotes : Candidates.runNotes txs ⊆ Candidates.runNotes (txs ++ [tx]) := by
+      have priorNotes : Candidates.runNotes txs ⊆ Candidates.runNotes (txs ++ [tx]) := by
         rw [runNotes_append]; exact List.subset_append_left _ _
-      have newNotes : notes tx ⊆ Candidates.runNotes (txs ++ [tx]) := by
+      have addedNotes : notes tx ⊆ Candidates.runNotes (txs ++ [tx]) := by
         rw [runNotes_append]; exact List.subset_append_right _ _
-      have oldKeys : Candidates.runKeys txs ⊆ Candidates.runKeys (txs ++ [tx]) := by
+      have priorKeys : Candidates.runKeys txs ⊆ Candidates.runKeys (txs ++ [tx]) := by
         rw [runKeys_append]; exact List.subset_append_left _ _
-      have newKeys : (inputs tx).map Prod.snd ⊆ Candidates.runKeys (txs ++ [tx]) := by
+      have addedKeys : (inputs tx).map Prod.snd ⊆ Candidates.runKeys (txs ++ [tx]) := by
         rw [runKeys_append]; exact List.subset_append_right _ _
       have hp : Candidates.CryptoHyp P txs :=
-        ⟨fun n hn n' hn' => hcrypto.commit_inj n (oldNotes hn) n' (oldNotes hn'),
-         fun k hk k' hk' => hcrypto.derivePub_inj k (oldKeys hk) k' (oldKeys hk')⟩
+        ⟨fun n hn n' hn' => hcrypto.commit_inj n (priorNotes hn) n' (priorNotes hn'),
+         fun k hk k' hk' => hcrypto.derivePub_inj k (priorKeys hk) k' (priorKeys hk')⟩
       change ((txs ++ [tx]).flatMap Tx.valueConsumes).Nodup
       simp only [List.flatMap_append, List.flatMap_cons, List.flatMap_nil,
         List.append_nil]
@@ -244,11 +244,11 @@ theorem crossEpochNoDoubleSpend_proof (P : PrimSpec) : crossEpochNoDoubleSpend P
       intro c hc c' hc' heq
       obtain ⟨n, hn, k, hk, hcm, ho, hm⟩ := hr.consumed_recorded hc
       obtain ⟨n', hn', k', hk', hcm', ho', hg, _⟩ := hs.valueConsumes_witness hc'
-      have hnEq := hcrypto.commit_inj n (oldNotes hn) n' (newNotes hn')
+      have hnEq := hcrypto.commit_inj n (priorNotes hn) n' (addedNotes hn')
         (hcm.trans (heq.trans hcm'.symm))
       have hpub : P.derivePub k = P.derivePub k' :=
         ho.trans ((congrArg (fun n : Note P => n.ownerPubkey) hnEq).trans ho'.symm)
-      have hkEq := hcrypto.derivePub_inj k (oldKeys hk) k' (newKeys hk') hpub
+      have hkEq := hcrypto.derivePub_inj k (priorKeys hk) k' (addedKeys hk') hpub
       exact hg.not_recorded (hnEq ▸ hkEq ▸ hm)
 
 theorem Candidates.Steps.epoch_mono {before after : St P} {txs : List (Tx P)}

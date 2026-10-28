@@ -91,9 +91,9 @@ theorem obsEquiv_iff_permutations (log₁ log₂ : List (Event P)) :
         log₁.map (renameEvent cm nf) = log₂ := by
   constructor
   · rintro ⟨cm, nf, h⟩
-    obtain ⟨pc, hc⟩ := extendOnList cm (log₁.flatMap commitmentAtoms)
-    obtain ⟨pn, hn⟩ := extendOnList nf (log₁.flatMap nullifierAtoms)
-    refine ⟨pc, pn, Eq.trans ?_ h⟩
+    obtain ⟨permC, hc⟩ := extendOnList cm (log₁.flatMap commitmentAtoms)
+    obtain ⟨permN, hn⟩ := extendOnList nf (log₁.flatMap nullifierAtoms)
+    refine ⟨permC, permN, Eq.trans ?_ h⟩
     apply List.map_congr_left
     intro e he
     apply renameEvent_congr

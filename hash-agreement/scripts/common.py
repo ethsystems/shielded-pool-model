@@ -83,20 +83,20 @@ def load_plain():
 
 
 def _parse_nested(text):
-    toks = re.findall(r"\[|\]|0x[0-9a-fA-F]+|\d+|,", text)
-    stack, cur = [], []
-    for t in toks:
+    lexemes = re.findall(r"\[|\]|0x[0-9a-fA-F]+|\d+|,", text)
+    stack, frame = [], []
+    for t in lexemes:
         if t == "[":
-            stack.append(cur)
-            cur = []
+            stack.append(frame)
+            frame = []
         elif t == "]":
-            done = cur
-            cur = stack.pop()
-            cur.append(done)
+            closed = frame
+            frame = stack.pop()
+            frame.append(closed)
         elif t != ",":
-            cur.append(int(t, 0))
+            frame.append(int(t, 0))
     assert not stack
-    return cur
+    return frame
 
 
 def load_noir():
