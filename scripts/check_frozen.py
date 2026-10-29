@@ -54,20 +54,20 @@ def main(argv):
         pins_path.write_text("".join(f"{digest(root / f)}  {f}\n" for f in files))
         print(f"wrote {len(files)} pins to {pins_path}")
         return 0
-    pins = {}
+    roster = {}
     for line in pins_path.read_text().splitlines():
         if line.strip() and not line.startswith("#"):
             h, p = line.split(None, 1)
-            pins[p.strip()] = h
-    bad = [f"unpinned: {f}" for f in files if f not in pins]
-    bad += [f"missing: {p}" for p in pins if not (root / p).is_file()]
-    bad += [f"changed: {p}" for p in pins
-            if (root / p).is_file() and digest(root / p) != pins[p]]
-    for b in bad:
+            roster[p.strip()] = h
+    faults = [f"unpinned: {f}" for f in files if f not in roster]
+    faults += [f"missing: {p}" for p in roster if not (root / p).is_file()]
+    faults += [f"changed: {p}" for p in roster
+            if (root / p).is_file() and digest(root / p) != roster[p]]
+    for b in faults:
         print(b)
-    if bad:
+    if faults:
         return 1
-    print(f"frozen surface OK ({len(pins)} files)")
+    print(f"frozen surface OK ({len(roster)} files)")
     return 0
 
 

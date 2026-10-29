@@ -12,7 +12,7 @@
   "lakefile.toml": "fd4318d1c911bb51c3460a25e4162ae9de498322a45f43bdf759b6e960fd8d5e",
   "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
   "scripts/check_vectors.py": "986bbe01bc4ac07c839ee3e67694930e6249efa3ae4a26053f0d5a56a5a50b37",
-  "scripts/common.py": "300799ddbc8133e7d4e4633a1d926e1ec2964a6eb6b5b31214be574de6ff33db",
+  "scripts/common.py": "a60a0df792b74932ec4b61c1cdae591b95bbb7e87ba0754f5160ab729a39cb7f",
   "scripts/gen_lean.py": "4a6795b324a261be5c1914962f51c32dc566e7ea8bffa73a8d326418d91faaff",
   "scripts/gen_sol.py": "e19f8cb887504a2c3d5cffbe9aea5632fe1eb4c8be5cbf516d9c7161c145af2e",
   "scripts/replay.py": "51005f003c3df9d7af8dde792a099bba829ecfbeb7ce1eb6623cc16311ac2f64",

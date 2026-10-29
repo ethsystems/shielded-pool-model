@@ -33,9 +33,9 @@ if grep -rnE --include="*.lean" "(^|[^_[:alnum:]])simp($| [^o])" LeanShieldedPoo
 # every declared axiom must be listed in AXIOMS.md by its full name (grep belt; kernel census is the suspenders)
 while read -r f line; do
   case "$f" in controls/*) echo "GATE FAIL: axiom declared in control $f"; exit 1;; esac
-  ax=$(echo "$line" | sed -nE 's/^[0-9]+:[[:space:]]*((private|protected)[[:space:]]+)*axiom[[:space:]]+([^[:space:]:({]+).*/\3/p')
-  [ -n "$ax" ] || { echo "GATE FAIL: axiom declaration in $f not parsed: $line"; exit 1; }
-  awk -v a="$ax" '$1 == "-" && $2 == a { f = 1 } END { exit !f }' AXIOMS.md || { echo "GATE FAIL: axiom '$ax' in $f not listed in AXIOMS.md"; exit 1; }
+  axname=$(echo "$line" | sed -nE 's/^[0-9]+:[[:space:]]*((private|protected)[[:space:]]+)*axiom[[:space:]]+([^[:space:]:({]+).*/\3/p')
+  [ -n "$axname" ] || { echo "GATE FAIL: axiom declaration in $f not parsed: $line"; exit 1; }
+  awk -v a="$axname" '$1 == "-" && $2 == a { f = 1 } END { exit !f }' AXIOMS.md || { echo "GATE FAIL: axiom '$axname' in $f not listed in AXIOMS.md"; exit 1; }
 done < <(grep -rnE "^[[:space:]]*(private[[:space:]]+|protected[[:space:]]+)*axiom([[:space:]]|$)" LeanShieldedPool statements controls 2>/dev/null | sed 's/:/ /')
 python3 scripts/mk_check.py statements/INVENTORY.md > "$WORK/CheckInventory.lean"
 if ! lake env lean "$WORK/CheckInventory.lean" > "$WORK/axioms.out" 2>&1; then
@@ -44,12 +44,12 @@ fi
 python3 scripts/check_axioms.py statements/INVENTORY.md "$WORK/axioms.out" || { echo "GATE FAIL: census"; exit 1; }
 shopt -s nullglob
 for f in controls/neg_*.lean; do
-  expected=$(sed -n 's/^-- EXPECT: //p' "$f" | head -1)
+  wanted=$(sed -n 's/^-- EXPECT: //p' "$f" | head -1)
   if lake env lean "$f" > "$WORK/ctl.out" 2>&1; then
     echo "GATE FAIL: negative control built: $f"; exit 1
   fi
-  if [ -n "$expected" ] && ! grep -qF "$expected" "$WORK/ctl.out"; then
-    echo "GATE FAIL: $f failed for the wrong reason (wanted: $expected)"; cat "$WORK/ctl.out"; exit 1
+  if [ -n "$wanted" ] && ! grep -qF "$wanted" "$WORK/ctl.out"; then
+    echo "GATE FAIL: $f failed for the wrong reason (wanted: $wanted)"; cat "$WORK/ctl.out"; exit 1
   fi
 done
 # positive and refutation controls must BUILD. A refutation control proves the

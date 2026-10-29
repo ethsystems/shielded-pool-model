@@ -107,26 +107,26 @@ theorem Run.leaves_length {sup : P.Token → Prop} {txs : List (Tx P)} {st : St 
 
 private theorem sum_le_of_prefix {l₁ l₂ : List (Tx P)} (h : l₁ <+: l₂) :
     (l₁.map Tx.leafDelta).sum ≤ (l₂.map Tx.leafDelta).sum := by
-  obtain ⟨t, rfl⟩ := h
+  obtain ⟨tail, rfl⟩ := h
   rw [List.map_append, List.sum_append]
   exact Nat.le_add_right _ _
 
 theorem noMidTransferRoot_proof (P : PrimSpec) : noMidTransferRoot P := by
-  intro sup txs st hr pre d st₀ hp h0 hmem
-  have hpre : pre <+: txs := (List.prefix_append pre _).trans hp
+  intro sup txs st hr stem d st₀ hp h0 hmem
+  have hstem : stem <+: txs := (List.prefix_append stem _).trans hp
   have e0 := h0.leaves_length
-  rcases windowBoundary_proof P sup txs st hr _ hmem with hz | ⟨q, tx, st₁, st₂, hq, h1, hs, hlen⟩
+  rcases windowBoundary_proof P sup txs st hr _ hmem with hz | ⟨lead, tx, st₁, st₂, hlead, h1, hs, hlen⟩
   · omega
   · have e2 := (Run.step h1 hs).leaves_length
-    rcases Nat.lt_or_ge pre.length (q ++ [tx]).length with hl | hl
-    · have hle : (pre ++ [Tx.transfer d]).length ≤ (q ++ [tx]).length := by
+    rcases Nat.lt_or_ge stem.length (lead ++ [tx]).length with hl | hl
+    · have hle : (stem ++ [Tx.transfer d]).length ≤ (lead ++ [tx]).length := by
         rw [List.length_append, List.length_singleton]
         omega
-      have hpq := sum_le_of_prefix (List.prefix_of_prefix_length_le hp hq hle)
+      have hpq := sum_le_of_prefix (List.prefix_of_prefix_length_le hp hlead hle)
       rw [List.map_append, List.sum_append] at hpq
       have h2 : ([Tx.transfer d].map (Tx.leafDelta (P := P))).sum = 2 := rfl
       omega
-    · have hqp := sum_le_of_prefix (List.prefix_of_prefix_length_le hq hpre hl)
+    · have hqp := sum_le_of_prefix (List.prefix_of_prefix_length_le hlead hstem hl)
       omega
 
 theorem honestWithdrawWindow_proof (P : PrimSpec) : honestWithdrawWindow P := by
